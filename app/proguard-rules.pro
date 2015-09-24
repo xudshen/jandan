@@ -49,6 +49,8 @@
 -keepattributes *Annotation*
 -dontwarn ch.qos.logback.core.net.*
 
+##java8 retrolambda
+-dontwarn java.lang.invoke.*
 
 # for gson
 -keepattributes Signature

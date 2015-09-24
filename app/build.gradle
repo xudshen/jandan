@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.android.databinding'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 23
@@ -24,7 +25,7 @@ android {
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            shrinkResources true
+            shrinkResources false
         }
         release {
             minifyEnabled false
@@ -49,7 +50,11 @@ android {
         javaMaxHeapSize "4g"
     }
 
-
+    retrolambda {
+        jdk "/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home"
+        oldJdk "/Library/Java/JavaVirtualMachines/jdk1.7.0_55.jdk/Contents/Home"
+        javaVersion JavaVersion.VERSION_1_7
+    }
 }
 
 dependencies {
