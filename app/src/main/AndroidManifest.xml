@@ -1,7 +1,12 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="info.xudshen.jandan">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="info.xudshen.jandan">
 
-    <application android:allowBackup="true" android:label="@string/app_name"
-        android:icon="@mipmap/ic_launcher" android:theme="@style/AppTheme">
+    <application
+        android:name=".JandanApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme.Light.WithDarkToolbar">
 
     </application>
 

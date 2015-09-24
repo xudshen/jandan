@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFF</color>
+
+    <color name="amber_500">#FFC107</color>
+    <color name="amber_700">#FFA000</color>
+    <color name="amber_100">#FFECB3</color>
+
+    <color name="deep_purple_a200">#7C4DFF</color>
+
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+    <color name="text_and_icons">#212121</color>
+    <color name="divider">#B6B6B6</color>
+</resources>
+
