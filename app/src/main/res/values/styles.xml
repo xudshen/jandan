@@ -7,8 +7,6 @@
 
         <!-- enable window content transitions -->
         <item name="android:windowContentTransitions">true</item>
-
-        <item name="ic_search">@drawable/ic_search_white_24dp</item>
     </style>
 
     <style name="AppTheme.Light.WithDarkToolbar" parent="@style/Theme.AppCompat.Light.NoActionBar">
@@ -18,7 +16,5 @@
 
         <!-- enable window content transitions -->
         <item name="android:windowContentTransitions">true</item>
-
-        <item name="ic_search">@drawable/ic_search_white_24dp</item>
     </style>
 </resources>

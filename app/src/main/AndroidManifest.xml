@@ -10,7 +10,7 @@
         android:theme="@style/AppTheme.Light.WithDarkToolbar">
         <activity
             android:name=".view.PostActivity"
-            android:label="@string/title_activity_post">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

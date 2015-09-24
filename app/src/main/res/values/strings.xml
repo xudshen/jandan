@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Jandan</string>
-    <string name="title_activity_post">Posts</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="drawer_item_posts">Posts</string>
+    <string name="drawer_item_pics">Pics</string>
+    <string name="drawer_item_jokes">Jokes</string>
+    <string name="drawer_item_movies">Movies</string>
+    <string name="drawer_preference">Preference</string>
 </resources>

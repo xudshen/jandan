@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_posts"
+            android:icon="@drawable/ic_search_white_24dp"
+            android:title="@string/drawer_item_posts" />
+        <item
+            android:id="@+id/nav_pics"
+            android:icon="@drawable/ic_search_white_24dp"
+            android:title="@string/drawer_item_pics" />
+        <item
+            android:id="@+id/nav_jokes"
+            android:icon="@drawable/ic_search_white_24dp"
+            android:title="@string/drawer_item_jokes" />
+        <item
+            android:id="@+id/nav_movies"
+            android:icon="@drawable/ic_search_white_24dp"
+            android:title="@string/drawer_item_movies" />
+    </group>
+</menu>
