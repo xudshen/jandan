@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">煎个蛋</string>
+    <string name="app_name">煎蛋噜</string>
     <string name="drawer_item_jokes">小电影</string>
     <string name="drawer_item_posts">新鲜事</string>
     <string name="drawer_preference">偏好设置</string>
