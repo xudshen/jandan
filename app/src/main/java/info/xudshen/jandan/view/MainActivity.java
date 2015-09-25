@@ -16,19 +16,19 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.xudshen.jandan.R;
 
-public class PostActivity extends AppCompatActivity implements PostsFragment.OnFragmentInteractionListener {
-    @Bind(R.id.app_toolbar)
+public class MainActivity extends AppCompatActivity implements PostsFragment.OnFragmentInteractionListener {
+    @Bind(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.drawer_layout)
+    @Bind(R.id.activity_main_drawer_layout)
     DrawerLayout drawerLayout;
-    @Bind(R.id.nvView)
-    NavigationView navigationView;
+    @Bind(R.id.activity_main_drawer_nv)
+    NavigationView drawerNavigationView;
     ActionBarDrawerToggle drawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post);
+        setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
@@ -36,7 +36,7 @@ public class PostActivity extends AppCompatActivity implements PostsFragment.OnF
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.setDrawerListener(drawerToggle);
 
-        navigationView.setNavigationItemSelectedListener(menuItem -> {
+        drawerNavigationView.setNavigationItemSelectedListener(menuItem -> {
             Fragment fragment = null;
             Class fragmentClass = null;
             switch (menuItem.getItemId()) {
@@ -68,7 +68,7 @@ public class PostActivity extends AppCompatActivity implements PostsFragment.OnF
 
             // Insert the fragment by replacing any existing fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.activity_main_content, fragment).commit();
 
             // Highlight the selected item, update the title, and close the drawer
             menuItem.setChecked(true);
