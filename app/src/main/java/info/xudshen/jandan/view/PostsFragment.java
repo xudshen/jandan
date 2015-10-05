@@ -51,15 +51,9 @@ public class PostsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_posts, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
+        //Called when the fragment has been associated with the activity
         super.onAttach(context);
         try {
             mListener = (OnFragmentInteractionListener) context;
@@ -78,6 +72,13 @@ public class PostsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
     }
 
 }

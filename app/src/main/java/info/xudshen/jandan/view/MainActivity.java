@@ -3,6 +3,7 @@ package info.xudshen.jandan.view;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -68,7 +69,11 @@ public class MainActivity extends AppCompatActivity implements PostsFragment.OnF
 
             // Insert the fragment by replacing any existing fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.activity_main_content, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.activity_main_content, fragment)
+                    //if you do call addToBackStack() when removing a fragment,
+                    //then the fragment is stopped and will be resumed if the user navigates back
+//                    .addToBackStack(null)
+                    .commit();
 
             // Highlight the selected item, update the title, and close the drawer
             menuItem.setChecked(true);
@@ -77,6 +82,27 @@ public class MainActivity extends AppCompatActivity implements PostsFragment.OnF
 
             return true;
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //[foreground lifetime]visible & taking user focus
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //[foreground lifetime]visible & not taking user focus
+        //called when device goes to sleep OR dialog appears
+        //TODO: write crucial persistent data
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        //TODO: the transient state of the activity (the state of the UI)
+        //just test it with rotate the device
     }
 
     @Override
