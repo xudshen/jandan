@@ -1,4 +1,4 @@
-package info.xudshen.droiddata;
+package info.xudshen.droiddata.daogenerator;
 
 import java.util.List;
 

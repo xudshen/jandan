@@ -1,8 +1,8 @@
-package info.xudshen.droiddata.converter;
+package info.xudshen.droiddata.daogenerator.converter;
 
 import android.util.Log;
 
-import info.xudshen.droiddata.DaoUtil;
+import info.xudshen.droiddata.daogenerator.DaoUtil;
 
 
 /**
@@ -29,6 +29,6 @@ public class EnumPropertyConverter<T extends Enum<T>> implements IPropertyConver
     }
 
     public static String getName(String className) {
-        return "cn.com.chuanliu.diandi.sdk.basic.daogenerator.converter.EnumPropertyConverter<" + DaoUtil.getClassnameFromFullyQualified(className) + ">";
+        return "info.xudshen.droiddata.daogenerator.converter.EnumPropertyConverter<" + DaoUtil.getClassnameFromFullyQualified(className) + ">";
     }
 }

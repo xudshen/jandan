@@ -15,29 +15,24 @@
  * You should have received a copy of the GNU General Public License
  * along with greenDAO Generator.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.xudshen.droiddata;
+package info.xudshen.droiddata.daogenerator;
 
-
-public class Index extends PropertyOrderList {
-    private String name;
-    private boolean unique;
-
-    public String getName() {
-        return name;
+/** NOT IMPLEMENTED YET. Check back later. */
+public class QueryParam {
+    private Property column;
+    private String operator;
+    
+    public QueryParam(Property column, String operator) {
+        this.column = column;
+        this.operator = operator;
     }
 
-    public Index setName(String name) {
-        this.name = name;
-        return this;
+    public Property getColumn() {
+        return column;
     }
 
-    public Index makeUnique() {
-        unique = true;
-        return this;
+    public String getOperator() {
+        return operator;
     }
-
-    public boolean isUnique() {
-        return unique;
-    }
-
+    
 }
