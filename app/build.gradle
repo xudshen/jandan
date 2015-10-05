@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.android.databinding'
 apply plugin: 'me.tatarka.retrolambda'
 
@@ -59,6 +60,8 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    apt 'com.android.databinding:compiler:1.0-rc1'
 
     //multidex
     compile 'com.android.support:multidex:1.0.1'

@@ -2,6 +2,7 @@ package info.xudshen.jandan.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.databinding.FragmentPostsBinding;
+import info.xudshen.jandan.model.Article;
 
 public class PostsFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -48,7 +51,9 @@ public class PostsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_posts, container, false);
+        FragmentPostsBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_posts, container, false);
+        binding.setArticle(new Article("123"));
+        return binding.getRoot();
     }
 
     @Override
