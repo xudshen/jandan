@@ -2,7 +2,7 @@
     package="info.xudshen.droiddata">
 
     <application
-        android:allowBackup="false"
+        android:allowBackup="true"
         android:label="@string/app_name" />
 
 </manifest>

@@ -59,7 +59,7 @@ public class DaoGenerator {
         patternKeepMethods = compilePattern("METHODS");
 
         Configuration config = new Configuration();
-        config.setDirectoryForTemplateLoading(new File("sdk/src-template"));
+        config.setDirectoryForTemplateLoading(new File("DroidData/src-template"));
         config.setObjectWrapper(new DefaultObjectWrapper());
 
         templateDao = config.getTemplate("dao.ftl");
