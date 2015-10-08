@@ -2,6 +2,7 @@ package info.xudshen.jandan.model;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.util.Log;
 
 import java.sql.Timestamp;
 
@@ -14,6 +15,7 @@ public class Article extends BaseObservable {
     private String title;
     private String author;
     private Timestamp time;
+    private String content = "0";
 
     public Article() {
     }
@@ -50,5 +52,15 @@ public class Article extends BaseObservable {
     public void setTime(Timestamp time) {
         this.time = time;
         notifyPropertyChanged(BR.time);
+    }
+
+    @Bindable
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+        notifyPropertyChanged(BR.content);
     }
 }

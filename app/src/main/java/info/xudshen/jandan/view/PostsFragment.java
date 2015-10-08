@@ -10,9 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.concurrent.TimeUnit;
+
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.databinding.FragmentPostsBinding;
 import info.xudshen.jandan.model.Article;
+import rx.Observable;
+import rx.Observer;
 
 public class PostsFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -21,6 +25,8 @@ public class PostsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private Article article = new Article("123");
 
     private OnFragmentInteractionListener mListener;
 
@@ -45,6 +51,8 @@ public class PostsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        Observable.interval(1, TimeUnit.SECONDS).subscribe(aLong -> article.setContent(aLong.toString()));
     }
 
     @Override
@@ -52,7 +60,7 @@ public class PostsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         FragmentPostsBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_posts, container, false);
-        binding.setArticle(new Article("123"));
+        binding.setArticle(article);
         return binding.getRoot();
     }
 
