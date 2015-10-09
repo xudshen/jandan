@@ -28,7 +28,7 @@ public class JandanApp extends MultiDexApplication {
 
         SQLiteOpenHelper openHelper = new DaoMaster.DevOpenHelper(this, "default", null);
         SQLiteDatabase db = openHelper.getWritableDatabase();
-        daoSession = (new DaoMaster(db)).newSession();
+        daoSession = (new DaoMaster(db)).newSession().setContext(this);
         ModelContentProvider.daoSession = daoSession;
     }
 }

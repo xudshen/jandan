@@ -25,14 +25,10 @@ import info.xudshen.jandan.model.JokeDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
-    private Context context;
-
-    public Context getContext() {
-        return context;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
+    public DaoSession setContext(Context context) {
+        articleDao.setContext(context);
+        jokeDao.setContext(context);
+        return this;
     }
 
     private final DaoConfig articleDaoConfig;

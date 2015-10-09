@@ -46,7 +46,6 @@ public class ArticleDao extends DDAbstractDao<Article, Long> {
     
     public ArticleDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
-        contextWeakReference = new WeakReference<Context>(daoSession.getContext());
     }
 
     /** Creates the underlying database table. */
@@ -163,6 +162,10 @@ public class ArticleDao extends DDAbstractDao<Article, Long> {
     public static final String AUTHORITY = "info.xudshen.jandan.model.provider";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLENAME);
     private WeakReference<Context> contextWeakReference;
+
+    public void setContext(Context context){
+        contextWeakReference = new WeakReference<Context>(context);
+    }
 
     @Override
     protected void notifyInsert(Article entity) {

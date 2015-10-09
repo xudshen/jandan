@@ -96,8 +96,7 @@ public class ${entity.classNameDao} extends DDAbstractDao<${entity.className}, $
     
     public ${entity.classNameDao}(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
-        contextWeakReference = new WeakReference<Context>(daoSession.getContext());
-<#if entity.active>        
+<#if entity.active>
         this.daoSession = daoSession;
 </#if>
     }
@@ -276,6 +275,10 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
     public static final String AUTHORITY = "${schema.defaultJavaPackageDao}.provider";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLENAME);
     private WeakReference<Context> contextWeakReference;
+
+    public void setContext(Context context){
+        contextWeakReference = new WeakReference<Context>(context);
+    }
 
     @Override
     protected void notifyInsert(${entity.className} entity) {

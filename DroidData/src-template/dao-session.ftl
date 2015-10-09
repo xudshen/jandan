@@ -46,14 +46,11 @@ import ${entity.javaPackageDao}.${entity.classNameDao};
  */
 public class DaoSession extends AbstractDaoSession {
 
-    private Context context;
-
-    public Context getContext() {
-        return context;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
+    public DaoSession setContext(Context context) {
+<#list schema.entities as entity>
+        ${entity.classNameDao?uncap_first}.setContext(context);
+</#list>
+        return this;
     }
 
 <#list schema.entities as entity>
