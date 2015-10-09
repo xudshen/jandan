@@ -1,5 +1,6 @@
 package info.xudshen.jandan.model;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.Map;
@@ -23,6 +24,16 @@ import info.xudshen.jandan.model.JokeDao;
  * @see de.greenrobot.dao.AbstractDaoSession
  */
 public class DaoSession extends AbstractDaoSession {
+
+    private Context context;
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
 
     private final DaoConfig articleDaoConfig;
     private final DaoConfig jokeDaoConfig;

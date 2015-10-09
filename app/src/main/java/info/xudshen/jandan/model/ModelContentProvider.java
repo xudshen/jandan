@@ -19,33 +19,36 @@ import info.xudshen.jandan.model.ArticleDao;
 <application> element:
 
     <provider
-            android:name="info.xudshen.jandan.model.ArticleContentProvider"
+            android:name="info.xudshen.jandan.model.ModelContentProvider"
             android:authorities="info.xudshen.jandan.model.provider"/>
     */
 
-public class ArticleContentProvider extends ContentProvider {
+public class ModelContentProvider extends ContentProvider {
 
     public static final String AUTHORITY = "info.xudshen.jandan.model.provider";
-    public static final String BASE_PATH = "";
-    public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
-    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
-            + "/" + BASE_PATH;
-    public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
-            + "/" + BASE_PATH;
 
-    private static final String TABLENAME = ArticleDao.TABLENAME;
-    private static final String PK = ArticleDao.Properties.ArticleId
-            .columnName;
+    public static final String ARTICLE_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
+            + "/" + ArticleDao.TABLENAME;
+    public static final String ARTICLE_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
+            + "/" + ArticleDao.TABLENAME;
+    public static final String JOKE_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
+            + "/" + JokeDao.TABLENAME;
+    public static final String JOKE_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
+            + "/" + JokeDao.TABLENAME;
 
-    private static final int ARTICLE_DIR = 0;
-    private static final int ARTICLE_ID = 1;
+    private static final int ARTICLE_DIR = 0x0000;
+    private static final int ARTICLE_ID = 0x1000;
+    private static final int JOKE_DIR = 0x0001;
+    private static final int JOKE_ID = 0x1001;
 
     private static final UriMatcher sURIMatcher;
 
     static {
         sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        sURIMatcher.addURI(AUTHORITY, BASE_PATH, ARTICLE_DIR);
-        sURIMatcher.addURI(AUTHORITY, BASE_PATH + "/#", ARTICLE_ID);
+        sURIMatcher.addURI(AUTHORITY, ArticleDao.TABLENAME, ARTICLE_DIR);
+        sURIMatcher.addURI(AUTHORITY, ArticleDao.TABLENAME + "/#", ARTICLE_ID);
+        sURIMatcher.addURI(AUTHORITY, JokeDao.TABLENAME, JOKE_DIR);
+        sURIMatcher.addURI(AUTHORITY, JokeDao.TABLENAME + "/#", JOKE_ID);
     }
 
     /**
@@ -59,7 +62,7 @@ public class ArticleContentProvider extends ContentProvider {
         // if(daoSession == null) {
         // throw new IllegalStateException("DaoSession must be set before content provider is created");
         // }
-        DaoLog.d("Content Provider started: " + CONTENT_URI);
+        DaoLog.d("Content Provider started");
         return true;
     }
 
@@ -70,74 +73,46 @@ public class ArticleContentProvider extends ContentProvider {
         return daoSession.getDatabase();
     }
 
+    /**
+     * only accept uri with id
+     */
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         int uriType = sURIMatcher.match(uri);
-        long id = 0;
-        String path = "";
         switch (uriType) {
-            case ARTICLE_DIR:
-                id = getDatabase().insert(TABLENAME, null, values);
-                path = BASE_PATH + "/" + id;
+            case ARTICLE_ID:
+            case JOKE_ID:
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
         getContext().getContentResolver().notifyChange(uri, null);
-        return Uri.parse(path);
+        return uri;
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         int uriType = sURIMatcher.match(uri);
-        SQLiteDatabase db = getDatabase();
-        int rowsDeleted = 0;
-        String id;
-        switch (uriType) {
-            case ARTICLE_DIR:
-                rowsDeleted = db.delete(TABLENAME, selection, selectionArgs);
-                break;
-            case ARTICLE_ID:
-                id = uri.getLastPathSegment();
-                if (TextUtils.isEmpty(selection)) {
-                    rowsDeleted = db.delete(TABLENAME, PK + "=" + id, null);
-                } else {
-                    rowsDeleted = db.delete(TABLENAME, PK + "=" + id + " and "
-                            + selection, selectionArgs);
-                }
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown URI: " + uri);
+        if (uriType == -1) {
+            throw new IllegalArgumentException("Unknown URI: " + uri);
         }
         getContext().getContentResolver().notifyChange(uri, null);
-        return rowsDeleted;
+        return 1;
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
         int uriType = sURIMatcher.match(uri);
-        SQLiteDatabase db = getDatabase();
-        int rowsUpdated = 0;
-        String id;
         switch (uriType) {
-            case ARTICLE_DIR:
-                rowsUpdated = db.update(TABLENAME, values, selection, selectionArgs);
-                break;
             case ARTICLE_ID:
-                id = uri.getLastPathSegment();
-                if (TextUtils.isEmpty(selection)) {
-                    rowsUpdated = db.update(TABLENAME, values, PK + "=" + id, null);
-                } else {
-                    rowsUpdated = db.update(TABLENAME, values, PK + "=" + id
-                            + " and " + selection, selectionArgs);
-                }
+            case JOKE_ID:
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
         getContext().getContentResolver().notifyChange(uri, null);
-        return rowsUpdated;
+        return 1;
     }
 
     @Override
@@ -148,11 +123,19 @@ public class ArticleContentProvider extends ContentProvider {
         int uriType = sURIMatcher.match(uri);
         switch (uriType) {
             case ARTICLE_DIR:
-                queryBuilder.setTables(TABLENAME);
+                queryBuilder.setTables(ArticleDao.TABLENAME);
                 break;
             case ARTICLE_ID:
-                queryBuilder.setTables(TABLENAME);
-                queryBuilder.appendWhere(PK + "="
+                queryBuilder.setTables(ArticleDao.TABLENAME);
+                queryBuilder.appendWhere(ArticleDao.Properties.ArticleId.columnName + "="
+                        + uri.getLastPathSegment());
+                break;
+            case JOKE_DIR:
+                queryBuilder.setTables(JokeDao.TABLENAME);
+                break;
+            case JOKE_ID:
+                queryBuilder.setTables(JokeDao.TABLENAME);
+                queryBuilder.appendWhere(JokeDao.Properties.JokeId.columnName + "="
                         + uri.getLastPathSegment());
                 break;
             default:
@@ -171,9 +154,13 @@ public class ArticleContentProvider extends ContentProvider {
     public final String getType(Uri uri) {
         switch (sURIMatcher.match(uri)) {
             case ARTICLE_DIR:
-                return CONTENT_TYPE;
+                return ARTICLE_TYPE;
             case ARTICLE_ID:
-                return CONTENT_ITEM_TYPE;
+                return ARTICLE_ITEM_TYPE;
+            case JOKE_DIR:
+                return JOKE_TYPE;
+            case JOKE_ID:
+                return JOKE_ITEM_TYPE;
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
