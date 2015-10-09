@@ -19,6 +19,7 @@ import info.xudshen.jandan.databinding.FragmentPostsBinding;
 import info.xudshen.jandan.model.Article;
 import info.xudshen.jandan.model.ArticleDao;
 import rx.Observable;
+import rx.functions.Action0;
 
 public class PostsFragment extends Fragment {
     private Article article = new Article("123");
@@ -41,10 +42,19 @@ public class PostsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+        Observable.empty().subscribe((T) -> {
+        }, (E) -> {
+        }, () -> {
+            if (JandanApp.daoSession.getArticleDao().count() < 100) {
+                for (int i = 0; i < 10000; i = i + 1) {
+                    Article newArticle = new Article(i + "");
+                    JandanApp.daoSession.getArticleDao().insert(newArticle);
+                }
+            }
+        });
         Observable.interval(1, TimeUnit.SECONDS).subscribe(aLong -> {
             article.setContent(aLong.toString());
-            Article newArticle = new Article(aLong.toString());
-            JandanApp.daoSession.getArticleDao().insert(newArticle);
         });
     }
 
