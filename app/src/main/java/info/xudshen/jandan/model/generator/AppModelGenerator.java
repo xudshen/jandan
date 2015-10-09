@@ -2,6 +2,7 @@ package info.xudshen.jandan.model.generator;
 
 import info.xudshen.droiddata.daogenerator.Entity;
 import info.xudshen.droiddata.daogenerator.ModelGenerator;
+import info.xudshen.droiddata.daogenerator.Property;
 import info.xudshen.droiddata.daogenerator.Schema;
 
 /**
@@ -21,11 +22,14 @@ public class AppModelGenerator extends ModelGenerator {
     void addArticle(Schema schema) {
         Entity entity = schema.addEntity("Article");
 
-        addLongProperty(entity, "articleId").primaryKey();
+        entity.addIdProperty();
+        Property articleId = addLongProperty(entity, "articleId").getProperty();
         addStringProperty(entity, "title");
         addStringProperty(entity, "author");
         addTimestampProperty(entity, "time");
         addStringProperty(entity, "content");
+
+        addUniqueIndex(entity, articleId);
 
         entity.addContentProvider();
         entity.addImport(GSON_EXPOSE);
@@ -34,9 +38,12 @@ public class AppModelGenerator extends ModelGenerator {
     void addJoke(Schema schema) {
         Entity entity = schema.addEntity("Joke");
 
-        addLongProperty(entity, "jokeId").primaryKey();
+        entity.addIdProperty();
+        Property jokeId = addLongProperty(entity, "jokeId").getProperty();
         addStringProperty(entity, "author");
         addStringProperty(entity, "content");
+
+        addUniqueIndex(entity, jokeId);
 
         entity.addContentProvider();
         entity.addImport(GSON_EXPOSE);

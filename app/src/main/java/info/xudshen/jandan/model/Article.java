@@ -12,6 +12,7 @@ import java.sql.Timestamp;
  */
 public class Article {
 
+    private Long id;
     @Expose
     private Long articleId;
     @Expose
@@ -29,16 +30,25 @@ public class Article {
     public Article() {
     }
 
-    public Article(Long articleId) {
-        this.articleId = articleId;
+    public Article(Long id) {
+        this.id = id;
     }
 
-    public Article(Long articleId, String title, String author, Timestamp time, String content) {
+    public Article(Long id, Long articleId, String title, String author, Timestamp time, String content) {
+        this.id = id;
         this.articleId = articleId;
         this.title = title;
         this.author = author;
         this.time = time;
         this.content = content;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getArticleId() {

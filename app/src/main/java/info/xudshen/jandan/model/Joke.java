@@ -11,6 +11,7 @@ import com.google.gson.annotations.Expose;
  */
 public class Joke {
 
+    private Long id;
     @Expose
     private Long jokeId;
     @Expose
@@ -24,14 +25,23 @@ public class Joke {
     public Joke() {
     }
 
-    public Joke(Long jokeId) {
-        this.jokeId = jokeId;
+    public Joke(Long id) {
+        this.id = id;
     }
 
-    public Joke(Long jokeId, String author, String content) {
+    public Joke(Long id, Long jokeId, String author, String content) {
+        this.id = id;
         this.jokeId = jokeId;
         this.author = author;
         this.content = content;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getJokeId() {

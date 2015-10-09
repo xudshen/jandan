@@ -27,9 +27,10 @@ public class JokeDao extends DDAbstractDao<Joke, Long> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property JokeId = new Property(0, Long.class, "jokeId", true, "JOKE_ID");
-        public final static Property Author = new Property(1, String.class, "author", false, "AUTHOR");
-        public final static Property Content = new Property(2, String.class, "content", false, "CONTENT");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property JokeId = new Property(1, Long.class, "jokeId", false, "JOKE_ID");
+        public final static Property Author = new Property(2, String.class, "author", false, "AUTHOR");
+        public final static Property Content = new Property(3, String.class, "content", false, "CONTENT");
     }
 
 
@@ -46,9 +47,13 @@ public class JokeDao extends DDAbstractDao<Joke, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists ? "IF NOT EXISTS " : "";
         db.execSQL("CREATE TABLE " + constraint + "\"JOKE\" (" + //
-                "\"JOKE_ID\" INTEGER PRIMARY KEY ," + // 0: jokeId
-                "\"AUTHOR\" TEXT," + // 1: author
-                "\"CONTENT\" TEXT);"); // 2: content
+                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
+                "\"JOKE_ID\" INTEGER," + // 1: jokeId
+                "\"AUTHOR\" TEXT," + // 2: author
+                "\"CONTENT\" TEXT);"); // 3: content
+        // Add Indexes
+        db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_JOKE_JOKE_ID ON JOKE" +
+                " (\"JOKE_ID\");");
     }
 
     /** Drops the underlying database table. */
@@ -62,19 +67,24 @@ public class JokeDao extends DDAbstractDao<Joke, Long> {
     protected void bindValues(SQLiteStatement stmt, Joke entity) {
         stmt.clearBindings();
  
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
+ 
         Long jokeId = entity.getJokeId();
         if (jokeId != null) {
-            stmt.bindLong(1, jokeId);
+            stmt.bindLong(2, jokeId);
         }
  
         String author = entity.getAuthor();
         if (author != null) {
-            stmt.bindString(2, author);
+            stmt.bindString(3, author);
         }
  
         String content = entity.getContent();
         if (content != null) {
-            stmt.bindString(3, content);
+            stmt.bindString(4, content);
         }
     }
 
@@ -88,9 +98,10 @@ public class JokeDao extends DDAbstractDao<Joke, Long> {
     @Override
     public Joke readEntity(Cursor cursor, int offset) {
         Joke entity = new Joke( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // jokeId
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // author
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // content
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // jokeId
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // author
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // content
         );
         return entity;
     }
@@ -98,15 +109,16 @@ public class JokeDao extends DDAbstractDao<Joke, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, Joke entity, int offset) {
-        entity.setJokeId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setAuthor(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setContent(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setJokeId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
+        entity.setAuthor(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setContent(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
     }
     
     /** @inheritdoc */
     @Override
     protected Long updateKeyAfterInsert(Joke entity, long rowId) {
-        entity.setJokeId(rowId);
+        entity.setId(rowId);
         return rowId;
     }
     
@@ -114,7 +126,7 @@ public class JokeDao extends DDAbstractDao<Joke, Long> {
     @Override
     public Long getKey(Joke entity) {
         if (entity != null) {
-            return entity.getJokeId();
+            return entity.getId();
         } else {
             return null;
         }

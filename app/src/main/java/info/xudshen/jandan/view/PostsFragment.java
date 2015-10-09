@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import java.util.concurrent.TimeUnit;
 
+import info.xudshen.jandan.JandanApp;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.adapter.ArticleRecyclerViewAdapter;
 import info.xudshen.jandan.databinding.FragmentPostsBinding;
@@ -40,7 +41,11 @@ public class PostsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Observable.interval(1, TimeUnit.SECONDS).subscribe(aLong -> article.setContent(aLong.toString()));
+        Observable.interval(1, TimeUnit.SECONDS).subscribe(aLong -> {
+            article.setContent(aLong.toString());
+            Article newArticle = new Article(aLong.toString());
+            JandanApp.daoSession.getArticleDao().insert(newArticle);
+        });
     }
 
     @Override

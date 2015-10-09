@@ -123,7 +123,7 @@ public class ModelContentProvider extends ContentProvider {
                 break;
             case ARTICLE_ID:
                 queryBuilder.setTables(ArticleDao.TABLENAME);
-                queryBuilder.appendWhere(ArticleDao.Properties.ArticleId.columnName + "="
+                queryBuilder.appendWhere(ArticleDao.Properties.Id.columnName + "="
                         + uri.getLastPathSegment());
                 break;
             case JOKE_DIR:
@@ -131,7 +131,7 @@ public class ModelContentProvider extends ContentProvider {
                 break;
             case JOKE_ID:
                 queryBuilder.setTables(JokeDao.TABLENAME);
-                queryBuilder.appendWhere(JokeDao.Properties.JokeId.columnName + "="
+                queryBuilder.appendWhere(JokeDao.Properties.Id.columnName + "="
                         + uri.getLastPathSegment());
                 break;
             default:
