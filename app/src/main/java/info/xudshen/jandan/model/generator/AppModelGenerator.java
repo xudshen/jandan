@@ -27,6 +27,8 @@ public class AppModelGenerator extends ModelGenerator {
         addTimestampProperty(entity, "time");
         addStringProperty(entity, "content");
 
+        entity.addContentProvider();
+
         entity.addImport(GSON_EXPOSE);
     }
 

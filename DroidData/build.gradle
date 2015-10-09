@@ -24,4 +24,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.0.1'
 
     compile 'org.freemarker:freemarker:2.3.22'
+    compile 'de.greenrobot:greendao:2.0.0'
 }
