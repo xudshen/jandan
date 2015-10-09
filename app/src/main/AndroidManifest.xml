@@ -8,6 +8,10 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme.Light.WithDarkToolbar">
+        <provider
+            android:name="info.xudshen.jandan.model.ModelContentProvider"
+            android:authorities="info.xudshen.jandan.model.provider"/>
+
         <activity
             android:name=".view.MainActivity"
             android:label="@string/app_name">

@@ -1,11 +1,11 @@
 package info.xudshen.jandan.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,19 +13,13 @@ import android.view.ViewGroup;
 import java.util.concurrent.TimeUnit;
 
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.adapter.ArticleRecyclerViewAdapter;
 import info.xudshen.jandan.databinding.FragmentPostsBinding;
 import info.xudshen.jandan.model.Article;
+import info.xudshen.jandan.model.ArticleDao;
 import rx.Observable;
-import rx.Observer;
 
 public class PostsFragment extends Fragment {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private Article article = new Article("123");
 
     private OnFragmentInteractionListener mListener;
@@ -34,8 +28,6 @@ public class PostsFragment extends Fragment {
     public static PostsFragment newInstance(String param1, String param2) {
         PostsFragment fragment = new PostsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -47,10 +39,6 @@ public class PostsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         Observable.interval(1, TimeUnit.SECONDS).subscribe(aLong -> article.setContent(aLong.toString()));
     }
@@ -61,6 +49,11 @@ public class PostsFragment extends Fragment {
         // Inflate the layout for this fragment
         FragmentPostsBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_posts, container, false);
         binding.setArticle(article);
+        binding.myRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        ArticleRecyclerViewAdapter viewAdapter = new ArticleRecyclerViewAdapter(getActivity(), ArticleDao.CONTENT_URI, null, null, null, null);
+        binding.myRecyclerView.setAdapter(viewAdapter);
+        getLoaderManager().initLoader(0, null, viewAdapter);
+
         return binding.getRoot();
     }
 
