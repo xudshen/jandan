@@ -28,7 +28,6 @@ public class AppModelGenerator extends ModelGenerator {
         addStringProperty(entity, "content");
 
         entity.addContentProvider();
-
         entity.addImport(GSON_EXPOSE);
     }
 
@@ -39,6 +38,7 @@ public class AppModelGenerator extends ModelGenerator {
         addStringProperty(entity, "author");
         addStringProperty(entity, "content");
 
+        entity.addContentProvider();
         entity.addImport(GSON_EXPOSE);
     }
 

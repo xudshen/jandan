@@ -1,10 +1,14 @@
 package info.xudshen.jandan.model;
 
+import java.lang.ref.WeakReference;
+import android.content.ContentUris;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.net.Uri;
 
-import de.greenrobot.dao.AbstractDao;
+import info.xudshen.droiddata.daogenerator.DDAbstractDao;
 import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
 
@@ -14,7 +18,7 @@ import info.xudshen.jandan.model.Joke;
 /** 
  * DAO for table "JOKE".
 */
-public class JokeDao extends AbstractDao<Joke, Long> {
+public class JokeDao extends DDAbstractDao<Joke, Long> {
 
     public static final String TABLENAME = "JOKE";
 
@@ -26,7 +30,7 @@ public class JokeDao extends AbstractDao<Joke, Long> {
         public final static Property JokeId = new Property(0, Long.class, "jokeId", true, "JOKE_ID");
         public final static Property Author = new Property(1, String.class, "author", false, "AUTHOR");
         public final static Property Content = new Property(2, String.class, "content", false, "CONTENT");
-    };
+    }
 
 
     public JokeDao(DaoConfig config) {
@@ -35,11 +39,12 @@ public class JokeDao extends AbstractDao<Joke, Long> {
     
     public JokeDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        contextWeakReference = new WeakReference<Context>(daoSession.getContext());
     }
 
     /** Creates the underlying database table. */
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
-        String constraint = ifNotExists? "IF NOT EXISTS ": "";
+        String constraint = ifNotExists ? "IF NOT EXISTS " : "";
         db.execSQL("CREATE TABLE " + constraint + "\"JOKE\" (" + //
                 "\"JOKE_ID\" INTEGER PRIMARY KEY ," + // 0: jokeId
                 "\"AUTHOR\" TEXT," + // 1: author
@@ -96,7 +101,7 @@ public class JokeDao extends AbstractDao<Joke, Long> {
         entity.setJokeId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setAuthor(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setContent(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-     }
+    }
     
     /** @inheritdoc */
     @Override
@@ -108,7 +113,7 @@ public class JokeDao extends AbstractDao<Joke, Long> {
     /** @inheritdoc */
     @Override
     public Long getKey(Joke entity) {
-        if(entity != null) {
+        if (entity != null) {
             return entity.getJokeId();
         } else {
             return null;
@@ -120,5 +125,96 @@ public class JokeDao extends AbstractDao<Joke, Long> {
     protected boolean isEntityUpdateable() {
         return true;
     }
-    
+
+    public static final String AUTHORITY = "info.xudshen.jandan.model.provider";
+    public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLENAME);
+    private WeakReference<Context> contextWeakReference;
+
+    @Override
+    protected void notifyInsert(Joke entity) {
+        Long key = getKey(entity);
+        if (key != null) {
+            contextWeakReference.get().getContentResolver().insert(
+                    ContentUris.withAppendedId(CONTENT_URI, key), null);
+        }
+    }
+
+    @Override
+    protected void notifyInsert(Iterable<Joke> entities) {
+        //TODO: loop it for now
+        for (Joke entity : entities) {
+            Long key = getKey(entity);
+            if (key != null) {
+                contextWeakReference.get().getContentResolver().insert(
+                        ContentUris.withAppendedId(CONTENT_URI, key), null);
+            }
+        }
+    }
+
+    @Override
+    protected void notifyUpdate(Joke entity) {
+        Long key = getKey(entity);
+        if (key != null) {
+            contextWeakReference.get().getContentResolver().update(
+                    ContentUris.withAppendedId(CONTENT_URI, key), null, null, null);
+        }
+    }
+
+    @Override
+    protected void notifyUpdate(Iterable<Joke> entities) {
+        //TODO: loop it for now
+        for (Joke entity : entities) {
+            Long key = getKey(entity);
+            if (key != null) {
+                contextWeakReference.get().getContentResolver().update(
+                        ContentUris.withAppendedId(CONTENT_URI, key), null, null, null);
+            }
+        }
+    }
+
+    @Override
+    protected void notifyDelete(Joke entity) {
+        Long key = getKey(entity);
+        if (key != null) {
+            contextWeakReference.get().getContentResolver().delete(
+                    ContentUris.withAppendedId(CONTENT_URI, key), null, null);
+        }
+    }
+
+    @Override
+    protected void notifyDelete(Iterable<Joke> entities) {
+        //TODO: loop it for now
+        for (Joke entity : entities) {
+            Long key = getKey(entity);
+            if (key != null) {
+                contextWeakReference.get().getContentResolver().delete(
+                        ContentUris.withAppendedId(CONTENT_URI, key), null, null);
+            }
+        }
+    }
+
+    @Override
+    protected void notifyDeleteByKey(Long key) {
+        if (key != null) {
+            if (key == -1) {
+                contextWeakReference.get().getContentResolver().delete(
+                        CONTENT_URI, null, null);
+            } else {
+                contextWeakReference.get().getContentResolver().delete(
+                        ContentUris.withAppendedId(CONTENT_URI, key), null, null);
+            }
+        }
+    }
+
+    @Override
+    protected void notifyDeleteByKey(Iterable<Long> keys) {
+        //TODO: loop it for now
+        for (Long key : keys) {
+            if (key != null) {
+                contextWeakReference.get().getContentResolver().delete(
+                        ContentUris.withAppendedId(CONTENT_URI, key), null, null);
+            }
+        }
+    }
+
 }

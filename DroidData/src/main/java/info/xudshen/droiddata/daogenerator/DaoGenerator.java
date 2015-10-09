@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,6 +96,7 @@ public class DaoGenerator {
         System.out.println("Processing schema version " + schema.getVersion() + "...");
 
         List<Entity> entities = schema.getEntities();
+        ContentProvider contentProvider = new ContentProvider(schema, new ArrayList<Entity>());
         for (Entity entity : entities) {
             generate(templateDao, outDirFile, entity.getJavaPackageDao(), entity.getClassNameDao(), schema, entity);
             if (!entity.isProtobuf() && !entity.isSkipGeneration()) {
@@ -110,13 +112,20 @@ public class DaoGenerator {
                     System.out.println("Skipped " + javaFilename.getCanonicalPath());
                 }
             }
-            for (ContentProvider contentProvider : entity.getContentProviders()) {
-                Map<String, Object> additionalObjectsForTemplate = new HashMap<String, Object>();
-                additionalObjectsForTemplate.put("contentProvider", contentProvider);
-                generate(templateContentProvider, outDirFile, entity.getJavaPackage(), entity.getClassName()
-                        + "ContentProvider", schema, entity, additionalObjectsForTemplate);
+            for (ContentProvider contentProvider1 : entity.getContentProviders()) {
+                contentProvider.getEntities().add(contentProvider1.getEntities().get(0));
             }
         }
+        if(contentProvider.getEntities().size() > 0) {
+            contentProvider.setAuthority(contentProvider.getEntities().get(0).getJavaPackage() + ".provider");
+            contentProvider.setJavaPackage(contentProvider.getEntities().get(0).getJavaPackage());
+            contentProvider.setClassName("ModelContentProvider");
+            Map<String, Object> additionalObjectsForTemplate = new HashMap<String, Object>();
+            additionalObjectsForTemplate.put("contentProvider", contentProvider);
+            generate(templateContentProvider, outDirFile, contentProvider.getEntities().get(0).getJavaPackage(), "Model"
+                    + "ContentProvider", schema, null, additionalObjectsForTemplate);
+        }
+
         generate(templateDaoMaster, outDirFile, schema.getDefaultJavaPackageDao(), "DaoMaster", schema, null);
         generate(templateDaoSession, outDirFile, schema.getDefaultJavaPackageDao(), "DaoSession", schema, null);
 

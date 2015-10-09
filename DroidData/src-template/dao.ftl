@@ -27,11 +27,15 @@ import java.util.List;
 <#if entity.toOneRelations?has_content>
 import java.util.ArrayList;
 </#if>
+import java.lang.ref.WeakReference;
+import android.content.ContentUris;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.net.Uri;
 
-import de.greenrobot.dao.AbstractDao;
+import info.xudshen.droiddata.daogenerator.DDAbstractDao;
 import de.greenrobot.dao.Property;
 <#if entity.toOneRelations?has_content>
 import de.greenrobot.dao.internal.SqlUtils;
@@ -61,7 +65,7 @@ import ${entity.javaPackage}.${entity.className}.Builder;
 /** 
  * DAO for table "${entity.tableName}".
 */
-public class ${entity.classNameDao} extends AbstractDao<${entity.className}, ${entity.pkType}> {
+public class ${entity.classNameDao} extends DDAbstractDao<${entity.className}, ${entity.pkType}> {
 
     public static final String TABLENAME = "${entity.tableName}";
 
@@ -73,7 +77,7 @@ public class ${entity.classNameDao} extends AbstractDao<${entity.className}, ${e
 <#list entity.propertiesColumns as property>
         public final static Property ${property.propertyName?cap_first} = new Property(${property_index}, ${property.javaType}.class, "${property.propertyName}", ${property.primaryKey?string}, "${property.columnName}");
 </#list>
-    };
+    }
 
 <#if entity.active>
     private DaoSession daoSession;
@@ -92,6 +96,7 @@ public class ${entity.classNameDao} extends AbstractDao<${entity.className}, ${e
     
     public ${entity.classNameDao}(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        contextWeakReference = new WeakReference<Context>(daoSession.getContext());
 <#if entity.active>        
         this.daoSession = daoSession;
 </#if>
@@ -100,7 +105,7 @@ public class ${entity.classNameDao} extends AbstractDao<${entity.className}, ${e
 <#if !entity.skipTableCreation>
     /** Creates the underlying database table. */
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
-        String constraint = ifNotExists? "IF NOT EXISTS ": "";
+        String constraint = ifNotExists ? "IF NOT EXISTS " : "";
         db.execSQL("CREATE TABLE " + constraint + "\"${entity.tableName}\" (" + //
 <#list entity.propertiesColumns as property>
                 "\"${property.columnName}\" ${property.columnType}<#if property.constraints??> ${property.constraints} </#if><#if property_has_next>," +<#else>);");</#if> // ${property_index}: ${property.propertyName}
@@ -228,7 +233,7 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
             -->${property.getEntityValueExpression("cursor.get${toCursorType[property.propertyType]}(offset + ${property_index})")});
 </#list>
 </#if>
-     }
+    }
     
     /** @inheritdoc */
     @Override
@@ -252,7 +257,7 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
     @Override
     public ${entity.pkType} getKey(${entity.className} entity) {
 <#if entity.pkProperty??>
-        if(entity != null) {
+        if (entity != null) {
             return entity.get${entity.pkProperty.propertyName?cap_first}();
         } else {
             return null;
@@ -267,7 +272,98 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
     protected boolean isEntityUpdateable() {
         return ${(!entity.protobuf)?string};
     }
-    
+
+    public static final String AUTHORITY = "${schema.defaultJavaPackageDao}.provider";
+    public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLENAME);
+    private WeakReference<Context> contextWeakReference;
+
+    @Override
+    protected void notifyInsert(${entity.className} entity) {
+        Long key = getKey(entity);
+        if (key != null) {
+            contextWeakReference.get().getContentResolver().insert(
+                    ContentUris.withAppendedId(CONTENT_URI, key), null);
+        }
+    }
+
+    @Override
+    protected void notifyInsert(Iterable<${entity.className}> entities) {
+        //TODO: loop it for now
+        for (${entity.className} entity : entities) {
+            Long key = getKey(entity);
+            if (key != null) {
+                contextWeakReference.get().getContentResolver().insert(
+                        ContentUris.withAppendedId(CONTENT_URI, key), null);
+            }
+        }
+    }
+
+    @Override
+    protected void notifyUpdate(${entity.className} entity) {
+        Long key = getKey(entity);
+        if (key != null) {
+            contextWeakReference.get().getContentResolver().update(
+                    ContentUris.withAppendedId(CONTENT_URI, key), null, null, null);
+        }
+    }
+
+    @Override
+    protected void notifyUpdate(Iterable<${entity.className}> entities) {
+        //TODO: loop it for now
+        for (${entity.className} entity : entities) {
+            Long key = getKey(entity);
+            if (key != null) {
+                contextWeakReference.get().getContentResolver().update(
+                        ContentUris.withAppendedId(CONTENT_URI, key), null, null, null);
+            }
+        }
+    }
+
+    @Override
+    protected void notifyDelete(${entity.className} entity) {
+        Long key = getKey(entity);
+        if (key != null) {
+            contextWeakReference.get().getContentResolver().delete(
+                    ContentUris.withAppendedId(CONTENT_URI, key), null, null);
+        }
+    }
+
+    @Override
+    protected void notifyDelete(Iterable<${entity.className}> entities) {
+        //TODO: loop it for now
+        for (${entity.className} entity : entities) {
+            Long key = getKey(entity);
+            if (key != null) {
+                contextWeakReference.get().getContentResolver().delete(
+                        ContentUris.withAppendedId(CONTENT_URI, key), null, null);
+            }
+        }
+    }
+
+    @Override
+    protected void notifyDeleteByKey(Long key) {
+        if (key != null) {
+            if (key == -1) {
+                contextWeakReference.get().getContentResolver().delete(
+                        CONTENT_URI, null, null);
+            } else {
+                contextWeakReference.get().getContentResolver().delete(
+                        ContentUris.withAppendedId(CONTENT_URI, key), null, null);
+            }
+        }
+    }
+
+    @Override
+    protected void notifyDeleteByKey(Iterable<Long> keys) {
+        //TODO: loop it for now
+        for (Long key : keys) {
+            if (key != null) {
+                contextWeakReference.get().getContentResolver().delete(
+                        ContentUris.withAppendedId(CONTENT_URI, key), null, null);
+            }
+        }
+    }
+
 <#list entity.incomingToManyRelations as toMany>
     /** Internal query to resolve the "${toMany.name}" to-many relationship of ${toMany.sourceEntity.className}. */
     public List<${toMany.targetEntity.className}> _query${toMany.sourceEntity.className?cap_first}_${toMany.name?cap_first}(<#--

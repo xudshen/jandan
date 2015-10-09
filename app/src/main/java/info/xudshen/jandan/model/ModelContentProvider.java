@@ -8,12 +8,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.text.TextUtils;
 
 import de.greenrobot.dao.DaoLog;
-
-import info.xudshen.jandan.model.DaoSession;
-import info.xudshen.jandan.model.ArticleDao;
 
 /* Copy this code snippet into your AndroidManifest.xml inside the
 <application> element:
