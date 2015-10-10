@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -111,7 +113,8 @@ public class PostsFragment extends Fragment {
             }
         });
 
-
+        binding.fab.setOnClickListener(v ->
+                binding.myRecyclerView.smoothScrollToPosition(linearLayoutManager.getItemCount() - 1));
         getLoaderManager().initLoader(0, null, viewAdapter);
         return binding.getRoot();
     }
