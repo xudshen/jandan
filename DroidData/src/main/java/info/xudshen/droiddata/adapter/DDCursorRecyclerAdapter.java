@@ -114,7 +114,7 @@ public abstract class DDCursorRecyclerAdapter<VH extends RecyclerView.ViewHolder
         }
     }
 
-    public Object getItem(int position) {
+    public Cursor getItemCursor(int position) {
         if (mDataValid && mCursor != null) {
             mCursor.moveToPosition(position);
             return mCursor;

@@ -79,6 +79,10 @@ public class PostsFragment extends Fragment {
         DDViewBindingCursorLoaderAdapter viewAdapter = RecyclerViewAdapterFactory.getArticleListAdapter(getActivity());
         viewAdapter.onItemClick((itemView, position) -> {
             Snackbar.make(itemView, position + "clicked", Snackbar.LENGTH_LONG).show();
+            Article itemArticle = JandanApp.daoSession.getArticleDao().readEntity(viewAdapter.getItemCursor(position), 0);
+            article.setArticleId(itemArticle.getArticleId());
+            article.setTitle(itemArticle.getTitle());
+            article.setId(itemArticle.getId());
         });
 
         binding.myRecyclerView.setLayoutManager(linearLayoutManager);
@@ -115,6 +119,12 @@ public class PostsFragment extends Fragment {
 
         binding.fab.setOnClickListener(v ->
                 binding.myRecyclerView.smoothScrollToPosition(linearLayoutManager.getItemCount() - 1));
+        binding.insertBtn.setOnClickListener(v -> {
+//                Snackbar.make(v, article.getTitle(), Snackbar.LENGTH_SHORT).show()
+                    article.setTitle(binding.inputTitle.getText().toString());
+                    JandanApp.daoSession.getArticleDao().update(article);
+                }
+        );
         getLoaderManager().initLoader(0, null, viewAdapter);
         return binding.getRoot();
     }
