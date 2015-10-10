@@ -99,6 +99,9 @@ dependencies {
     //greendao
     compile 'org.freemarker:freemarker:2.3.22'
 
+    //component
+    compile 'com.github.orangegangsters:swipy:1.2.0@aar'
+
     testCompile "org.mockito:mockito-core:1.+"
     testCompile "org.robolectric:robolectric:3.+"
 }

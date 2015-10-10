@@ -4,12 +4,16 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import info.xudshen.droiddata.adapter.impl.DDViewBindingCursorLoaderAdapter;
@@ -19,6 +23,8 @@ import info.xudshen.jandan.adapter.RecyclerViewAdapterFactory;
 import info.xudshen.jandan.databinding.FragmentPostsBinding;
 import info.xudshen.jandan.model.Article;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class PostsFragment extends Fragment {
     private Article article = new Article("123");
@@ -41,15 +47,17 @@ public class PostsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         Observable.empty().subscribe((T) -> {
         }, (E) -> {
         }, () -> {
             if (JandanApp.daoSession.getArticleDao().count() < 100) {
+                List<Article> articles = new ArrayList<Article>();
                 for (int i = 0; i < 10000; i = i + 1) {
                     Article newArticle = new Article(i + "");
-                    JandanApp.daoSession.getArticleDao().insert(newArticle);
+                    newArticle.setArticleId(Long.valueOf(i));
+                    articles.add(newArticle);
                 }
+                JandanApp.daoSession.getArticleDao().insertInTx(articles);
             }
         });
         Observable.interval(1, TimeUnit.SECONDS).subscribe(aLong -> {
@@ -63,11 +71,48 @@ public class PostsFragment extends Fragment {
         // Inflate the layout for this fragment
         FragmentPostsBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_posts, container, false);
         binding.setArticle(article);
-        binding.myRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        DDViewBindingCursorLoaderAdapter viewAdapter = RecyclerViewAdapterFactory.getArticleListAdapter(getActivity());
-        binding.myRecyclerView.setAdapter(viewAdapter);
-        getLoaderManager().initLoader(0, null, viewAdapter);
 
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+
+        DDViewBindingCursorLoaderAdapter viewAdapter = RecyclerViewAdapterFactory.getArticleListAdapter(getActivity());
+        viewAdapter.onItemClick((itemView, position) -> {
+            Snackbar.make(itemView, position + "clicked", Snackbar.LENGTH_LONG).show();
+        });
+
+        binding.myRecyclerView.setLayoutManager(linearLayoutManager);
+        binding.myRecyclerView.setAdapter(viewAdapter);
+
+        binding.swipeRefreshLayout.setColorSchemeResources(R.color.amber_700, R.color.deep_purple_a200);
+        binding.swipeRefreshLayout.setOnRefreshListener((direction) -> {
+            switch (direction) {
+                case TOP: {
+                    Observable.range(1, 10).subscribeOn(Schedulers.io())
+                            .doOnNext(integer -> {
+                                long offset = JandanApp.daoSession.getArticleDao().count();
+                                Article newArticle = new Article(offset + "");
+                                newArticle.setArticleId(offset);
+                                JandanApp.daoSession.getArticleDao().insert(newArticle);
+                            })
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe((T) -> {
+                            }, (E) -> {
+                            }, () -> {
+                                binding.swipeRefreshLayout.setRefreshing(false);
+                            });
+                    break;
+                }
+                case BOTTOM: {
+                    Observable.timer(2, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(aLong -> {
+                                binding.swipeRefreshLayout.setRefreshing(false);
+                            });
+                    break;
+                }
+            }
+        });
+
+
+        getLoaderManager().initLoader(0, null, viewAdapter);
         return binding.getRoot();
     }
 

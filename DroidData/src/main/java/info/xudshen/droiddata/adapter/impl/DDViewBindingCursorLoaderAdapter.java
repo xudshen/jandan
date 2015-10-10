@@ -7,6 +7,7 @@ import android.databinding.ViewDataBinding;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import info.xudshen.droiddata.adapter.DDCursorLoaderRecyclerAdapter;
@@ -16,6 +17,14 @@ import info.xudshen.droiddata.adapter.DDCursorLoaderRecyclerAdapter;
  */
 public class DDViewBindingCursorLoaderAdapter extends
         DDCursorLoaderRecyclerAdapter<DDViewBindingCursorLoaderAdapter.ViewHolder> {
+
+    private OnItemClickListener itemClickListener;
+
+    public DDViewBindingCursorLoaderAdapter onItemClick(OnItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+        return this;
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public ViewDataBinding binding;
 
@@ -23,8 +32,20 @@ public class DDViewBindingCursorLoaderAdapter extends
             super(binding.getRoot());
             this.binding = binding;
         }
+
+        public void registerOnItemClickListener(final OnItemClickListener itemClickListener) {
+            this.binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (itemClickListener != null) {
+                        itemClickListener.onItemClick(binding.getRoot(), getLayoutPosition());
+                    }
+                }
+            });
+        }
     }
 
+    //<editor-fold desc="ItemBinding">
     private ItemBindingLayoutSelector layoutSelector;
     private ItemBindingVariableAction bindingVariableAction;
 
@@ -41,13 +62,16 @@ public class DDViewBindingCursorLoaderAdapter extends
         this.bindingVariableAction = bindingVariableAction;
         return this;
     }
+    //</editor-fold>
 
     /**
      * @param viewType judged by {@link #getItemViewType(int)}
      */
     @Override
     public ViewHolder onCreateViewHolder(LayoutInflater inflater, int viewType, ViewGroup parent) {
-        return new ViewHolder(DataBindingUtil.inflate(inflater, viewType, parent, false));
+        ViewHolder viewHolder = new ViewHolder(DataBindingUtil.inflate(inflater, viewType, parent, false));
+        viewHolder.registerOnItemClickListener(itemClickListener);
+        return viewHolder;
     }
 
     @Override
@@ -65,6 +89,10 @@ public class DDViewBindingCursorLoaderAdapter extends
             throw new IllegalArgumentException("layoutSelector should not be null");
         }
         return layoutSelector.getItemBindingLayoutRes(position);
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View itemView, int position);
     }
 
     public interface ItemBindingLayoutSelector {

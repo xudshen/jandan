@@ -15,7 +15,7 @@ import info.xudshen.jandan.model.ArticleDao;
 public class RecyclerViewAdapterFactory {
     public static DDViewBindingCursorLoaderAdapter getArticleListAdapter(Activity activity) {
         return (new DDViewBindingCursorLoaderAdapter(
-                activity, ArticleDao.CONTENT_URI, null, null, null, null))
+                activity, ArticleDao.CONTENT_URI, null, null, null, "article_id desc limit 20"))
                 .layoutSelector(position -> R.layout.my_text_view)
                 .bindingVariableAction((viewDataBinding, cursor) -> {
                     Article article = JandanApp.daoSession.getArticleDao().readEntity(cursor, 0);
