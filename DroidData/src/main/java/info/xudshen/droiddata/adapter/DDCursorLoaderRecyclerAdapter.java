@@ -29,6 +29,7 @@ public abstract class DDCursorLoaderRecyclerAdapter<VH extends RecyclerView.View
         this.mSortOrder = sortOrder;
     }
 
+    //<editor-fold desc="Loader">
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(mContext, mUri, mProjection, mSelection, mSelectionArgs, mSortOrder);
@@ -43,4 +44,5 @@ public abstract class DDCursorLoaderRecyclerAdapter<VH extends RecyclerView.View
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         this.swapCursor(data);
     }
+    //</editor-fold>
 }

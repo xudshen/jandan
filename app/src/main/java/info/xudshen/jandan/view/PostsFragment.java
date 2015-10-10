@@ -12,14 +12,13 @@ import android.view.ViewGroup;
 
 import java.util.concurrent.TimeUnit;
 
+import info.xudshen.droiddata.adapter.impl.DDViewBindingCursorLoaderAdapter;
 import info.xudshen.jandan.JandanApp;
 import info.xudshen.jandan.R;
-import info.xudshen.jandan.adapter.ArticleRecyclerViewAdapter;
+import info.xudshen.jandan.adapter.RecyclerViewAdapterFactory;
 import info.xudshen.jandan.databinding.FragmentPostsBinding;
 import info.xudshen.jandan.model.Article;
-import info.xudshen.jandan.model.ArticleDao;
 import rx.Observable;
-import rx.functions.Action0;
 
 public class PostsFragment extends Fragment {
     private Article article = new Article("123");
@@ -65,7 +64,7 @@ public class PostsFragment extends Fragment {
         FragmentPostsBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_posts, container, false);
         binding.setArticle(article);
         binding.myRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        ArticleRecyclerViewAdapter viewAdapter = new ArticleRecyclerViewAdapter(getActivity(), ArticleDao.CONTENT_URI, null, null, null, null);
+        DDViewBindingCursorLoaderAdapter viewAdapter = RecyclerViewAdapterFactory.getArticleListAdapter(getActivity());
         binding.myRecyclerView.setAdapter(viewAdapter);
         getLoaderManager().initLoader(0, null, viewAdapter);
 

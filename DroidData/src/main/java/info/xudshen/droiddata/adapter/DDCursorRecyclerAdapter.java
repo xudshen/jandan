@@ -5,8 +5,11 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.os.Handler;
+import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 
 
 /**
@@ -20,6 +23,7 @@ public abstract class DDCursorRecyclerAdapter<VH extends RecyclerView.ViewHolder
     protected int mRowIDColumn;
     protected ChangeObserver mChangeObserver;
     protected DataSetObserver mDataSetObserver;
+    private LayoutInflater inflater;
 
     /**
      * If set the adapter will call requery() on the cursor whenever a content change
@@ -75,6 +79,16 @@ public abstract class DDCursorRecyclerAdapter<VH extends RecyclerView.ViewHolder
 
         //for CursorAdapter
         setHasStableIds(true);
+    }
+
+    public abstract VH onCreateViewHolder(LayoutInflater inflater, int viewType, ViewGroup parent);
+
+    @Override
+    public VH onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (inflater == null) {
+            inflater = LayoutInflater.from(parent.getContext());
+        }
+        return onCreateViewHolder(inflater, viewType, parent);
     }
 
     public abstract void onBindViewHolder(VH viewHolder, Cursor cursor);
