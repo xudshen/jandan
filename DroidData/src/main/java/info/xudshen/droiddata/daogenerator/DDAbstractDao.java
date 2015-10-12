@@ -11,6 +11,8 @@ import de.greenrobot.dao.query.DeleteQuery;
  * Created by xudshen on 15/10/9.
  */
 public abstract class DDAbstractDao<T, K extends Long> extends AbstractDao<T, K> {
+    public static final boolean EXTRA_OBSERVABLE = true;
+
     public DDAbstractDao(DaoConfig config) {
         super(config);
     }

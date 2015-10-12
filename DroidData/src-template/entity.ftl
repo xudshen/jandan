@@ -30,10 +30,17 @@ import ${schema.defaultJavaPackageDao}.DaoSession;
 import de.greenrobot.dao.DaoException;
 
 </#if>
+<#if entity.observable>
+import ${schema.defaultBRPath};
+
+</#if>
 <#if entity.additionalImportsEntity?has_content>
 <#list entity.additionalImportsEntity as additionalImport>
 import ${additionalImport};
 </#list>
+<#if entity.observable >
+import android.databinding.Bindable;
+</#if>
 
 </#if>
 <#if entity.hasKeepSections>
@@ -128,6 +135,9 @@ property>${property.javaTypeInEntity} ${property.propertyName}<#if property_has_
 <#if property.codeBeforeGetter ??>
     ${property.codeBeforeGetter}
 </#if>
+<#if property.bindable >
+    @Bindable
+</#if>
     public ${property.javaTypeInEntity} get${property.propertyName?cap_first}() {
         return ${property.propertyName};
     }
@@ -139,7 +149,15 @@ property>${property.javaTypeInEntity} ${property.propertyName}<#if property_has_
     ${property.codeBeforeGetter}
 </#if>
     public void set${property.propertyName?cap_first}(${property.javaTypeInEntity} ${property.propertyName}) {
+<#if property.bindable >
+        if ((this.${property.propertyName} == null && ${property.propertyName} != null)
+                || (this.${property.propertyName} != null && !this.${property.propertyName}.equals(${property.propertyName}))) {
+            this.${property.propertyName} = ${property.propertyName};
+            notifyPropertyChanged(BR.${property.propertyName});
+        }
+<#else>
         this.${property.propertyName} = ${property.propertyName};
+</#if>
     }
 
 </#list>

@@ -15,6 +15,8 @@ public class AppModelGenerator extends ModelGenerator {
 
     @Override
     protected void addEntities(Schema schema) {
+        schema.setDefaultBRPath("info.xudshen.jandan.BR");
+
         addArticle(schema);
         addJoke(schema);
     }
@@ -22,9 +24,11 @@ public class AppModelGenerator extends ModelGenerator {
     void addArticle(Schema schema) {
         Entity entity = schema.addEntity("Article");
 
+        entity.setObservable(true);
+
         entity.addIdProperty();
         Property articleId = addLongProperty(entity, "articleId").getProperty();
-        addStringProperty(entity, "title");
+        addStringProperty(entity, "title").bindable(true);
         addStringProperty(entity, "author");
         addTimestampProperty(entity, "time");
         addStringProperty(entity, "content");

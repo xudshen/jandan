@@ -130,6 +130,11 @@ public class Property {
             return this;
         }
 
+        public PropertyBuilder bindable(boolean bindable) {
+            property.bindable = bindable;
+            return this;
+        }
+
         public Property getProperty() {
             return property;
         }
@@ -152,6 +157,8 @@ public class Property {
     private String codeBeforeField;
     private String codeBeforeGetter;
     private String codeBeforeSetter;
+
+    private boolean bindable;
 
     private boolean primaryKey;
     private boolean pkAsc;
@@ -217,6 +224,10 @@ public class Property {
 
     public boolean isNotNull() {
         return notNull;
+    }
+
+    public boolean isBindable() {
+        return bindable;
     }
 
     public String getJavaType() {

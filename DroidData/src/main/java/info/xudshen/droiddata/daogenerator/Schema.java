@@ -32,6 +32,7 @@ public class Schema {
     private final String defaultJavaPackage;
     private String defaultJavaPackageDao;
     private String defaultJavaPackageTest;
+    private String defaultBRPath;
     private final List<Entity> entities;
     private Map<PropertyType, String> propertyToDbType;
     private Map<PropertyType, String> propertyToJavaTypeNotNull;
@@ -154,6 +155,14 @@ public class Schema {
 
     public void setDefaultJavaPackageTest(String defaultJavaPackageTest) {
         this.defaultJavaPackageTest = defaultJavaPackageTest;
+    }
+
+    public String getDefaultBRPath() {
+        return defaultBRPath;
+    }
+
+    public void setDefaultBRPath(String defaultBRPath) {
+        this.defaultBRPath = defaultBRPath;
     }
 
     public List<Entity> getEntities() {

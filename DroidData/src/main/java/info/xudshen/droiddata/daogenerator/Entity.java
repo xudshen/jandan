@@ -39,6 +39,7 @@ import java.util.TreeSet;
 public class Entity {
     private final Schema schema;
     private final String className;
+    private boolean observable;
     private final List<Property> properties;
     private List<Property> propertiesColumns;
     private final List<Property> propertiesPk;
@@ -74,6 +75,7 @@ public class Entity {
     Entity(Schema schema, String className) {
         this.schema = schema;
         this.className = className;
+        this.observable = false;
         properties = new ArrayList<Property>();
         propertiesPk = new ArrayList<Property>();
         propertiesNonPk = new ArrayList<Property>();
@@ -281,6 +283,17 @@ public class Entity {
 
     public String getClassName() {
         return className;
+    }
+
+    public boolean isObservable() {
+        return observable;
+    }
+
+    public void setObservable(boolean observable){
+        if(observable){
+            setSuperclass("android.databinding.BaseObservable");
+        }
+        this.observable = observable;
     }
 
     public List<Property> getProperties() {
