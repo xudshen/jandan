@@ -231,5 +231,4 @@ public class JokeDao extends DDAbstractDao<Joke, Long> {
             }
         }
     }
-
 }
