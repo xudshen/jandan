@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with greenDAO Generator.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.xudshen.droiddata.daogenerator;
+package info.xudshen.droiddata.dao.generator;
 
 /** Model class for an entity's property: a Java property mapped to a data base column. */
 public class Property {

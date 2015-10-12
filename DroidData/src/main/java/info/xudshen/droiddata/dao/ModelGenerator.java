@@ -1,7 +1,12 @@
-package info.xudshen.droiddata.daogenerator;
+package info.xudshen.droiddata.dao;
 
-import info.xudshen.droiddata.daogenerator.converter.EnumPropertyConverter;
-import info.xudshen.droiddata.daogenerator.converter.TimestampPropertyConverter;
+import info.xudshen.droiddata.dao.converter.EnumPropertyConverter;
+import info.xudshen.droiddata.dao.converter.TimestampPropertyConverter;
+import info.xudshen.droiddata.dao.generator.DaoGenerator;
+import info.xudshen.droiddata.dao.generator.Entity;
+import info.xudshen.droiddata.dao.generator.Index;
+import info.xudshen.droiddata.dao.generator.Property;
+import info.xudshen.droiddata.dao.generator.Schema;
 
 /**
  * Created by xudshen on 15/10/8.

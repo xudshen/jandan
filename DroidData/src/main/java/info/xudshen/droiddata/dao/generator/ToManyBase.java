@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with greenDAO Generator.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.xudshen.droiddata.daogenerator;
+package info.xudshen.droiddata.dao.generator;
 
 /** Base class for to-many relationship from source entities to target entities. */
 public abstract class ToManyBase {

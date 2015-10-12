@@ -3,7 +3,7 @@ package info.xudshen.jandan.adapter;
 import android.app.Activity;
 
 import info.xudshen.droiddata.adapter.impl.DDViewBindingCursorLoaderAdapter;
-import info.xudshen.droiddata.daogenerator.DDAbstractDao;
+import info.xudshen.droiddata.dao.DDAbstractDao;
 import info.xudshen.jandan.BR;
 import info.xudshen.jandan.JandanApp;
 import info.xudshen.jandan.R;

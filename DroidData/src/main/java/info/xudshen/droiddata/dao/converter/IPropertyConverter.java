@@ -1,4 +1,4 @@
-package info.xudshen.droiddata.daogenerator.converter;
+package info.xudshen.droiddata.dao.converter;
 
 /**
  * Created by xudshen on 15/7/14.

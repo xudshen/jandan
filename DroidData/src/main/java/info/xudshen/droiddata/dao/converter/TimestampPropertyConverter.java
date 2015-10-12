@@ -1,4 +1,4 @@
-package info.xudshen.droiddata.daogenerator.converter;
+package info.xudshen.droiddata.dao.converter;
 
 import java.sql.Timestamp;
 

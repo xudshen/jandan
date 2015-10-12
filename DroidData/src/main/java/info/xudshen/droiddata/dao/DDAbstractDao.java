@@ -1,4 +1,4 @@
-package info.xudshen.droiddata.daogenerator;
+package info.xudshen.droiddata.dao;
 
 import java.util.Arrays;
 
