@@ -3,7 +3,6 @@ package info.xudshen.jandan.adapter;
 import android.app.Activity;
 
 import info.xudshen.droiddata.adapter.impl.DDViewBindingCursorLoaderAdapter;
-import info.xudshen.droiddata.dao.DDAbstractDao;
 import info.xudshen.jandan.BR;
 import info.xudshen.jandan.JandanApp;
 import info.xudshen.jandan.R;
@@ -19,7 +18,7 @@ public class RecyclerViewAdapterFactory {
                 activity, ArticleDao.CONTENT_URI, null, null, null, "article_id desc limit 20"))
                 .layoutSelector(position -> R.layout.my_text_view)
                 .bindingVariableAction((viewDataBinding, cursor) -> {
-                    Article article = JandanApp.daoSession.getArticleDao().readEntity(cursor, DDAbstractDao.EXTRA_OBSERVABLE);
+                    Article article = JandanApp.daoSession.getArticleDao().transEntity(cursor);
                     viewDataBinding.setVariable(BR.item, article);
                 });
     }

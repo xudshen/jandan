@@ -42,6 +42,8 @@ public class AppModelGenerator extends ModelGenerator {
     void addJoke(Schema schema) {
         Entity entity = schema.addEntity("Joke");
 
+        entity.setObservable(true);
+
         entity.addIdProperty();
         Property jokeId = addLongProperty(entity, "jokeId").getProperty();
         addStringProperty(entity, "author");

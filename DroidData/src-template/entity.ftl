@@ -72,6 +72,10 @@ as ifc>${ifc}<#if ifc_has_next>, </#if></#list></#if> {
     private ${property.javaTypeInEntity} ${property.propertyName};
 </#if>
 </#list>
+<#if entity.observable >
+
+    private transient boolean __extraObservable = true;
+</#if>
 
 <#if entity.active>
     /** Used to resolve relations */
@@ -161,6 +165,16 @@ property>${property.javaTypeInEntity} ${property.propertyName}<#if property_has_
     }
 
 </#list>
+<#if entity.observable >
+    public boolean __isExtraObservable() {
+        return __extraObservable;
+    }
+
+    public void __setExtraObservable(boolean __extraObservable) {
+        this.__extraObservable = __extraObservable;
+    }
+
+</#if>
 <#--
 ##########################################
 ########## To-One Relations ##############

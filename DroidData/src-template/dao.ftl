@@ -55,11 +55,11 @@ import ${schema.defaultJavaPackageDao}.DaoSession;
 import ${additionalImport};
 </#list>
 
+</#if>
 <#if entity.observable >
 import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
-</#if>
 
 </#if>
 import ${entity.javaPackage}.${entity.className};
@@ -193,7 +193,7 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
 
     /** @inheritdoc */
     @Override
-    public ${entity.className} readEntity(Cursor cursor, int offset) {
+    protected ${entity.className} readEntity(Cursor cursor, int offset) {
 <#if entity.protobuf>
         Builder builder = ${entity.className}.newBuilder();
 <#list entity.properties as property>
@@ -232,7 +232,7 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
      
     /** @inheritdoc */
     @Override
-    public void readEntity(Cursor cursor, ${entity.className} entity, int offset) {
+    protected void readEntity(Cursor cursor, ${entity.className} entity, int offset) {
 <#if entity.protobuf>
         throw new UnsupportedOperationException("Protobuf objects cannot be modified");
 <#else> 
@@ -394,8 +394,12 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
 
     private Map<Long, WeakHashMap<${entity.className}, Boolean>> extraObMap = new HashMap<>();
 
+    /**
+     * register entity to extraObMap
+     * if entity.__isExtraObservable() == false, just skip it
+     */
     private void registerExtraOb(${entity.className} entity) {
-        if (entity == null) return;
+        if (entity == null || !entity.__isExtraObservable()) return;
         if (!extraObMap.containsKey(entity.get${entity.pkProperty.propertyName?cap_first}())) {
             extraObMap.put(entity.get${entity.pkProperty.propertyName?cap_first}(), new WeakHashMap<>());
         }
@@ -435,10 +439,9 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
      *
      * @param cursor           cursor
      * @param offset           offset column
-     * @param extra_observable register to extraOb
      * @return
      */
-    public ${entity.className} readEntity(Cursor cursor, int offset, boolean extra_observable) {
+    public ${entity.className} transEntity(Cursor cursor, int offset) {
 <#if entity.protobuf>
         Builder builder = ${entity.className}.newBuilder();
 <#list entity.properties as property>
@@ -461,9 +464,7 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
             --><#if property_has_next>,</#if> // ${property.propertyName}
 </#list>
         );
-        if (extra_observable) {
-            registerExtraOb(entity);
-        }
+        entity.__setExtraObservable(false);
         return entity;
 <#else>
 <#--
@@ -475,8 +476,8 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
 </#if>
     }
 
-    public Article readEntity(Cursor cursor, boolean extra_observable) {
-        return readEntity(cursor, 0, extra_observable);
+    public ${entity.className} transEntity(Cursor cursor) {
+        return transEntity(cursor, 0);
     }
 </#if>
 <#list entity.incomingToManyRelations as toMany>

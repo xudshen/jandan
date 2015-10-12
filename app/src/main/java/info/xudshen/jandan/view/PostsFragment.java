@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +78,7 @@ public class PostsFragment extends Fragment {
         DDViewBindingCursorLoaderAdapter viewAdapter = RecyclerViewAdapterFactory.getArticleListAdapter(getActivity());
         viewAdapter.onItemClick((itemView, position) -> {
             Snackbar.make(itemView, position + "clicked", Snackbar.LENGTH_LONG).show();
-            Article itemArticle = JandanApp.daoSession.getArticleDao().readEntity(viewAdapter.getItemCursor(position), 0);
+            Article itemArticle = JandanApp.daoSession.getArticleDao().transEntity(viewAdapter.getItemCursor(position));
             article.setArticleId(itemArticle.getArticleId());
             article.setTitle(itemArticle.getTitle());
             article.setId(itemArticle.getId());
