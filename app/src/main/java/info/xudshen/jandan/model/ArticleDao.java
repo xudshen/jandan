@@ -1,12 +1,16 @@
 package info.xudshen.jandan.model;
 
 import java.lang.ref.WeakReference;
+
+import android.content.ContentProviderOperation;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
+import android.os.RemoteException;
 
 import info.xudshen.droiddata.dao.DDAbstractDao;
 import de.greenrobot.dao.Property;
@@ -15,6 +19,7 @@ import de.greenrobot.dao.internal.DaoConfig;
 import info.xudshen.droiddata.dao.converter.TimestampPropertyConverter;
 import java.sql.Timestamp;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -117,7 +122,7 @@ public class ArticleDao extends DDAbstractDao<Article, Long> {
 
     /** @inheritdoc */
     @Override
-    public Article readEntity(Cursor cursor, int offset) {
+    protected Article readEntity(Cursor cursor, int offset) {
         Article entity = new Article( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // articleId
@@ -132,7 +137,7 @@ public class ArticleDao extends DDAbstractDao<Article, Long> {
      
     /** @inheritdoc */
     @Override
-    public void readEntity(Cursor cursor, Article entity, int offset) {
+    protected void readEntity(Cursor cursor, Article entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setArticleId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
         entity.setTitle(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
@@ -177,22 +182,35 @@ public class ArticleDao extends DDAbstractDao<Article, Long> {
     protected void notifyInsert(Article entity) {
         Long key = getKey(entity);
         if (key != null) {
-            contextWeakReference.get().getContentResolver().insert(
-                    ContentUris.withAppendedId(CONTENT_URI, key), null);
             notifyExtraOb(key, entity);
+
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().insert(
+                        ContentUris.withAppendedId(CONTENT_URI, key), null);
         }
     }
 
     @Override
     protected void notifyInsert(Iterable<Article> entities) {
-        //TODO: loop it for now
+        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
         for (Article entity : entities) {
             Long key = getKey(entity);
             if (key != null) {
-                contextWeakReference.get().getContentResolver().insert(
-                        ContentUris.withAppendedId(CONTENT_URI, key), null);
                 notifyExtraOb(key, entity);
+
+                ops.add(ContentProviderOperation.newInsert(
+                        ContentUris.withAppendedId(CONTENT_URI, key)).build());
             }
+        }
+
+        try {
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().applyBatch(AUTHORITY, ops);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (OperationApplicationException e) {
+            e.printStackTrace();
         }
     }
 
@@ -200,22 +218,35 @@ public class ArticleDao extends DDAbstractDao<Article, Long> {
     protected void notifyUpdate(Article entity) {
         Long key = getKey(entity);
         if (key != null) {
-            contextWeakReference.get().getContentResolver().update(
-                    ContentUris.withAppendedId(CONTENT_URI, key), null, null, null);
             notifyExtraOb(key);
+
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().update(
+                        ContentUris.withAppendedId(CONTENT_URI, key), null, null, null);
         }
     }
 
     @Override
     protected void notifyUpdate(Iterable<Article> entities) {
-        //TODO: loop it for now
+        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
         for (Article entity : entities) {
             Long key = getKey(entity);
             if (key != null) {
-                contextWeakReference.get().getContentResolver().update(
-                        ContentUris.withAppendedId(CONTENT_URI, key), null, null, null);
                 notifyExtraOb(key);
+
+                ops.add(ContentProviderOperation.newUpdate(
+                        ContentUris.withAppendedId(CONTENT_URI, key)).build());
             }
+        }
+
+        try {
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().applyBatch(AUTHORITY, ops);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (OperationApplicationException e) {
+            e.printStackTrace();
         }
     }
 
@@ -223,26 +254,37 @@ public class ArticleDao extends DDAbstractDao<Article, Long> {
     protected void notifyDelete(Article entity) {
         Long key = getKey(entity);
         if (key != null) {
-            contextWeakReference.get().getContentResolver().delete(
-                    ContentUris.withAppendedId(CONTENT_URI, key), null, null);
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().delete(
+                        ContentUris.withAppendedId(CONTENT_URI, key), null, null);
         }
     }
 
     @Override
     protected void notifyDelete(Iterable<Article> entities) {
-        //TODO: loop it for now
+        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
         for (Article entity : entities) {
             Long key = getKey(entity);
             if (key != null) {
-                contextWeakReference.get().getContentResolver().delete(
-                        ContentUris.withAppendedId(CONTENT_URI, key), null, null);
+                ops.add(ContentProviderOperation.newDelete(
+                        ContentUris.withAppendedId(CONTENT_URI, key)).build());
             }
+        }
+
+        try {
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().applyBatch(AUTHORITY, ops);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (OperationApplicationException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     protected void notifyDeleteByKey(Long key) {
-        if (key != null) {
+        if (key != null && contextWeakReference.get() != null) {
             if (key == -1) {
                 contextWeakReference.get().getContentResolver().delete(
                         CONTENT_URI, null, null);
@@ -255,19 +297,33 @@ public class ArticleDao extends DDAbstractDao<Article, Long> {
 
     @Override
     protected void notifyDeleteByKey(Iterable<Long> keys) {
-        //TODO: loop it for now
+        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
         for (Long key : keys) {
             if (key != null) {
-                contextWeakReference.get().getContentResolver().delete(
-                        ContentUris.withAppendedId(CONTENT_URI, key), null, null);
+                ops.add(ContentProviderOperation.newDelete(
+                        ContentUris.withAppendedId(CONTENT_URI, key)).build());
             }
+        }
+
+        try {
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().applyBatch(AUTHORITY, ops);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (OperationApplicationException e) {
+            e.printStackTrace();
         }
     }
 
     private Map<Long, WeakHashMap<Article, Boolean>> extraObMap = new HashMap<>();
 
+    /**
+     * register entity to extraObMap
+     * if entity.__isExtraObservable() == false, just skip it
+     */
     private void registerExtraOb(Article entity) {
-        if (entity == null) return;
+        if (entity == null || !entity.__isExtraObservable()) return;
         if (!extraObMap.containsKey(entity.getId())) {
             extraObMap.put(entity.getId(), new WeakHashMap<>());
         }
@@ -307,10 +363,9 @@ public class ArticleDao extends DDAbstractDao<Article, Long> {
      *
      * @param cursor           cursor
      * @param offset           offset column
-     * @param extra_observable register to extraOb
      * @return
      */
-    public Article readEntity(Cursor cursor, int offset, boolean extra_observable) {
+    public Article transEntity(Cursor cursor, int offset) {
         Article entity = new Article( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // articleId
@@ -319,13 +374,11 @@ public class ArticleDao extends DDAbstractDao<Article, Long> {
             cursor.isNull(offset + 4) ? null : timeConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 4)), // time
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // content
         );
-        if (extra_observable) {
-            registerExtraOb(entity);
-        }
+        entity.__setExtraObservable(false);
         return entity;
     }
 
-    public Article readEntity(Cursor cursor, boolean extra_observable) {
-        return readEntity(cursor, 0, extra_observable);
+    public Article transEntity(Cursor cursor) {
+        return transEntity(cursor, 0);
     }
 }

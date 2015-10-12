@@ -28,12 +28,16 @@ import java.util.List;
 import java.util.ArrayList;
 </#if>
 import java.lang.ref.WeakReference;
+
+import android.content.ContentProviderOperation;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
+import android.os.RemoteException;
 
 import info.xudshen.droiddata.dao.DDAbstractDao;
 import de.greenrobot.dao.Property;
@@ -56,6 +60,7 @@ import ${additionalImport};
 </#list>
 
 </#if>
+import java.util.ArrayList;
 <#if entity.observable >
 import java.util.HashMap;
 import java.util.Map;
@@ -296,26 +301,39 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
     protected void notifyInsert(${entity.className} entity) {
         Long key = getKey(entity);
         if (key != null) {
-            contextWeakReference.get().getContentResolver().insert(
-                    ContentUris.withAppendedId(CONTENT_URI, key), null);
 <#if entity.observable >
             notifyExtraOb(key, entity);
+
 </#if>
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().insert(
+                        ContentUris.withAppendedId(CONTENT_URI, key), null);
         }
     }
 
     @Override
     protected void notifyInsert(Iterable<${entity.className}> entities) {
-        //TODO: loop it for now
+        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
         for (${entity.className} entity : entities) {
             Long key = getKey(entity);
             if (key != null) {
-                contextWeakReference.get().getContentResolver().insert(
-                        ContentUris.withAppendedId(CONTENT_URI, key), null);
 <#if entity.observable >
                 notifyExtraOb(key, entity);
+
 </#if>
+                ops.add(ContentProviderOperation.newInsert(
+                        ContentUris.withAppendedId(CONTENT_URI, key)).build());
             }
+        }
+
+        try {
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().applyBatch(AUTHORITY, ops);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (OperationApplicationException e) {
+            e.printStackTrace();
         }
     }
 
@@ -323,26 +341,39 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
     protected void notifyUpdate(${entity.className} entity) {
         Long key = getKey(entity);
         if (key != null) {
-            contextWeakReference.get().getContentResolver().update(
-                    ContentUris.withAppendedId(CONTENT_URI, key), null, null, null);
 <#if entity.observable >
             notifyExtraOb(key);
+
 </#if>
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().update(
+                        ContentUris.withAppendedId(CONTENT_URI, key), null, null, null);
         }
     }
 
     @Override
     protected void notifyUpdate(Iterable<${entity.className}> entities) {
-        //TODO: loop it for now
+        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
         for (${entity.className} entity : entities) {
             Long key = getKey(entity);
             if (key != null) {
-                contextWeakReference.get().getContentResolver().update(
-                        ContentUris.withAppendedId(CONTENT_URI, key), null, null, null);
 <#if entity.observable >
                 notifyExtraOb(key);
+
 </#if>
+                ops.add(ContentProviderOperation.newUpdate(
+                        ContentUris.withAppendedId(CONTENT_URI, key)).build());
             }
+        }
+
+        try {
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().applyBatch(AUTHORITY, ops);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (OperationApplicationException e) {
+            e.printStackTrace();
         }
     }
 
@@ -350,26 +381,37 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
     protected void notifyDelete(${entity.className} entity) {
         Long key = getKey(entity);
         if (key != null) {
-            contextWeakReference.get().getContentResolver().delete(
-                    ContentUris.withAppendedId(CONTENT_URI, key), null, null);
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().delete(
+                        ContentUris.withAppendedId(CONTENT_URI, key), null, null);
         }
     }
 
     @Override
     protected void notifyDelete(Iterable<${entity.className}> entities) {
-        //TODO: loop it for now
+        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
         for (${entity.className} entity : entities) {
             Long key = getKey(entity);
             if (key != null) {
-                contextWeakReference.get().getContentResolver().delete(
-                        ContentUris.withAppendedId(CONTENT_URI, key), null, null);
+                ops.add(ContentProviderOperation.newDelete(
+                        ContentUris.withAppendedId(CONTENT_URI, key)).build());
             }
+        }
+
+        try {
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().applyBatch(AUTHORITY, ops);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (OperationApplicationException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     protected void notifyDeleteByKey(Long key) {
-        if (key != null) {
+        if (key != null && contextWeakReference.get() != null) {
             if (key == -1) {
                 contextWeakReference.get().getContentResolver().delete(
                         CONTENT_URI, null, null);
@@ -382,12 +424,22 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
 
     @Override
     protected void notifyDeleteByKey(Iterable<Long> keys) {
-        //TODO: loop it for now
+        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
         for (Long key : keys) {
             if (key != null) {
-                contextWeakReference.get().getContentResolver().delete(
-                        ContentUris.withAppendedId(CONTENT_URI, key), null, null);
+                ops.add(ContentProviderOperation.newDelete(
+                        ContentUris.withAppendedId(CONTENT_URI, key)).build());
             }
+        }
+
+        try {
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().applyBatch(AUTHORITY, ops);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (OperationApplicationException e) {
+            e.printStackTrace();
         }
     }
 <#if entity.observable>

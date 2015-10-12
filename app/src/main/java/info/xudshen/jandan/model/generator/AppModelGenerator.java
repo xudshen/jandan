@@ -29,7 +29,7 @@ public class AppModelGenerator extends ModelGenerator {
         entity.addIdProperty();
         Property articleId = addLongProperty(entity, "articleId").getProperty();
         addStringProperty(entity, "title").bindable(true);
-        addStringProperty(entity, "author");
+        addStringProperty(entity, "author").bindable(true);
         addTimestampProperty(entity, "time");
         addStringProperty(entity, "content");
 

@@ -27,6 +27,8 @@ public class Article extends android.databinding.BaseObservable  {
     @Expose
     private String content;
 
+    private transient boolean __extraObservable = true;
+
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
 
@@ -75,12 +77,17 @@ public class Article extends android.databinding.BaseObservable  {
         }
     }
 
+    @Bindable
     public String getAuthor() {
         return author;
     }
 
     public void setAuthor(String author) {
-        this.author = author;
+        if ((this.author == null && author != null)
+                || (this.author != null && !this.author.equals(author))) {
+            this.author = author;
+            notifyPropertyChanged(BR.author);
+        }
     }
 
     public Timestamp getTime() {
@@ -97,6 +104,14 @@ public class Article extends android.databinding.BaseObservable  {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public boolean __isExtraObservable() {
+        return __extraObservable;
+    }
+
+    public void __setExtraObservable(boolean __extraObservable) {
+        this.__extraObservable = __extraObservable;
     }
 
     // KEEP METHODS - put your custom methods here

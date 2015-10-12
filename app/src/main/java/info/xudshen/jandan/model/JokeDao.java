@@ -1,16 +1,25 @@
 package info.xudshen.jandan.model;
 
 import java.lang.ref.WeakReference;
+
+import android.content.ContentProviderOperation;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
+import android.os.RemoteException;
 
 import info.xudshen.droiddata.dao.DDAbstractDao;
 import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import info.xudshen.jandan.model.Joke;
 
@@ -95,23 +104,25 @@ public class JokeDao extends DDAbstractDao<Joke, Long> {
 
     /** @inheritdoc */
     @Override
-    public Joke readEntity(Cursor cursor, int offset) {
+    protected Joke readEntity(Cursor cursor, int offset) {
         Joke entity = new Joke( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // jokeId
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // author
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // content
         );
+        registerExtraOb(entity);
         return entity;
     }
      
     /** @inheritdoc */
     @Override
-    public void readEntity(Cursor cursor, Joke entity, int offset) {
+    protected void readEntity(Cursor cursor, Joke entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setJokeId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
         entity.setAuthor(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setContent(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        registerExtraOb(entity);
     }
     
     /** @inheritdoc */
@@ -149,20 +160,35 @@ public class JokeDao extends DDAbstractDao<Joke, Long> {
     protected void notifyInsert(Joke entity) {
         Long key = getKey(entity);
         if (key != null) {
-            contextWeakReference.get().getContentResolver().insert(
-                    ContentUris.withAppendedId(CONTENT_URI, key), null);
+            notifyExtraOb(key, entity);
+
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().insert(
+                        ContentUris.withAppendedId(CONTENT_URI, key), null);
         }
     }
 
     @Override
     protected void notifyInsert(Iterable<Joke> entities) {
-        //TODO: loop it for now
+        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
         for (Joke entity : entities) {
             Long key = getKey(entity);
             if (key != null) {
-                contextWeakReference.get().getContentResolver().insert(
-                        ContentUris.withAppendedId(CONTENT_URI, key), null);
+                notifyExtraOb(key, entity);
+
+                ops.add(ContentProviderOperation.newInsert(
+                        ContentUris.withAppendedId(CONTENT_URI, key)).build());
             }
+        }
+
+        try {
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().applyBatch(AUTHORITY, ops);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (OperationApplicationException e) {
+            e.printStackTrace();
         }
     }
 
@@ -170,20 +196,35 @@ public class JokeDao extends DDAbstractDao<Joke, Long> {
     protected void notifyUpdate(Joke entity) {
         Long key = getKey(entity);
         if (key != null) {
-            contextWeakReference.get().getContentResolver().update(
-                    ContentUris.withAppendedId(CONTENT_URI, key), null, null, null);
+            notifyExtraOb(key);
+
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().update(
+                        ContentUris.withAppendedId(CONTENT_URI, key), null, null, null);
         }
     }
 
     @Override
     protected void notifyUpdate(Iterable<Joke> entities) {
-        //TODO: loop it for now
+        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
         for (Joke entity : entities) {
             Long key = getKey(entity);
             if (key != null) {
-                contextWeakReference.get().getContentResolver().update(
-                        ContentUris.withAppendedId(CONTENT_URI, key), null, null, null);
+                notifyExtraOb(key);
+
+                ops.add(ContentProviderOperation.newUpdate(
+                        ContentUris.withAppendedId(CONTENT_URI, key)).build());
             }
+        }
+
+        try {
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().applyBatch(AUTHORITY, ops);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (OperationApplicationException e) {
+            e.printStackTrace();
         }
     }
 
@@ -191,26 +232,37 @@ public class JokeDao extends DDAbstractDao<Joke, Long> {
     protected void notifyDelete(Joke entity) {
         Long key = getKey(entity);
         if (key != null) {
-            contextWeakReference.get().getContentResolver().delete(
-                    ContentUris.withAppendedId(CONTENT_URI, key), null, null);
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().delete(
+                        ContentUris.withAppendedId(CONTENT_URI, key), null, null);
         }
     }
 
     @Override
     protected void notifyDelete(Iterable<Joke> entities) {
-        //TODO: loop it for now
+        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
         for (Joke entity : entities) {
             Long key = getKey(entity);
             if (key != null) {
-                contextWeakReference.get().getContentResolver().delete(
-                        ContentUris.withAppendedId(CONTENT_URI, key), null, null);
+                ops.add(ContentProviderOperation.newDelete(
+                        ContentUris.withAppendedId(CONTENT_URI, key)).build());
             }
+        }
+
+        try {
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().applyBatch(AUTHORITY, ops);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (OperationApplicationException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     protected void notifyDeleteByKey(Long key) {
-        if (key != null) {
+        if (key != null && contextWeakReference.get() != null) {
             if (key == -1) {
                 contextWeakReference.get().getContentResolver().delete(
                         CONTENT_URI, null, null);
@@ -223,12 +275,86 @@ public class JokeDao extends DDAbstractDao<Joke, Long> {
 
     @Override
     protected void notifyDeleteByKey(Iterable<Long> keys) {
-        //TODO: loop it for now
+        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
         for (Long key : keys) {
             if (key != null) {
-                contextWeakReference.get().getContentResolver().delete(
-                        ContentUris.withAppendedId(CONTENT_URI, key), null, null);
+                ops.add(ContentProviderOperation.newDelete(
+                        ContentUris.withAppendedId(CONTENT_URI, key)).build());
             }
         }
+
+        try {
+            if (contextWeakReference.get() != null)
+                contextWeakReference.get().getContentResolver().applyBatch(AUTHORITY, ops);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (OperationApplicationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Map<Long, WeakHashMap<Joke, Boolean>> extraObMap = new HashMap<>();
+
+    /**
+     * register entity to extraObMap
+     * if entity.__isExtraObservable() == false, just skip it
+     */
+    private void registerExtraOb(Joke entity) {
+        if (entity == null || !entity.__isExtraObservable()) return;
+        if (!extraObMap.containsKey(entity.getId())) {
+            extraObMap.put(entity.getId(), new WeakHashMap<>());
+        }
+        WeakHashMap<Joke, Boolean> map = extraObMap.get(entity.getId());
+        if (!map.containsKey(entity)) {
+            map.put(entity, true);
+        }
+    }
+
+    private void notifyExtraOb(Long key) {
+        if (extraObMap.containsKey(key)) {
+            for (Joke entity : extraObMap.get(key).keySet()) {
+                if (entity != null)
+                    refresh(entity);
+            }
+        }
+    }
+
+    /**
+     * register new entity, and notify other entity
+     *
+     * @param key
+     * @param newEntity
+     */
+    private void notifyExtraOb(Long key, Joke newEntity) {
+        registerExtraOb(newEntity);
+        if (extraObMap.containsKey(key)) {
+            for (Joke entity : extraObMap.get(key).keySet()) {
+                if (entity != null && entity != newEntity)
+                    refresh(entity);
+            }
+        }
+    }
+
+    /**
+     * used for client to get the entity from cursor
+     *
+     * @param cursor           cursor
+     * @param offset           offset column
+     * @return
+     */
+    public Joke transEntity(Cursor cursor, int offset) {
+        Joke entity = new Joke( //
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // jokeId
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // author
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // content
+        );
+        entity.__setExtraObservable(false);
+        return entity;
+    }
+
+    public Joke transEntity(Cursor cursor) {
+        return transEntity(cursor, 0);
     }
 }
