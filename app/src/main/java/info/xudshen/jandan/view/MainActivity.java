@@ -1,7 +1,6 @@
 package info.xudshen.jandan.view;
 
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
@@ -17,7 +16,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.xudshen.jandan.R;
 
-public class MainActivity extends AppCompatActivity implements PostsFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.activity_main_drawer_layout)
@@ -26,14 +25,7 @@ public class MainActivity extends AppCompatActivity implements PostsFragment.OnF
     NavigationView drawerNavigationView;
     ActionBarDrawerToggle drawerToggle;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-
-        setSupportActionBar(toolbar);
-
+    private void initDrawer() {
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.setDrawerListener(drawerToggle);
 
@@ -85,6 +77,17 @@ public class MainActivity extends AppCompatActivity implements PostsFragment.OnF
     }
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
+
+        initDrawer();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         //[foreground lifetime]visible & taking user focus
@@ -125,10 +128,5 @@ public class MainActivity extends AppCompatActivity implements PostsFragment.OnF
         super.onPostCreate(savedInstanceState);
 
         drawerToggle.syncState();
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 }
