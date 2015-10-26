@@ -33,6 +33,7 @@ public class Schema {
     private String defaultJavaPackageDao;
     private String defaultJavaPackageTest;
     private String defaultBRPath;
+    private String defaultJavaPackageObservable;
     private final List<Entity> entities;
     private Map<PropertyType, String> propertyToDbType;
     private Map<PropertyType, String> propertyToJavaTypeNotNull;
@@ -163,6 +164,14 @@ public class Schema {
 
     public void setDefaultBRPath(String defaultBRPath) {
         this.defaultBRPath = defaultBRPath;
+    }
+
+    public String getDefaultJavaPackageObservable() {
+        return defaultJavaPackageObservable;
+    }
+
+    public void setDefaultJavaPackageObservable(String defaultJavaPackageObservable) {
+        this.defaultJavaPackageObservable = defaultJavaPackageObservable;
     }
 
     public List<Entity> getEntities() {

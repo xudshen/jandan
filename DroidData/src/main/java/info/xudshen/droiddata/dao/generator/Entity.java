@@ -36,7 +36,7 @@ import java.util.TreeSet;
  * @see <a href="http://greendao-orm.com/documentation/modelling-entities/">Modelling Entities (Documentation page)</a>
  * @see <a href="http://greendao-orm.com/documentation/relations/">Relations (Documentation page)</a>
  */
-public class Entity {
+public class Entity implements Cloneable {
     private final Schema schema;
     private final String className;
     private boolean observable;
@@ -290,9 +290,6 @@ public class Entity {
     }
 
     public void setObservable(boolean observable){
-        if(observable){
-            setSuperclass("android.databinding.BaseObservable");
-        }
         this.observable = observable;
     }
 
@@ -678,4 +675,8 @@ public class Entity {
         return "Entity " + className + " (package: " + javaPackage + ")";
     }
 
+    @Override
+    protected Entity clone() throws CloneNotSupportedException {
+        return (Entity)super.clone();
+    }
 }

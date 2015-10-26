@@ -30,13 +30,22 @@ import ${schema.defaultJavaPackageDao}.DaoSession;
 import de.greenrobot.dao.DaoException;
 
 </#if>
+<#if entity.observable>
+import ${schema.defaultBRPath};
+
+</#if>
 <#if entity.additionalImportsEntity?has_content>
 <#list entity.additionalImportsEntity as additionalImport>
 import ${additionalImport};
 </#list>
+import java.util.ArrayList;
+import java.util.List;
+
 <#if entity.observable >
 import android.databinding.Bindable;
 </#if>
+
+import ${schema.defaultJavaPackage}.${entity.className};
 
 </#if>
 <#if entity.hasKeepSections>
@@ -50,7 +59,7 @@ import android.databinding.Bindable;
 /**
  * Entity mapped to table "${entity.tableName}".
  */
-public class ${entity.className}<#if
+public class ${entity.className}Observable<#if
 entity.superclass?has_content> extends ${entity.superclass} </#if><#if
 entity.interfacesToImplement?has_content> implements <#list entity.interfacesToImplement
 as ifc>${ifc}<#if ifc_has_next>, </#if></#list></#if> {
@@ -96,11 +105,11 @@ ${keepFields!}    // KEEP FIELDS END
 
 </#if>
 <#if entity.constructors>
-    public ${entity.className}() {
+    public ${entity.className}Observable() {
     }
 <#if entity.propertiesPk?has_content && entity.propertiesPk?size != entity.properties?size>
 
-    public ${entity.className}(<#list entity.propertiesPk as
+    public ${entity.className}Observable(<#list entity.propertiesPk as
 property>${property.javaType} ${property.propertyName}<#if property_has_next>, </#if></#list>) {
 <#list entity.propertiesPk as property>
         this.${property.propertyName} = ${property.propertyName};
@@ -108,7 +117,7 @@ property>${property.javaType} ${property.propertyName}<#if property_has_next>, <
     }
 </#if>
 
-    public ${entity.className}(<#list entity.properties as
+    public ${entity.className}Observable(<#list entity.properties as
 property>${property.javaTypeInEntity} ${property.propertyName}<#if property_has_next>, </#if></#list>) {
 <#list entity.properties as property>
         this.${property.propertyName} = ${property.propertyName};
@@ -131,6 +140,9 @@ property>${property.javaTypeInEntity} ${property.propertyName}<#if property_has_
 <#if property.codeBeforeGetter ??>
     ${property.codeBeforeGetter}
 </#if>
+<#if property.bindable >
+    @Bindable
+</#if>
     public ${property.javaTypeInEntity} get${property.propertyName?cap_first}() {
         return ${property.propertyName};
     }
@@ -142,133 +154,55 @@ property>${property.javaTypeInEntity} ${property.propertyName}<#if property_has_
     ${property.codeBeforeGetter}
 </#if>
     public void set${property.propertyName?cap_first}(${property.javaTypeInEntity} ${property.propertyName}) {
+<#if property.bindable >
+        if ((this.${property.propertyName} == null && ${property.propertyName} != null)
+                || (this.${property.propertyName} != null && !this.${property.propertyName}.equals(${property.propertyName}))) {
+            this.${property.propertyName} = ${property.propertyName};
+            notifyPropertyChanged(BR.${property.propertyName});
+        }
+<#else>
         this.${property.propertyName} = ${property.propertyName};
+</#if>
     }
 
 </#list>
-<#--
-##########################################
-########## To-One Relations ##############
-##########################################
--->
-<#list entity.toOneRelations as toOne>
-    /** To-one relationship, resolved on first access. */
-    public ${toOne.targetEntity.className} get${toOne.name?cap_first}() {
-<#if toOne.useFkProperty>
-        ${toOne.fkProperties[0].javaType} __key = this.${toOne.fkProperties[0].propertyName};
-        if (${toOne.name}__resolvedKey == null || <#--
-        --><#if toOne.resolvedKeyUseEquals[0]>!${toOne.name}__resolvedKey.equals(__key)<#--
-        --><#else>${toOne.name}__resolvedKey != __key</#if>) {
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            ${toOne.targetEntity.classNameDao} targetDao = daoSession.get${toOne.targetEntity.classNameDao?cap_first}();
-            ${toOne.targetEntity.className} ${toOne.name}New = targetDao.load(__key);
-            synchronized (this) {
-                ${toOne.name} = ${toOne.name}New;
-            	${toOne.name}__resolvedKey = __key;
-            }
+
+    /**
+     * convert entity to entityObservable
+     */
+    public ${entity.className}Observable(${entity.className} entity) {
+<#list entity.properties as property>
+        this.${property.propertyName} = entity.get${property.propertyName?cap_first}();
+</#list>
+    }
+
+    @Override
+    public Long getModelKey() {
+        return this.get${entity.pkProperty.propertyName?cap_first}();
+    }
+
+    @Override
+    public void refresh(${entity.className} entity) {
+        List<Integer> propertyChanges = new ArrayList<>();
+<#list entity.properties as property>
+<#if property.bindable >
+        if ((this.${property.propertyName} == null && entity.get${property.propertyName?cap_first}() != null)
+                || (this.${property.propertyName} != null && !this.${property.propertyName}.equals(entity.get${property.propertyName?cap_first}()))) {
+            this.${property.propertyName} = entity.get${property.propertyName?cap_first}();
+            propertyChanges.add(BR.${property.propertyName});
         }
 <#else>
-        if (${toOne.name} != null || !${toOne.name}__refreshed) {
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            ${toOne.targetEntity.classNameDao} targetDao = daoSession.get${toOne.targetEntity.classNameDao?cap_first}();
-            targetDao.refresh(${toOne.name});
-            ${toOne.name}__refreshed = true;
-        }
+        this.${property.propertyName} = entity.get${property.propertyName?cap_first}();
 </#if>
-        return ${toOne.name};
-    }
-<#if !toOne.useFkProperty>
-
-    /** To-one relationship, returned entity is not refreshed and may carry only the PK property. */
-    public ${toOne.targetEntity.className} peak${toOne.name?cap_first}() {
-        return ${toOne.name};
-    }
-</#if>
-
-    public void set${toOne.name?cap_first}(${toOne.targetEntity.className} ${toOne.name}) {
-<#if toOne.fkProperties[0].notNull>
-        if (${toOne.name} == null) {
-            throw new DaoException("To-one property '${toOne.fkProperties[0].propertyName}' has not-null constraint; cannot set to-one to null");
-        }
-</#if>
-        synchronized (this) {
-            this.${toOne.name} = ${toOne.name};
-<#if toOne.useFkProperty>        
-            ${toOne.fkProperties[0].propertyName} = <#if !toOne.fkProperties[0].notNull>${toOne.name} == null ? null : </#if>${toOne.name}.get${toOne.targetEntity.pkProperty.propertyName?cap_first}();
-            ${toOne.name}__resolvedKey = ${toOne.fkProperties[0].propertyName};
-<#else>
-            ${toOne.name}__refreshed = true;
-</#if>
-        }
-    }
-
 </#list>
-<#--
-##########################################
-########## To-Many Relations #############
-##########################################
--->
-<#list entity.toManyRelations as toMany>
-    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
-    public List<${toMany.targetEntity.className}> get${toMany.name?cap_first}() {
-        if (${toMany.name} == null) {
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            ${toMany.targetEntity.classNameDao} targetDao = daoSession.get${toMany.targetEntity.classNameDao?cap_first}();
-            List<${toMany.targetEntity.className}> ${toMany.name}New = targetDao._query${toMany.sourceEntity.className?cap_first}_${toMany.name?cap_first}(<#--
-                --><#if toMany.sourceProperties??><#list toMany.sourceProperties as property>${property.propertyName}<#if property_has_next>, </#if></#list><#else><#--
-                -->${entity.pkProperty.propertyName}</#if>);
-            synchronized (this) {<#-- Check if another thread was faster, we cannot lock while doing the query to prevent deadlocks -->
-                if(${toMany.name} == null) {
-                    ${toMany.name} = ${toMany.name}New;
-                }
-            }
+
+        if (propertyChanges.size() == 1) {
+            notifyPropertyChanged(propertyChanges.get(0));
+        } else if (propertyChanges.size() > 1) {
+            notifyChange();
         }
-        return ${toMany.name};
     }
 
-    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    public synchronized void reset${toMany.name?cap_first}() {
-        ${toMany.name} = null;
-    }
-
-</#list>
-<#--
-##########################################
-########## Active entity operations ######
-##########################################
--->
-<#if entity.active>
-    /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */
-    public void delete() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }    
-        myDao.delete(this);
-    }
-
-    /** Convenient call for {@link AbstractDao#update(Object)}. Entity must attached to an entity context. */
-    public void update() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }    
-        myDao.update(this);
-    }
-
-    /** Convenient call for {@link AbstractDao#refresh(Object)}. Entity must attached to an entity context. */
-    public void refresh() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }    
-        myDao.refresh(this);
-    }
-
-</#if>
 <#if entity.hasKeepSections>
     // KEEP METHODS - put your custom methods here
 ${keepMethods!}    // KEEP METHODS END

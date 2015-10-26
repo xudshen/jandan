@@ -132,6 +132,9 @@ public class Property {
 
         public PropertyBuilder bindable(boolean bindable) {
             property.bindable = bindable;
+            if (bindable) {
+                property.entity.setObservable(true);
+            }
             return this;
         }
 

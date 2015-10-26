@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.android.databinding'
 
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
@@ -32,6 +33,8 @@ dependencies {
     def testDependencies = rootProject.ext.dataTestDependencies
 
     compile project(':domain')
+
+    apt dependencies.androidBinding
 
     apt dependencies.daggerCompiler
     compile dependencies.daggerCompiler

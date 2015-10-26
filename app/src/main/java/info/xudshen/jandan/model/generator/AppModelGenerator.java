@@ -10,12 +10,15 @@ import info.xudshen.droiddata.dao.generator.Schema;
  */
 public class AppModelGenerator extends ModelGenerator {
     public AppModelGenerator() {
-        super(1, "info.xudshen.jandan.model", "app/src/main/java");
+        super(1, "info.xudshen.jandan.domain.model", "data/src/main/java");
+        setOutDirEntity("domain/src/main/java");
     }
 
     @Override
     protected void addEntities(Schema schema) {
-        schema.setDefaultBRPath("info.xudshen.jandan.BR");
+        schema.setDefaultBRPath("info.xudshen.data.BR");
+        schema.setDefaultJavaPackageDao("info.xudshen.jandan.data.dao");
+        schema.setDefaultJavaPackageObservable("info.xudshen.jandan.data.model.observable");
 
         addArticle(schema);
         addJoke(schema);
@@ -23,8 +26,6 @@ public class AppModelGenerator extends ModelGenerator {
 
     void addArticle(Schema schema) {
         Entity entity = schema.addEntity("Article");
-
-        entity.setObservable(true);
 
         entity.addIdProperty();
         Property articleId = addLongProperty(entity, "articleId").getProperty();
@@ -41,8 +42,6 @@ public class AppModelGenerator extends ModelGenerator {
 
     void addJoke(Schema schema) {
         Entity entity = schema.addEntity("Joke");
-
-        entity.setObservable(true);
 
         entity.addIdProperty();
         Property jokeId = addLongProperty(entity, "jokeId").getProperty();

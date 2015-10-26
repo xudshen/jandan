@@ -221,9 +221,6 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
             --><#if property_has_next>,</#if> // ${property.propertyName}
 </#list>        
         );
-<#if entity.observable >
-        registerExtraOb(entity);
-</#if>
         return entity;
 <#else>
 <#--
@@ -245,9 +242,6 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
         entity.set${property.propertyName?cap_first}(<#if !property.notNull>cursor.isNull(offset + ${property_index}) ? null : </#if><#--
             -->${property.getEntityValueExpression("cursor.get${toCursorType[property.propertyType]}(offset + ${property_index})")});
 </#list>
-<#if entity.observable >
-        registerExtraOb(entity);
-</#if>
 </#if>
     }
     
@@ -293,7 +287,7 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + TABLENAME);
     private WeakReference<Context> contextWeakReference;
 
-    public void setContext(Context context){
+    public void setContext(Context context) {
         contextWeakReference = new WeakReference<Context>(context);
     }
 
@@ -302,7 +296,7 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
         Long key = getKey(entity);
         if (key != null) {
 <#if entity.observable >
-            notifyExtraOb(key, entity);
+            notifyExtraOb(key);
 
 </#if>
             if (contextWeakReference.get() != null)
@@ -319,7 +313,7 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
             Long key = getKey(entity);
             if (key != null) {
 <#if entity.observable >
-                notifyExtraOb(key, entity);
+                notifyExtraOb(key);
 
 </#if>
                 ops.add(ContentProviderOperation.newInsert(
@@ -444,18 +438,17 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
     }
 <#if entity.observable>
 
-    private Map<Long, WeakHashMap<${entity.className}, Boolean>> extraObMap = new HashMap<>();
+    private Map<Long, WeakHashMap<IModelObservable<${entity.className}>, Boolean>> extraObMap = new HashMap<>();
 
     /**
      * register entity to extraObMap
-     * if entity.__isExtraObservable() == false, just skip it
      */
-    private void registerExtraOb(${entity.className} entity) {
-        if (entity == null || !entity.__isExtraObservable()) return;
-        if (!extraObMap.containsKey(entity.get${entity.pkProperty.propertyName?cap_first}())) {
-            extraObMap.put(entity.get${entity.pkProperty.propertyName?cap_first}(), new WeakHashMap<>());
+    private void registerExtraOb(IModelObservable entity) {
+        if (entity == null) return;
+        if (!extraObMap.containsKey(entity.getModelKey())) {
+            extraObMap.put(entity.getModelKey(), new WeakHashMap<>());
         }
-        WeakHashMap<${entity.className}, Boolean> map = extraObMap.get(entity.get${entity.pkProperty.propertyName?cap_first}());
+        WeakHashMap<IModelObservable<${entity.className}>, Boolean> map = extraObMap.get(entity.getModelKey());
         if (!map.containsKey(entity)) {
             map.put(entity, true);
         }
@@ -463,74 +456,14 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
 
     private void notifyExtraOb(Long key) {
         if (extraObMap.containsKey(key)) {
-            for (${entity.className} entity : extraObMap.get(key).keySet()) {
+            ${entity.className} newEntity = load(key);
+            for (IModelObservable<${entity.className}> entity : extraObMap.get(key).keySet()) {
                 if (entity != null)
-                    refresh(entity);
+                    entity.refresh(newEntity);
             }
         }
     }
 
-    /**
-     * register new entity, and notify other entity
-     *
-     * @param key
-     * @param newEntity
-     */
-    private void notifyExtraOb(Long key, ${entity.className} newEntity) {
-        registerExtraOb(newEntity);
-        if (extraObMap.containsKey(key)) {
-            for (${entity.className} entity : extraObMap.get(key).keySet()) {
-                if (entity != null && entity != newEntity)
-                    refresh(entity);
-            }
-        }
-    }
-
-    /**
-     * used for client to get the entity from cursor
-     *
-     * @param cursor           cursor
-     * @param offset           offset column
-     * @return
-     */
-    public ${entity.className} transEntity(Cursor cursor, int offset) {
-<#if entity.protobuf>
-        Builder builder = ${entity.className}.newBuilder();
-<#list entity.properties as property>
-<#if !property.notNull>
-        if (!cursor.isNull(offset + ${property_index})) {
-    </#if>        builder.set${property.propertyName?cap_first}(cursor.get${toCursorType[property.propertyType]}(offset + ${property_index}));
-<#if !property.notNull>
-        }
-</#if>
-</#list>
-        return builder.build();
-<#elseif entity.constructors>
-<#--
-############################## readEntity non-protobuff, constructor ##############################
--->
-        ${entity.className} entity = new ${entity.className}( //
-<#list entity.properties as property>
-            <#if !property.notNull>cursor.isNull(offset + ${property_index}) ? null : </#if><#--
-            -->${property.getEntityValueExpression("cursor.get${toCursorType[property.propertyType]}(offset + ${property_index})")}<#--
-            --><#if property_has_next>,</#if> // ${property.propertyName}
-</#list>
-        );
-        entity.__setExtraObservable(false);
-        return entity;
-<#else>
-<#--
-############################## readEntity non-protobuff, setters ##############################
--->
-        ${entity.className} entity = new ${entity.className}();
-        readEntity(cursor, entity, offset);
-        return entity;
-</#if>
-    }
-
-    public ${entity.className} transEntity(Cursor cursor) {
-        return transEntity(cursor, 0);
-    }
 </#if>
 <#list entity.incomingToManyRelations as toMany>
     /** Internal query to resolve the "${toMany.name}" to-many relationship of ${toMany.sourceEntity.className}. */

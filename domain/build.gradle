@@ -39,6 +39,7 @@ dependencies {
     provided dependencies.javaxAnnotation
 
     compile dependencies.rxJava
+    compile dependencies.gson
 
     compile dependencies.logbackCore
     compile dependencies.logbackClassic

@@ -72,6 +72,8 @@ public abstract class ModelGenerator {
     private int version;
     private String defaultJavaPackage;
     private String outDir;
+    private String outDirEntity;
+    private String outDirTest;
 
     public ModelGenerator(int version, String defaultJavaPackage, String outDir) {
         this.version = version;
@@ -81,10 +83,18 @@ public abstract class ModelGenerator {
         this.schema.enableKeepSectionsByDefault();
     }
 
+    public void setOutDirEntity(String outDirEntity) {
+        this.outDirEntity = outDirEntity;
+    }
+
+    public void setOutDirTest(String outDirTest) {
+        this.outDirTest = outDirTest;
+    }
+
     protected abstract void addEntities(Schema schema);
 
     protected void generateAll() throws Exception {
         addEntities(this.schema);
-        new DaoGenerator().generateAll(this.schema, this.outDir);
+        new DaoGenerator().generateAll(this.schema, this.outDir, this.outDirEntity, this.outDirTest);
     }
 }

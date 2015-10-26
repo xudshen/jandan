@@ -88,6 +88,7 @@ ext {
             javaxAnnotation: "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
             //enhance
             rxJava         : "io.reactivex:rxjava:${rxJavaVersion}",
+            gson           : "com.google.code.gson:gson:${gsonVersion}",
             //log
             logbackCore    : "com.github.tony19:logback-android-core:${logbackVersion}",
             logbackClassic : "com.github.tony19:logback-android-classic:${logbackVersion}",
@@ -100,6 +101,8 @@ ext {
     ]
 
     dataDependencies = [
+            //androidBinding
+            androidBinding : 'com.android.databinding:compiler:1.0-rc1',
             //DI
             daggerCompiler : "com.google.dagger:dagger-compiler:${daggerVersion}",
             dagger         : "com.google.dagger:dagger:${daggerVersion}",

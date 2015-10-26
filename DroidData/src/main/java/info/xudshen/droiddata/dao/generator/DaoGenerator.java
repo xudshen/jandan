@@ -47,6 +47,7 @@ public class DaoGenerator {
     private Template templateDaoMaster;
     private Template templateDaoSession;
     private Template templateEntity;
+    private Template templateEntityObservable;
     private Template templateDaoUnitTest;
     private Template templateContentProvider;
 
@@ -67,6 +68,7 @@ public class DaoGenerator {
         templateDaoMaster = config.getTemplate("dao-master.ftl");
         templateDaoSession = config.getTemplate("dao-session.ftl");
         templateEntity = config.getTemplate("entity.ftl");
+        templateEntityObservable = config.getTemplate("entity-observable.ftl");
         templateDaoUnitTest = config.getTemplate("dao-unit-test.ftl");
         templateContentProvider = config.getTemplate("content-provider.ftl");
     }
@@ -98,6 +100,7 @@ public class DaoGenerator {
         List<Entity> entities = schema.getEntities();
         ContentProvider contentProvider = new ContentProvider(schema, new ArrayList<Entity>());
         for (Entity entity : entities) {
+            entity.getAdditionalImportsDao().add("info.xudshen.droiddata.dao.IModelObservable");
             generate(templateDao, outDirFile, entity.getJavaPackageDao(), entity.getClassNameDao(), schema, entity);
             if (!entity.isProtobuf() && !entity.isSkipGeneration()) {
                 generate(templateEntity, outDirEntityFile, entity.getJavaPackage(), entity.getClassName(), schema, entity);
@@ -112,17 +115,29 @@ public class DaoGenerator {
                     System.out.println("Skipped " + javaFilename.getCanonicalPath());
                 }
             }
+            for (Property property : entity.getProperties()) {
+                if (property.isBindable()) {
+                    Entity entityOb = entity.clone();
+                    if (schema.getDefaultJavaPackageObservable() != null)
+                        entityOb.setJavaPackage(schema.getDefaultJavaPackageObservable());
+                    entityOb.setSuperclass("android.databinding.BaseObservable");
+                    entityOb.addImport("info.xudshen.droiddata.dao.IModelObservable");
+                    entityOb.implementsInterface("IModelObservable<" + entityOb.getClassName() + ">");
+                    generate(templateEntityObservable, outDirFile, entityOb.getJavaPackage(), entityOb.getClassName() + "Observable", schema, entityOb);
+                    break;
+                }
+            }
             for (ContentProvider contentProvider1 : entity.getContentProviders()) {
                 contentProvider.getEntities().add(contentProvider1.getEntities().get(0));
             }
         }
         if(contentProvider.getEntities().size() > 0) {
-            contentProvider.setAuthority(contentProvider.getEntities().get(0).getJavaPackage() + ".provider");
-            contentProvider.setJavaPackage(contentProvider.getEntities().get(0).getJavaPackage());
+            contentProvider.setAuthority(schema.getDefaultJavaPackageDao() + ".provider");
+            contentProvider.setJavaPackage(schema.getDefaultJavaPackageDao());
             contentProvider.setClassName("ModelContentProvider");
             Map<String, Object> additionalObjectsForTemplate = new HashMap<String, Object>();
             additionalObjectsForTemplate.put("contentProvider", contentProvider);
-            generate(templateContentProvider, outDirFile, contentProvider.getEntities().get(0).getJavaPackage(), "Model"
+            generate(templateContentProvider, outDirFile, schema.getDefaultJavaPackageDao(), "Model"
                     + "ContentProvider", schema, null, additionalObjectsForTemplate);
         }
 
