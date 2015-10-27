@@ -443,7 +443,7 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
     /**
      * register entity to extraObMap
      */
-    private void registerExtraOb(IModelObservable entity) {
+    public void registerExtraOb(IModelObservable entity) {
         if (entity == null) return;
         if (!extraObMap.containsKey(entity.getModelKey())) {
             extraObMap.put(entity.getModelKey(), new WeakHashMap<>());

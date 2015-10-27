@@ -50,6 +50,7 @@ public class DaoGenerator {
     private Template templateEntityObservable;
     private Template templateDaoUnitTest;
     private Template templateContentProvider;
+    private Template templateModelTrans;
 
     public DaoGenerator() throws IOException {
         System.out.println("greenDAO Generator");
@@ -71,6 +72,7 @@ public class DaoGenerator {
         templateEntityObservable = config.getTemplate("entity-observable.ftl");
         templateDaoUnitTest = config.getTemplate("dao-unit-test.ftl");
         templateContentProvider = config.getTemplate("content-provider.ftl");
+        templateModelTrans = config.getTemplate("entity-trans.ftl");
     }
 
     private Pattern compilePattern(String sectionName) {
@@ -99,6 +101,7 @@ public class DaoGenerator {
 
         List<Entity> entities = schema.getEntities();
         ContentProvider contentProvider = new ContentProvider(schema, new ArrayList<Entity>());
+        ContentProvider entityTrans = new ContentProvider(schema, new ArrayList<Entity>());
         for (Entity entity : entities) {
             entity.getAdditionalImportsDao().add("info.xudshen.droiddata.dao.IModelObservable");
             generate(templateDao, outDirFile, entity.getJavaPackageDao(), entity.getClassNameDao(), schema, entity);
@@ -124,6 +127,8 @@ public class DaoGenerator {
                     entityOb.addImport("info.xudshen.droiddata.dao.IModelObservable");
                     entityOb.implementsInterface("IModelObservable<" + entityOb.getClassName() + ">");
                     generate(templateEntityObservable, outDirFile, entityOb.getJavaPackage(), entityOb.getClassName() + "Observable", schema, entityOb);
+
+                    entityTrans.getEntities().add(entity);
                     break;
                 }
             }
@@ -139,6 +144,13 @@ public class DaoGenerator {
             additionalObjectsForTemplate.put("contentProvider", contentProvider);
             generate(templateContentProvider, outDirFile, schema.getDefaultJavaPackageDao(), "Model"
                     + "ContentProvider", schema, null, additionalObjectsForTemplate);
+        }
+        if (entityTrans.getEntities().size() > 0) {
+            contentProvider.setClassName("ModelTrans");
+            Map<String, Object> additionalObjectsForTemplate = new HashMap<String, Object>();
+            additionalObjectsForTemplate.put("contentProvider", contentProvider);
+            generate(templateModelTrans, outDirFile, schema.getDefaultJavaPackageDao(),
+                    contentProvider.getClassName(), schema, null, additionalObjectsForTemplate);
         }
 
         generate(templateDaoMaster, outDirFile, schema.getDefaultJavaPackageDao(), "DaoMaster", schema, null);

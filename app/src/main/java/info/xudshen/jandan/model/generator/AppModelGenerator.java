@@ -46,7 +46,7 @@ public class AppModelGenerator extends ModelGenerator {
         entity.addIdProperty();
         Property jokeId = addLongProperty(entity, "jokeId").getProperty();
         addStringProperty(entity, "author");
-        addStringProperty(entity, "content");
+        addStringProperty(entity, "content").bindable(true);
 
         addUniqueIndex(entity, jokeId);
 
