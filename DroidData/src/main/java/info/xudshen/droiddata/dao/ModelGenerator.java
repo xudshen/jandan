@@ -69,32 +69,44 @@ public abstract class ModelGenerator {
     }
 
     private Schema schema;
-    private int version;
-    private String defaultJavaPackage;
-    private String outDir;
-    private String outDirEntity;
-    private String outDirTest;
+    private String daoOutDir;
+    private String entityOutDir;
+    private String testOutDir;
 
-    public ModelGenerator(int version, String defaultJavaPackage, String outDir) {
-        this.version = version;
-        this.defaultJavaPackage = defaultJavaPackage;
-        this.outDir = outDir;
-        this.schema = new Schema(version, defaultJavaPackage);
+    public ModelGenerator(int version, String entityJavaPackage) {
+        this.schema = new Schema(version, entityJavaPackage);
         this.schema.enableKeepSectionsByDefault();
     }
 
-    public void setOutDirEntity(String outDirEntity) {
-        this.outDirEntity = outDirEntity;
+
+    public void setEntityOutDir(String entityOutDir) {
+        this.entityOutDir = entityOutDir;
     }
 
-    public void setOutDirTest(String outDirTest) {
-        this.outDirTest = outDirTest;
+    public void setDaoOutDir(String daoOutDir) {
+        this.daoOutDir = daoOutDir;
+    }
+
+    public void setTestOutDir(String testOutDir) {
+        this.testOutDir = testOutDir;
+    }
+
+    public void setBRPath(String brPath) {
+        this.schema.setDefaultBRPath(brPath);
+    }
+
+    public void setDaoJavaPackage(String daoJavaPackage) {
+        this.schema.setDefaultJavaPackageDao(daoJavaPackage);
+    }
+
+    public void setObservableJavaPackage(String observableJavaPackage) {
+        this.schema.setDefaultJavaPackageObservable(observableJavaPackage);
     }
 
     protected abstract void addEntities(Schema schema);
 
     protected void generateAll() throws Exception {
         addEntities(this.schema);
-        new DaoGenerator().generateAll(this.schema, this.outDir, this.outDirEntity, this.outDirTest);
+        new DaoGenerator().generateAll(this.schema, this.daoOutDir, this.entityOutDir, this.testOutDir);
     }
 }

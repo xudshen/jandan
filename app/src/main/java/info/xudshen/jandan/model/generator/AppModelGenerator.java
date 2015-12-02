@@ -10,16 +10,17 @@ import info.xudshen.droiddata.dao.generator.Schema;
  */
 public class AppModelGenerator extends ModelGenerator {
     public AppModelGenerator() {
-        super(1, "info.xudshen.jandan.domain.model", "data/src/main/java");
-        setOutDirEntity("domain/src/main/java");
+        super(1, "info.xudshen.jandan.domain.model");
+        setEntityOutDir("domain/src/main/java");
+        setDaoOutDir("data/src/main/java");
+        setBRPath("info.xudshen.data.BR");
+
+        setDaoJavaPackage("info.xudshen.jandan.data.dao");
+        setObservableJavaPackage("info.xudshen.jandan.data.model.observable");
     }
 
     @Override
     protected void addEntities(Schema schema) {
-        schema.setDefaultBRPath("info.xudshen.data.BR");
-        schema.setDefaultJavaPackageDao("info.xudshen.jandan.data.dao");
-        schema.setDefaultJavaPackageObservable("info.xudshen.jandan.data.model.observable");
-
         addArticle(schema);
         addJoke(schema);
     }
