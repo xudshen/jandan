@@ -37,10 +37,15 @@ public class ModelTrans {
         this.daoSession = daoSession;
     }
 
+    //<editor-fold desc="TransArticle">
     <TO extends IModelObservable> TO transArticle(Article entity, IModelTrans<Article, TO> trans) {
         TO entityOb = trans.to(entity);
         this.daoSession.getArticleDao().registerExtraOb(entityOb);
         return entityOb;
+    }
+
+    ArticleObservable transArticle(Article entity) {
+        return transArticle(entity, ARTICLE_TRANS);
     }
 
     <TO extends IModelObservable> Iterable<TO> transArticle(Iterable<Article> entities, IModelTrans<Article, TO> trans) {
@@ -54,10 +59,20 @@ public class ModelTrans {
         return list;
     }
 
+    Iterable<ArticleObservable> transArticle(Iterable<Article> entities) {
+        return transArticle(entities, ARTICLE_TRANS);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="TransJoke">
     <TO extends IModelObservable> TO transJoke(Joke entity, IModelTrans<Joke, TO> trans) {
         TO entityOb = trans.to(entity);
         this.daoSession.getJokeDao().registerExtraOb(entityOb);
         return entityOb;
+    }
+
+    JokeObservable transJoke(Joke entity) {
+        return transJoke(entity, JOKE_TRANS);
     }
 
     <TO extends IModelObservable> Iterable<TO> transJoke(Iterable<Joke> entities, IModelTrans<Joke, TO> trans) {
@@ -70,4 +85,9 @@ public class ModelTrans {
         }
         return list;
     }
+
+    Iterable<JokeObservable> transJoke(Iterable<Joke> entities) {
+        return transJoke(entities, JOKE_TRANS);
+    }
+    //</editor-fold>
 }

@@ -35,10 +35,15 @@ public class ${contentProvider.className} {
     }
 <#list contentProvider.entities as entity>
 
+    //<editor-fold desc="Trans${entity.className}">
     <TO extends IModelObservable> TO trans${entity.className?cap_first}(${entity.className} entity, IModelTrans<${entity.className}, TO> trans) {
         TO entityOb = trans.to(entity);
         this.daoSession.get${entity.className?cap_first}Dao().registerExtraOb(entityOb);
         return entityOb;
+    }
+
+    ${entity.className}Observable trans${entity.className?cap_first}(${entity.className} entity) {
+        return trans${entity.className?cap_first}(entity, ${entity.tableName}_TRANS);
     }
 
     <TO extends IModelObservable> Iterable<TO> trans${entity.className?cap_first}(Iterable<${entity.className}> entities, IModelTrans<${entity.className}, TO> trans) {
@@ -51,5 +56,10 @@ public class ${contentProvider.className} {
         }
         return list;
     }
+
+    Iterable<${entity.className}Observable> trans${entity.className?cap_first}(Iterable<${entity.className}> entities) {
+        return trans${entity.className?cap_first}(entities, ${entity.tableName}_TRANS);
+    }
+    //</editor-fold>
 </#list>
 }
