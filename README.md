@@ -1,26 +1,59 @@
-# jandan
+# Jandan.app
+## Modules
+domain
+
+data
+
+app
 
 # DroidData
-## Structure
+## Model Structure
 ```
-Model -> 
+Model
+  * must have id column
 
-ModelDao -> 
-  * query
-  * insert
-  * update
-  * delete
+ModelObservable <- ModelDao._allchanges
+  -> BaseObservable.notifyPropertyChanged 
+
+ModelDao
+  -> insert
+     update
+     delete
+    -> notify ModelObservable/ContentProvider
+     
+  -> query => Model
   
 ModelTrans <- Model
-  -> ModelObservable
+  => ModelObservable
 
-ContentProvider <- ModelDao._allchanges
+ContentProvider <- ModelDao._allChanges
   -> insert
   -> update
   -> delete
   
-  -> query -> Dao.query -> Cursor -> Model
+  -> query -> ModelDao.query -> Cursor => Model
 ```
-  
 
+## RecyclerAdapter
+```java
+DDCursorRecyclerAdapter
+- onCreateViewHolder(LayoutInflater inflater, int viewType, ViewGroup parent)
+- onBindViewHolder(VH viewHolder, Cursor cursor)
+- swapCursor(Cursor newCursor)
+
+DDCursorLoaderRecyclerAdapter <- DDCursorRecyclerAdapter
+- DDCursorLoaderRecyclerAdapter(Context context, Uri uri, String[] projection, String selection,
+                                String[] selectionArgs, String sortOrder)
+- onLoadFinished -> swapCursor
+
+DDViewBindingCursorLoaderAdapter <- DDCursorLoaderRecyclerAdapter
+- layoutSelector(position -> {}) //get the layout_res for each item
+- bindingVariableAction((viewDataBinding, cursor) -> {}) //bind view with cursor data
+
+- onItemClick((itemView, position) -> {})
+```
+
+## TODO
+- [ ] potential memory leak on ModelObservable
+- [ ] DDViewBindingCursorLoaderAdapter.onItemClick position choose
   
