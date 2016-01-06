@@ -6,7 +6,7 @@
 
         <variable
             name="article"
-            type="info.xudshen.jandan.model.Article" />
+            type="info.xudshen.jandan.domain.model.Article" />
     </data>
 
     <android.support.design.widget.CoordinatorLayout

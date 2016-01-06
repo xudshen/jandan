@@ -6,9 +6,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
-import info.xudshen.jandan.model.DaoMaster;
-import info.xudshen.jandan.model.DaoSession;
-import info.xudshen.jandan.model.ModelContentProvider;
+import info.xudshen.jandan.data.dao.DaoMaster;
+import info.xudshen.jandan.data.dao.DaoSession;
+import info.xudshen.jandan.data.dao.ModelContentProvider;
+
 
 /**
  * Created by xudshen on 15/9/24.
