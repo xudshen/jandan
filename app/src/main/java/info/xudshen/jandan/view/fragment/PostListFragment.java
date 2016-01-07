@@ -1,10 +1,9 @@
-package info.xudshen.jandan.view;
+package info.xudshen.jandan.view.fragment;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +12,14 @@ import android.view.ViewGroup;
 import info.xudshen.droiddata.adapter.impl.DDViewBindingCursorLoaderAdapter;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.adapter.RecyclerViewAdapterFactory;
-import info.xudshen.jandan.databinding.FragmentPostsBinding;
+import info.xudshen.jandan.databinding.FragmentPostListBinding;
 
-public class PostsFragment extends Fragment {
-    public static PostsFragment newInstance() {
-        PostsFragment fragment = new PostsFragment();
-        return fragment;
+public class PostListFragment extends BaseFragment {
+    public static PostListFragment newInstance() {
+        return new PostListFragment();
     }
 
-    public PostsFragment() {
+    public PostListFragment() {
     }
 
     @Override
@@ -33,7 +31,7 @@ public class PostsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        FragmentPostsBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_posts, container, false);
+        FragmentPostListBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_post_list, container, false);
 
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
 

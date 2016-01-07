@@ -9,11 +9,11 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme.Light.WithDarkToolbar">
         <provider
-            android:name="info.xudshen.jandan.model.ModelContentProvider"
-            android:authorities="info.xudshen.jandan.model.provider"/>
+            android:name="info.xudshen.jandan.data.dao.ModelContentProvider"
+            android:authorities="info.xudshen.jandan.data.dao.provider" />
 
         <activity
-            android:name=".view.MainActivity"
+            android:name=".view.activity.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

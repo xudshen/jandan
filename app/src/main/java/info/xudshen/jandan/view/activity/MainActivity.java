@@ -1,22 +1,20 @@
-package info.xudshen.jandan.view;
+package info.xudshen.jandan.view.activity;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.view.fragment.PostListFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.activity_main_drawer_layout)
@@ -26,52 +24,34 @@ public class MainActivity extends AppCompatActivity {
     ActionBarDrawerToggle drawerToggle;
 
     private void initDrawer() {
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                R.string.drawer_open, R.string.drawer_close);
         drawerLayout.setDrawerListener(drawerToggle);
 
         drawerNavigationView.setNavigationItemSelectedListener(menuItem -> {
-            Fragment fragment = null;
-            Class fragmentClass = null;
             switch (menuItem.getItemId()) {
                 case R.id.nav_posts: {
-                    fragmentClass = PostsFragment.class;
+                    this.replaceFragment(R.id.activity_main_content, PostListFragment.newInstance());
                     break;
                 }
                 case R.id.nav_pics: {
-                    fragmentClass = PostsFragment.class;
                     break;
                 }
                 case R.id.nav_jokes: {
-                    fragmentClass = PostsFragment.class;
                     break;
                 }
                 case R.id.nav_movies: {
-                    fragmentClass = PostsFragment.class;
                     break;
                 }
-                default:
-                    fragmentClass = PostsFragment.class;
+                default: {
+                    break;
+                }
             }
-
-            try {
-                fragment = (Fragment) fragmentClass.newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            // Insert the fragment by replacing any existing fragment
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.activity_main_content, fragment)
-                    //if you do call addToBackStack() when removing a fragment,
-                    //then the fragment is stopped and will be resumed if the user navigates back
-//                    .addToBackStack(null)
-                    .commit();
 
             // Highlight the selected item, update the title, and close the drawer
             menuItem.setChecked(true);
             setTitle(menuItem.getTitle());
             drawerLayout.closeDrawers();
-
             return true;
         });
     }
@@ -83,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
-
         initDrawer();
     }
 
@@ -108,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         //just test it with rotate the device
     }
 
+    //<editor-fold desc="Drawer">
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (drawerToggle.onOptionsItemSelected(item)) {
@@ -129,4 +109,5 @@ public class MainActivity extends AppCompatActivity {
 
         drawerToggle.syncState();
     }
+    //</editor-fold>
 }

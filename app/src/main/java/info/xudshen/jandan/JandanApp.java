@@ -9,6 +9,9 @@ import android.support.multidex.MultiDexApplication;
 import info.xudshen.jandan.data.dao.DaoMaster;
 import info.xudshen.jandan.data.dao.DaoSession;
 import info.xudshen.jandan.data.dao.ModelContentProvider;
+import info.xudshen.jandan.internal.di.components.ApplicationComponent;
+import info.xudshen.jandan.internal.di.components.DaggerApplicationComponent;
+import info.xudshen.jandan.internal.di.modules.ApplicationModule;
 
 
 /**
@@ -16,6 +19,8 @@ import info.xudshen.jandan.data.dao.ModelContentProvider;
  */
 public class JandanApp extends MultiDexApplication {
     public static DaoSession daoSession;
+
+    private ApplicationComponent applicationComponent;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -31,5 +36,17 @@ public class JandanApp extends MultiDexApplication {
         SQLiteDatabase db = openHelper.getWritableDatabase();
         daoSession = (new DaoMaster(db)).newSession().setContext(this);
         ModelContentProvider.daoSession = daoSession;
+
+        this.initializeInjector();
+    }
+
+    private void initializeInjector() {
+        this.applicationComponent = DaggerApplicationComponent.builder()
+                .applicationModule(new ApplicationModule(this))
+                .build();
+    }
+
+    public ApplicationComponent getApplicationComponent() {
+        return applicationComponent;
     }
 }
