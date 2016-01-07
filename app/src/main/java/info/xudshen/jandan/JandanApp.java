@@ -18,8 +18,6 @@ import info.xudshen.jandan.internal.di.modules.ApplicationModule;
  * Created by xudshen on 15/9/24.
  */
 public class JandanApp extends MultiDexApplication {
-    public static DaoSession daoSession;
-
     private ApplicationComponent applicationComponent;
 
     @Override
@@ -32,12 +30,8 @@ public class JandanApp extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
 
-        SQLiteOpenHelper openHelper = new DaoMaster.DevOpenHelper(this, "default", null);
-        SQLiteDatabase db = openHelper.getWritableDatabase();
-        daoSession = (new DaoMaster(db)).newSession().setContext(this);
-        ModelContentProvider.daoSession = daoSession;
-
         this.initializeInjector();
+        ModelContentProvider.daoSession = getApplicationComponent().daoSession();
     }
 
     private void initializeInjector() {

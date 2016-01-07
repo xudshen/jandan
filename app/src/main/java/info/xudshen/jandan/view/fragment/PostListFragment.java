@@ -9,17 +9,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import javax.inject.Inject;
+
+import butterknife.ButterKnife;
 import info.xudshen.droiddata.adapter.impl.DDViewBindingCursorLoaderAdapter;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.adapter.RecyclerViewAdapterFactory;
 import info.xudshen.jandan.databinding.FragmentPostListBinding;
+import info.xudshen.jandan.internal.di.components.PostComponent;
+import info.xudshen.jandan.presenter.PostListPresenter;
+import info.xudshen.jandan.view.PostListView;
 
-public class PostListFragment extends BaseFragment {
+public class PostListFragment extends BaseFragment implements PostListView {
     public static PostListFragment newInstance() {
         return new PostListFragment();
     }
 
+    @Inject
+    PostListPresenter postListPresenter;
+
     public PostListFragment() {
+        super();
     }
 
     @Override
@@ -63,6 +73,12 @@ public class PostListFragment extends BaseFragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        this.initialize();
+    }
+
+    @Override
     public void onAttach(Context context) {
         //Called when the fragment has been associated with the activity
         super.onAttach(context);
@@ -72,4 +88,40 @@ public class PostListFragment extends BaseFragment {
     public void onDetach() {
         super.onDetach();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.postListPresenter.resume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        this.postListPresenter.pause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.postListPresenter.destroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
+    private void initialize() {
+        this.getComponent(PostComponent.class).inject(this);
+        this.postListPresenter.setView(this);
+    }
+
+    //<editor-fold desc="Called by Presenter">
+    @Override
+    public void renderPostList() {
+
+    }
+    //</editor-fold>
 }

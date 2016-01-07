@@ -12,9 +12,13 @@ import android.view.MenuItem;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.internal.di.HasComponent;
+import info.xudshen.jandan.internal.di.HasComponents;
+import info.xudshen.jandan.internal.di.components.DaggerPostComponent;
+import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.view.fragment.PostListFragment;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements HasComponents {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.activity_main_drawer_layout)
@@ -22,6 +26,8 @@ public class MainActivity extends BaseActivity {
     @Bind(R.id.activity_main_drawer_nv)
     NavigationView drawerNavigationView;
     ActionBarDrawerToggle drawerToggle;
+
+    private PostComponent postComponent;
 
     private void initDrawer() {
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
@@ -64,6 +70,8 @@ public class MainActivity extends BaseActivity {
 
         setSupportActionBar(toolbar);
         initDrawer();
+
+        this.initializeInjector();
     }
 
     @Override
@@ -109,5 +117,22 @@ public class MainActivity extends BaseActivity {
 
         drawerToggle.syncState();
     }
+    //</editor-fold>
+
+    //<editor-fold desc="HasComponents">
+    private void initializeInjector() {
+        this.postComponent = DaggerPostComponent.builder()
+                .applicationComponent(this.getApplicationComponent())
+                .build();
+    }
+
+    @Override
+    public <C> C getComponent(Class<C> componentType) {
+        if (componentType.isInstance(this.postComponent)) {
+            return (C) this.postComponent;
+        }
+        throw new IllegalStateException("componentType=" + componentType.getSimpleName() + " not found");
+    }
+
     //</editor-fold>
 }
