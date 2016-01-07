@@ -2,7 +2,6 @@ package info.xudshen.jandan.view.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
@@ -10,6 +9,7 @@ import javax.inject.Inject;
 
 import info.xudshen.jandan.JandanApp;
 import info.xudshen.jandan.internal.di.components.ApplicationComponent;
+import info.xudshen.jandan.internal.di.modules.ActivityModule;
 import info.xudshen.jandan.navigation.Navigator;
 
 /**
@@ -32,6 +32,15 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected ApplicationComponent getApplicationComponent() {
         return ((JandanApp) getApplication()).getApplicationComponent();
+    }
+
+    /**
+     * Get an Activity module for dependency injection.
+     *
+     * @return {@link ActivityModule}
+     */
+    protected ActivityModule getActivityModule() {
+        return new ActivityModule(this);
     }
 
     /**

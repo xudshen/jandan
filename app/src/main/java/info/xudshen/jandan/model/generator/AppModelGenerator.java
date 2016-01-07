@@ -1,7 +1,7 @@
 package info.xudshen.jandan.model.generator;
 
-import info.xudshen.droiddata.dao.generator.Entity;
 import info.xudshen.droiddata.dao.ModelGenerator;
+import info.xudshen.droiddata.dao.generator.Entity;
 import info.xudshen.droiddata.dao.generator.Property;
 import info.xudshen.droiddata.dao.generator.Schema;
 

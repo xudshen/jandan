@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.xudshen.jandan.R;
-import info.xudshen.jandan.internal.di.HasComponent;
 import info.xudshen.jandan.internal.di.HasComponents;
 import info.xudshen.jandan.internal.di.components.DaggerPostComponent;
 import info.xudshen.jandan.internal.di.components.PostComponent;
@@ -122,7 +121,8 @@ public class MainActivity extends BaseActivity implements HasComponents {
     //<editor-fold desc="HasComponents">
     private void initializeInjector() {
         this.postComponent = DaggerPostComponent.builder()
-                .applicationComponent(this.getApplicationComponent())
+                .applicationComponent(getApplicationComponent())
+                .activityModule(getActivityModule())
                 .build();
     }
 

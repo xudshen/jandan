@@ -2,10 +2,8 @@ package info.xudshen.jandan.adapter;
 
 import android.app.Activity;
 
-
 import info.xudshen.droiddata.adapter.impl.DDViewBindingCursorLoaderAdapter;
 import info.xudshen.jandan.BR;
-import info.xudshen.jandan.JandanApp;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.dao.ArticleDao;
 import info.xudshen.jandan.domain.model.Article;

@@ -1,13 +1,9 @@
 package info.xudshen.jandan;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
-import info.xudshen.jandan.data.dao.DaoMaster;
-import info.xudshen.jandan.data.dao.DaoSession;
 import info.xudshen.jandan.data.dao.ModelContentProvider;
 import info.xudshen.jandan.internal.di.components.ApplicationComponent;
 import info.xudshen.jandan.internal.di.components.DaggerApplicationComponent;
