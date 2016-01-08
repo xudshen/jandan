@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="article"
-            type="info.xudshen.jandan.domain.model.Article" />
+            name="post"
+            type="info.xudshen.jandan.domain.model.Post" />
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -25,18 +25,18 @@
                 android:id="@+id/inputTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{article.title}" />
+                android:text="@{post.title}" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{article.title}" />
+                android:text="@{post.title}" />
 
             <Button
+                android:id="@+id/insertBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:id="@+id/insertBtn"
                 android:text="insert" />
 
             <com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout

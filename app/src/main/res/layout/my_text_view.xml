@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="info.xudshen.jandan.domain.model.Article" />
+            type="info.xudshen.jandan.domain.model.Post" />
     </data>
 
     <TextView

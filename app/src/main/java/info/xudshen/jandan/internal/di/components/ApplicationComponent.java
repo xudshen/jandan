@@ -5,9 +5,9 @@ import android.content.Context;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import info.xudshen.jandan.data.dao.ArticleDao;
+import info.xudshen.jandan.data.dao.AuthorDao;
 import info.xudshen.jandan.data.dao.DaoSession;
-import info.xudshen.jandan.data.dao.JokeDao;
+import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.internal.di.modules.ApplicationModule;
 import info.xudshen.jandan.internal.di.modules.DaoModule;
 import info.xudshen.jandan.navigation.Navigator;
@@ -28,7 +28,7 @@ public interface ApplicationComponent {
 
     DaoSession daoSession();
 
-    ArticleDao articleDao();
+    PostDao postDao();
 
-    JokeDao jokeDao();
+    AuthorDao authorDao();
 }

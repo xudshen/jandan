@@ -45,7 +45,7 @@ public class PostListFragment extends BaseFragment implements PostListView {
 
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
 
-        DDViewBindingCursorLoaderAdapter viewAdapter = RecyclerViewAdapterFactory.getArticleListAdapter(getActivity());
+        DDViewBindingCursorLoaderAdapter viewAdapter = RecyclerViewAdapterFactory.getPostListAdapter(getActivity());
         viewAdapter.onItemClick((itemView, position) -> {
             Snackbar.make(itemView, position + "clicked", Snackbar.LENGTH_LONG).show();
             //viewAdapter.getItemCursor(position);

@@ -4,9 +4,9 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import info.xudshen.jandan.data.dao.ArticleDao;
+import info.xudshen.jandan.data.dao.AuthorDao;
 import info.xudshen.jandan.data.dao.DaoSession;
-import info.xudshen.jandan.data.dao.JokeDao;
+import info.xudshen.jandan.data.dao.PostDao;
 
 /**
  * Created by xudshen on 16/1/7.
@@ -16,13 +16,13 @@ import info.xudshen.jandan.data.dao.JokeDao;
 public class DaoModule {
     @Provides
     @Singleton
-    ArticleDao provideArticleDao(DaoSession daoSession) {
-        return daoSession.getArticleDao();
+    PostDao providePostDao(DaoSession daoSession) {
+        return daoSession.getPostDao();
     }
 
     @Provides
     @Singleton
-    JokeDao provideJokeDao(DaoSession daoSession) {
-        return daoSession.getJokeDao();
+    AuthorDao provideAuthorDao(DaoSession daoSession) {
+        return daoSession.getAuthorDao();
     }
 }

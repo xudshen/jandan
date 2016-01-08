@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 
-import info.xudshen.jandan.data.dao.ArticleDao;
+import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.internal.di.PerActivity;
 import info.xudshen.jandan.view.PostListView;
 
@@ -16,7 +16,7 @@ public class PostListPresenter implements Presenter {
     private PostListView postListView;
 
     @Inject
-    ArticleDao articleDao;
+    PostDao postDao;
 
     @Inject
     public PostListPresenter() {
