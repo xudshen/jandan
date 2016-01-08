@@ -10,6 +10,7 @@ import info.xudshen.jandan.data.dao.JokeDao;
 
 /**
  * Created by xudshen on 16/1/7.
+ * //TODO: the following code can be generated
  */
 @Module
 public class DaoModule {
