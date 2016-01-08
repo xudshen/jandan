@@ -23,28 +23,28 @@ public class ModelContentProvider extends ContentProvider {
 
     public static final String AUTHORITY = "info.xudshen.jandan.data.dao.provider";
 
-    public static final String ARTICLE_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
-            + "/" + ArticleDao.TABLENAME;
-    public static final String ARTICLE_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
-            + "/" + ArticleDao.TABLENAME;
-    public static final String JOKE_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
-            + "/" + JokeDao.TABLENAME;
-    public static final String JOKE_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
-            + "/" + JokeDao.TABLENAME;
+    public static final String POST_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
+            + "/" + PostDao.TABLENAME;
+    public static final String POST_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
+            + "/" + PostDao.TABLENAME;
+    public static final String AUTHOR_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
+            + "/" + AuthorDao.TABLENAME;
+    public static final String AUTHOR_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
+            + "/" + AuthorDao.TABLENAME;
 
-    private static final int ARTICLE_DIR = 0x0000;
-    private static final int ARTICLE_ID = 0x1000;
-    private static final int JOKE_DIR = 0x0001;
-    private static final int JOKE_ID = 0x1001;
+    private static final int POST_DIR = 0x0000;
+    private static final int POST_ID = 0x1000;
+    private static final int AUTHOR_DIR = 0x0001;
+    private static final int AUTHOR_ID = 0x1001;
 
     private static final UriMatcher sURIMatcher;
 
     static {
         sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        sURIMatcher.addURI(AUTHORITY, ArticleDao.TABLENAME, ARTICLE_DIR);
-        sURIMatcher.addURI(AUTHORITY, ArticleDao.TABLENAME + "/#", ARTICLE_ID);
-        sURIMatcher.addURI(AUTHORITY, JokeDao.TABLENAME, JOKE_DIR);
-        sURIMatcher.addURI(AUTHORITY, JokeDao.TABLENAME + "/#", JOKE_ID);
+        sURIMatcher.addURI(AUTHORITY, PostDao.TABLENAME, POST_DIR);
+        sURIMatcher.addURI(AUTHORITY, PostDao.TABLENAME + "/#", POST_ID);
+        sURIMatcher.addURI(AUTHORITY, AuthorDao.TABLENAME, AUTHOR_DIR);
+        sURIMatcher.addURI(AUTHORITY, AuthorDao.TABLENAME + "/#", AUTHOR_ID);
     }
 
     /**
@@ -76,8 +76,8 @@ public class ModelContentProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
         int uriType = sURIMatcher.match(uri);
         switch (uriType) {
-            case ARTICLE_ID:
-            case JOKE_ID:
+            case POST_ID:
+            case AUTHOR_ID:
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -101,8 +101,8 @@ public class ModelContentProvider extends ContentProvider {
                       String[] selectionArgs) {
         int uriType = sURIMatcher.match(uri);
         switch (uriType) {
-            case ARTICLE_ID:
-            case JOKE_ID:
+            case POST_ID:
+            case AUTHOR_ID:
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -118,20 +118,20 @@ public class ModelContentProvider extends ContentProvider {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         int uriType = sURIMatcher.match(uri);
         switch (uriType) {
-            case ARTICLE_DIR:
-                queryBuilder.setTables(ArticleDao.TABLENAME);
+            case POST_DIR:
+                queryBuilder.setTables(PostDao.TABLENAME);
                 break;
-            case ARTICLE_ID:
-                queryBuilder.setTables(ArticleDao.TABLENAME);
-                queryBuilder.appendWhere(ArticleDao.Properties.Id.columnName + "="
+            case POST_ID:
+                queryBuilder.setTables(PostDao.TABLENAME);
+                queryBuilder.appendWhere(PostDao.Properties.Id.columnName + "="
                         + uri.getLastPathSegment());
                 break;
-            case JOKE_DIR:
-                queryBuilder.setTables(JokeDao.TABLENAME);
+            case AUTHOR_DIR:
+                queryBuilder.setTables(AuthorDao.TABLENAME);
                 break;
-            case JOKE_ID:
-                queryBuilder.setTables(JokeDao.TABLENAME);
-                queryBuilder.appendWhere(JokeDao.Properties.Id.columnName + "="
+            case AUTHOR_ID:
+                queryBuilder.setTables(AuthorDao.TABLENAME);
+                queryBuilder.appendWhere(AuthorDao.Properties.Id.columnName + "="
                         + uri.getLastPathSegment());
                 break;
             default:
@@ -149,14 +149,14 @@ public class ModelContentProvider extends ContentProvider {
     @Override
     public final String getType(Uri uri) {
         switch (sURIMatcher.match(uri)) {
-            case ARTICLE_DIR:
-                return ARTICLE_TYPE;
-            case ARTICLE_ID:
-                return ARTICLE_ITEM_TYPE;
-            case JOKE_DIR:
-                return JOKE_TYPE;
-            case JOKE_ID:
-                return JOKE_ITEM_TYPE;
+            case POST_DIR:
+                return POST_TYPE;
+            case POST_ID:
+                return POST_ITEM_TYPE;
+            case AUTHOR_DIR:
+                return AUTHOR_TYPE;
+            case AUTHOR_ID:
+                return AUTHOR_ITEM_TYPE;
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }

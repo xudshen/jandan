@@ -21,35 +21,41 @@ public class AppModelGenerator extends ModelGenerator {
 
     @Override
     protected void addEntities(Schema schema) {
-        addArticle(schema);
-        addJoke(schema);
+        addPost(schema);
+        addAuthor(schema);
     }
 
-    void addArticle(Schema schema) {
-        Entity entity = schema.addEntity("Article");
+    void addPost(Schema schema) {
+        Entity entity = schema.addEntity("Post");
 
         entity.addIdProperty();
-        Property articleId = addLongProperty(entity, "articleId").getProperty();
+        Property postId = addLongProperty(entity, "postId").bindable(true).getProperty();
+        addStringProperty(entity, "url").bindable(true);
         addStringProperty(entity, "title").bindable(true);
-        addStringProperty(entity, "author").bindable(true);
-        addTimestampProperty(entity, "time");
-        addStringProperty(entity, "content");
+        addTimestampProperty(entity, "date");
 
-        addUniqueIndex(entity, articleId);
+        addStringProperty(entity, "comment_count");
+
+        addUniqueIndex(entity, postId);
 
         entity.addContentProvider();
         entity.addImport(GSON_EXPOSE);
     }
 
-    void addJoke(Schema schema) {
-        Entity entity = schema.addEntity("Joke");
+    void addAuthor(Schema schema) {
+        Entity entity = schema.addEntity("Author");
 
         entity.addIdProperty();
-        Property jokeId = addLongProperty(entity, "jokeId").getProperty();
-        addStringProperty(entity, "author");
-        addStringProperty(entity, "content").bindable(true);
+        Property authorId = addLongProperty(entity, "authorId").bindable(true).getProperty();
+        addStringProperty(entity, "slug").bindable(true);
+        addStringProperty(entity, "name").bindable(true);
+        addStringProperty(entity, "first_name").bindable(true);
+        addStringProperty(entity, "last_name").bindable(true);
+        addStringProperty(entity, "nick_name").bindable(true);
+        addStringProperty(entity, "url").bindable(true);
+        addStringProperty(entity, "description").bindable(true);
 
-        addUniqueIndex(entity, jokeId);
+        addUniqueIndex(entity, authorId);
 
         entity.addContentProvider();
         entity.addImport(GSON_EXPOSE);

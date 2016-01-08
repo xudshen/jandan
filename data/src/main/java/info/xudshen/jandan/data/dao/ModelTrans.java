@@ -5,25 +5,25 @@ import java.util.List;
 
 import info.xudshen.droiddata.dao.IModelTrans;
 import info.xudshen.droiddata.dao.IModelObservable;
-import info.xudshen.jandan.domain.model.Article;
-import info.xudshen.jandan.domain.model.Joke;
-import info.xudshen.jandan.data.model.observable.ArticleObservable;
-import info.xudshen.jandan.data.model.observable.JokeObservable;
+import info.xudshen.jandan.domain.model.Post;
+import info.xudshen.jandan.domain.model.Author;
+import info.xudshen.jandan.data.model.observable.PostObservable;
+import info.xudshen.jandan.data.model.observable.AuthorObservable;
 
 public class ModelTrans {
 
-    private static final IModelTrans<Article, ArticleObservable> ARTICLE_TRANS =
-            new IModelTrans<Article, ArticleObservable>() {
+    private static final IModelTrans<Post, PostObservable> POST_TRANS =
+            new IModelTrans<Post, PostObservable>() {
                 @Override
-                public ArticleObservable to(Article entity) {
-                    return new ArticleObservable(entity);
+                public PostObservable to(Post entity) {
+                    return new PostObservable(entity);
                 }
             };
-    private static final IModelTrans<Joke, JokeObservable> JOKE_TRANS =
-            new IModelTrans<Joke, JokeObservable>() {
+    private static final IModelTrans<Author, AuthorObservable> AUTHOR_TRANS =
+            new IModelTrans<Author, AuthorObservable>() {
                 @Override
-                public JokeObservable to(Joke entity) {
-                    return new JokeObservable(entity);
+                public AuthorObservable to(Author entity) {
+                    return new AuthorObservable(entity);
                 }
             };
 
@@ -37,21 +37,21 @@ public class ModelTrans {
         this.daoSession = daoSession;
     }
 
-    //<editor-fold desc="TransArticle">
-    <TO extends IModelObservable> TO transArticle(Article entity, IModelTrans<Article, TO> trans) {
+    //<editor-fold desc="TransPost">
+    <TO extends IModelObservable> TO transPost(Post entity, IModelTrans<Post, TO> trans) {
         TO entityOb = trans.to(entity);
-        this.daoSession.getArticleDao().registerExtraOb(entityOb);
+        this.daoSession.getPostDao().registerExtraOb(entityOb);
         return entityOb;
     }
 
-    ArticleObservable transArticle(Article entity) {
-        return transArticle(entity, ARTICLE_TRANS);
+    PostObservable transPost(Post entity) {
+        return transPost(entity, POST_TRANS);
     }
 
-    <TO extends IModelObservable> Iterable<TO> transArticle(Iterable<Article> entities, IModelTrans<Article, TO> trans) {
+    <TO extends IModelObservable> Iterable<TO> transPost(Iterable<Post> entities, IModelTrans<Post, TO> trans) {
         List<TO> list = new ArrayList<>();
-        ArticleDao dao = this.daoSession.getArticleDao();
-        for (Article entity : entities) {
+        PostDao dao = this.daoSession.getPostDao();
+        for (Post entity : entities) {
             TO entityOb = trans.to(entity);
             list.add(entityOb);
             dao.registerExtraOb(entityOb);
@@ -59,26 +59,26 @@ public class ModelTrans {
         return list;
     }
 
-    Iterable<ArticleObservable> transArticle(Iterable<Article> entities) {
-        return transArticle(entities, ARTICLE_TRANS);
+    Iterable<PostObservable> transPost(Iterable<Post> entities) {
+        return transPost(entities, POST_TRANS);
     }
     //</editor-fold>
 
-    //<editor-fold desc="TransJoke">
-    <TO extends IModelObservable> TO transJoke(Joke entity, IModelTrans<Joke, TO> trans) {
+    //<editor-fold desc="TransAuthor">
+    <TO extends IModelObservable> TO transAuthor(Author entity, IModelTrans<Author, TO> trans) {
         TO entityOb = trans.to(entity);
-        this.daoSession.getJokeDao().registerExtraOb(entityOb);
+        this.daoSession.getAuthorDao().registerExtraOb(entityOb);
         return entityOb;
     }
 
-    JokeObservable transJoke(Joke entity) {
-        return transJoke(entity, JOKE_TRANS);
+    AuthorObservable transAuthor(Author entity) {
+        return transAuthor(entity, AUTHOR_TRANS);
     }
 
-    <TO extends IModelObservable> Iterable<TO> transJoke(Iterable<Joke> entities, IModelTrans<Joke, TO> trans) {
+    <TO extends IModelObservable> Iterable<TO> transAuthor(Iterable<Author> entities, IModelTrans<Author, TO> trans) {
         List<TO> list = new ArrayList<>();
-        JokeDao dao = this.daoSession.getJokeDao();
-        for (Joke entity : entities) {
+        AuthorDao dao = this.daoSession.getAuthorDao();
+        for (Author entity : entities) {
             TO entityOb = trans.to(entity);
             list.add(entityOb);
             dao.registerExtraOb(entityOb);
@@ -86,8 +86,8 @@ public class ModelTrans {
         return list;
     }
 
-    Iterable<JokeObservable> transJoke(Iterable<Joke> entities) {
-        return transJoke(entities, JOKE_TRANS);
+    Iterable<AuthorObservable> transAuthor(Iterable<Author> entities) {
+        return transAuthor(entities, AUTHOR_TRANS);
     }
     //</editor-fold>
 }
