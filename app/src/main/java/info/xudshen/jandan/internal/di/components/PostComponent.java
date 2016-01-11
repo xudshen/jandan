@@ -1,7 +1,6 @@
 package info.xudshen.jandan.internal.di.components;
 
 import dagger.Component;
-import info.xudshen.droiddata.adapter.impl.DDViewBindingCursorLoaderAdapter;
 import info.xudshen.jandan.internal.di.PerActivity;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
 import info.xudshen.jandan.internal.di.modules.PostModule;

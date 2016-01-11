@@ -13,12 +13,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import info.xudshen.droiddata.adapter.impl.DDViewBindingCursorLoaderAdapter;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.databinding.FragmentPostListBinding;
-import info.xudshen.jandan.domain.model.Post;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PostListPresenter;
 import info.xudshen.jandan.view.PostListView;
@@ -75,8 +73,8 @@ public class PostListFragment extends BaseFragment implements PostListView {
             }
         });
 
-        binding.fab.setOnClickListener(v ->
-                binding.myRecyclerView.smoothScrollToPosition(linearLayoutManager.getItemCount() > 0 ? linearLayoutManager.getItemCount() - 1 : 0));
+//        binding.fab.setOnClickListener(v ->
+//                binding.myRecyclerView.smoothScrollToPosition(linearLayoutManager.getItemCount() > 0 ? linearLayoutManager.getItemCount() - 1 : 0));
         getLoaderManager().initLoader(0, null, postListAdapter);
         return binding.getRoot();
     }
@@ -127,12 +125,12 @@ public class PostListFragment extends BaseFragment implements PostListView {
         this.postListPresenter.setView(this);
     }
 
-    @OnClick(R.id.insertBtn)
-    public void insert() {
-        Post post = new Post();
-        post.setTitle(System.currentTimeMillis() + "");
-        postDao.insert(post);
-    }
+//    @OnClick(R.id.insertBtn)
+//    public void insert() {
+//        Post post = new Post();
+//        post.setTitle(System.currentTimeMillis() + "");
+//        postDao.insert(post);
+//    }
 
     //<editor-fold desc="Called by Presenter">
     @Override

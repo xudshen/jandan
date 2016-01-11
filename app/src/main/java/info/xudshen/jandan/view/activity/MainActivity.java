@@ -4,10 +4,12 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -15,7 +17,8 @@ import info.xudshen.jandan.R;
 import info.xudshen.jandan.internal.di.HasComponents;
 import info.xudshen.jandan.internal.di.components.DaggerPostComponent;
 import info.xudshen.jandan.internal.di.components.PostComponent;
-import info.xudshen.jandan.view.fragment.PostListFragment;
+import info.xudshen.jandan.view.fragment.IndicatorFragment;
+import info.xudshen.jandan.view.fragment.PostHubFragment;
 
 public class MainActivity extends BaseActivity implements HasComponents {
     @Bind(R.id.toolbar)
@@ -25,6 +28,9 @@ public class MainActivity extends BaseActivity implements HasComponents {
     @Bind(R.id.activity_main_drawer_nv)
     NavigationView drawerNavigationView;
     ActionBarDrawerToggle drawerToggle;
+
+    @Bind(R.id.sliding_tabs)
+    TabLayout slidingTabs;
 
     private PostComponent postComponent;
 
@@ -36,10 +42,13 @@ public class MainActivity extends BaseActivity implements HasComponents {
         drawerNavigationView.setNavigationItemSelectedListener(menuItem -> {
             switch (menuItem.getItemId()) {
                 case R.id.nav_posts: {
-                    this.replaceFragment(R.id.activity_main_content, PostListFragment.newInstance());
+                    slidingTabs.setVisibility(View.VISIBLE);
+                    this.replaceFragment(R.id.activity_main_content, PostHubFragment.newInstance());
                     break;
                 }
                 case R.id.nav_pics: {
+                    slidingTabs.setVisibility(View.GONE);
+                    this.replaceFragment(R.id.activity_main_content, IndicatorFragment.newInstance(90));
                     break;
                 }
                 case R.id.nav_jokes: {

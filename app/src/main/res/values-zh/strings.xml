@@ -8,4 +8,7 @@
     <string name="drawer_item_movies">段子</string>
     <string name="drawer_open">打开侧边导航栏</string>
     <string name="drawer_close">关闭侧边导航栏</string>
+    <string name="post_hub_tab_new">新鲜事</string>
+    <string name="post_hub_tab_ranking">排行</string>
+    <string name="post_hub_tab_topic">专题</string>
 </resources>

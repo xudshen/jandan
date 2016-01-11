@@ -9,69 +9,23 @@
             type="info.xudshen.jandan.domain.model.Post" />
     </data>
 
-    <android.support.design.widget.CoordinatorLayout
+    <com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        app:direction="both"
         tools:context=".view.fragment.PostListFragment">
 
-        <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/my_recycler_view"
             android:layout_width="match_parent"
+
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <!-- TODO: Update blank fragment layout -->
-            <EditText
-                android:id="@+id/inputTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{post.title}" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{post.title}" />
-
-            <Button
-                android:id="@+id/insertBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:text="insert" />
-
-            <com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
-                android:id="@+id/swipeRefreshLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:direction="both">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/my_recycler_view"
-                    android:layout_width="match_parent"
-
-                    android:layout_height="match_parent"
-                    android:clickable="true"
-                    android:focusable="true"
-
-                    android:scrollbars="vertical" />
-            </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>
-        </LinearLayout>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="16dp"
             android:clickable="true"
             android:focusable="true"
 
-            app:layout_anchor="@id/my_recycler_view"
-            app:layout_anchorGravity="end|bottom"
-
-            app:layout_behavior="info.xudshen.jandan.behavior.ScrollAwareFABBehavior" />
-
-    </android.support.design.widget.CoordinatorLayout>
+            android:scrollbars="vertical" />
+    </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>
 </layout>
 
 
