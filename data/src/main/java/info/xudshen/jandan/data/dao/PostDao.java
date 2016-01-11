@@ -341,4 +341,7 @@ public class PostDao extends DDAbstractDao<Post, Long> {
         }
     }
 
+    public Post loadEntity(Cursor cursor){
+        return this.readEntity(cursor, 0);
+    }
 }

@@ -10,12 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import info.xudshen.droiddata.adapter.impl.DDViewBindingCursorLoaderAdapter;
 import info.xudshen.jandan.R;
-import info.xudshen.jandan.adapter.RecyclerViewAdapterFactory;
+import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.databinding.FragmentPostListBinding;
+import info.xudshen.jandan.domain.model.Post;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PostListPresenter;
 import info.xudshen.jandan.view.PostListView;
@@ -27,6 +30,11 @@ public class PostListFragment extends BaseFragment implements PostListView {
 
     @Inject
     PostListPresenter postListPresenter;
+    @Inject
+    @Named("postListAdapter")
+    DDViewBindingCursorLoaderAdapter postListAdapter;
+    @Inject
+    PostDao postDao;
 
     public PostListFragment() {
         super();
@@ -40,19 +48,20 @@ public class PostListFragment extends BaseFragment implements PostListView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        this.initialize();
+
         // Inflate the layout for this fragment
         FragmentPostListBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_post_list, container, false);
 
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
 
-        DDViewBindingCursorLoaderAdapter viewAdapter = RecyclerViewAdapterFactory.getPostListAdapter(getActivity());
-        viewAdapter.onItemClick((itemView, position) -> {
+        postListAdapter.onItemClick((itemView, position) -> {
             Snackbar.make(itemView, position + "clicked", Snackbar.LENGTH_LONG).show();
             //viewAdapter.getItemCursor(position);
         });
 
         binding.myRecyclerView.setLayoutManager(linearLayoutManager);
-        binding.myRecyclerView.setAdapter(viewAdapter);
+        binding.myRecyclerView.setAdapter(postListAdapter);
 
         binding.swipeRefreshLayout.setColorSchemeResources(R.color.amber_700, R.color.deep_purple_a200);
         binding.swipeRefreshLayout.setOnRefreshListener((direction) -> {
@@ -67,15 +76,15 @@ public class PostListFragment extends BaseFragment implements PostListView {
         });
 
         binding.fab.setOnClickListener(v ->
-                binding.myRecyclerView.smoothScrollToPosition(linearLayoutManager.getItemCount() - 1));
-        getLoaderManager().initLoader(0, null, viewAdapter);
+                binding.myRecyclerView.smoothScrollToPosition(linearLayoutManager.getItemCount() > 0 ? linearLayoutManager.getItemCount() - 1 : 0));
+        getLoaderManager().initLoader(0, null, postListAdapter);
         return binding.getRoot();
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.initialize();
+
     }
 
     @Override
@@ -116,6 +125,13 @@ public class PostListFragment extends BaseFragment implements PostListView {
     private void initialize() {
         this.getComponent(PostComponent.class).inject(this);
         this.postListPresenter.setView(this);
+    }
+
+    @OnClick(R.id.insertBtn)
+    public void insert() {
+        Post post = new Post();
+        post.setTitle(System.currentTimeMillis() + "");
+        postDao.insert(post);
     }
 
     //<editor-fold desc="Called by Presenter">
