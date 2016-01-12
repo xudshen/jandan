@@ -1,0 +1,29 @@
+<configuration>
+    <appender name="LOGCAT" class="ch.qos.logback.classic.android.LogcatAppender">
+        <tagEncoder>
+            <pattern>%logger{0}</pattern>
+        </tagEncoder>
+        <encoder>
+            <pattern>[%thread]%method: %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--<property name="LOG_DIR" value="/sdcard/" />-->
+
+    <!--<appender name="LOGFILE" class="ch.qos.logback.core.FileAppender">-->
+        <!--<file>${LOG_DIR}/trace.log</file>-->
+        <!--<tagEncoder>-->
+            <!--<pattern>%logger{0}</pattern>-->
+        <!--</tagEncoder>-->
+        <!--<encoder>-->
+            <!--<pattern>[%thread]%method: %msg%n</pattern>-->
+        <!--</encoder>-->
+    <!--</appender>-->
+
+    <root level="DEBUG">
+        <appender-ref ref="LOGCAT" />
+    </root>
+    <!--<root level="DEBUG">-->
+        <!--<appender-ref ref="LOGFILE" />-->
+    <!--</root>-->
+</configuration>
