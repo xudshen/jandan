@@ -17,4 +17,14 @@
         <!-- enable window content transitions -->
         <item name="android:windowContentTransitions">true</item>
     </style>
+
+    <style name="CustomMaterialDrawerTheme" parent="MaterialDrawerTheme.Light.DarkToolbar">
+        <item name="colorPrimary">@color/amber_500</item>
+        <item name="colorPrimaryDark">@color/amber_700</item>
+        <item name="colorAccent">@color/deep_purple_a200</item>
+
+        <item name="material_drawer_selected_text">@color/amber_700</item>
+        <!-- enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+    </style>
 </resources>

@@ -104,9 +104,15 @@ dependencies {
     compile dependencies.slf4j
 
     compile dependencies.freemarker
-
+    
     compile dependencies.swipy
+    compile('com.mikepenz:materialdrawer:4.6.3@aar') {
+        transitive = true
+    }
+    compile 'com.mikepenz:google-material-typeface:2.1.0.1.original@aar'
+    compile 'com.mikepenz:fontawesome-typeface:4.5.0.1@aar'
 
+    androidTestCompile 'com.android.support:support-annotations:23.1.1'
     androidTestCompile testDependencies.mockito
     androidTestCompile testDependencies.dexmaker
     androidTestCompile testDependencies.dexmakerMockito

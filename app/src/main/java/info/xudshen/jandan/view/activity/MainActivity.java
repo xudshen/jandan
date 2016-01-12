@@ -1,15 +1,22 @@
 package info.xudshen.jandan.view.activity;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
+
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -23,51 +30,69 @@ import info.xudshen.jandan.view.fragment.PostHubFragment;
 public class MainActivity extends BaseActivity implements HasComponents {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.activity_main_drawer_layout)
-    DrawerLayout drawerLayout;
-    @Bind(R.id.activity_main_drawer_nv)
-    NavigationView drawerNavigationView;
-    ActionBarDrawerToggle drawerToggle;
-
     @Bind(R.id.sliding_tabs)
     TabLayout slidingTabs;
+
+    Drawer drawer;
 
     private PostComponent postComponent;
 
     private void initDrawer() {
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
-                R.string.drawer_open, R.string.drawer_close);
-        drawerLayout.setDrawerListener(drawerToggle);
+        IProfile profile = new ProfileDrawerItem()
+                .withName("Java-Help")
+                .withEmail("java-help@mail.ru")
+                .withIcon(R.color.md_green_500);
 
-        drawerNavigationView.setNavigationItemSelectedListener(menuItem -> {
-            switch (menuItem.getItemId()) {
-                case R.id.nav_posts: {
-                    slidingTabs.setVisibility(View.VISIBLE);
-                    this.replaceFragment(R.id.activity_main_content, PostHubFragment.newInstance());
-                    break;
-                }
-                case R.id.nav_pics: {
-                    slidingTabs.setVisibility(View.GONE);
-                    this.replaceFragment(R.id.activity_main_content, IndicatorFragment.newInstance(90));
-                    break;
-                }
-                case R.id.nav_jokes: {
-                    break;
-                }
-                case R.id.nav_movies: {
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
+        ProfileSettingDrawerItem profileSettingDrawerItem = new ProfileSettingDrawerItem()
+                .withName(getString(R.string.drawer_profile_add))
+                .withIcon(GoogleMaterial.Icon.gmd_add)
+                .withIdentifier(-1);
 
-            // Highlight the selected item, update the title, and close the drawer
-            menuItem.setChecked(true);
-            setTitle(menuItem.getTitle());
-            drawerLayout.closeDrawers();
-            return true;
-        });
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.color.amber_500)
+                .addProfiles(profile, profileSettingDrawerItem)
+                .build();
+
+        drawer = new DrawerBuilder().withActivity(this)
+                .withToolbar(toolbar)
+                .withTranslucentStatusBar(false)
+                .withActionBarDrawerToggleAnimated(true)
+                .withAccountHeader(headerResult)
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withName(R.string.drawer_item_posts).withIdentifier(R.id.nav_posts).withIcon(FontAwesome.Icon.faw_newspaper_o),
+                        new PrimaryDrawerItem().withName(R.string.drawer_item_pics).withIdentifier(R.id.nav_pics).withIcon(GoogleMaterial.Icon.gmd_photo),
+                        new PrimaryDrawerItem().withName(R.string.drawer_item_jokes).withIdentifier(R.id.nav_jokes).withIcon(GoogleMaterial.Icon.gmd_face),
+                        new PrimaryDrawerItem().withName(R.string.drawer_item_movies).withIdentifier(R.id.nav_movies).withIcon(GoogleMaterial.Icon.gmd_movie),
+                        new DividerDrawerItem(),
+                        new PrimaryDrawerItem().withName(R.string.drawer_preference).withIdentifier(R.id.nav_preference).withIcon(GoogleMaterial.Icon.gmd_settings),
+                        new PrimaryDrawerItem().withName(R.string.drawer_about).withIdentifier(R.id.nav_about).withIcon(GoogleMaterial.Icon.gmd_info)
+                )
+                .withOnDrawerItemClickListener((view, position, drawerItem) -> {
+                    switch (drawerItem.getIdentifier()) {
+                        case R.id.nav_posts: {
+                            slidingTabs.setVisibility(View.VISIBLE);
+                            this.replaceFragment(R.id.activity_main_content, PostHubFragment.newInstance());
+                            setTitle(R.string.drawer_item_posts);
+                            break;
+                        }
+                        case R.id.nav_pics: {
+                            slidingTabs.setVisibility(View.GONE);
+                            this.replaceFragment(R.id.activity_main_content, IndicatorFragment.newInstance(90));
+                            setTitle(R.string.drawer_item_pics);
+                            break;
+                        }
+                        default: {
+                            return false;
+                        }
+                    }
+                    drawer.closeDrawer();
+                    return true;
+                })
+                .build();
+//                menuItem.setChecked(true);
+//                setTitle(menuItem.getTitle());
+//                drawerLayout.closeDrawers();
     }
 
     @Override
@@ -105,25 +130,12 @@ public class MainActivity extends BaseActivity implements HasComponents {
 
     //<editor-fold desc="Drawer">
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (drawerToggle.onOptionsItemSelected(item)) {
-            return true;
+    public void onBackPressed() {
+        if (drawer != null && drawer.isDrawerOpen()) {
+            drawer.closeDrawer();
+        } else {
+            super.onBackPressed();
         }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        drawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-        drawerToggle.syncState();
     }
     //</editor-fold>
 
@@ -142,6 +154,5 @@ public class MainActivity extends BaseActivity implements HasComponents {
         }
         throw new IllegalStateException("componentType=" + componentType.getSimpleName() + " not found");
     }
-
     //</editor-fold>
 }

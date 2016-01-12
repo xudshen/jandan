@@ -7,7 +7,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme.Light.WithDarkToolbar">
+        android:theme="@style/CustomMaterialDrawerTheme">
         <provider
             android:name="info.xudshen.jandan.data.dao.ModelContentProvider"
             android:authorities="info.xudshen.jandan.data.dao.provider" />
