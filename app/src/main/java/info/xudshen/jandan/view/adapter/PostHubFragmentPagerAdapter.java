@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,7 @@ import info.xudshen.jandan.view.fragment.PostListFragment;
 /**
  * Created by xudshen on 16/1/11.
  */
-public class PostHubFragmentPagerAdapter extends FragmentPagerAdapter {
+public class PostHubFragmentPagerAdapter extends FragmentStatePagerAdapter {
     private static final Logger logger = LoggerFactory.getLogger(PostHubFragmentPagerAdapter.class);
     final int PAGE_COUNT = 3;
     private Context context;
@@ -35,7 +36,7 @@ public class PostHubFragmentPagerAdapter extends FragmentPagerAdapter {
         logger.info(position + "");
         switch (position) {
             case 0: {
-                return PostListFragment.newInstance();
+                return IndicatorFragment.newInstance(position);
             }
             case 1: {
                 return IndicatorFragment.newInstance(position);

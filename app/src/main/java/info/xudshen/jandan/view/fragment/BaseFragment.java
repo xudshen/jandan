@@ -1,10 +1,16 @@
 package info.xudshen.jandan.view.fragment;
 
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import com.mikepenz.materialdrawer.Drawer;
+
+import info.xudshen.jandan.R;
 import info.xudshen.jandan.internal.di.HasComponent;
 import info.xudshen.jandan.internal.di.HasComponents;
+import info.xudshen.jandan.view.activity.HasDrawer;
 
 /**
  * Created by xudshen on 16/1/7.
@@ -23,5 +29,24 @@ public abstract class BaseFragment extends Fragment {
             throw new IllegalStateException("activity=" + getActivity().getClass().getSimpleName()
                     + " not implement HasComponent or HasComponents");
         }
+    }
+
+    protected Drawer getDrawer() {
+        if (HasDrawer.class.isInstance(getActivity())) {
+            return ((HasDrawer) getActivity()).getDrawer();
+        }
+        throw new IllegalStateException("activity=" + getActivity().getClass().getSimpleName()
+                + " not implement HasDrawer");
+    }
+
+    protected void setActionBarDrawerToggle(Toolbar toolbar) {
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(getActivity(), getDrawer().getDrawerLayout(),
+                toolbar,
+                R.string.drawer_open, R.string.drawer_close);
+        getDrawer().setActionBarDrawerToggle(drawerToggle);
+        drawerToggle.syncState();
+        drawerToggle.setDrawerIndicatorEnabled(true);
+//        drawerToggle.setHomeAsUpIndicator(new IconicsDrawable(activity, GoogleMaterial.Icon.gmd_arrow_back).sizeDp(16).color(Color.WHITE));
+//        drawerToggle.setToolbarNavigationClickListener(v -> activity.onBackPressed());
     }
 }

@@ -61,7 +61,7 @@ public class PostListFragment extends BaseFragment implements PostListView {
         binding.myRecyclerView.setLayoutManager(linearLayoutManager);
         binding.myRecyclerView.setAdapter(postListAdapter);
 
-        binding.swipeRefreshLayout.setColorSchemeResources(R.color.amber_700, R.color.deep_purple_a200);
+        binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark, R.color.colorAccent);
         binding.swipeRefreshLayout.setOnRefreshListener((direction) -> {
             switch (direction) {
                 case TOP: {
