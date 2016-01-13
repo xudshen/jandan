@@ -5,7 +5,6 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.os.Handler;
-import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -81,17 +80,24 @@ public abstract class DDCursorRecyclerAdapter<VH extends RecyclerView.ViewHolder
         setHasStableIds(true);
     }
 
-    public abstract VH onCreateViewHolder(LayoutInflater inflater, int viewType, ViewGroup parent);
+    /**
+     * create viewHolder
+     * provide LayoutInflater.from(parent.getContext())
+     */
+    public abstract VH createViewHolder(LayoutInflater inflater, int viewType, ViewGroup parent);
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
         if (inflater == null) {
             inflater = LayoutInflater.from(parent.getContext());
         }
-        return onCreateViewHolder(inflater, viewType, parent);
+        return createViewHolder(inflater, viewType, parent);
     }
 
-    public abstract void onBindViewHolder(VH viewHolder, Cursor cursor);
+    /**
+     * bind viewHolder with cursor
+     */
+    public abstract void bindViewHolder(VH viewHolder, Cursor cursor);
 
     @Override
     public void onBindViewHolder(VH holder, int position) {
@@ -101,7 +107,7 @@ public abstract class DDCursorRecyclerAdapter<VH extends RecyclerView.ViewHolder
         if (!mCursor.moveToPosition(position)) {
             throw new IllegalStateException("couldn't move cursor to position " + position);
         }
-        onBindViewHolder(holder, mCursor);
+        bindViewHolder(holder, mCursor);
     }
 
     //<editor-fold desc="get Item">
@@ -199,7 +205,7 @@ public abstract class DDCursorRecyclerAdapter<VH extends RecyclerView.ViewHolder
     @Deprecated
     protected void onContentChanged() {
         if (mAutoRequery && mCursor != null && !mCursor.isClosed()) {
-            if (false) Log.v("Cursor", "Auto requerying " + mCursor + " due to update");
+            if (false) Log.v("Cursor", "Auto re-querying " + mCursor + " due to update");
             mDataValid = mCursor.requery();
         }
     }

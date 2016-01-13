@@ -9,6 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
+import com.github.florent37.materialviewpager.adapter.RecyclerViewMaterialAdapter;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -20,6 +23,7 @@ import info.xudshen.jandan.databinding.FragmentPostListBinding;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PostListPresenter;
 import info.xudshen.jandan.view.PostListView;
+import info.xudshen.jandan.view.adapter.HeaderVBCLAdapter;
 
 public class PostListFragment extends BaseFragment implements PostListView {
     public static PostListFragment newInstance() {
@@ -30,7 +34,7 @@ public class PostListFragment extends BaseFragment implements PostListView {
     PostListPresenter postListPresenter;
     @Inject
     @Named("postListAdapter")
-    DDViewBindingCursorLoaderAdapter postListAdapter;
+    HeaderVBCLAdapter postListAdapter;
     @Inject
     PostDao postDao;
 
@@ -53,7 +57,7 @@ public class PostListFragment extends BaseFragment implements PostListView {
 
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
 
-        postListAdapter.onItemClick((itemView, position) -> {
+        postListAdapter.setItemClickListener((itemView, position) -> {
             Snackbar.make(itemView, position + "clicked", Snackbar.LENGTH_LONG).show();
             //viewAdapter.getItemCursor(position);
         });
@@ -75,6 +79,7 @@ public class PostListFragment extends BaseFragment implements PostListView {
 
 //        binding.fab.setOnClickListener(v ->
 //                binding.myRecyclerView.smoothScrollToPosition(linearLayoutManager.getItemCount() > 0 ? linearLayoutManager.getItemCount() - 1 : 0));
+        MaterialViewPagerHelper.registerRecyclerView(getActivity(), binding.myRecyclerView, null);
         getLoaderManager().initLoader(0, null, postListAdapter);
         return binding.getRoot();
     }

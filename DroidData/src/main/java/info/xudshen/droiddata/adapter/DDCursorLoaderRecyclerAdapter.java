@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 
 /**
  * Created by xudshen on 15/10/8.
+ * <p>
+ * This class wraps the CursorLoader part
  */
 public abstract class DDCursorLoaderRecyclerAdapter<VH extends RecyclerView.ViewHolder> extends DDCursorRecyclerAdapter<VH> implements LoaderManager.LoaderCallbacks<Cursor> {
     Uri mUri;

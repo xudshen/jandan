@@ -12,6 +12,7 @@ import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.domain.model.Post;
 import info.xudshen.jandan.internal.di.PerActivity;
+import info.xudshen.jandan.view.adapter.HeaderVBCLAdapter;
 
 /**
  * Created by xudshen on 16/1/7.
@@ -26,13 +27,14 @@ public class PostModule {
     @Provides
     @PerActivity
     @Named("postListAdapter")
-    DDViewBindingCursorLoaderAdapter providePostListAdapter(Activity activity, PostDao postDao) {
-        return (new DDViewBindingCursorLoaderAdapter(
-                activity, PostDao.CONTENT_URI, null, null, null, "post_id desc"))
+    HeaderVBCLAdapter providePostListAdapter(Activity activity, PostDao postDao) {
+        return new HeaderVBCLAdapter.Builder()
+                .cursorLoader(activity, PostDao.CONTENT_URI, null, null, null, "post_id desc")
                 .layoutSelector(position -> R.layout.my_text_view)
                 .bindingVariableAction((viewDataBinding, cursor) -> {
                     Post post = postDao.loadEntity(cursor);
                     viewDataBinding.setVariable(BR.item, post);
-                });
+                })
+                .build();
     }
 }
