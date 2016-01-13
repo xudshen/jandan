@@ -16,4 +16,7 @@
     <string name="post_hub_tab_ranking">Ranking</string>
     <string name="post_hub_tab_topic">Topic</string>
     <string name="drawer_profile_add">Add account</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

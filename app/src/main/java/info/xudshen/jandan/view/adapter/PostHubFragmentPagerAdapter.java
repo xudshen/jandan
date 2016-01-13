@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.view.fragment.BlankFragment;
+import info.xudshen.jandan.view.fragment.PostListFragment;
 import info.xudshen.jandan.view.fragment.ReadLaterFragment;
 
 /**
@@ -34,16 +36,16 @@ public class PostHubFragmentPagerAdapter extends FragmentStatePagerAdapter {
         logger.info(position + "");
         switch (position) {
             case 0: {
-                return ReadLaterFragment.newInstance(position);
+                return PostListFragment.newInstance();
             }
             case 1: {
-                return ReadLaterFragment.newInstance(position);
+                return BlankFragment.newInstance(position);
             }
             case 2: {
-                return ReadLaterFragment.newInstance(position);
+                return BlankFragment.newInstance(position);
             }
             default: {
-                return ReadLaterFragment.newInstance(999);
+                return BlankFragment.newInstance(999);
             }
         }
     }
