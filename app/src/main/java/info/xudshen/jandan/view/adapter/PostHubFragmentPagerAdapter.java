@@ -3,15 +3,13 @@ package info.xudshen.jandan.view.adapter;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import info.xudshen.jandan.R;
-import info.xudshen.jandan.view.fragment.IndicatorFragment;
-import info.xudshen.jandan.view.fragment.PostListFragment;
+import info.xudshen.jandan.view.fragment.ReadLaterFragment;
 
 /**
  * Created by xudshen on 16/1/11.
@@ -36,16 +34,16 @@ public class PostHubFragmentPagerAdapter extends FragmentStatePagerAdapter {
         logger.info(position + "");
         switch (position) {
             case 0: {
-                return IndicatorFragment.newInstance(position);
+                return ReadLaterFragment.newInstance(position);
             }
             case 1: {
-                return IndicatorFragment.newInstance(position);
+                return ReadLaterFragment.newInstance(position);
             }
             case 2: {
-                return IndicatorFragment.newInstance(position);
+                return ReadLaterFragment.newInstance(position);
             }
             default: {
-                return IndicatorFragment.newInstance(999);
+                return ReadLaterFragment.newInstance(999);
             }
         }
     }

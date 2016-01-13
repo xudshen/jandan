@@ -17,7 +17,7 @@ import info.xudshen.jandan.internal.di.components.DaggerActivityComponent;
 import info.xudshen.jandan.internal.di.components.DaggerPostComponent;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
-import info.xudshen.jandan.view.fragment.IndicatorFragment;
+import info.xudshen.jandan.view.fragment.ReadLaterFragment;
 import info.xudshen.jandan.view.fragment.PostHubFragment;
 
 public class MainActivity extends BaseActivity implements HasComponents, HasDrawer {
@@ -44,7 +44,7 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
                     break;
                 }
                 case R.id.nav_pics: {
-                    this.replaceFragment(R.id.activity_main_content, IndicatorFragment.newInstance(90));
+                    this.replaceFragment(R.id.activity_main_content, ReadLaterFragment.newInstance(90));
                     setTitle(R.string.drawer_item_pics);
                     break;
                 }

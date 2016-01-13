@@ -14,18 +14,18 @@ import info.xudshen.jandan.internal.di.components.PostComponent;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link IndicatorFragment#newInstance} factory method to
+ * Use the {@link ReadLaterFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class IndicatorFragment extends BaseFragment {
+public class ReadLaterFragment extends BaseFragment {
     public static final String ARG_PAGE = "ARG_PAGE";
 
     private int mPage;
 
-    public static IndicatorFragment newInstance(int page) {
+    public static ReadLaterFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-        IndicatorFragment fragment = new IndicatorFragment();
+        ReadLaterFragment fragment = new ReadLaterFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -41,7 +41,7 @@ public class IndicatorFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         getComponent(PostComponent.class).inject(this);
 
-        View view = inflater.inflate(R.layout.fragment_indicator, container, false);
+        View view = inflater.inflate(R.layout.fragment_read_later, container, false);
         setActionBarDrawerToggle((Toolbar) view.findViewById(R.id.toolbar));
 
         TextView textView = (TextView) view.findViewById(R.id.fragment_indicator_text);
