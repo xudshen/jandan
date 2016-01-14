@@ -14,15 +14,16 @@ import android.support.v7.widget.RecyclerView;
  * <p>
  * This class wraps the CursorLoader part
  */
-public abstract class DDCursorLoaderRecyclerAdapter<VH extends RecyclerView.ViewHolder> extends DDCursorRecyclerAdapter<VH> implements LoaderManager.LoaderCallbacks<Cursor> {
+public abstract class DDCursorLoaderRVAdapter<VH extends RecyclerView.ViewHolder>
+        extends DDCursorRVAdapter<VH> implements LoaderManager.LoaderCallbacks<Cursor> {
     Uri mUri;
     String[] mProjection;
     String mSelection;
     String[] mSelectionArgs;
     String mSortOrder;
 
-    public DDCursorLoaderRecyclerAdapter(Context context, Uri uri, String[] projection, String selection,
-                                         String[] selectionArgs, String sortOrder) {
+    public DDCursorLoaderRVAdapter(Context context, Uri uri, String[] projection, String selection,
+                                   String[] selectionArgs, String sortOrder) {
         super(context, null, FLAG_REGISTER_CONTENT_OBSERVER);
         this.mUri = uri;
         this.mProjection = projection;

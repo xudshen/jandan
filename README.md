@@ -47,8 +47,8 @@ DDCursorLoaderRecyclerAdapter <- DDCursorRecyclerAdapter
 - onLoadFinished -> swapCursor
 
 DDViewBindingCursorLoaderAdapter <- DDCursorLoaderRecyclerAdapter
-- layoutSelector(position -> {}) //get the layout_res for each item
-- bindingVariableAction((viewDataBinding, cursor) -> {}) //bind view with cursor data
+- itemLayoutSelector(position -> {}) //get the layout_res for each item
+- itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {}) //bind view with cursor data
 
 - onItemClick((itemView, position) -> {})
 ```

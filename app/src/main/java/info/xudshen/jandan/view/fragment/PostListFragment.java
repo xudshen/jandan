@@ -10,20 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
-import com.github.florent37.materialviewpager.adapter.RecyclerViewMaterialAdapter;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.ButterKnife;
-import info.xudshen.droiddata.adapter.impl.DDViewBindingCursorLoaderAdapter;
+import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.databinding.FragmentPostListBinding;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PostListPresenter;
 import info.xudshen.jandan.view.PostListView;
-import info.xudshen.jandan.view.adapter.HeaderVBCLAdapter;
 
 public class PostListFragment extends BaseFragment implements PostListView {
     public static PostListFragment newInstance() {
@@ -34,7 +32,7 @@ public class PostListFragment extends BaseFragment implements PostListView {
     PostListPresenter postListPresenter;
     @Inject
     @Named("postListAdapter")
-    HeaderVBCLAdapter postListAdapter;
+    DDBindableCursorLoaderRVHeaderAdapter postListAdapter;
     @Inject
     PostDao postDao;
 
@@ -57,7 +55,7 @@ public class PostListFragment extends BaseFragment implements PostListView {
 
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
 
-        postListAdapter.setItemClickListener((itemView, position) -> {
+        postListAdapter.setOnItemClickListener((itemView, position) -> {
             Snackbar.make(itemView, position + "clicked", Snackbar.LENGTH_LONG).show();
             //viewAdapter.getItemCursor(position);
         });

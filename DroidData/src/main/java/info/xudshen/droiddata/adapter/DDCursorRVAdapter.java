@@ -14,9 +14,10 @@ import android.view.ViewGroup;
 /**
  * Created by xudshen on 15/10/8.
  */
-public abstract class DDCursorRecyclerAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+public abstract class DDCursorRVAdapter<VH extends RecyclerView.ViewHolder>
+        extends RecyclerView.Adapter<VH> {
     protected boolean mDataValid;
-    protected boolean mAutoRequery;
+    protected boolean mAutoReQuery;
     protected Cursor mCursor;
     protected Context mContext;
     protected int mRowIDColumn;
@@ -47,16 +48,16 @@ public abstract class DDCursorRecyclerAdapter<VH extends RecyclerView.ViewHolder
     public static final int FLAG_REGISTER_CONTENT_OBSERVER = 0x02;
 
 
-    public DDCursorRecyclerAdapter(Context context, Cursor c, int flags) {
+    public DDCursorRVAdapter(Context context, Cursor c, int flags) {
         init(context, c, flags);
     }
 
     void init(Context context, Cursor c, int flags) {
         if ((flags & FLAG_AUTO_REQUERY) == FLAG_AUTO_REQUERY) {
             flags |= FLAG_REGISTER_CONTENT_OBSERVER;
-            mAutoRequery = true;
+            mAutoReQuery = true;
         } else {
-            mAutoRequery = false;
+            mAutoReQuery = false;
         }
         boolean cursorPresent = c != null;
         mCursor = c;
@@ -204,7 +205,7 @@ public abstract class DDCursorRecyclerAdapter<VH extends RecyclerView.ViewHolder
      */
     @Deprecated
     protected void onContentChanged() {
-        if (mAutoRequery && mCursor != null && !mCursor.isClosed()) {
+        if (mAutoReQuery && mCursor != null && !mCursor.isClosed()) {
             if (false) Log.v("Cursor", "Auto re-querying " + mCursor + " due to update");
             mDataValid = mCursor.requery();
         }
