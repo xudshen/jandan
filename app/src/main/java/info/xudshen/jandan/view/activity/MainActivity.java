@@ -29,11 +29,25 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
     private ActivityComponent activityComponent;
 
     @Override
+    protected void initializeInjector() {
+        ActivityModule activityModule = getActivityModule();
+        activityComponent = DaggerActivityComponent.builder()
+                .applicationComponent(getApplicationComponent())
+                .activityModule(activityModule)
+                .build();
+        activityComponent.inject(this);
+
+        postComponent = DaggerPostComponent.builder()
+                .applicationComponent(getApplicationComponent())
+                .activityModule(activityModule)
+                .build();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.initializeInjector();
         //set drawer click listener
         drawer.setOnDrawerItemClickListener((view, position, drawerItem) -> {
             logger.info("onClick, {}", drawerItem.getIdentifier());
@@ -55,6 +69,10 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
             drawer.closeDrawer();
             return true;
         });
+
+        if (savedInstanceState == null) {
+            drawer.setSelection(R.id.nav_posts);
+        }
     }
 
     @Override
@@ -78,7 +96,7 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
         //just test it with rotate the device
     }
 
-    //<editor-fold desc="Drawer">
+    //<editor-fold desc="Other Action">
     @Override
     public void onBackPressed() {
         if (drawer != null && drawer.isDrawerOpen()) {
@@ -89,21 +107,7 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
     }
     //</editor-fold>
 
-    //<editor-fold desc="HasComponents">
-    private void initializeInjector() {
-        ActivityModule activityModule = getActivityModule();
-        activityComponent = DaggerActivityComponent.builder()
-                .applicationComponent(getApplicationComponent())
-                .activityModule(activityModule)
-                .build();
-        activityComponent.inject(this);
-
-        postComponent = DaggerPostComponent.builder()
-                .applicationComponent(getApplicationComponent())
-                .activityModule(activityModule)
-                .build();
-    }
-
+    //<editor-fold desc="HasComponents HasDrawer">
     @Override
     public <C> C getComponent(Class<C> componentType) {
         if (componentType.isInstance(this.activityComponent)) {
@@ -119,6 +123,5 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
     public Drawer getDrawer() {
         return drawer;
     }
-
     //</editor-fold>
 }

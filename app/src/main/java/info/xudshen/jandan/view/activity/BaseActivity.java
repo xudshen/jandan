@@ -19,10 +19,16 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Inject
     Navigator navigator;
 
+    /**
+     * called in {@link #onCreate(Bundle)}
+     */
+    protected abstract void initializeInjector();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.getApplicationComponent().inject(this);
+        initializeInjector();
     }
 
     /**

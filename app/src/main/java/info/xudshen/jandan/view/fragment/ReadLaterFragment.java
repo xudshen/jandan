@@ -31,6 +31,11 @@ public class ReadLaterFragment extends BaseFragment {
     }
 
     @Override
+    public void inject() {
+        getComponent(PostComponent.class).inject(this);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPage = getArguments().getInt(ARG_PAGE);
@@ -39,7 +44,7 @@ public class ReadLaterFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getComponent(PostComponent.class).inject(this);
+        inject();
 
         View view = inflater.inflate(R.layout.fragment_read_later, container, false);
         setActionBarDrawerToggle((Toolbar) view.findViewById(R.id.toolbar));

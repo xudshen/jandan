@@ -59,7 +59,8 @@ public class ActivityModule {
                 .build();
 
         return new DrawerBuilder().withActivity(this.activity)
-                .withTranslucentStatusBar(false)
+                .withTranslucentStatusBar(true)
+//                .withFullscreen(true)
                 .withActionBarDrawerToggleAnimated(true)
                 .withAccountHeader(headerResult)
                 .addDrawerItems(

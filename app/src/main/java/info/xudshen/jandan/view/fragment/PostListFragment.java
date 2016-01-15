@@ -41,6 +41,12 @@ public class PostListFragment extends BaseFragment implements PostListView {
     }
 
     @Override
+    public void inject() {
+        this.getComponent(PostComponent.class).inject(this);
+        this.postListPresenter.setView(this);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -48,7 +54,7 @@ public class PostListFragment extends BaseFragment implements PostListView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        this.initialize();
+        this.inject();
 
         // Inflate the layout for this fragment
         FragmentPostListBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_post_list, container, false);
@@ -121,11 +127,6 @@ public class PostListFragment extends BaseFragment implements PostListView {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-    }
-
-    private void initialize() {
-        this.getComponent(PostComponent.class).inject(this);
-        this.postListPresenter.setView(this);
     }
 
 //    @OnClick(R.id.insertBtn)
