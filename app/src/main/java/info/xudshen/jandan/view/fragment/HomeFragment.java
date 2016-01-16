@@ -66,7 +66,7 @@ public class HomeFragment extends BaseFragment {
                 case 1:
                     return HeaderDesign.fromColorAndDrawable(
                             getResources().getColor(R.color.md_amber_500),
-                            getActivity().getResources().getDrawable(R.drawable.androidh900));
+                            getActivity().getResources().getDrawable(R.drawable.androidh901));
                 case 2:
                     return HeaderDesign.fromColorAndDrawable(
                             getResources().getColor(R.color.md_amber_500),
@@ -74,7 +74,7 @@ public class HomeFragment extends BaseFragment {
                 case 3:
                     return HeaderDesign.fromColorAndDrawable(
                             getResources().getColor(R.color.md_amber_500),
-                            getActivity().getResources().getDrawable(R.drawable.androidh900));
+                            getActivity().getResources().getDrawable(R.drawable.header_joke));
                 case 4:
                     return HeaderDesign.fromColorAndDrawable(
                             getResources().getColor(R.color.md_amber_500),
