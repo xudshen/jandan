@@ -1,28 +1,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_posts"
-            android:icon="@drawable/ic_search_white_24dp"
-            android:title="@string/drawer_item_posts" />
+            android:id="@+id/drawer_home"
+            android:title="@string/drawer_home" />
         <item
-            android:id="@+id/nav_pics"
-            android:icon="@drawable/ic_search_white_24dp"
-            android:title="@string/drawer_item_pics" />
+            android:id="@+id/drawer_read_later"
+            android:title="@string/drawer_read_later" />
         <item
-            android:id="@+id/nav_jokes"
-            android:icon="@drawable/ic_search_white_24dp"
-            android:title="@string/drawer_item_jokes" />
+            android:id="@+id/drawer_favorites"
+            android:title="@string/drawer_favorites" />
+
         <item
-            android:id="@+id/nav_movies"
-            android:icon="@drawable/ic_search_white_24dp"
-            android:title="@string/drawer_item_movies" />
-        <item
-            android:id="@+id/nav_preference"
-            android:icon="@drawable/ic_search_white_24dp"
+            android:id="@+id/drawer_preference"
             android:title="@string/drawer_preference" />
         <item
-            android:id="@+id/nav_about"
-            android:icon="@drawable/ic_search_white_24dp"
+            android:id="@+id/drawer_about"
             android:title="@string/drawer_about" />
     </group>
 </menu>

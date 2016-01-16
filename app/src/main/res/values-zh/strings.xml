@@ -2,18 +2,21 @@
 <resources>
     <string name="app_name">煎蛋噜</string>
 
-    <string name="drawer_item_posts">新鲜事</string>
-    <string name="drawer_item_pics">无聊图</string>
-    <string name="drawer_item_jokes">段子</string>
-    <string name="drawer_item_movies">小电影</string>
+    <string name="tab_item_ranking">排行榜</string>
+    <string name="tab_item_posts">新鲜事</string>
+    <string name="tab_item_pics">无聊图</string>
+    <string name="tab_item_jokes">段子</string>
+    <string name="tab_item_movies">小电影</string>
+
+    <string name="drawer_home">首页</string>
+    <string name="drawer_read_later">稍后阅读</string>
+    <string name="drawer_favorites">我的收藏</string>
+
     <string name="drawer_preference">设置</string>
     <string name="drawer_about">关于</string>
 
     <string name="drawer_open">打开侧边导航栏</string>
     <string name="drawer_close">关闭侧边导航栏</string>
 
-    <string name="post_hub_tab_new">新鲜事</string>
-    <string name="post_hub_tab_ranking">排行</string>
-    <string name="post_hub_tab_topic">专题</string>
     <string name="drawer_profile_add">添加账户</string>
 </resources>

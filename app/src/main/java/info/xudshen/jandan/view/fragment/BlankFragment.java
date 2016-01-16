@@ -23,6 +23,11 @@ public class BlankFragment extends BaseFragment {
     }
 
     @Override
+    protected void inject() {
+        
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPage = getArguments().getInt(ARG_PAGE);

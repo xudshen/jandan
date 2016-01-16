@@ -18,16 +18,16 @@ import info.xudshen.jandan.R;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.view.adapter.PostHubFragmentPagerAdapter;
 
-public class PostHubFragment extends BaseFragment {
-    private static final Logger logger = LoggerFactory.getLogger(PostHubFragment.class);
+public class HomeFragment extends BaseFragment {
+    private static final Logger logger = LoggerFactory.getLogger(HomeFragment.class);
     @Bind(R.id.materialViewPager)
     MaterialViewPager viewPager;
 
-    public static PostHubFragment newInstance() {
-        return new PostHubFragment();
+    public static HomeFragment newInstance() {
+        return new HomeFragment();
     }
 
-    public PostHubFragment() {
+    public HomeFragment() {
     }
 
     @Override
@@ -45,7 +45,7 @@ public class PostHubFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         inject();
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_post_hub, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
         setActionBarDrawerToggle(viewPager.getToolbar());
 
@@ -65,11 +65,19 @@ public class PostHubFragment extends BaseFragment {
                             getActivity().getResources().getDrawable(R.drawable.androidh900));
                 case 1:
                     return HeaderDesign.fromColorAndDrawable(
-                            getResources().getColor(R.color.md_red_500),
+                            getResources().getColor(R.color.md_amber_500),
                             getActivity().getResources().getDrawable(R.drawable.androidh900));
                 case 2:
                     return HeaderDesign.fromColorAndDrawable(
-                            getResources().getColor(R.color.md_purple_500),
+                            getResources().getColor(R.color.md_amber_500),
+                            getActivity().getResources().getDrawable(R.drawable.androidh900));
+                case 3:
+                    return HeaderDesign.fromColorAndDrawable(
+                            getResources().getColor(R.color.md_amber_500),
+                            getActivity().getResources().getDrawable(R.drawable.androidh900));
+                case 4:
+                    return HeaderDesign.fromColorAndDrawable(
+                            getResources().getColor(R.color.md_amber_500),
                             getActivity().getResources().getDrawable(R.drawable.androidh900));
             }
             //execute others actions if needed (ex : modify your header logo)
@@ -79,5 +87,7 @@ public class PostHubFragment extends BaseFragment {
         viewPager.getViewPager().setOffscreenPageLimit(viewPager.getViewPager().getAdapter().getCount());
         //After set an adapter to the ViewPager
         viewPager.getPagerTitleStrip().setViewPager(viewPager.getViewPager());
+        //set default
+        viewPager.getViewPager().setCurrentItem(1);
     }
 }

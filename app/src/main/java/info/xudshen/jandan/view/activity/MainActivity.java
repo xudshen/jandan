@@ -17,8 +17,8 @@ import info.xudshen.jandan.internal.di.components.DaggerActivityComponent;
 import info.xudshen.jandan.internal.di.components.DaggerPostComponent;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
+import info.xudshen.jandan.view.fragment.HomeFragment;
 import info.xudshen.jandan.view.fragment.ReadLaterFragment;
-import info.xudshen.jandan.view.fragment.PostHubFragment;
 
 public class MainActivity extends BaseActivity implements HasComponents, HasDrawer {
     private static final Logger logger = LoggerFactory.getLogger(MainActivity.class);
@@ -47,19 +47,29 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initializeInjector();
 
         //set drawer click listener
         drawer.setOnDrawerItemClickListener((view, position, drawerItem) -> {
             logger.info("onClick, {}", drawerItem.getIdentifier());
             switch (drawerItem.getIdentifier()) {
-                case R.id.nav_posts: {
-                    this.replaceFragment(R.id.activity_main_content, PostHubFragment.newInstance());
-                    setTitle(R.string.drawer_item_posts);
+                case R.id.drawer_home: {
+                    this.replaceFragment(R.id.activity_main_content, HomeFragment.newInstance());
+                    setTitle(R.string.drawer_home);
                     break;
                 }
-                case R.id.nav_pics: {
+                case R.id.drawer_read_later: {
                     this.replaceFragment(R.id.activity_main_content, ReadLaterFragment.newInstance(90));
-                    setTitle(R.string.drawer_item_pics);
+                    setTitle(R.string.drawer_read_later);
+                    break;
+                }
+                case R.id.drawer_favorites: {
+                    break;
+                }
+                case R.id.drawer_preference: {
+                    break;
+                }
+                case R.id.drawer_about: {
                     break;
                 }
                 default: {
@@ -71,7 +81,7 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
         });
 
         if (savedInstanceState == null) {
-            drawer.setSelection(R.id.nav_posts);
+            drawer.setSelection(R.id.drawer_home);
         }
     }
 

@@ -11,14 +11,13 @@ import org.slf4j.LoggerFactory;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.view.fragment.BlankFragment;
 import info.xudshen.jandan.view.fragment.PostListFragment;
-import info.xudshen.jandan.view.fragment.ReadLaterFragment;
 
 /**
  * Created by xudshen on 16/1/11.
  */
 public class PostHubFragmentPagerAdapter extends FragmentStatePagerAdapter {
     private static final Logger logger = LoggerFactory.getLogger(PostHubFragmentPagerAdapter.class);
-    final int PAGE_COUNT = 3;
+    final int PAGE_COUNT = 5;
     private Context context;
 
     public PostHubFragmentPagerAdapter(FragmentManager fm, Context context) {
@@ -36,12 +35,18 @@ public class PostHubFragmentPagerAdapter extends FragmentStatePagerAdapter {
         logger.info(position + "");
         switch (position) {
             case 0: {
-                return PostListFragment.newInstance();
-            }
-            case 1: {
                 return BlankFragment.newInstance(position);
             }
+            case 1: {
+                return PostListFragment.newInstance();
+            }
             case 2: {
+                return BlankFragment.newInstance(position);
+            }
+            case 3: {
+                return BlankFragment.newInstance(position);
+            }
+            case 4: {
                 return BlankFragment.newInstance(position);
             }
             default: {
@@ -55,16 +60,22 @@ public class PostHubFragmentPagerAdapter extends FragmentStatePagerAdapter {
         // Generate title based on item position
         switch (position) {
             case 0: {
-                return context.getText(R.string.post_hub_tab_new);
+                return context.getText(R.string.tab_item_ranking);
             }
             case 1: {
-                return context.getText(R.string.post_hub_tab_ranking);
+                return context.getText(R.string.tab_item_posts);
             }
             case 2: {
-                return context.getText(R.string.post_hub_tab_topic);
+                return context.getText(R.string.tab_item_pics);
+            }
+            case 3: {
+                return context.getText(R.string.tab_item_jokes);
+            }
+            case 4: {
+                return context.getText(R.string.tab_item_movies);
             }
             default: {
-                return context.getText(R.string.post_hub_tab_new);
+                return context.getText(R.string.tab_item_posts);
             }
         }
     }

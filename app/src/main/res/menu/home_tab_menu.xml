@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/tab_item_ranking"
+            android:title="@string/tab_item_ranking" />
+        <item
+            android:id="@+id/tab_item_posts"
+            android:title="@string/tab_item_posts" />
+        <item
+            android:id="@+id/tab_item_pics"
+            android:title="@string/tab_item_pics" />
+        <item
+            android:id="@+id/tab_item_jokes"
+            android:title="@string/tab_item_jokes" />
+        <item
+            android:id="@+id/tab_item_movies"
+            android:title="@string/tab_item_movies" />
+    </group>
+</menu>

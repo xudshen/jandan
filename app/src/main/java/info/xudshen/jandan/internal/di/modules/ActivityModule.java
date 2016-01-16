@@ -64,19 +64,17 @@ public class ActivityModule {
                 .withActionBarDrawerToggleAnimated(true)
                 .withAccountHeader(headerResult)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName(R.string.drawer_item_posts)
-                                .withIdentifier(R.id.nav_posts).withIcon(FontAwesome.Icon.faw_newspaper_o),
-                        new PrimaryDrawerItem().withName(R.string.drawer_item_pics)
-                                .withIdentifier(R.id.nav_pics).withIcon(GoogleMaterial.Icon.gmd_photo),
-                        new PrimaryDrawerItem().withName(R.string.drawer_item_jokes)
-                                .withIdentifier(R.id.nav_jokes).withIcon(GoogleMaterial.Icon.gmd_face),
-                        new PrimaryDrawerItem().withName(R.string.drawer_item_movies)
-                                .withIdentifier(R.id.nav_movies).withIcon(GoogleMaterial.Icon.gmd_movie),
+                        new PrimaryDrawerItem().withName(R.string.drawer_home)
+                                .withIdentifier(R.id.drawer_home).withIcon(FontAwesome.Icon.faw_newspaper_o),
+                        new PrimaryDrawerItem().withName(R.string.drawer_read_later)
+                                .withIdentifier(R.id.drawer_read_later).withIcon(GoogleMaterial.Icon.gmd_photo),
+                        new PrimaryDrawerItem().withName(R.string.drawer_favorites)
+                                .withIdentifier(R.id.drawer_favorites).withIcon(GoogleMaterial.Icon.gmd_face),
                         new DividerDrawerItem(),
                         new PrimaryDrawerItem().withName(R.string.drawer_preference)
-                                .withIdentifier(R.id.nav_preference).withIcon(GoogleMaterial.Icon.gmd_settings),
+                                .withIdentifier(R.id.drawer_preference).withIcon(GoogleMaterial.Icon.gmd_settings),
                         new PrimaryDrawerItem().withName(R.string.drawer_about)
-                                .withIdentifier(R.id.nav_about).withIcon(GoogleMaterial.Icon.gmd_info)
+                                .withIdentifier(R.id.drawer_about).withIcon(GoogleMaterial.Icon.gmd_info)
                 )
                 .build();
     }
