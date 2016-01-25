@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="item"
+            type="info.xudshen.jandan.domain.model.Post" />
+    </data>
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:layout_marginBottom="@dimen/cardMarginVertical"
+        android:layout_marginLeft="@dimen/cardMarginHorizontal"
+        android:layout_marginRight="@dimen/cardMarginHorizontal"
+        android:layout_marginTop="@dimen/cardMarginVertical"
+        android:background="@android:color/white">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:columnCount="4"
+            android:focusable="true"
+            android:rowCount="2">
+
+            <ImageView
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_rowSpan="2"
+                android:src="#f40707" />
+
+            <TextView
+                style="@style/PostCardTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:layout_columnWeight="1"
+                android:layout_gravity="top"
+
+                android:paddingLeft="12dp"
+                android:paddingRight="-12dp"
+                android:paddingTop="12dp"
+                android:text="物理科学家能说服工程师们信3D打印的金属零件吗?"
+
+                android:translationZ="4dp" />
+
+            <ImageButton
+                style="@style/SmallIconButton"
+                android:layout_marginRight="2dp"
+                android:layout_marginTop="4dp"
+                android:src="@drawable/ic_more_vert_black_18dp" />
+
+            <TextView
+                style="@style/PostCardMeta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+
+                android:paddingBottom="12dp"
+                android:paddingLeft="12dp"
+                android:text="小脑袋@小学堂" />
+
+            <TextView
+                style="@style/PostCardMeta"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="bottom"
+
+                android:paddingBottom="12dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:text="4分钟前" />
+        </GridLayout>
+    </android.support.v7.widget.CardView>
+</layout>
