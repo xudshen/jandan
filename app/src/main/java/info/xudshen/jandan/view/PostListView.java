@@ -5,5 +5,7 @@ package info.xudshen.jandan.view;
  * In this case is used as a view representing a user profile.
  */
 public interface PostListView {
-    void renderPostList();
+    void swipeDownFinished();
+
+    void swipeUpFinished();
 }

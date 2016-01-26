@@ -26,6 +26,21 @@ public class PostListPresenter implements Presenter {
         this.postListView = view;
     }
 
+    /**
+     * load new data
+     */
+    public void swipeDownStart() {
+        this.postListView.swipeDownFinished();
+    }
+
+    /**
+     * load history data
+     */
+    public void swipeUpStart() {
+        this.postListView.swipeUpFinished();
+    }
+
+
     @Override
     public void resume() {
 
