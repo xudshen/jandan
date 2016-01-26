@@ -2,7 +2,9 @@ package info.xudshen.jandan.view.activity;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.v4.view.LayoutInflaterCompat;
 
+import com.mikepenz.iconics.context.IconicsLayoutInflater;
 import com.mikepenz.materialdrawer.Drawer;
 
 import org.slf4j.Logger;
@@ -45,6 +47,7 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        LayoutInflaterCompat.setFactory(getLayoutInflater(), new IconicsLayoutInflater(getDelegate()));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initializeInjector();

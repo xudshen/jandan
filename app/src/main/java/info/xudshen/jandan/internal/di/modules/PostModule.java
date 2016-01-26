@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.v7.widget.PopupMenu;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.slf4j.Logger;
@@ -46,7 +47,7 @@ public class PostModule {
                 })
                 .bindableViewHolderCreator(((inflater1, viewType1, parent1) -> {
                     ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
-                    ImageButton button = (ImageButton) viewDataBinding.getRoot().findViewById(R.id.post_card_more_btn);
+                    ImageView button = (ImageView) viewDataBinding.getRoot().findViewById(R.id.post_card_more_btn);
                     button.setOnClickListener(v -> {
                         logger.info("more clicked");
                         PopupMenu popupMenu = new PopupMenu(activity, button);
