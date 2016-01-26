@@ -3,6 +3,12 @@ package info.xudshen.jandan.internal.di.modules;
 import android.app.Activity;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.support.v7.widget.PopupMenu;
+import android.widget.ImageButton;
+import android.widget.Toast;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Named;
 
@@ -21,6 +27,7 @@ import info.xudshen.jandan.internal.di.PerActivity;
  */
 @Module
 public class PostModule {
+    private static final Logger logger = LoggerFactory.getLogger(PostModule.class);
     private int postId = -1;
 
     public PostModule() {
@@ -39,6 +46,25 @@ public class PostModule {
                 })
                 .bindableViewHolderCreator(((inflater1, viewType1, parent1) -> {
                     ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
+                    ImageButton button = (ImageButton) viewDataBinding.getRoot().findViewById(R.id.post_card_more_btn);
+                    button.setOnClickListener(v -> {
+                        logger.info("more clicked");
+                        PopupMenu popupMenu = new PopupMenu(activity, button);
+                        popupMenu.setOnMenuItemClickListener(item -> {
+                            switch (item.getItemId()) {
+                                case R.id.post_card_more_menu_favo:
+                                    logger.info("Favo Clicked");
+                                    return true;
+                                case R.id.post_card_more_menu_later:
+                                    logger.info("Later Clicked");
+                                    return true;
+                                default:
+                                    return false;
+                            }
+                        });
+                        popupMenu.inflate(R.menu.post_card_more_menu);
+                        popupMenu.show();
+                    });
                     return new DDBindableViewHolder(viewDataBinding);
                 }))
                 .itemLayoutSelector(position -> R.layout.post_card_view)

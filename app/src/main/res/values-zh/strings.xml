@@ -19,4 +19,6 @@
     <string name="drawer_close">关闭侧边导航栏</string>
 
     <string name="drawer_profile_add">添加账户</string>
+    <string name="post_card_more_menu_favo">收藏</string>
+    <string name="post_card_more_menu_later">稍后阅读</string>
 </resources>

@@ -23,7 +23,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
-        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorPrimary">@color/primary_text</item>
         <!--this make status bar transparent[MaterialViewPager]-->
         <item name="android:windowTranslucentStatus" tools:targetApi="19">true</item>
 

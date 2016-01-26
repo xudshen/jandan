@@ -19,4 +19,6 @@
     <string name="drawer_close">Close navigation drawer</string>
 
     <string name="drawer_profile_add">Add account</string>
+    <string name="post_card_more_menu_favo">Add to favorite</string>
+    <string name="post_card_more_menu_later">Read later</string>
 </resources>
