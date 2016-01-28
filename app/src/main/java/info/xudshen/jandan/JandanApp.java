@@ -4,6 +4,9 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
+
 import info.xudshen.jandan.data.dao.ModelContentProvider;
 import info.xudshen.jandan.internal.di.components.ApplicationComponent;
 import info.xudshen.jandan.internal.di.components.DaggerApplicationComponent;
@@ -16,6 +19,14 @@ import info.xudshen.jandan.internal.di.modules.ApplicationModule;
 public class JandanApp extends MultiDexApplication {
     private ApplicationComponent applicationComponent;
 
+    public static RefWatcher getRefWatcher(Context context) {
+        JandanApp application = (JandanApp) context.getApplicationContext();
+        return application.refWatcher;
+    }
+
+    private RefWatcher refWatcher;
+
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -25,6 +36,7 @@ public class JandanApp extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        refWatcher = LeakCanary.install(this);
 
         this.initializeInjector();
         ModelContentProvider.daoSession = getApplicationComponent().daoSession();

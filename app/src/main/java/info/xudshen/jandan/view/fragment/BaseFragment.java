@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.mikepenz.materialdrawer.Drawer;
 
+import info.xudshen.jandan.JandanApp;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.internal.di.HasComponent;
 import info.xudshen.jandan.internal.di.HasComponents;
@@ -68,5 +69,11 @@ public abstract class BaseFragment extends Fragment {
 
     public void showToast(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        JandanApp.getRefWatcher(getActivity()).watch(this);
     }
 }
