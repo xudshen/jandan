@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.florent37.materialviewpager.MaterialViewPager;
-import com.github.florent37.materialviewpager.header.HeaderDesign;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,32 +56,32 @@ public class HomeFragment extends BaseFragment {
         viewPager.getViewPager().setAdapter(new PostHubFragmentPagerAdapter(getFragmentManager(),
                 getActivity()));
 
-        viewPager.setMaterialViewPagerListener(page -> {
-            switch (page) {
-                case 0:
-                    return HeaderDesign.fromColorAndDrawable(
-                            getResources().getColor(R.color.md_amber_500),
-                            getActivity().getResources().getDrawable(R.drawable.androidh900));
-                case 1:
-                    return HeaderDesign.fromColorAndDrawable(
-                            getResources().getColor(R.color.md_amber_500),
-                            getActivity().getResources().getDrawable(R.drawable.androidh901));
-                case 2:
-                    return HeaderDesign.fromColorAndDrawable(
-                            getResources().getColor(R.color.md_amber_500),
-                            getActivity().getResources().getDrawable(R.drawable.androidh900));
-                case 3:
-                    return HeaderDesign.fromColorAndDrawable(
-                            getResources().getColor(R.color.md_amber_500),
-                            getActivity().getResources().getDrawable(R.drawable.header_joke));
-                case 4:
-                    return HeaderDesign.fromColorAndDrawable(
-                            getResources().getColor(R.color.md_amber_500),
-                            getActivity().getResources().getDrawable(R.drawable.androidh900));
-            }
-            //execute others actions if needed (ex : modify your header logo)
-            return null;
-        });
+//        viewPager.setMaterialViewPagerListener(page -> {
+//            switch (page) {
+//                case 0:
+//                    return HeaderDesign.fromColorAndDrawable(
+//                            getResources().getColor(R.color.md_amber_500),
+//                            getActivity().getResources().getDrawable(R.drawable.androidh900));
+//                case 1:
+//                    return HeaderDesign.fromColorAndDrawable(
+//                            getResources().getColor(R.color.md_amber_500),
+//                            getActivity().getResources().getDrawable(R.drawable.androidh901));
+//                case 2:
+//                    return HeaderDesign.fromColorAndDrawable(
+//                            getResources().getColor(R.color.md_amber_500),
+//                            getActivity().getResources().getDrawable(R.drawable.androidh900));
+//                case 3:
+//                    return HeaderDesign.fromColorAndDrawable(
+//                            getResources().getColor(R.color.md_amber_500),
+//                            getActivity().getResources().getDrawable(R.drawable.header_joke));
+//                case 4:
+//                    return HeaderDesign.fromColorAndDrawable(
+//                            getResources().getColor(R.color.md_amber_500),
+//                            getActivity().getResources().getDrawable(R.drawable.androidh900));
+//            }
+//            //execute others actions if needed (ex : modify your header logo)
+//            return null;
+//        });
 
         viewPager.getViewPager().setOffscreenPageLimit(viewPager.getViewPager().getAdapter().getCount());
         //After set an adapter to the ViewPager

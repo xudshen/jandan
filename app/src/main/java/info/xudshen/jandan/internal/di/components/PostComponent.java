@@ -5,8 +5,8 @@ import info.xudshen.jandan.internal.di.PerActivity;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
 import info.xudshen.jandan.internal.di.modules.PostModule;
 import info.xudshen.jandan.view.fragment.HomeFragment;
-import info.xudshen.jandan.view.fragment.ReadLaterFragment;
 import info.xudshen.jandan.view.fragment.PostListFragment;
+import info.xudshen.jandan.view.fragment.ReadLaterFragment;
 
 /**
  * Created by xudshen on 16/1/7.

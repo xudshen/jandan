@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -14,18 +15,67 @@ import info.xudshen.jandan.JandanApp;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.internal.di.HasComponent;
 import info.xudshen.jandan.internal.di.HasComponents;
+import info.xudshen.jandan.navigation.Navigator;
+import info.xudshen.jandan.view.activity.BaseActivity;
 import info.xudshen.jandan.view.activity.HasDrawer;
+import info.xudshen.jandan.view.activity.TransitionHelper;
 
 /**
  * Created by xudshen on 16/1/7.
  */
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements TransitionHelper.Listener {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        TransitionHelper.of(getActivity()).addListener(this);
+        super.onCreate(savedInstanceState);
+
+    }
+
     /**
      * inject dependencies
      * normally called in {@link Fragment#onCreateView(LayoutInflater, ViewGroup, Bundle)}
      * or {@link Fragment#onActivityCreated(Bundle)}
      */
     protected abstract void inject();
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        TransitionHelper.of(getActivity()).onViewCreated();
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        JandanApp.getRefWatcher(getActivity()).watch(this);
+    }
+
+    //<editor-fold desc="TransitionHelper.Listener">
+    @Override
+    public void onBeforeViewShows(View contentView) {
+    }
+
+    @Override
+    public void onBeforeEnter(View contentView) {
+    }
+
+    @Override
+    public void onAfterEnter() {
+    }
+
+    @Override
+    public boolean onBeforeBack() {
+        return false;
+    }
+
+    @Override
+    public void onBeforeReturn() {
+    }
+    //</editor-fold>
+
+    protected Navigator getNavigator() {
+        return ((BaseActivity) getActivity()).getNavigator();
+    }
 
     /**
      * get components from parent activity
@@ -69,11 +119,5 @@ public abstract class BaseFragment extends Fragment {
 
     public void showToast(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        JandanApp.getRefWatcher(getActivity()).watch(this);
     }
 }

@@ -3,13 +3,16 @@ package info.xudshen.jandan.view.fragment;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -21,8 +24,11 @@ import info.xudshen.jandan.databinding.FragmentPostListBinding;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PostListPresenter;
 import info.xudshen.jandan.view.PostListView;
+import info.xudshen.jandan.view.activity.BaseActivity;
 
 public class PostListFragment extends BaseFragment implements PostListView {
+    private static final Logger logger = LoggerFactory.getLogger(PostListFragment.class);
+
     public static PostListFragment newInstance() {
         return new PostListFragment();
     }
@@ -58,8 +64,10 @@ public class PostListFragment extends BaseFragment implements PostListView {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_post_list, container, false);
 
         postListAdapter.setOnItemClickListener((itemView, position) -> {
-            Snackbar.make(itemView, position + "clicked", Snackbar.LENGTH_LONG).show();
-            //viewAdapter.getItemCursor(position);
+            logger.info(position + "clicked");
+
+            ImageView imageView = (ImageView) itemView.findViewById(R.id.post_card_img);
+            getNavigator().launchItemReader((BaseActivity) getActivity(), imageView);
         });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
