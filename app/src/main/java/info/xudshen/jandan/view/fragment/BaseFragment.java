@@ -47,6 +47,7 @@ public abstract class BaseFragment extends Fragment implements TransitionHelper.
     @Override
     public void onDestroy() {
         super.onDestroy();
+        TransitionHelper.of(getActivity()).removeListener(this);
         JandanApp.getRefWatcher(getActivity()).watch(this);
     }
 

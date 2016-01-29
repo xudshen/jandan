@@ -172,6 +172,10 @@ public class TransitionHelper {
         listeners.add(listener);
     }
 
+    public void removeListener(Listener listener) {
+        listeners.remove(listener);
+    }
+
     private void onAfterEnter() {
         for (Listener listener : listeners) listener.onAfterEnter();
         isAfterEnter = true;
