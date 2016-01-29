@@ -21,4 +21,7 @@
     <string name="drawer_profile_add">Add account</string>
     <string name="post_card_more_menu_favo">Add to favorite</string>
     <string name="post_card_more_menu_later">Read later</string>
+
+    <string name="launch_item_reader_transition">launch_item_reader_transition</string>
+    <string name="press_again_exit">Press Again To Exit</string>
 </resources>

@@ -21,4 +21,5 @@
     <string name="drawer_profile_add">添加账户</string>
     <string name="post_card_more_menu_favo">收藏</string>
     <string name="post_card_more_menu_later">稍后阅读</string>
+    <string name="press_again_exit">再按退出</string>
 </resources>

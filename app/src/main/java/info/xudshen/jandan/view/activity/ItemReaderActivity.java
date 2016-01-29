@@ -3,6 +3,7 @@ package info.xudshen.jandan.view.activity;
 import android.os.Bundle;
 import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 
 import com.mikepenz.iconics.context.IconicsLayoutInflater;
 
@@ -31,5 +32,8 @@ public class ItemReaderActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         viewPager.setAdapter(new ItemReadPagerAdapter(getSupportFragmentManager()));
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 }

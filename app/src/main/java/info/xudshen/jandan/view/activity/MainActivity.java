@@ -110,12 +110,20 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
     }
 
     //<editor-fold desc="Other Action">
+    private int backPressedCount = 0;
+
     @Override
     public void onBackPressed() {
         if (drawer != null && drawer.isDrawerOpen()) {
             drawer.closeDrawer();
         } else {
-            super.onBackPressed();
+            if (backPressedCount == 0) {
+                showToast(getString(R.string.press_again_exit));
+                backPressedCount = 1;
+            } else {
+                super.onBackPressed();
+                backPressedCount = 0;
+            }
         }
     }
     //</editor-fold>

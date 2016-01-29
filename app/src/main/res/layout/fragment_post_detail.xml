@@ -1,16 +1,113 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:clickable="true"
+    android:padding="16dp"
     tools:context="info.xudshen.jandan.view.fragment.PostDetailFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <ImageView
-        android:layout_width="196dp"
-        android:layout_height="196dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/leak_canary_icon"
-        android:transitionName="profile"/>
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/PostDetailTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="物理科学家能说服工程师们信3D打印的金属零件吗?" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/post_detail_author"
+                style="@style/PostDetailMeta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="小脑袋"
+                android:textColor="@color/colorAccent" />
+
+            <TextView
+                style="@style/PostDetailMeta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+
+                android:text="\@小学堂" />
+
+            <TextView
+                style="@style/PostDetailMeta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+
+                android:paddingLeft="12dp"
+                android:text="4分钟前" />
+        </LinearLayout>
+        <!--<ImageView-->
+        <!--android:layout_width="196dp"-->
+        <!--android:layout_height="196dp"-->
+        <!--android:scaleType="fitCenter"-->
+        <!--android:src="@drawable/post_placeholder" />-->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:text="1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:text="1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:text="1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:text="1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:text="1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:text="1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2" />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

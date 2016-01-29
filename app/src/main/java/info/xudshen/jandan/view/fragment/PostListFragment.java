@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
 
@@ -66,8 +65,8 @@ public class PostListFragment extends BaseFragment implements PostListView {
         postListAdapter.setOnItemClickListener((itemView, position) -> {
             logger.info(position + "clicked");
 
-            ImageView imageView = (ImageView) itemView.findViewById(R.id.post_card_img);
-            getNavigator().launchItemReader((BaseActivity) getActivity(), imageView);
+            getNavigator().launchItemReader((BaseActivity) getActivity(),
+                    itemView.findViewById(R.id.post_card_author));
         });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
