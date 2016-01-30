@@ -9,68 +9,13 @@
             type="info.xudshen.jandan.domain.model.Post" />
     </data>
 
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/post_comment_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/md_white_1000"
         android:clickable="true"
-        tools:context="info.xudshen.jandan.view.fragment.PostDetailFragment">
+        android:focusable="true"
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/layoutMarginVertical"
-            android:paddingTop="@dimen/layoutMarginVertical">
-
-            <TextView
-                style="@style/PostDetailTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/layoutMarginHorizontal"
-                android:paddingRight="@dimen/layoutMarginHorizontal"
-                android:text="物理科学家能说服工程师们信3D打印的金属零件吗?" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/layoutMarginHorizontal"
-                android:paddingRight="@dimen/layoutMarginHorizontal">
-
-                <TextView
-                    android:id="@+id/post_detail_author"
-                    style="@style/PostDetailMeta"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:text="小脑袋"
-                    android:textColor="@color/colorAccent" />
-
-                <TextView
-                    style="@style/PostDetailMeta"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-
-                    android:text="\@小学堂" />
-
-                <TextView
-                    style="@style/PostDetailMeta"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-
-                    android:paddingLeft="12dp"
-                    android:text="4分钟前" />
-            </LinearLayout>
-
-            <WebView
-                android:id="@+id/post_detail_body"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="6dp" />
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+        android:scrollbars="none" />
 </layout>

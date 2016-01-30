@@ -1,6 +1,8 @@
 package info.xudshen.droiddata.adapter.impl;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.databinding.ViewDataBinding;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ public class DDBindableCursorLoaderRVHeaderAdapter<VH extends RecyclerView.ViewH
     private int mPlaceholderSize = 1;
 
     protected HeaderViewHolderCreator<VH> headerViewHolderCreator;
+    protected HeaderViewDataBindingVariableAction headerViewDataBindingVariableAction;
 
     public DDBindableCursorLoaderRVHeaderAdapter(Context context, Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         super(context, uri, projection, selection, selectionArgs, sortOrder);
@@ -52,7 +55,18 @@ public class DDBindableCursorLoaderRVHeaderAdapter<VH extends RecyclerView.ViewH
      */
     @Override
     public void onBindViewHolder(VH holder, int position) {
-        if (getItemViewType(position) == TYPE_PLACEHOLDER) return;
+        if (getItemViewType(position) == TYPE_PLACEHOLDER) {
+            if (headerViewDataBindingVariableAction != null) {
+                if (!IBindableViewHolder.class.isAssignableFrom(holder.getClass())) {
+                    throw new IllegalArgumentException(holder.getClass().getSimpleName()
+                            + " should implement IBindableViewHolder");
+                }
+                ViewDataBinding binding = ((IBindableViewHolder) holder).getViewDataBinding();
+                headerViewDataBindingVariableAction.doViewDataBindingVariable(binding);
+                binding.executePendingBindings();
+            }
+            return;
+        }
 
         if (!mDataValid) {
             throw new IllegalStateException("this should only be called when the cursor is valid");
@@ -79,18 +93,22 @@ public class DDBindableCursorLoaderRVHeaderAdapter<VH extends RecyclerView.ViewH
     }
 
     //<editor-fold desc="Getter && Setter">
-    public HeaderViewHolderCreator<VH> getHeaderViewHolderCreator() {
-        return headerViewHolderCreator;
-    }
-
     public void setHeaderViewHolderCreator(HeaderViewHolderCreator<VH> headerViewHolderCreator) {
         this.headerViewHolderCreator = headerViewHolderCreator;
+    }
+
+    public void setHeaderViewDataBindingVariableAction(HeaderViewDataBindingVariableAction headerViewDataBindingVariableAction) {
+        this.headerViewDataBindingVariableAction = headerViewDataBindingVariableAction;
     }
     //</editor-fold>
 
     //<editor-fold desc="Interface">
     public interface HeaderViewHolderCreator<VH extends RecyclerView.ViewHolder> {
         VH createHeaderViewHolder(LayoutInflater inflater, int viewType, ViewGroup parent);
+    }
+
+    public interface HeaderViewDataBindingVariableAction {
+        void doViewDataBindingVariable(ViewDataBinding viewDataBinding);
     }
     //</editor-fold>
 
@@ -107,6 +125,11 @@ public class DDBindableCursorLoaderRVHeaderAdapter<VH extends RecyclerView.ViewH
 
         public Builder headerViewHolderCreator(HeaderViewHolderCreator<VH> headerViewHolderCreator) {
             this.obj.setHeaderViewHolderCreator(headerViewHolderCreator);
+            return this;
+        }
+
+        public Builder headerViewDataBindingVariableAction(HeaderViewDataBindingVariableAction headerViewDataBindingVariableAction) {
+            this.obj.setHeaderViewDataBindingVariableAction(headerViewDataBindingVariableAction);
             return this;
         }
 
