@@ -2,4 +2,6 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="cardMarginHorizontal">10dp</dimen>
     <dimen name="cardMarginVertical">4dp</dimen>
+    <dimen name="layoutMarginHorizontal">16dp</dimen>
+    <dimen name="layoutMarginVertical">16dp</dimen>
 </resources>

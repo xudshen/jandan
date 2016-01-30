@@ -69,7 +69,7 @@
     </style>
 
     <style name="PostDetailMeta">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/secondary_text</item>
         <!--<item name="android:lineSpacingMultiplier">1.2</item>-->
     </style>
