@@ -2,20 +2,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="post"
-            type="info.xudshen.jandan.domain.model.Post" />
-    </data>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/post_comment_list"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/md_white_1000"
-        android:clickable="true"
-        android:focusable="true"
+        android:layout_height="match_parent">
 
-        android:scrollbars="none" />
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/post_with_comment_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/md_white_1000"
+            android:clickable="true"
+            android:focusable="true"
+            android:scrollbars="none"
+            android:visibility="gone" />
+    </FrameLayout>
 </layout>

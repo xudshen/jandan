@@ -17,6 +17,7 @@ import info.xudshen.jandan.internal.di.components.DaggerPostComponent;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
 import info.xudshen.jandan.view.adapter.ItemReadPagerAdapter;
+import info.xudshen.jandan.view.transition.StackPageTransformer;
 
 public class ItemReaderActivity extends BaseActivity implements HasComponents {
     @Bind(R.id.item_reader_view_pager)
@@ -51,6 +52,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents {
         ButterKnife.bind(this);
 
         viewPager.setAdapter(new ItemReadPagerAdapter(getSupportFragmentManager()));
+        viewPager.setPageTransformer(true, new StackPageTransformer());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

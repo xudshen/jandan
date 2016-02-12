@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import info.xudshen.jandan.R;
@@ -13,6 +14,9 @@ public class BlankFragment extends BaseFragment {
     public static final String ARG_PAGE = "ARG_PAGE";
 
     private int mPage;
+
+    TextView textView;
+    ProgressBar progressBar;
 
     public static BlankFragment newInstance(int page) {
         Bundle args = new Bundle();
@@ -24,7 +28,7 @@ public class BlankFragment extends BaseFragment {
 
     @Override
     protected void inject() {
-        
+
     }
 
     @Override
@@ -38,8 +42,20 @@ public class BlankFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_blank, container, false);
 
-        TextView textView = (TextView) view.findViewById(R.id.fragment_blank_text);
+        textView = (TextView) view.findViewById(R.id.fragment_blank_text);
         textView.setText("Fragment $" + mPage);
+        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         return view;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            progressBar.setVisibility(View.GONE);
+            textView.setVisibility(View.VISIBLE);
+        } else {
+
+        }
     }
 }

@@ -47,10 +47,15 @@ public class PostDetailFragment extends BaseFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_post_detail, container, false);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        binding.postCommentList.setLayoutManager(linearLayoutManager);
-        binding.postCommentList.setAdapter(postCommentAdapter);
+        binding.postWithCommentList.setLayoutManager(linearLayoutManager);
+        binding.postWithCommentList.setAdapter(postCommentAdapter);
 
+        postCommentAdapter.setCursorLoaderLoadFinishedListener(() -> {
+            binding.postWithCommentList.setVisibility(View.VISIBLE);
+            binding.progressBar.setVisibility(View.GONE);
+        });
         getLoaderManager().initLoader(0, null, postCommentAdapter);
+
         return binding.getRoot();
     }
 
