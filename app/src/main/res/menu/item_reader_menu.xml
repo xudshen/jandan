@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/item_reader_menu_favo"
+        android:title="@string/post_card_more_menu_favo"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/item_reader_menu_later"
+        android:title="@string/post_card_more_menu_later"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/item_reader_menu_share"
+        android:title="分享"
+        android:visible="true" />
+</menu>

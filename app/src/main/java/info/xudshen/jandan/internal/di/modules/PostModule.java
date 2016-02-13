@@ -55,7 +55,7 @@ public class PostModule {
                     viewDataBinding.setVariable(BR.item, post);
                 })
                 .onItemSubViewClickListener(R.id.post_card_more_btn, ((v, position) -> {
-                    logger.info("more clicked");
+                    logger.info("{} more clicked", position);
                     PopupMenu popupMenu = new PopupMenu(activity, v);
                     popupMenu.setOnMenuItemClickListener(item -> {
                         switch (item.getItemId()) {
@@ -94,25 +94,6 @@ public class PostModule {
                 })
                 .itemViewHolderCreator(((inflater1, viewType1, parent1) -> {
                     ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
-                    ImageView button = (ImageView) viewDataBinding.getRoot().findViewById(R.id.post_card_more_btn);
-                    button.setOnClickListener(v -> {
-                        logger.info("more clicked");
-                        PopupMenu popupMenu = new PopupMenu(activity, button);
-                        popupMenu.setOnMenuItemClickListener(item -> {
-                            switch (item.getItemId()) {
-                                case R.id.post_card_more_menu_favo:
-                                    logger.info("Favo Clicked");
-                                    return true;
-                                case R.id.post_card_more_menu_later:
-                                    logger.info("Later Clicked");
-                                    return true;
-                                default:
-                                    return false;
-                            }
-                        });
-                        popupMenu.inflate(R.menu.post_card_more_menu);
-                        popupMenu.show();
-                    });
                     return new DDBindableViewHolder(viewDataBinding);
                 }))
                 .itemLayoutSelector(position -> R.layout.post_card_view)
