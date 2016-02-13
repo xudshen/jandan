@@ -2,7 +2,7 @@ package info.xudshen.droiddata.adapter;
 
 import android.databinding.ViewDataBinding;
 
-import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVAdapter;
+import java.util.List;
 
 /**
  * Created by xudshen on 16/1/14.
@@ -10,6 +10,9 @@ import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVAdapter;
 public interface IBindableViewHolder {
     ViewDataBinding getViewDataBinding();
 
-    void registerOnItemClickListener(DDBindableCursorLoaderRVAdapter.OnItemClickListener onItemClickListener,
+    void registerOnItemClickListener(UserActionRegistry.OnClickListener onClickListener,
                                      int mPlaceholderSize);
+
+    void registerOnItemSubViewUserActionListener(List<UserActionRegistry> userActionRegistries,
+                                                 int mPlaceholderSize);
 }

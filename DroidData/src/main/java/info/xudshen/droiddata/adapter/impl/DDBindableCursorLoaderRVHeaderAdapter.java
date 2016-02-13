@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import info.xudshen.droiddata.adapter.IBindableViewHolder;
+import info.xudshen.droiddata.adapter.UserActionRegistry;
 
 /**
  * Created by xudshen on 16/1/13.
@@ -36,22 +37,24 @@ public class DDBindableCursorLoaderRVHeaderAdapter<VH extends RecyclerView.ViewH
                 return headerViewHolderCreator.createHeaderViewHolder(inflater, viewType, parent);
             }
             default: {
-                if (bindableViewHolderCreator == null) {
-                    throw new IllegalArgumentException("bindableViewHolderCreator should not be null");
+                if (itemViewHolderCreator == null) {
+                    throw new IllegalArgumentException("itemViewHolderCreator should not be null");
                 }
-                VH viewHolder = bindableViewHolderCreator.createBindableViewHolder(inflater, viewType, parent);
+                VH viewHolder = itemViewHolderCreator.createItemViewHolder(inflater, viewType, parent);
                 if (!IBindableViewHolder.class.isAssignableFrom(viewHolder.getClass())) {
                     throw new IllegalArgumentException(viewHolder.getClass().getSimpleName()
                             + " should implement IBindableViewHolder");
                 }
                 ((IBindableViewHolder) viewHolder).registerOnItemClickListener(onItemClickListener, mPlaceholderSize);
+                ((IBindableViewHolder) viewHolder).registerOnItemSubViewUserActionListener(userActionRegistries, mPlaceholderSize);
                 return viewHolder;
             }
         }
     }
 
     /**
-     * we must override this because the position is {position + mPlaceholderSize} now
+     * we must override this (not {@link #bindViewHolder(RecyclerView.ViewHolder, Cursor)})
+     * because the position is {position + mPlaceholderSize} now
      */
     @Override
     public void onBindViewHolder(VH holder, int position) {
@@ -104,10 +107,20 @@ public class DDBindableCursorLoaderRVHeaderAdapter<VH extends RecyclerView.ViewH
 
     //<editor-fold desc="Interface">
     public interface HeaderViewHolderCreator<VH extends RecyclerView.ViewHolder> {
+        /**
+         * create view holder, bind view listener
+         * if you create lots of listener,
+         * try {@link info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter.Builder#onItemSubViewClickListener(int, UserActionRegistry.OnClickListener)}
+         *
+         * @param viewType always {@link #TYPE_PLACEHOLDER}
+         */
         VH createHeaderViewHolder(LayoutInflater inflater, int viewType, ViewGroup parent);
     }
 
     public interface HeaderViewDataBindingVariableAction {
+        /**
+         * bind data with view, may called multi times
+         */
         void doViewDataBindingVariable(ViewDataBinding viewDataBinding);
     }
     //</editor-fold>
@@ -133,8 +146,8 @@ public class DDBindableCursorLoaderRVHeaderAdapter<VH extends RecyclerView.ViewH
             return this;
         }
 
-        public Builder bindableViewHolderCreator(BindableViewHolderCreator<VH> bindableViewHolderCreator) {
-            this.obj.setBindableViewHolderCreator(bindableViewHolderCreator);
+        public Builder itemViewHolderCreator(ItemViewHolderCreator<VH> itemViewHolderCreator) {
+            this.obj.setItemViewHolderCreator(itemViewHolderCreator);
             return this;
         }
 
@@ -148,8 +161,13 @@ public class DDBindableCursorLoaderRVHeaderAdapter<VH extends RecyclerView.ViewH
             return this;
         }
 
-        public Builder onItemClickListener(OnItemClickListener onItemClickListener) {
+        public Builder onItemClickListener(UserActionRegistry.OnClickListener onItemClickListener) {
             this.obj.setOnItemClickListener(onItemClickListener);
+            return this;
+        }
+
+        public Builder onItemSubViewClickListener(int viewId, UserActionRegistry.OnClickListener onClickListener) {
+            this.obj.userActionRegistries.add(new UserActionRegistry(viewId, onClickListener));
             return this;
         }
 

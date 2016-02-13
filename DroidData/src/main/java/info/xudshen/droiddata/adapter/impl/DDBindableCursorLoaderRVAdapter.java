@@ -6,11 +6,14 @@ import android.databinding.ViewDataBinding;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import info.xudshen.droiddata.adapter.DDCursorLoaderRVAdapter;
 import info.xudshen.droiddata.adapter.IBindableViewHolder;
+import info.xudshen.droiddata.adapter.UserActionRegistry;
 
 /**
  * Created by xudshen on 15/10/10.
@@ -18,11 +21,12 @@ import info.xudshen.droiddata.adapter.IBindableViewHolder;
 public class DDBindableCursorLoaderRVAdapter<VH extends RecyclerView.ViewHolder> extends
         DDCursorLoaderRVAdapter<VH> {
 
-    protected BindableViewHolderCreator<VH> bindableViewHolderCreator;
+    protected ItemViewHolderCreator<VH> itemViewHolderCreator;
     protected ItemLayoutSelector itemLayoutSelector;
     protected ItemViewDataBindingVariableAction itemViewDataBindingVariableAction;
 
-    protected OnItemClickListener onItemClickListener;
+    protected UserActionRegistry.OnClickListener onItemClickListener;
+    protected List<UserActionRegistry> userActionRegistries = new ArrayList<>();
 
     public DDBindableCursorLoaderRVAdapter(Context context, Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         super(context, uri, projection, selection, selectionArgs, sortOrder);
@@ -33,16 +37,17 @@ public class DDBindableCursorLoaderRVAdapter<VH extends RecyclerView.ViewHolder>
      */
     @Override
     public VH createViewHolder(LayoutInflater inflater, int viewType, ViewGroup parent) {
-        if (bindableViewHolderCreator == null) {
-            throw new IllegalArgumentException("bindableViewHolderCreator should not be null");
+        if (itemViewHolderCreator == null) {
+            throw new IllegalArgumentException("itemViewHolderCreator should not be null");
         }
-        VH viewHolder = bindableViewHolderCreator.createBindableViewHolder(inflater, viewType, parent);
+        VH viewHolder = itemViewHolderCreator.createItemViewHolder(inflater, viewType, parent);
 //                new ViewHolder(DataBindingUtil.inflate(inflater, viewType, parent, false));
         if (!IBindableViewHolder.class.isAssignableFrom(viewHolder.getClass())) {
             throw new IllegalArgumentException(viewHolder.getClass().getSimpleName()
                     + " should implement IBindableViewHolder");
         }
         ((IBindableViewHolder) viewHolder).registerOnItemClickListener(onItemClickListener, 0);
+        ((IBindableViewHolder) viewHolder).registerOnItemSubViewUserActionListener(userActionRegistries, 0);
         return viewHolder;
     }
 
@@ -69,46 +74,33 @@ public class DDBindableCursorLoaderRVAdapter<VH extends RecyclerView.ViewHolder>
     }
 
     //<editor-fold desc="Getter & Setter">
-    public BindableViewHolderCreator<VH> getBindableViewHolderCreator() {
-        return bindableViewHolderCreator;
-    }
-
-    public void setBindableViewHolderCreator(BindableViewHolderCreator<VH> bindableViewHolderCreator) {
-        this.bindableViewHolderCreator = bindableViewHolderCreator;
-    }
-
-    public ItemLayoutSelector getItemLayoutSelector() {
-        return itemLayoutSelector;
+    public void setItemViewHolderCreator(ItemViewHolderCreator<VH> itemViewHolderCreator) {
+        this.itemViewHolderCreator = itemViewHolderCreator;
     }
 
     public void setItemLayoutSelector(ItemLayoutSelector itemLayoutSelector) {
         this.itemLayoutSelector = itemLayoutSelector;
     }
 
-    public ItemViewDataBindingVariableAction getItemViewDataBindingVariableAction() {
-        return itemViewDataBindingVariableAction;
-    }
-
     public void setItemViewDataBindingVariableAction(ItemViewDataBindingVariableAction itemViewDataBindingVariableAction) {
         this.itemViewDataBindingVariableAction = itemViewDataBindingVariableAction;
     }
 
-    public OnItemClickListener getOnItemClickListener() {
-        return onItemClickListener;
-    }
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(UserActionRegistry.OnClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
     //</editor-fold>
 
     //<editor-fold desc="interface">
-    public interface BindableViewHolderCreator<VH extends RecyclerView.ViewHolder> {
-        VH createBindableViewHolder(LayoutInflater inflater, int viewType, ViewGroup parent);
-    }
-
-    public interface OnItemClickListener {
-        void onItemClick(View itemView, int position);
+    public interface ItemViewHolderCreator<VH extends RecyclerView.ViewHolder> {
+        /**
+         * create view holder, bind view listener
+         * if you create lots of listener,
+         * try {@link info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVAdapter.Builder#onItemSubViewClickListener(int, UserActionRegistry.OnClickListener)}
+         *
+         * @param viewType value from {@link #itemLayoutSelector}
+         */
+        VH createItemViewHolder(LayoutInflater inflater, int viewType, ViewGroup parent);
     }
 
     public interface ItemLayoutSelector {
@@ -116,6 +108,9 @@ public class DDBindableCursorLoaderRVAdapter<VH extends RecyclerView.ViewHolder>
     }
 
     public interface ItemViewDataBindingVariableAction {
+        /**
+         * bind data with view, may called multi times
+         */
         void doViewDataBindingVariable(ViewDataBinding viewDataBinding, Cursor cursor);
     }
     //</editor-fold>
@@ -131,8 +126,8 @@ public class DDBindableCursorLoaderRVAdapter<VH extends RecyclerView.ViewHolder>
             return this;
         }
 
-        public Builder bindableViewHolderCreator(BindableViewHolderCreator<VH> bindableViewHolderCreator) {
-            this.obj.setBindableViewHolderCreator(bindableViewHolderCreator);
+        public Builder itemViewHolderCreator(ItemViewHolderCreator<VH> itemViewHolderCreator) {
+            this.obj.setItemViewHolderCreator(itemViewHolderCreator);
             return this;
         }
 
@@ -146,8 +141,13 @@ public class DDBindableCursorLoaderRVAdapter<VH extends RecyclerView.ViewHolder>
             return this;
         }
 
-        public Builder onItemClickListener(OnItemClickListener onItemClickListener) {
+        public Builder onItemClickListener(UserActionRegistry.OnClickListener onItemClickListener) {
             this.obj.setOnItemClickListener(onItemClickListener);
+            return this;
+        }
+
+        public Builder onItemSubViewClickListener(int viewId, UserActionRegistry.OnClickListener onClickListener) {
+            this.obj.userActionRegistries.add(new UserActionRegistry(viewId, onClickListener));
             return this;
         }
 
