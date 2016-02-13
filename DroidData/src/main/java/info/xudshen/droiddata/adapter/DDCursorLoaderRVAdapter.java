@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -22,8 +21,6 @@ public abstract class DDCursorLoaderRVAdapter<VH extends RecyclerView.ViewHolder
     String mSelection;
     String[] mSelectionArgs;
     String mSortOrder;
-
-    protected CursorLoaderLoadFinishedListener cursorLoaderLoadFinishedListener;
 
     public DDCursorLoaderRVAdapter(Context context, Uri uri, String[] projection, String selection,
                                    String[] selectionArgs, String sortOrder) {
@@ -49,31 +46,6 @@ public abstract class DDCursorLoaderRVAdapter<VH extends RecyclerView.ViewHolder
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         this.swapCursor(data);
-        if (cursorLoaderLoadFinishedListener != null) {
-            Handler mainHandler = new Handler(this.mContext.getMainLooper());
-
-            Runnable myRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    cursorLoaderLoadFinishedListener.cursorLoaderLoadFinished();
-                }
-            };
-            mainHandler.post(myRunnable);
-        }
-    }
-    //</editor-fold>
-
-    public interface CursorLoaderLoadFinishedListener {
-        void cursorLoaderLoadFinished();
-    }
-
-    //<editor-fold desc="Getter & Setter">
-    public CursorLoaderLoadFinishedListener getCursorLoaderLoadFinishedListener() {
-        return cursorLoaderLoadFinishedListener;
-    }
-
-    public void setCursorLoaderLoadFinishedListener(CursorLoaderLoadFinishedListener cursorLoaderLoadFinishedListener) {
-        this.cursorLoaderLoadFinishedListener = cursorLoaderLoadFinishedListener;
     }
     //</editor-fold>
 }

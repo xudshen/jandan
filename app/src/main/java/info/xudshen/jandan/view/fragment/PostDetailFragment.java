@@ -50,10 +50,10 @@ public class PostDetailFragment extends BaseFragment {
         binding.postWithCommentList.setLayoutManager(linearLayoutManager);
         binding.postWithCommentList.setAdapter(postCommentAdapter);
 
-        postCommentAdapter.setCursorLoaderLoadFinishedListener(() -> {
+//        postCommentAdapter.setCursorLoaderLoadFinishedListener(() -> {
             binding.postWithCommentList.setVisibility(View.VISIBLE);
             binding.progressBar.setVisibility(View.GONE);
-        });
+//        });
         getLoaderManager().initLoader(0, null, postCommentAdapter);
 
         return binding.getRoot();
