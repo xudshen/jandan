@@ -19,7 +19,12 @@ import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
 import info.xudshen.jandan.BR;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.dao.PostDao;
+import info.xudshen.jandan.domain.executor.PostExecutionThread;
+import info.xudshen.jandan.domain.executor.ThreadExecutor;
+import info.xudshen.jandan.domain.interactor.GetPostDetail;
+import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.domain.model.Post;
+import info.xudshen.jandan.domain.repository.PostRepository;
 import info.xudshen.jandan.internal.di.PerActivity;
 import info.xudshen.jandan.utils.HtmlHelper;
 
@@ -29,9 +34,13 @@ import info.xudshen.jandan.utils.HtmlHelper;
 @Module
 public class PostModule {
     private static final Logger logger = LoggerFactory.getLogger(PostModule.class);
-    private int postId = -1;
+    private Long postId = -1l;
 
     public PostModule() {
+    }
+
+    public PostModule(Long postId) {
+        this.postId = postId;
     }
 
     @Provides
@@ -102,5 +111,13 @@ public class PostModule {
                     viewDataBinding.setVariable(BR.item, post);
                 })
                 .build();
+    }
+
+    @Provides
+    @PerActivity
+    @Named("postDetail")
+    UseCase provideGetPostDetailUseCase(PostRepository postRepository,
+                                        ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+        return new GetPostDetail(postId, postRepository, threadExecutor, postExecutionThread);
     }
 }

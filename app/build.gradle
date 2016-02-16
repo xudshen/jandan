@@ -96,7 +96,6 @@ dependencies {
     compile dependencies.butterKnife
     compile dependencies.gson
 
-    compile dependencies.retrofit
     compile dependencies.picasso
 
     compile dependencies.logbackCore

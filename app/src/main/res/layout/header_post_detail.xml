@@ -18,6 +18,7 @@
         android:paddingTop="@dimen/layoutMarginVertical">
 
         <TextView
+            android:id="@+id/post_detail_title"
             style="@style/PostDetailTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

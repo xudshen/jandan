@@ -1,6 +1,8 @@
 package info.xudshen.jandan.domain.model;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.sql.Timestamp;
 import android.databinding.Bindable;
 
@@ -15,6 +17,7 @@ public class Post {
 
     private Long id;
     @Expose
+    @SerializedName("id")
     private Long postId;
     @Expose
     private String url;

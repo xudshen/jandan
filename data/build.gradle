@@ -45,6 +45,11 @@ dependencies {
     compile dependencies.rxAndroid
     compile dependencies.gson
 
+    compile dependencies.retrofit
+    compile dependencies.retrofitRxjava
+    compile dependencies.retrofitGson
+    compile dependencies.retrofitLog
+
     compile dependencies.logbackCore
     compile dependencies.logbackClassic
     compile dependencies.slf4j

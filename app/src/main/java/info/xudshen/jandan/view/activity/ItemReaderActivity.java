@@ -35,6 +35,7 @@ import info.xudshen.jandan.internal.di.components.DaggerActivityComponent;
 import info.xudshen.jandan.internal.di.components.DaggerPostComponent;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
+import info.xudshen.jandan.internal.di.modules.PostModule;
 import info.xudshen.jandan.view.adapter.ItemReadPagerAdapter;
 import info.xudshen.jandan.view.transition.StackPageTransformer;
 
@@ -71,6 +72,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents {
         postComponent = DaggerPostComponent.builder()
                 .applicationComponent(getApplicationComponent())
                 .activityModule(activityModule)
+                .postModule(new PostModule(75829l))
                 .build();
     }
 
