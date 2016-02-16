@@ -44,11 +44,15 @@ public class PostDao extends DDAbstractDao<Post, Long> {
         public final static Property PostId = new Property(1, Long.class, "postId", false, "POST_ID");
         public final static Property Url = new Property(2, String.class, "url", false, "URL");
         public final static Property Title = new Property(3, String.class, "title", false, "TITLE");
-        public final static Property Date = new Property(4, Long.class, "date", false, "DATE");
-        public final static Property Comment_count = new Property(5, String.class, "comment_count", false, "COMMENT_COUNT");
+        public final static Property Content = new Property(4, String.class, "content", false, "CONTENT");
+        public final static Property Excerpt = new Property(5, String.class, "excerpt", false, "EXCERPT");
+        public final static Property Date = new Property(6, Long.class, "date", false, "DATE");
+        public final static Property Modified = new Property(7, Long.class, "modified", false, "MODIFIED");
+        public final static Property Comment_count = new Property(8, String.class, "comment_count", false, "COMMENT_COUNT");
     }
 
     private final TimestampPropertyConverter dateConverter = new TimestampPropertyConverter();
+    private final TimestampPropertyConverter modifiedConverter = new TimestampPropertyConverter();
 
     public PostDao(DaoConfig config) {
         super(config);
@@ -66,8 +70,11 @@ public class PostDao extends DDAbstractDao<Post, Long> {
                 "\"POST_ID\" INTEGER," + // 1: postId
                 "\"URL\" TEXT," + // 2: url
                 "\"TITLE\" TEXT," + // 3: title
-                "\"DATE\" INTEGER," + // 4: date
-                "\"COMMENT_COUNT\" TEXT);"); // 5: comment_count
+                "\"CONTENT\" TEXT," + // 4: content
+                "\"EXCERPT\" TEXT," + // 5: excerpt
+                "\"DATE\" INTEGER," + // 6: date
+                "\"MODIFIED\" INTEGER," + // 7: modified
+                "\"COMMENT_COUNT\" TEXT);"); // 8: comment_count
         // Add Indexes
         db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_POST_POST_ID ON POST" +
                 " (\"POST_ID\");");
@@ -104,14 +111,29 @@ public class PostDao extends DDAbstractDao<Post, Long> {
             stmt.bindString(4, title);
         }
  
+        String content = entity.getContent();
+        if (content != null) {
+            stmt.bindString(5, content);
+        }
+ 
+        String excerpt = entity.getExcerpt();
+        if (excerpt != null) {
+            stmt.bindString(6, excerpt);
+        }
+ 
         Timestamp date = entity.getDate();
         if (date != null) {
-            stmt.bindLong(5, dateConverter.convertToDatabaseValue(date));
+            stmt.bindLong(7, dateConverter.convertToDatabaseValue(date));
+        }
+ 
+        Timestamp modified = entity.getModified();
+        if (modified != null) {
+            stmt.bindLong(8, modifiedConverter.convertToDatabaseValue(modified));
         }
  
         String comment_count = entity.getComment_count();
         if (comment_count != null) {
-            stmt.bindString(6, comment_count);
+            stmt.bindString(9, comment_count);
         }
     }
 
@@ -129,8 +151,11 @@ public class PostDao extends DDAbstractDao<Post, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // postId
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // url
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // title
-            cursor.isNull(offset + 4) ? null : dateConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 4)), // date
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // comment_count
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // content
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // excerpt
+            cursor.isNull(offset + 6) ? null : dateConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 6)), // date
+            cursor.isNull(offset + 7) ? null : modifiedConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 7)), // modified
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8) // comment_count
         );
         return entity;
     }
@@ -142,8 +167,11 @@ public class PostDao extends DDAbstractDao<Post, Long> {
         entity.setPostId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
         entity.setUrl(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setTitle(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setDate(cursor.isNull(offset + 4) ? null : dateConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 4)));
-        entity.setComment_count(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setContent(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setExcerpt(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setDate(cursor.isNull(offset + 6) ? null : dateConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 6)));
+        entity.setModified(cursor.isNull(offset + 7) ? null : modifiedConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 7)));
+        entity.setComment_count(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
     }
     
     /** @inheritdoc */
@@ -344,4 +372,5 @@ public class PostDao extends DDAbstractDao<Post, Long> {
     public Post loadEntity(Cursor cursor){
         return this.readEntity(cursor, 0);
     }
+
 }

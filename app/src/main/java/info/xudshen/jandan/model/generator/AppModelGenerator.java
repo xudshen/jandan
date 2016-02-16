@@ -23,16 +23,22 @@ public class AppModelGenerator extends ModelGenerator {
     protected void addEntities(Schema schema) {
         addPost(schema);
         addAuthor(schema);
+        addComment(schema);
     }
 
     void addPost(Schema schema) {
         Entity entity = schema.addEntity("Post");
 
         entity.addIdProperty();
-        Property postId = addLongProperty(entity, "postId").bindable(true).getProperty();
+        Property postId = addLongProperty(entity, "postId")
+                .codeBeforeField("@Expose\n    @SerializedName(\"id\")")
+                .bindable(true).getProperty();
         addStringProperty(entity, "url").bindable(true);
         addStringProperty(entity, "title").bindable(true);
+        addStringProperty(entity, "content").bindable(true);
+        addStringProperty(entity, "excerpt").bindable(true);
         addTimestampProperty(entity, "date");
+        addTimestampProperty(entity, "modified");
 
         addStringProperty(entity, "comment_count");
 
@@ -40,13 +46,16 @@ public class AppModelGenerator extends ModelGenerator {
 
         entity.addContentProvider();
         entity.addImport(GSON_EXPOSE);
+        entity.addImport(GSON_SERIALIZEDNAME);
     }
 
     void addAuthor(Schema schema) {
         Entity entity = schema.addEntity("Author");
 
         entity.addIdProperty();
-        Property authorId = addLongProperty(entity, "authorId").bindable(true).getProperty();
+        Property authorId = addLongProperty(entity, "authorId")
+                .codeBeforeField("@Expose\n    @SerializedName(\"id\")")
+                .bindable(true).getProperty();
         addStringProperty(entity, "slug").bindable(true);
         addStringProperty(entity, "name").bindable(true);
         addStringProperty(entity, "first_name").bindable(true);
@@ -59,6 +68,32 @@ public class AppModelGenerator extends ModelGenerator {
 
         entity.addContentProvider();
         entity.addImport(GSON_EXPOSE);
+        entity.addImport(GSON_SERIALIZEDNAME);
+    }
+
+    void addComment(Schema schema) {
+        Entity entity = schema.addEntity("Comment");
+
+        entity.addIdProperty();
+        Property commentId = addLongProperty(entity, "commentId")
+                .codeBeforeField("@Expose\n    @SerializedName(\"id\")")
+                .bindable(true).getProperty();
+        addStringProperty(entity, "name").bindable(true);
+        addStringProperty(entity, "url").bindable(true);
+        addTimestampProperty(entity, "date");
+
+        addStringProperty(entity, "content").bindable(true);
+
+        addLongProperty(entity, "parent").bindable(true);
+        addLongProperty(entity, "votePositive").bindable(true);
+        addLongProperty(entity, "voteNegative").bindable(true);
+        addLongProperty(entity, "index").bindable(true);
+
+        addUniqueIndex(entity, commentId);
+
+        entity.addContentProvider();
+        entity.addImport(GSON_EXPOSE);
+        entity.addImport(GSON_SERIALIZEDNAME);
     }
 
     public static void main(String[] args) throws Exception {

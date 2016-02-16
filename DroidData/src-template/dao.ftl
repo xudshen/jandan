@@ -464,6 +464,10 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
         }
     }
 
+    public ${entity.className} loadEntity(Cursor cursor){
+        return this.readEntity(cursor, 0);
+    }
+
 </#if>
 <#list entity.incomingToManyRelations as toMany>
     /** Internal query to resolve the "${toMany.name}" to-many relationship of ${toMany.sourceEntity.className}. */

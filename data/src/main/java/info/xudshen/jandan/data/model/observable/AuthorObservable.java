@@ -3,6 +3,7 @@ package info.xudshen.jandan.data.model.observable;
 import info.xudshen.data.BR;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import info.xudshen.droiddata.dao.IModelObservable;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class AuthorObservable extends android.databinding.BaseObservable  implem
 
     private Long id;
     @Expose
+    @SerializedName("id")
     private Long authorId;
     @Expose
     private String slug;

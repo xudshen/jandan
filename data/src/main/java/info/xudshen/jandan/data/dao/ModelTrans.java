@@ -7,8 +7,10 @@ import info.xudshen.droiddata.dao.IModelTrans;
 import info.xudshen.droiddata.dao.IModelObservable;
 import info.xudshen.jandan.domain.model.Post;
 import info.xudshen.jandan.domain.model.Author;
+import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.data.model.observable.PostObservable;
 import info.xudshen.jandan.data.model.observable.AuthorObservable;
+import info.xudshen.jandan.data.model.observable.CommentObservable;
 
 public class ModelTrans {
 
@@ -24,6 +26,13 @@ public class ModelTrans {
                 @Override
                 public AuthorObservable to(Author entity) {
                     return new AuthorObservable(entity);
+                }
+            };
+    private static final IModelTrans<Comment, CommentObservable> COMMENT_TRANS =
+            new IModelTrans<Comment, CommentObservable>() {
+                @Override
+                public CommentObservable to(Comment entity) {
+                    return new CommentObservable(entity);
                 }
             };
 
@@ -88,6 +97,33 @@ public class ModelTrans {
 
     Iterable<AuthorObservable> transAuthor(Iterable<Author> entities) {
         return transAuthor(entities, AUTHOR_TRANS);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="TransComment">
+    <TO extends IModelObservable> TO transComment(Comment entity, IModelTrans<Comment, TO> trans) {
+        TO entityOb = trans.to(entity);
+        this.daoSession.getCommentDao().registerExtraOb(entityOb);
+        return entityOb;
+    }
+
+    CommentObservable transComment(Comment entity) {
+        return transComment(entity, COMMENT_TRANS);
+    }
+
+    <TO extends IModelObservable> Iterable<TO> transComment(Iterable<Comment> entities, IModelTrans<Comment, TO> trans) {
+        List<TO> list = new ArrayList<>();
+        CommentDao dao = this.daoSession.getCommentDao();
+        for (Comment entity : entities) {
+            TO entityOb = trans.to(entity);
+            list.add(entityOb);
+            dao.registerExtraOb(entityOb);
+        }
+        return list;
+    }
+
+    Iterable<CommentObservable> transComment(Iterable<Comment> entities) {
+        return transComment(entities, COMMENT_TRANS);
     }
     //</editor-fold>
 }

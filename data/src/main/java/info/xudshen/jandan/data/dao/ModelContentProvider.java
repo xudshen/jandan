@@ -31,11 +31,17 @@ public class ModelContentProvider extends ContentProvider {
             + "/" + AuthorDao.TABLENAME;
     public static final String AUTHOR_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
             + "/" + AuthorDao.TABLENAME;
+    public static final String COMMENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
+            + "/" + CommentDao.TABLENAME;
+    public static final String COMMENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
+            + "/" + CommentDao.TABLENAME;
 
     private static final int POST_DIR = 0x0000;
     private static final int POST_ID = 0x1000;
     private static final int AUTHOR_DIR = 0x0001;
     private static final int AUTHOR_ID = 0x1001;
+    private static final int COMMENT_DIR = 0x0002;
+    private static final int COMMENT_ID = 0x1002;
 
     private static final UriMatcher sURIMatcher;
 
@@ -45,6 +51,8 @@ public class ModelContentProvider extends ContentProvider {
         sURIMatcher.addURI(AUTHORITY, PostDao.TABLENAME + "/#", POST_ID);
         sURIMatcher.addURI(AUTHORITY, AuthorDao.TABLENAME, AUTHOR_DIR);
         sURIMatcher.addURI(AUTHORITY, AuthorDao.TABLENAME + "/#", AUTHOR_ID);
+        sURIMatcher.addURI(AUTHORITY, CommentDao.TABLENAME, COMMENT_DIR);
+        sURIMatcher.addURI(AUTHORITY, CommentDao.TABLENAME + "/#", COMMENT_ID);
     }
 
     /**
@@ -78,6 +86,7 @@ public class ModelContentProvider extends ContentProvider {
         switch (uriType) {
             case POST_ID:
             case AUTHOR_ID:
+            case COMMENT_ID:
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -103,6 +112,7 @@ public class ModelContentProvider extends ContentProvider {
         switch (uriType) {
             case POST_ID:
             case AUTHOR_ID:
+            case COMMENT_ID:
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -134,6 +144,14 @@ public class ModelContentProvider extends ContentProvider {
                 queryBuilder.appendWhere(AuthorDao.Properties.Id.columnName + "="
                         + uri.getLastPathSegment());
                 break;
+            case COMMENT_DIR:
+                queryBuilder.setTables(CommentDao.TABLENAME);
+                break;
+            case COMMENT_ID:
+                queryBuilder.setTables(CommentDao.TABLENAME);
+                queryBuilder.appendWhere(CommentDao.Properties.Id.columnName + "="
+                        + uri.getLastPathSegment());
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
@@ -157,6 +175,10 @@ public class ModelContentProvider extends ContentProvider {
                 return AUTHOR_TYPE;
             case AUTHOR_ID:
                 return AUTHOR_ITEM_TYPE;
+            case COMMENT_DIR:
+                return COMMENT_TYPE;
+            case COMMENT_ID:
+                return COMMENT_ITEM_TYPE;
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }

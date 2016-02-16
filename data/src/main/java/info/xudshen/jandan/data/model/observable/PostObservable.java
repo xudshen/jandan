@@ -3,6 +3,7 @@ package info.xudshen.jandan.data.model.observable;
 import info.xudshen.data.BR;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import info.xudshen.droiddata.dao.IModelObservable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -23,13 +24,20 @@ public class PostObservable extends android.databinding.BaseObservable  implemen
 
     private Long id;
     @Expose
+    @SerializedName("id")
     private Long postId;
     @Expose
     private String url;
     @Expose
     private String title;
     @Expose
+    private String content;
+    @Expose
+    private String excerpt;
+    @Expose
     private Timestamp date;
+    @Expose
+    private Timestamp modified;
     @Expose
     private String comment_count;
 
@@ -43,12 +51,15 @@ public class PostObservable extends android.databinding.BaseObservable  implemen
         this.id = id;
     }
 
-    public PostObservable(Long id, Long postId, String url, String title, Timestamp date, String comment_count) {
+    public PostObservable(Long id, Long postId, String url, String title, String content, String excerpt, Timestamp date, Timestamp modified, String comment_count) {
         this.id = id;
         this.postId = postId;
         this.url = url;
         this.title = title;
+        this.content = content;
+        this.excerpt = excerpt;
         this.date = date;
+        this.modified = modified;
         this.comment_count = comment_count;
     }
 
@@ -99,12 +110,46 @@ public class PostObservable extends android.databinding.BaseObservable  implemen
         }
     }
 
+    @Bindable
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        if ((this.content == null && content != null)
+                || (this.content != null && !this.content.equals(content))) {
+            this.content = content;
+            notifyPropertyChanged(BR.content);
+        }
+    }
+
+    @Bindable
+    public String getExcerpt() {
+        return excerpt;
+    }
+
+    public void setExcerpt(String excerpt) {
+        if ((this.excerpt == null && excerpt != null)
+                || (this.excerpt != null && !this.excerpt.equals(excerpt))) {
+            this.excerpt = excerpt;
+            notifyPropertyChanged(BR.excerpt);
+        }
+    }
+
     public Timestamp getDate() {
         return date;
     }
 
     public void setDate(Timestamp date) {
         this.date = date;
+    }
+
+    public Timestamp getModified() {
+        return modified;
+    }
+
+    public void setModified(Timestamp modified) {
+        this.modified = modified;
     }
 
     public String getComment_count() {
@@ -124,7 +169,10 @@ public class PostObservable extends android.databinding.BaseObservable  implemen
         this.postId = entity.getPostId();
         this.url = entity.getUrl();
         this.title = entity.getTitle();
+        this.content = entity.getContent();
+        this.excerpt = entity.getExcerpt();
         this.date = entity.getDate();
+        this.modified = entity.getModified();
         this.comment_count = entity.getComment_count();
     }
 
@@ -152,7 +200,18 @@ public class PostObservable extends android.databinding.BaseObservable  implemen
             this.title = entity.getTitle();
             propertyChanges.add(BR.title);
         }
+        if ((this.content == null && entity.getContent() != null)
+                || (this.content != null && !this.content.equals(entity.getContent()))) {
+            this.content = entity.getContent();
+            propertyChanges.add(BR.content);
+        }
+        if ((this.excerpt == null && entity.getExcerpt() != null)
+                || (this.excerpt != null && !this.excerpt.equals(entity.getExcerpt()))) {
+            this.excerpt = entity.getExcerpt();
+            propertyChanges.add(BR.excerpt);
+        }
         this.date = entity.getDate();
+        this.modified = entity.getModified();
         this.comment_count = entity.getComment_count();
 
         if (propertyChanges.size() == 1) {

@@ -2,7 +2,6 @@ package info.xudshen.jandan.domain.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import java.sql.Timestamp;
 import android.databinding.Bindable;
 
@@ -24,7 +23,13 @@ public class Post {
     @Expose
     private String title;
     @Expose
+    private String content;
+    @Expose
+    private String excerpt;
+    @Expose
     private Timestamp date;
+    @Expose
+    private Timestamp modified;
     @Expose
     private String comment_count;
 
@@ -38,12 +43,15 @@ public class Post {
         this.id = id;
     }
 
-    public Post(Long id, Long postId, String url, String title, Timestamp date, String comment_count) {
+    public Post(Long id, Long postId, String url, String title, String content, String excerpt, Timestamp date, Timestamp modified, String comment_count) {
         this.id = id;
         this.postId = postId;
         this.url = url;
         this.title = title;
+        this.content = content;
+        this.excerpt = excerpt;
         this.date = date;
+        this.modified = modified;
         this.comment_count = comment_count;
     }
 
@@ -79,12 +87,36 @@ public class Post {
         this.title = title;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getExcerpt() {
+        return excerpt;
+    }
+
+    public void setExcerpt(String excerpt) {
+        this.excerpt = excerpt;
+    }
+
     public Timestamp getDate() {
         return date;
     }
 
     public void setDate(Timestamp date) {
         this.date = date;
+    }
+
+    public Timestamp getModified() {
+        return modified;
+    }
+
+    public void setModified(Timestamp modified) {
+        this.modified = modified;
     }
 
     public String getComment_count() {
