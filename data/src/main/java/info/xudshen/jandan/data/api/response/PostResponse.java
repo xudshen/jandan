@@ -1,7 +1,12 @@
 package info.xudshen.jandan.data.api.response;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
+import info.xudshen.jandan.domain.model.Author;
+import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.Post;
 
 /**
@@ -11,7 +16,8 @@ public class PostResponse {
     @Expose
     private String status;
     @Expose
-    private Post post;
+    @SerializedName("post")
+    private PostWrapper postWrapper;
     @Expose
     private String previousUrl;
     @Expose
@@ -28,12 +34,12 @@ public class PostResponse {
         this.status = status;
     }
 
-    public Post getPost() {
-        return post;
+    public PostWrapper getPostWrapper() {
+        return postWrapper;
     }
 
-    public void setPost(Post post) {
-        this.post = post;
+    public void setPostWrapper(PostWrapper postWrapper) {
+        this.postWrapper = postWrapper;
     }
 
     public String getPreviousUrl() {
@@ -50,5 +56,31 @@ public class PostResponse {
 
     public void setNextUrl(String nextUrl) {
         this.nextUrl = nextUrl;
+    }
+
+    public class PostWrapper extends Post {
+        @Expose
+        private Author author;
+        @Expose
+        private List<Comment> comments;
+
+        public PostWrapper() {
+        }
+
+        public Author getAuthor() {
+            return author;
+        }
+
+        public void setAuthor(Author author) {
+            this.author = author;
+        }
+
+        public List<Comment> getComments() {
+            return comments;
+        }
+
+        public void setComments(List<Comment> comments) {
+            this.comments = comments;
+        }
     }
 }

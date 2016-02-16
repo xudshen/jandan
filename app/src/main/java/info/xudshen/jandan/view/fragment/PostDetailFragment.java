@@ -109,11 +109,11 @@ public class PostDetailFragment extends BaseFragment implements PostDetailView {
                 .headerViewDataBindingVariableAction(viewDataBinding1 -> {
                     TextView textView = (TextView) viewDataBinding1.getRoot().findViewById(R.id.post_detail_title);
                     textView.setText(post.getTitle());
-//                    WebView postDetailBody = (WebView) viewDataBinding1.getRoot().findViewById(R.id.post_detail_body);
-//                    String summary = post.getTitle();
-//                    summary = HtmlHelper.formBody(summary);
-//                    postDetailBody.loadDataWithBaseURL(null, summary, "text/html; charset=UTF-8", null, null);
-//                    postDetailBody.setOnLongClickListener(v -> true);
+                    WebView postDetailBody = (WebView) viewDataBinding1.getRoot().findViewById(R.id.post_detail_body);
+                    String summary = post.getContent();
+                    summary = HtmlHelper.formBody(summary);
+                    postDetailBody.loadDataWithBaseURL(null, summary, "text/html; charset=UTF-8", null, null);
+                    postDetailBody.setOnLongClickListener(v -> true);
                 })
                 .itemViewHolderCreator(((inflater1, viewType1, parent1) -> {
                     ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
