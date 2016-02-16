@@ -106,7 +106,7 @@ dependencies {
     compile dependencies.freemarker
     
     compile dependencies.swipy
-    compile('com.mikepenz:materialdrawer:4.6.3@aar') {
+    compile('com.mikepenz:materialdrawer:5.0.0@aar') {
         transitive = true
     }
     compile 'com.mikepenz:google-material-typeface:2.1.0.1.original@aar'

@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
         //set drawer click listener
         drawer.setOnDrawerItemClickListener((view, position, drawerItem) -> {
             logger.info("onClick, {}", drawerItem.getIdentifier());
-            switch (drawerItem.getIdentifier()) {
+            switch ((int) drawerItem.getIdentifier()) {
                 case R.id.drawer_home: {
                     this.replaceFragment(R.id.activity_main_content, HomeFragment.newInstance());
                     setTitle(R.string.drawer_home);
