@@ -25,6 +25,8 @@ public class PostListPresenter implements Presenter {
 
     private UseCase getPostListUseCase;
 
+    private Long page = 1l;
+
     @Inject
     public PostListPresenter(@Named("postList") UseCase getPostListUseCase) {
         this.getPostListUseCase = getPostListUseCase;
@@ -67,19 +69,39 @@ public class PostListPresenter implements Presenter {
                     public void onNext(Object o) {
                         PostListPresenter.this.postListView.renderList();
                     }
-                }, 1l);
+                }, page);
     }
 
     /**
      * load new data
      */
     public void swipeDownStart() {
-        //do something
+        page = 1l;
+        initialize();
     }
 
     /**
      * load history data
      */
     public void swipeUpStart() {
+        page = page + 1;
+        this.postListView.showSwipeUpLoading();
+        this.getPostListUseCase.execute(this.postListView.bindToLifecycle(),
+                new Subscriber() {
+                    @Override
+                    public void onCompleted() {
+                        PostListPresenter.this.postListView.hideSwipeUpLoading();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        logger.error("", e);
+                    }
+
+                    @Override
+                    public void onNext(Object o) {
+                        PostListPresenter.this.postListView.renderList();
+                    }
+                }, page);
     }
 }

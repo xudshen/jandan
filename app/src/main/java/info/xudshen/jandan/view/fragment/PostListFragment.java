@@ -20,7 +20,9 @@ import javax.inject.Named;
 import butterknife.ButterKnife;
 import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.data.dao.SimplePostDao;
 import info.xudshen.jandan.databinding.FragmentPostListBinding;
+import info.xudshen.jandan.domain.model.SimplePost;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PostListPresenter;
 import info.xudshen.jandan.view.PostListView;
@@ -35,6 +37,8 @@ public class PostListFragment extends BaseFragment implements PostListView {
 
     @Inject
     PostListPresenter postListPresenter;
+    @Inject
+    SimplePostDao simplePostDao;
     @Inject
     @Named("postListAdapter")
     DDBindableCursorLoaderRVHeaderAdapter postListAdapter;
@@ -63,10 +67,10 @@ public class PostListFragment extends BaseFragment implements PostListView {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_post_list, container, false);
 
         postListAdapter.setOnItemClickListener((itemView, position) -> {
-            logger.info(position + "clicked");
-
+            SimplePost simplePost = simplePostDao.loadEntity(postListAdapter.getItemCursor(position));
+            logger.info("position={}, postId={}", position, simplePost.getPostId());
             getNavigator().launchItemReader((BaseActivity) getActivity(),
-                    itemView.findViewById(R.id.post_card_author));
+                    itemView.findViewById(R.id.post_card_author), simplePost.getPostId());
         });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -75,6 +79,7 @@ public class PostListFragment extends BaseFragment implements PostListView {
 
         binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark, R.color.colorAccent);
         binding.swipeRefreshLayout.setOnRefreshListener((direction) -> {
+            logger.info("refresh {}", direction);
             switch (direction) {
                 case TOP: {
                     this.postListPresenter.swipeDownStart();
@@ -86,9 +91,6 @@ public class PostListFragment extends BaseFragment implements PostListView {
                 }
             }
         });
-
-//        binding.fab.setOnClickListener(v ->
-//                binding.myRecyclerView.smoothScrollToPosition(linearLayoutManager.getItemCount() > 0 ? linearLayoutManager.getItemCount() - 1 : 0));
 
         //init for MaterialViewPager
         MaterialViewPagerHelper.registerRecyclerView(getActivity(), binding.myRecyclerView, null);
@@ -142,7 +144,6 @@ public class PostListFragment extends BaseFragment implements PostListView {
     //<editor-fold desc="Called by Presenter"
     @Override
     public void showLoading() {
-        binding.swipeRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
         binding.swipeRefreshLayout.setRefreshing(true);
     }
 
@@ -168,7 +169,6 @@ public class PostListFragment extends BaseFragment implements PostListView {
 
     @Override
     public void showSwipeUpLoading() {
-        binding.swipeRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTTOM);
         binding.swipeRefreshLayout.setRefreshing(true);
     }
 

@@ -60,6 +60,10 @@ public class CloudPostDataStore implements PostDataStore {
                     return simplePosts;
                 })
                 .doOnNext(simplePosts -> {
+                    if (page == 1l) {
+                        //TODO: not right
+                        CloudPostDataStore.this.simplePostDao.deleteAll();
+                    }
                     CloudPostDataStore.this.simplePostDao.insertOrReplaceInTx(simplePosts);
                 });
     }
