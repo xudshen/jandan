@@ -5,7 +5,9 @@ import javax.inject.Singleton;
 
 import info.xudshen.jandan.data.api.ApiAdapter;
 import info.xudshen.jandan.data.dao.PostDao;
+import info.xudshen.jandan.data.dao.SimplePostDao;
 import info.xudshen.jandan.data.repository.datasource.PostDataStore;
+import info.xudshen.jandan.domain.model.SimplePost;
 
 /**
  * Created by xudshen on 16/2/16.
@@ -13,15 +15,21 @@ import info.xudshen.jandan.data.repository.datasource.PostDataStore;
 @Singleton
 public class PostDataStoreFactory {
     private final PostDao postDao;
+    private final SimplePostDao simplePostDao;
 
     @Inject
-    public PostDataStoreFactory(PostDao postDao) {
-        if (postDao == null) {
+    public PostDataStoreFactory(PostDao postDao, SimplePostDao simplePostDao) {
+        if (postDao == null || simplePostDao == null) {
             throw new IllegalArgumentException("Constructor parameters cannot be null!!!");
         }
         this.postDao = postDao;
+        this.simplePostDao = simplePostDao;
     }
 
+    /**
+     * @param postId used for check
+     * @return
+     */
     public PostDataStore create(Long postId) {
         PostDataStore postDataStore;
 
@@ -30,9 +38,13 @@ public class PostDataStoreFactory {
         if (false) {
             postDataStore = new LocalPostDataStore(postDao);
         } else {
-            postDataStore = new CloudPostDataStore(ApiAdapter.getPostService(), postDao);
+            postDataStore = new CloudPostDataStore(ApiAdapter.getPostService(), postDao, simplePostDao);
         }
 
         return postDataStore;
+    }
+
+    public PostDataStore createCloudDataStore() {
+        return new CloudPostDataStore(ApiAdapter.getPostService(), postDao, simplePostDao);
     }
 }

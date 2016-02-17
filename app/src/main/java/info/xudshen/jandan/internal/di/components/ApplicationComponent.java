@@ -8,6 +8,7 @@ import dagger.Component;
 import info.xudshen.jandan.data.dao.AuthorDao;
 import info.xudshen.jandan.data.dao.DaoSession;
 import info.xudshen.jandan.data.dao.PostDao;
+import info.xudshen.jandan.data.dao.SimplePostDao;
 import info.xudshen.jandan.domain.executor.PostExecutionThread;
 import info.xudshen.jandan.domain.executor.ThreadExecutor;
 import info.xudshen.jandan.domain.repository.PostRepository;
@@ -40,4 +41,6 @@ public interface ApplicationComponent {
     PostDao postDao();
 
     AuthorDao authorDao();
+
+    SimplePostDao simplePostDao();
 }

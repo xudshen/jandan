@@ -1,9 +1,12 @@
 package info.xudshen.jandan.data.repository.datasource.impl;
 
+import java.util.List;
+
 import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.data.exception.PostNotFoundException;
 import info.xudshen.jandan.data.repository.datasource.PostDataStore;
 import info.xudshen.jandan.domain.model.Post;
+import info.xudshen.jandan.domain.model.SimplePost;
 import rx.Observable;
 import rx.Subscriber;
 
@@ -35,5 +38,11 @@ public class LocalPostDataStore implements PostDataStore {
                 }
             }
         });
+    }
+
+    @Override
+    public Observable<List<SimplePost>> postList(Long page) {
+        //skip
+        return null;
     }
 }

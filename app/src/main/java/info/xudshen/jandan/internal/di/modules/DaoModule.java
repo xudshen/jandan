@@ -7,6 +7,7 @@ import dagger.Provides;
 import info.xudshen.jandan.data.dao.AuthorDao;
 import info.xudshen.jandan.data.dao.DaoSession;
 import info.xudshen.jandan.data.dao.PostDao;
+import info.xudshen.jandan.data.dao.SimplePostDao;
 
 /**
  * Created by xudshen on 16/1/7.
@@ -24,5 +25,11 @@ public class DaoModule {
     @Singleton
     AuthorDao provideAuthorDao(DaoSession daoSession) {
         return daoSession.getAuthorDao();
+    }
+
+    @Provides
+    @Singleton
+    SimplePostDao provideSimplePostDao(DaoSession daoSession) {
+        return daoSession.getSimplePostDao();
     }
 }

@@ -19,11 +19,14 @@ import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
 import info.xudshen.jandan.BR;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.dao.PostDao;
+import info.xudshen.jandan.data.dao.SimplePostDao;
 import info.xudshen.jandan.domain.executor.PostExecutionThread;
 import info.xudshen.jandan.domain.executor.ThreadExecutor;
 import info.xudshen.jandan.domain.interactor.GetPostDetail;
+import info.xudshen.jandan.domain.interactor.GetPostList;
 import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.domain.model.Post;
+import info.xudshen.jandan.domain.model.SimplePost;
 import info.xudshen.jandan.domain.repository.PostRepository;
 import info.xudshen.jandan.internal.di.PerActivity;
 import info.xudshen.jandan.utils.HtmlHelper;
@@ -46,9 +49,9 @@ public class PostModule {
     @Provides
     @PerActivity
     @Named("postListAdapter")
-    DDBindableCursorLoaderRVHeaderAdapter providePostListAdapter(Activity activity, PostDao postDao) {
+    DDBindableCursorLoaderRVHeaderAdapter providePostListAdapter(Activity activity, SimplePostDao simplePostDao) {
         return new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
-                .cursorLoader(activity, PostDao.CONTENT_URI, null, null, null, "post_id desc")
+                .cursorLoader(activity, SimplePostDao.CONTENT_URI, null, null, null, "date desc")
                 .headerViewHolderCreator((inflater, viewType, parent) -> {
                     return new DDBindableViewHolder(inflater.inflate(
                             com.github.florent37.materialviewpager.R.layout.material_view_pager_placeholder,
@@ -60,7 +63,7 @@ public class PostModule {
                 }))
                 .itemLayoutSelector(position -> R.layout.post_card_view)
                 .itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {
-                    Post post = postDao.loadEntity(cursor);
+                    SimplePost post = simplePostDao.loadEntity(cursor);
                     viewDataBinding.setVariable(BR.item, post);
                 })
                 .onItemSubViewClickListener(R.id.post_card_more_btn, ((v, position) -> {
@@ -119,5 +122,13 @@ public class PostModule {
     UseCase provideGetPostDetailUseCase(PostRepository postRepository,
                                         ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         return new GetPostDetail(postId, postRepository, threadExecutor, postExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("postList")
+    UseCase provideGetPostListUseCase(PostRepository postRepository,
+                                      ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+        return new GetPostList(postRepository, threadExecutor, postExecutionThread);
     }
 }

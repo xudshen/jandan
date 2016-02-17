@@ -8,27 +8,25 @@ import info.xudshen.jandan.domain.repository.PostRepository;
 import rx.Observable;
 
 /**
- * Created by xudshen on 16/2/16.
+ * Created by xudshen on 16/2/17.
  */
-public class GetPostDetail extends UseCase {
-    private final Long postId;
+public class GetPostList extends UseCase {
     private final PostRepository postRepository;
 
     @Inject
-    public GetPostDetail(Long postId, PostRepository postRepository,
-                         ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+    public GetPostList(PostRepository postRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
-        this.postId = postId;
         this.postRepository = postRepository;
     }
 
     @Override
     protected Observable buildUseCaseObservable() {
-        return this.postRepository.post(this.postId);
+        return null;
     }
 
     @Override
     protected Observable buildUseCaseObservable(Long... params) {
-        return buildUseCaseObservable();
+        Long page = params[0];
+        return this.postRepository.postList(page);
     }
 }

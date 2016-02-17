@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <import type="info.xudshen.jandan.utils.RealtimeTimeUtils"/>
         <variable
             name="item"
-            type="info.xudshen.jandan.domain.model.Post" />
+            type="info.xudshen.jandan.domain.model.SimplePost" />
     </data>
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -73,7 +73,7 @@
                 android:paddingLeft="12dp"
                 android:paddingRight="-12dp"
                 android:paddingTop="12dp"
-                android:text="物理科学家能说服工程师们信3D打印的金属零件吗?"
+                android:text="@{item.title}"
 
                 android:translationZ="4dp" />
 
@@ -96,7 +96,7 @@
 
                 android:layout_marginBottom="12dp"
                 android:layout_marginLeft="12dp"
-                android:text="小脑袋" />
+                android:text="@{item.authorName}" />
 
             <TextView
                 style="@style/PostCardMeta"
@@ -105,7 +105,7 @@
                 android:layout_gravity="bottom"
 
                 android:paddingBottom="12dp"
-                android:text="\@小学堂" />
+                android:text="@{item.categoryDescription}" />
 
             <TextView
                 style="@style/PostCardMeta"
@@ -117,7 +117,7 @@
                 android:layout_marginBottom="12dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
-                android:text="4分钟前" />
+                android:text="@{RealtimeTimeUtils.realtime(item.date)}" />
         </GridLayout>
     </android.support.v7.widget.CardView>
 </layout>

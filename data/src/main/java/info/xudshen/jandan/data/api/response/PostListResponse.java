@@ -6,8 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import info.xudshen.jandan.domain.model.Author;
-import info.xudshen.jandan.domain.model.Comment;
-import info.xudshen.jandan.domain.model.Post;
+import info.xudshen.jandan.domain.model.Category;
 import info.xudshen.jandan.domain.model.SimplePost;
 
 /**
@@ -17,7 +16,7 @@ public class PostListResponse {
     @Expose
     private String status;
     @Expose
-    private List<PostResponse.PostWrapper> posts;
+    private List<PostWrapper> posts;
     @Expose
     private Long count;
     @Expose
@@ -36,11 +35,11 @@ public class PostListResponse {
         this.status = status;
     }
 
-    public List<PostResponse.PostWrapper> getPosts() {
+    public List<PostWrapper> getPosts() {
         return posts;
     }
 
-    public void setPosts(List<PostResponse.PostWrapper> posts) {
+    public void setPosts(List<PostWrapper> posts) {
         this.posts = posts;
     }
 
@@ -72,7 +71,7 @@ public class PostListResponse {
         @Expose
         private Author author;
         @Expose
-        private List<Comment> comments;
+        private List<Category> categories;
         @Expose
         private HashMap<String, Object> customFields;
 
@@ -87,12 +86,12 @@ public class PostListResponse {
             this.author = author;
         }
 
-        public List<Comment> getComments() {
-            return comments;
+        public List<Category> getCategories() {
+            return categories;
         }
 
-        public void setComments(List<Comment> comments) {
-            this.comments = comments;
+        public void setCategories(List<Category> categories) {
+            this.categories = categories;
         }
 
         public HashMap<String, Object> getCustomFields() {
@@ -101,6 +100,14 @@ public class PostListResponse {
 
         public void setCustomFields(HashMap<String, Object> customFields) {
             this.customFields = customFields;
+        }
+
+        public SimplePost getSimplePost() {
+            this.setAuthorName(this.getAuthor().getName());
+            this.setCategoryDescription(this.getCategories().get(0).getDescription());
+            Object value = customFields.get("thumb_c");
+            this.setThumbC(((List<String>) value).get(0));
+            return this;
         }
     }
 }

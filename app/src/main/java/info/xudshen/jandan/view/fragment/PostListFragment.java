@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +48,6 @@ public class PostListFragment extends BaseFragment implements PostListView {
     @Override
     public void inject() {
         this.getComponent(PostComponent.class).inject(this);
-        this.postListPresenter.setView(this);
     }
 
     @Override
@@ -100,7 +100,8 @@ public class PostListFragment extends BaseFragment implements PostListView {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        this.postListPresenter.setView(this);
+        this.postListPresenter.initialize();
     }
 
     @Override
@@ -138,15 +139,53 @@ public class PostListFragment extends BaseFragment implements PostListView {
         ButterKnife.unbind(this);
     }
 
-    //<editor-fold desc="Called by Presenter">
+    //<editor-fold desc="Called by Presenter"
     @Override
-    public void swipeDownFinished() {
+    public void showLoading() {
+        binding.swipeRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
+        binding.swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void hideLoading() {
         binding.swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
-    public void swipeUpFinished() {
+    public void showRetry() {
+
+    }
+
+    @Override
+    public void hideRetry() {
+
+    }
+
+    @Override
+    public void showError(String message) {
+
+    }
+
+    @Override
+    public void showSwipeUpLoading() {
+        binding.swipeRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTTOM);
+        binding.swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void hideSwipeUpLoading() {
         binding.swipeRefreshLayout.setRefreshing(false);
     }
+
+    @Override
+    public void renderList() {
+
+    }
+
+    @Override
+    public Context getContext() {
+        return getActivity().getApplicationContext();
+    }
+
     //</editor-fold>
 }

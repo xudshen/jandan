@@ -13,7 +13,7 @@ public class Meta {
 
     private Long id;
     @Expose
-    private Long expireTag;
+    private Long expireTag = 0l;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END

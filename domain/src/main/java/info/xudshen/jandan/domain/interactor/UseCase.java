@@ -15,6 +15,9 @@
  */
 package info.xudshen.jandan.domain.interactor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import info.xudshen.jandan.domain.executor.PostExecutionThread;
 import info.xudshen.jandan.domain.executor.ThreadExecutor;
 import rx.Observable;
@@ -36,7 +39,7 @@ public abstract class UseCase {
     private final ThreadExecutor threadExecutor;
     private final PostExecutionThread postExecutionThread;
 
-    private Subscription subscription = Subscriptions.empty();
+    private List<Subscription> subscriptions = new ArrayList<>();
 
     protected UseCase(ThreadExecutor threadExecutor,
                       PostExecutionThread postExecutionThread) {
@@ -49,6 +52,8 @@ public abstract class UseCase {
      */
     protected abstract Observable buildUseCaseObservable();
 
+    protected abstract Observable buildUseCaseObservable(Long... params);
+
     /**
      * Executes the current use case.
      *
@@ -56,18 +61,28 @@ public abstract class UseCase {
      */
     @SuppressWarnings("unchecked")
     public void execute(Subscriber UseCaseSubscriber) {
-        this.subscription = this.buildUseCaseObservable()
+        this.subscriptions.add(this.buildUseCaseObservable()
                 .subscribeOn(Schedulers.from(threadExecutor))
                 .observeOn(postExecutionThread.getScheduler())
-                .subscribe(UseCaseSubscriber);
+                .subscribe(UseCaseSubscriber));
+    }
+
+    @SuppressWarnings("unchecked")
+    public void execute(Subscriber UseCaseSubscriber, Long... params) {
+        this.subscriptions.add(this.buildUseCaseObservable(params)
+                .subscribeOn(Schedulers.from(threadExecutor))
+                .observeOn(postExecutionThread.getScheduler())
+                .subscribe(UseCaseSubscriber));
     }
 
     /**
      * Unsubscribes from current {@link Subscription}.
      */
     public void unsubscribe() {
-        if (!subscription.isUnsubscribed()) {
-            subscription.unsubscribe();
+        for (Subscription subscription : subscriptions) {
+            if (!subscription.isUnsubscribed()) {
+                subscription.unsubscribe();
+            }
         }
     }
 }
