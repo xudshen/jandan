@@ -7,6 +7,8 @@ package info.xudshen.jandan.view;
 
 import android.content.Context;
 
+import rx.Observable;
+
 /**
  * Interface representing a View that will use to load data.
  */
@@ -42,4 +44,9 @@ public interface LoadDataView {
      * Get a {@link android.content.Context}.
      */
     Context context();
+
+    /**
+     * Get rxlifecycle
+     */
+    <T> Observable.Transformer<T, T> bindToLifecycle();
 }

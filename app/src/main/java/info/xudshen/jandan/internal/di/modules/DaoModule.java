@@ -5,7 +5,10 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import info.xudshen.jandan.data.dao.AuthorDao;
+import info.xudshen.jandan.data.dao.CategoryDao;
+import info.xudshen.jandan.data.dao.CommentDao;
 import info.xudshen.jandan.data.dao.DaoSession;
+import info.xudshen.jandan.data.dao.MetaDao;
 import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.data.dao.SimplePostDao;
 
@@ -17,8 +20,20 @@ import info.xudshen.jandan.data.dao.SimplePostDao;
 public class DaoModule {
     @Provides
     @Singleton
+    MetaDao provideMetaDao(DaoSession daoSession) {
+        return daoSession.getMetaDao();
+    }
+
+    @Provides
+    @Singleton
     PostDao providePostDao(DaoSession daoSession) {
         return daoSession.getPostDao();
+    }
+
+    @Provides
+    @Singleton
+    SimplePostDao provideSimplePostDao(DaoSession daoSession) {
+        return daoSession.getSimplePostDao();
     }
 
     @Provides
@@ -29,7 +44,13 @@ public class DaoModule {
 
     @Provides
     @Singleton
-    SimplePostDao provideSimplePostDao(DaoSession daoSession) {
-        return daoSession.getSimplePostDao();
+    CategoryDao provideCategoryDao(DaoSession daoSession) {
+        return daoSession.getCategoryDao();
+    }
+
+    @Provides
+    @Singleton
+    CommentDao provideCommentDao(DaoSession daoSession) {
+        return daoSession.getCommentDao();
     }
 }

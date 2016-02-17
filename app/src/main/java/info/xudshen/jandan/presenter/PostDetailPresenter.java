@@ -45,7 +45,6 @@ public class PostDetailPresenter implements Presenter {
 
     @Override
     public void destroy() {
-        this.getPostDetailUseCase.unsubscribe();
         this.postDetailView = null;
     }
 
@@ -58,22 +57,23 @@ public class PostDetailPresenter implements Presenter {
      */
     private void loadPostDetail() {
         this.postDetailView.showLoading();
-        this.getPostDetailUseCase.execute(new Subscriber<Post>() {
-            @Override
-            public void onCompleted() {
-                PostDetailPresenter.this.postDetailView.hideLoading();
-            }
+        this.getPostDetailUseCase.execute(this.postDetailView.bindToLifecycle(),
+                new Subscriber<Post>() {
+                    @Override
+                    public void onCompleted() {
+                        PostDetailPresenter.this.postDetailView.hideLoading();
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                //do something
-                logger.error("", e);
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        //do something
+                        logger.error("", e);
+                    }
 
-            @Override
-            public void onNext(Post post) {
-                PostDetailPresenter.this.postDetailView.renderPostDetail(post);
-            }
-        });
+                    @Override
+                    public void onNext(Post post) {
+                        PostDetailPresenter.this.postDetailView.renderPostDetail(post);
+                    }
+                });
     }
 }

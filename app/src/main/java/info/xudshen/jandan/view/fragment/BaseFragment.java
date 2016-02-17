@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.mikepenz.materialdrawer.Drawer;
+import com.trello.rxlifecycle.components.support.RxFragment;
 
 import info.xudshen.jandan.JandanApp;
 import info.xudshen.jandan.R;
@@ -23,7 +24,7 @@ import info.xudshen.jandan.view.activity.TransitionHelper;
 /**
  * Created by xudshen on 16/1/7.
  */
-public abstract class BaseFragment extends Fragment implements TransitionHelper.Listener {
+public abstract class BaseFragment extends RxFragment implements TransitionHelper.Listener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         TransitionHelper.of(getActivity()).addListener(this);

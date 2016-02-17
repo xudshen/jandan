@@ -44,7 +44,7 @@ public class CloudPostDataStore implements PostDataStore {
                 .map(postResponse -> (Post) postResponse.getPostWrapper())
                 .doOnNext(post -> {
                     if (post != null) {
-                        CloudPostDataStore.this.postDao.insert(post);
+                        CloudPostDataStore.this.postDao.insertOrReplace(post);
                     }
                 });
     }
@@ -60,7 +60,7 @@ public class CloudPostDataStore implements PostDataStore {
                     return simplePosts;
                 })
                 .doOnNext(simplePosts -> {
-                    CloudPostDataStore.this.simplePostDao.insertInTx(simplePosts);
+                    CloudPostDataStore.this.simplePostDao.insertOrReplaceInTx(simplePosts);
                 });
     }
 }

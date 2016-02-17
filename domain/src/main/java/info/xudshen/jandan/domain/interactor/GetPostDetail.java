@@ -11,24 +11,23 @@ import rx.Observable;
  * Created by xudshen on 16/2/16.
  */
 public class GetPostDetail extends UseCase {
-    private final Long postId;
     private final PostRepository postRepository;
 
     @Inject
-    public GetPostDetail(Long postId, PostRepository postRepository,
+    public GetPostDetail(PostRepository postRepository,
                          ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
-        this.postId = postId;
         this.postRepository = postRepository;
     }
 
     @Override
     protected Observable buildUseCaseObservable() {
-        return this.postRepository.post(this.postId);
+        return null;
     }
 
     @Override
     protected Observable buildUseCaseObservable(Long... params) {
-        return buildUseCaseObservable();
+        Long postId = params[0];
+        return this.postRepository.post(postId);
     }
 }

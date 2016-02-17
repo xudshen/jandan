@@ -46,28 +46,28 @@ public class PostListPresenter implements Presenter {
 
     @Override
     public void destroy() {
-        this.getPostListUseCase.unsubscribe();
         this.postListView = null;
     }
 
     public void initialize() {
         this.postListView.showLoading();
-        this.getPostListUseCase.execute(new Subscriber() {
-            @Override
-            public void onCompleted() {
-                PostListPresenter.this.postListView.hideLoading();
-            }
+        this.getPostListUseCase.execute(this.postListView.bindToLifecycle(),
+                new Subscriber() {
+                    @Override
+                    public void onCompleted() {
+                        PostListPresenter.this.postListView.hideLoading();
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                logger.error("", e);
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        logger.error("", e);
+                    }
 
-            @Override
-            public void onNext(Object o) {
-                PostListPresenter.this.postListView.renderList();
-            }
-        }, 1l);
+                    @Override
+                    public void onNext(Object o) {
+                        PostListPresenter.this.postListView.renderList();
+                    }
+                }, 1l);
     }
 
     /**

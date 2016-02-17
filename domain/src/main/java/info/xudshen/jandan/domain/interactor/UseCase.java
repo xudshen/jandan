@@ -60,6 +60,7 @@ public abstract class UseCase {
      * @param UseCaseSubscriber The guy who will be listen to the observable build with {@link #buildUseCaseObservable()}.
      */
     @SuppressWarnings("unchecked")
+    @Deprecated
     public void execute(Subscriber UseCaseSubscriber) {
         this.subscriptions.add(this.buildUseCaseObservable()
                 .subscribeOn(Schedulers.from(threadExecutor))
@@ -68,6 +69,7 @@ public abstract class UseCase {
     }
 
     @SuppressWarnings("unchecked")
+    @Deprecated
     public void execute(Subscriber UseCaseSubscriber, Long... params) {
         this.subscriptions.add(this.buildUseCaseObservable(params)
                 .subscribeOn(Schedulers.from(threadExecutor))
@@ -75,9 +77,29 @@ public abstract class UseCase {
                 .subscribe(UseCaseSubscriber));
     }
 
+    @SuppressWarnings("unchecked")
+    public void execute(Observable.Transformer transformer, Subscriber UseCaseSubscriber) {
+        this.buildUseCaseObservable()
+                .compose(transformer)
+                .subscribeOn(Schedulers.from(threadExecutor))
+                .observeOn(postExecutionThread.getScheduler())
+                .subscribe(UseCaseSubscriber);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void execute(Observable.Transformer transformer, Subscriber UseCaseSubscriber,
+                        Long... params) {
+        this.buildUseCaseObservable(params)
+                .compose(transformer)
+                .subscribeOn(Schedulers.from(threadExecutor))
+                .observeOn(postExecutionThread.getScheduler())
+                .subscribe(UseCaseSubscriber);
+    }
+
     /**
      * Unsubscribes from current {@link Subscription}.
      */
+    @Deprecated
     public void unsubscribe() {
         for (Subscription subscription : subscriptions) {
             if (!subscription.isUnsubscribed()) {

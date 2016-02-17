@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+
 import javax.inject.Inject;
 
 import info.xudshen.jandan.JandanApp;
@@ -16,7 +18,7 @@ import info.xudshen.jandan.navigation.Navigator;
 /**
  * Created by xudshen on 16/1/6.
  */
-public abstract class BaseActivity extends AppCompatActivity implements TransitionHelper.Source, TransitionHelper.Listener {
+public abstract class BaseActivity extends RxAppCompatActivity implements TransitionHelper.Source, TransitionHelper.Listener {
     @Inject
     Navigator navigator;
     TransitionHelper transitionHelper;

@@ -72,7 +72,6 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents {
         postComponent = DaggerPostComponent.builder()
                 .applicationComponent(getApplicationComponent())
                 .activityModule(activityModule)
-                .postModule(new PostModule(75829l))
                 .build();
     }
 

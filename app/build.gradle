@@ -93,6 +93,8 @@ dependencies {
 
     compile dependencies.rxJava
     compile dependencies.rxAndroid
+    compile dependencies.rxlifecycle
+    compile dependencies.rxlifecycleComp
     compile dependencies.butterKnife
     compile dependencies.gson
 
