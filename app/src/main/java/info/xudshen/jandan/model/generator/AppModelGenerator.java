@@ -21,9 +21,21 @@ public class AppModelGenerator extends ModelGenerator {
 
     @Override
     protected void addEntities(Schema schema) {
+        addMeta(schema);
         addPost(schema);
+        addSimplePost(schema);
         addAuthor(schema);
+        addCategory(schema);
         addComment(schema);
+    }
+
+    void addMeta(Schema schema) {
+        Entity entity = schema.addEntity("Meta");
+
+        entity.addIdProperty();
+        addLongProperty(entity, "expireTag");
+
+        entity.addImport(GSON_EXPOSE);
     }
 
     void addPost(Schema schema) {
@@ -40,7 +52,35 @@ public class AppModelGenerator extends ModelGenerator {
         addTimestampProperty(entity, "date");
         addTimestampProperty(entity, "modified");
 
-        addStringProperty(entity, "comment_count");
+        addStringProperty(entity, "commentCount");
+
+        addUniqueIndex(entity, postId);
+
+        entity.addContentProvider();
+        entity.addImport(GSON_EXPOSE);
+        entity.addImport(GSON_SERIALIZEDNAME);
+    }
+
+    void addSimplePost(Schema schema) {
+        Entity entity = schema.addEntity("SimplePost");
+
+        entity.addIdProperty();
+        Property postId = addLongProperty(entity, "postId")
+                .codeBeforeField("@Expose\n    @SerializedName(\"id\")")
+                .bindable(true).getProperty();
+        addStringProperty(entity, "url").bindable(true);
+        addStringProperty(entity, "title").bindable(true);
+        addStringProperty(entity, "excerpt").bindable(true);
+        addStringProperty(entity, "thumbC").bindable(true);
+        addTimestampProperty(entity, "date");
+        addTimestampProperty(entity, "modified");
+
+        addStringProperty(entity, "commentCount");
+
+        addStringProperty(entity, "authorName");
+        addStringProperty(entity, "categoryDescription");
+
+        addStringProperty(entity, "expireTag");
 
         addUniqueIndex(entity, postId);
 
@@ -65,6 +105,25 @@ public class AppModelGenerator extends ModelGenerator {
         addStringProperty(entity, "description").bindable(true);
 
         addUniqueIndex(entity, authorId);
+
+        entity.addContentProvider();
+        entity.addImport(GSON_EXPOSE);
+        entity.addImport(GSON_SERIALIZEDNAME);
+    }
+
+    void addCategory(Schema schema) {
+        Entity entity = schema.addEntity("Category");
+
+        entity.addIdProperty();
+        Property categoryId = addLongProperty(entity, "categoryId")
+                .codeBeforeField("@Expose\n    @SerializedName(\"id\")")
+                .bindable(true).getProperty();
+        addStringProperty(entity, "slug").bindable(true);
+        addStringProperty(entity, "title").bindable(true);
+        addStringProperty(entity, "description").bindable(true);
+        addStringProperty(entity, "post_count").bindable(true);
+
+        addUniqueIndex(entity, categoryId);
 
         entity.addContentProvider();
         entity.addImport(GSON_EXPOSE);

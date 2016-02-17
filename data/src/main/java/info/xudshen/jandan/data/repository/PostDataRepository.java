@@ -1,5 +1,7 @@
 package info.xudshen.jandan.data.repository;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -25,5 +27,10 @@ public class PostDataRepository implements PostRepository {
     public Observable<Post> post(Long postId) {
         final PostDataStore postDataStore = this.postDataStoreFactory.create(postId);
         return postDataStore.post(postId);
+    }
+
+    @Override
+    public Observable<List<Post>> postList(Long page) {
+        return null;
     }
 }

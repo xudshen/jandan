@@ -1,5 +1,7 @@
 package info.xudshen.jandan.domain.repository;
 
+import java.util.List;
+
 import rx.Observable;
 
 import info.xudshen.jandan.domain.model.Post;
@@ -9,4 +11,6 @@ import info.xudshen.jandan.domain.model.Post;
  */
 public interface PostRepository {
     Observable<Post> post(Long postId);
+
+    Observable<List<Post>> postList(Long page);
 }

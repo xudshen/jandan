@@ -1,7 +1,6 @@
 package info.xudshen.jandan.data.api.response;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,22 +8,24 @@ import java.util.List;
 import info.xudshen.jandan.domain.model.Author;
 import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.Post;
+import info.xudshen.jandan.domain.model.SimplePost;
 
 /**
- * Created by xudshen on 16/2/16.
+ * Created by xudshen on 16/2/17.
  */
-public class PostResponse {
+public class PostListResponse {
     @Expose
     private String status;
     @Expose
-    @SerializedName("post")
-    private PostWrapper postWrapper;
+    private List<PostResponse.PostWrapper> posts;
     @Expose
-    private String previousUrl;
+    private Long count;
     @Expose
-    private String nextUrl;
+    private Long countTotal;
+    @Expose
+    private Long pages;
 
-    public PostResponse() {
+    public PostListResponse() {
     }
 
     public String getStatus() {
@@ -35,31 +36,39 @@ public class PostResponse {
         this.status = status;
     }
 
-    public PostWrapper getPostWrapper() {
-        return postWrapper;
+    public List<PostResponse.PostWrapper> getPosts() {
+        return posts;
     }
 
-    public void setPostWrapper(PostWrapper postWrapper) {
-        this.postWrapper = postWrapper;
+    public void setPosts(List<PostResponse.PostWrapper> posts) {
+        this.posts = posts;
     }
 
-    public String getPreviousUrl() {
-        return previousUrl;
+    public Long getCount() {
+        return count;
     }
 
-    public void setPreviousUrl(String previousUrl) {
-        this.previousUrl = previousUrl;
+    public void setCount(Long count) {
+        this.count = count;
     }
 
-    public String getNextUrl() {
-        return nextUrl;
+    public Long getCountTotal() {
+        return countTotal;
     }
 
-    public void setNextUrl(String nextUrl) {
-        this.nextUrl = nextUrl;
+    public void setCountTotal(Long countTotal) {
+        this.countTotal = countTotal;
     }
 
-    public class PostWrapper extends Post {
+    public Long getPages() {
+        return pages;
+    }
+
+    public void setPages(Long pages) {
+        this.pages = pages;
+    }
+
+    public class PostWrapper extends SimplePost {
         @Expose
         private Author author;
         @Expose
