@@ -10,9 +10,9 @@ import android.databinding.Bindable;
 // KEEP INCLUDES - put your custom includes here
 // KEEP INCLUDES END
 /**
- * Entity mapped to table "POST".
+ * Entity mapped to table "SIMPLE_POST".
  */
-public class Post {
+public class SimplePost {
 
     private Long id;
     @Expose
@@ -23,36 +23,45 @@ public class Post {
     @Expose
     private String title;
     @Expose
-    private String content;
-    @Expose
     private String excerpt;
+    @Expose
+    private String thumbC;
     @Expose
     private Timestamp date;
     @Expose
     private Timestamp modified;
     @Expose
     private String commentCount;
+    @Expose
+    private String authorName;
+    @Expose
+    private String categoryDescription;
+    @Expose
+    private String expireTag;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
 
-    public Post() {
+    public SimplePost() {
     }
 
-    public Post(Long id) {
+    public SimplePost(Long id) {
         this.id = id;
     }
 
-    public Post(Long id, Long postId, String url, String title, String content, String excerpt, Timestamp date, Timestamp modified, String commentCount) {
+    public SimplePost(Long id, Long postId, String url, String title, String excerpt, String thumbC, Timestamp date, Timestamp modified, String commentCount, String authorName, String categoryDescription, String expireTag) {
         this.id = id;
         this.postId = postId;
         this.url = url;
         this.title = title;
-        this.content = content;
         this.excerpt = excerpt;
+        this.thumbC = thumbC;
         this.date = date;
         this.modified = modified;
         this.commentCount = commentCount;
+        this.authorName = authorName;
+        this.categoryDescription = categoryDescription;
+        this.expireTag = expireTag;
     }
 
     public Long getId() {
@@ -87,20 +96,20 @@ public class Post {
         this.title = title;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     public String getExcerpt() {
         return excerpt;
     }
 
     public void setExcerpt(String excerpt) {
         this.excerpt = excerpt;
+    }
+
+    public String getThumbC() {
+        return thumbC;
+    }
+
+    public void setThumbC(String thumbC) {
+        this.thumbC = thumbC;
     }
 
     public Timestamp getDate() {
@@ -125,6 +134,30 @@ public class Post {
 
     public void setCommentCount(String commentCount) {
         this.commentCount = commentCount;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public String getCategoryDescription() {
+        return categoryDescription;
+    }
+
+    public void setCategoryDescription(String categoryDescription) {
+        this.categoryDescription = categoryDescription;
+    }
+
+    public String getExpireTag() {
+        return expireTag;
+    }
+
+    public void setExpireTag(String expireTag) {
+        this.expireTag = expireTag;
     }
 
     // KEEP METHODS - put your custom methods here

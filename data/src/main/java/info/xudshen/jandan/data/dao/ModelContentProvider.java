@@ -27,10 +27,18 @@ public class ModelContentProvider extends ContentProvider {
             + "/" + PostDao.TABLENAME;
     public static final String POST_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
             + "/" + PostDao.TABLENAME;
+    public static final String SIMPLE_POST_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
+            + "/" + SimplePostDao.TABLENAME;
+    public static final String SIMPLE_POST_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
+            + "/" + SimplePostDao.TABLENAME;
     public static final String AUTHOR_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
             + "/" + AuthorDao.TABLENAME;
     public static final String AUTHOR_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
             + "/" + AuthorDao.TABLENAME;
+    public static final String CATEGORY_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
+            + "/" + CategoryDao.TABLENAME;
+    public static final String CATEGORY_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
+            + "/" + CategoryDao.TABLENAME;
     public static final String COMMENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
             + "/" + CommentDao.TABLENAME;
     public static final String COMMENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
@@ -38,10 +46,14 @@ public class ModelContentProvider extends ContentProvider {
 
     private static final int POST_DIR = 0x0000;
     private static final int POST_ID = 0x1000;
-    private static final int AUTHOR_DIR = 0x0001;
-    private static final int AUTHOR_ID = 0x1001;
-    private static final int COMMENT_DIR = 0x0002;
-    private static final int COMMENT_ID = 0x1002;
+    private static final int SIMPLE_POST_DIR = 0x0001;
+    private static final int SIMPLE_POST_ID = 0x1001;
+    private static final int AUTHOR_DIR = 0x0002;
+    private static final int AUTHOR_ID = 0x1002;
+    private static final int CATEGORY_DIR = 0x0003;
+    private static final int CATEGORY_ID = 0x1003;
+    private static final int COMMENT_DIR = 0x0004;
+    private static final int COMMENT_ID = 0x1004;
 
     private static final UriMatcher sURIMatcher;
 
@@ -49,8 +61,12 @@ public class ModelContentProvider extends ContentProvider {
         sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         sURIMatcher.addURI(AUTHORITY, PostDao.TABLENAME, POST_DIR);
         sURIMatcher.addURI(AUTHORITY, PostDao.TABLENAME + "/#", POST_ID);
+        sURIMatcher.addURI(AUTHORITY, SimplePostDao.TABLENAME, SIMPLE_POST_DIR);
+        sURIMatcher.addURI(AUTHORITY, SimplePostDao.TABLENAME + "/#", SIMPLE_POST_ID);
         sURIMatcher.addURI(AUTHORITY, AuthorDao.TABLENAME, AUTHOR_DIR);
         sURIMatcher.addURI(AUTHORITY, AuthorDao.TABLENAME + "/#", AUTHOR_ID);
+        sURIMatcher.addURI(AUTHORITY, CategoryDao.TABLENAME, CATEGORY_DIR);
+        sURIMatcher.addURI(AUTHORITY, CategoryDao.TABLENAME + "/#", CATEGORY_ID);
         sURIMatcher.addURI(AUTHORITY, CommentDao.TABLENAME, COMMENT_DIR);
         sURIMatcher.addURI(AUTHORITY, CommentDao.TABLENAME + "/#", COMMENT_ID);
     }
@@ -85,7 +101,9 @@ public class ModelContentProvider extends ContentProvider {
         int uriType = sURIMatcher.match(uri);
         switch (uriType) {
             case POST_ID:
+            case SIMPLE_POST_ID:
             case AUTHOR_ID:
+            case CATEGORY_ID:
             case COMMENT_ID:
                 break;
             default:
@@ -111,7 +129,9 @@ public class ModelContentProvider extends ContentProvider {
         int uriType = sURIMatcher.match(uri);
         switch (uriType) {
             case POST_ID:
+            case SIMPLE_POST_ID:
             case AUTHOR_ID:
+            case CATEGORY_ID:
             case COMMENT_ID:
                 break;
             default:
@@ -136,12 +156,28 @@ public class ModelContentProvider extends ContentProvider {
                 queryBuilder.appendWhere(PostDao.Properties.Id.columnName + "="
                         + uri.getLastPathSegment());
                 break;
+            case SIMPLE_POST_DIR:
+                queryBuilder.setTables(SimplePostDao.TABLENAME);
+                break;
+            case SIMPLE_POST_ID:
+                queryBuilder.setTables(SimplePostDao.TABLENAME);
+                queryBuilder.appendWhere(SimplePostDao.Properties.Id.columnName + "="
+                        + uri.getLastPathSegment());
+                break;
             case AUTHOR_DIR:
                 queryBuilder.setTables(AuthorDao.TABLENAME);
                 break;
             case AUTHOR_ID:
                 queryBuilder.setTables(AuthorDao.TABLENAME);
                 queryBuilder.appendWhere(AuthorDao.Properties.Id.columnName + "="
+                        + uri.getLastPathSegment());
+                break;
+            case CATEGORY_DIR:
+                queryBuilder.setTables(CategoryDao.TABLENAME);
+                break;
+            case CATEGORY_ID:
+                queryBuilder.setTables(CategoryDao.TABLENAME);
+                queryBuilder.appendWhere(CategoryDao.Properties.Id.columnName + "="
                         + uri.getLastPathSegment());
                 break;
             case COMMENT_DIR:
@@ -171,10 +207,18 @@ public class ModelContentProvider extends ContentProvider {
                 return POST_TYPE;
             case POST_ID:
                 return POST_ITEM_TYPE;
+            case SIMPLE_POST_DIR:
+                return SIMPLE_POST_TYPE;
+            case SIMPLE_POST_ID:
+                return SIMPLE_POST_ITEM_TYPE;
             case AUTHOR_DIR:
                 return AUTHOR_TYPE;
             case AUTHOR_ID:
                 return AUTHOR_ITEM_TYPE;
+            case CATEGORY_DIR:
+                return CATEGORY_TYPE;
+            case CATEGORY_ID:
+                return CATEGORY_ITEM_TYPE;
             case COMMENT_DIR:
                 return COMMENT_TYPE;
             case COMMENT_ID:

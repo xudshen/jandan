@@ -6,10 +6,14 @@ import java.util.List;
 import info.xudshen.droiddata.dao.IModelTrans;
 import info.xudshen.droiddata.dao.IModelObservable;
 import info.xudshen.jandan.domain.model.Post;
+import info.xudshen.jandan.domain.model.SimplePost;
 import info.xudshen.jandan.domain.model.Author;
+import info.xudshen.jandan.domain.model.Category;
 import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.data.model.observable.PostObservable;
+import info.xudshen.jandan.data.model.observable.SimplePostObservable;
 import info.xudshen.jandan.data.model.observable.AuthorObservable;
+import info.xudshen.jandan.data.model.observable.CategoryObservable;
 import info.xudshen.jandan.data.model.observable.CommentObservable;
 
 public class ModelTrans {
@@ -21,11 +25,25 @@ public class ModelTrans {
                     return new PostObservable(entity);
                 }
             };
+    private static final IModelTrans<SimplePost, SimplePostObservable> SIMPLE_POST_TRANS =
+            new IModelTrans<SimplePost, SimplePostObservable>() {
+                @Override
+                public SimplePostObservable to(SimplePost entity) {
+                    return new SimplePostObservable(entity);
+                }
+            };
     private static final IModelTrans<Author, AuthorObservable> AUTHOR_TRANS =
             new IModelTrans<Author, AuthorObservable>() {
                 @Override
                 public AuthorObservable to(Author entity) {
                     return new AuthorObservable(entity);
+                }
+            };
+    private static final IModelTrans<Category, CategoryObservable> CATEGORY_TRANS =
+            new IModelTrans<Category, CategoryObservable>() {
+                @Override
+                public CategoryObservable to(Category entity) {
+                    return new CategoryObservable(entity);
                 }
             };
     private static final IModelTrans<Comment, CommentObservable> COMMENT_TRANS =
@@ -73,6 +91,33 @@ public class ModelTrans {
     }
     //</editor-fold>
 
+    //<editor-fold desc="TransSimplePost">
+    <TO extends IModelObservable> TO transSimplePost(SimplePost entity, IModelTrans<SimplePost, TO> trans) {
+        TO entityOb = trans.to(entity);
+        this.daoSession.getSimplePostDao().registerExtraOb(entityOb);
+        return entityOb;
+    }
+
+    SimplePostObservable transSimplePost(SimplePost entity) {
+        return transSimplePost(entity, SIMPLE_POST_TRANS);
+    }
+
+    <TO extends IModelObservable> Iterable<TO> transSimplePost(Iterable<SimplePost> entities, IModelTrans<SimplePost, TO> trans) {
+        List<TO> list = new ArrayList<>();
+        SimplePostDao dao = this.daoSession.getSimplePostDao();
+        for (SimplePost entity : entities) {
+            TO entityOb = trans.to(entity);
+            list.add(entityOb);
+            dao.registerExtraOb(entityOb);
+        }
+        return list;
+    }
+
+    Iterable<SimplePostObservable> transSimplePost(Iterable<SimplePost> entities) {
+        return transSimplePost(entities, SIMPLE_POST_TRANS);
+    }
+    //</editor-fold>
+
     //<editor-fold desc="TransAuthor">
     <TO extends IModelObservable> TO transAuthor(Author entity, IModelTrans<Author, TO> trans) {
         TO entityOb = trans.to(entity);
@@ -97,6 +142,33 @@ public class ModelTrans {
 
     Iterable<AuthorObservable> transAuthor(Iterable<Author> entities) {
         return transAuthor(entities, AUTHOR_TRANS);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="TransCategory">
+    <TO extends IModelObservable> TO transCategory(Category entity, IModelTrans<Category, TO> trans) {
+        TO entityOb = trans.to(entity);
+        this.daoSession.getCategoryDao().registerExtraOb(entityOb);
+        return entityOb;
+    }
+
+    CategoryObservable transCategory(Category entity) {
+        return transCategory(entity, CATEGORY_TRANS);
+    }
+
+    <TO extends IModelObservable> Iterable<TO> transCategory(Iterable<Category> entities, IModelTrans<Category, TO> trans) {
+        List<TO> list = new ArrayList<>();
+        CategoryDao dao = this.daoSession.getCategoryDao();
+        for (Category entity : entities) {
+            TO entityOb = trans.to(entity);
+            list.add(entityOb);
+            dao.registerExtraOb(entityOb);
+        }
+        return list;
+    }
+
+    Iterable<CategoryObservable> transCategory(Iterable<Category> entities) {
+        return transCategory(entities, CATEGORY_TRANS);
     }
     //</editor-fold>
 
