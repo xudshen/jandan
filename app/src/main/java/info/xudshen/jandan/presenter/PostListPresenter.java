@@ -47,6 +47,7 @@ public class PostListPresenter implements Presenter {
     @Override
     public void destroy() {
         this.getPostListUseCase.unsubscribe();
+        this.postListView = null;
     }
 
     public void initialize() {

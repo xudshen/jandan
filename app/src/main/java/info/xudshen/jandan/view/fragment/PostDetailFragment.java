@@ -60,9 +60,10 @@ public class PostDetailFragment extends BaseFragment implements PostDetailView {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        this.initialize();
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        this.postDetailPresenter.setView(this);
+        this.postDetailPresenter.initialize();
     }
 
     @Override
@@ -87,12 +88,6 @@ public class PostDetailFragment extends BaseFragment implements PostDetailView {
     public void onDestroy() {
         super.onDestroy();
         this.postDetailPresenter.destroy();
-    }
-
-    private void initialize() {
-        this.getComponent(PostComponent.class).inject(this);
-        this.postDetailPresenter.setView(this);
-        this.postDetailPresenter.initialize(null);
     }
 
     @Override
@@ -167,7 +162,7 @@ public class PostDetailFragment extends BaseFragment implements PostDetailView {
     }
 
     @Override
-    public Context getContext() {
+    public Context context() {
         return getActivity().getApplicationContext();
     }
 

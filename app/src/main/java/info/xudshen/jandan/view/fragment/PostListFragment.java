@@ -98,8 +98,8 @@ public class PostListFragment extends BaseFragment implements PostListView {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         this.postListPresenter.setView(this);
         this.postListPresenter.initialize();
     }
@@ -183,7 +183,7 @@ public class PostListFragment extends BaseFragment implements PostListView {
     }
 
     @Override
-    public Context getContext() {
+    public Context context() {
         return getActivity().getApplicationContext();
     }
 

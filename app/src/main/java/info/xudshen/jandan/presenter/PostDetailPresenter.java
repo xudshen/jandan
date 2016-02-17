@@ -20,7 +20,6 @@ import rx.Subscriber;
 @PerActivity
 public class PostDetailPresenter implements Presenter {
     private static final Logger logger = LoggerFactory.getLogger(PostDetailPresenter.class);
-    private Long postId;
     private PostDetailView postDetailView;
 
     private final UseCase getPostDetailUseCase;
@@ -47,10 +46,10 @@ public class PostDetailPresenter implements Presenter {
     @Override
     public void destroy() {
         this.getPostDetailUseCase.unsubscribe();
+        this.postDetailView = null;
     }
 
-    public void initialize(Long postId) {
-        this.postId = postId;
+    public void initialize() {
         this.loadPostDetail();
     }
 

@@ -7,6 +7,6 @@ import java.sql.Timestamp;
  */
 public class RealtimeTimeUtils {
     public static String realtime(Timestamp timestamp) {
-        return timestamp.toString();
+        return timestamp != null ? timestamp.toString() : "";
     }
 }

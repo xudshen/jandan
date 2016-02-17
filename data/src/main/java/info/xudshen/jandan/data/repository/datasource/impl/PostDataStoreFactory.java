@@ -33,9 +33,8 @@ public class PostDataStoreFactory {
     public PostDataStore create(Long postId) {
         PostDataStore postDataStore;
 
-//        if (this.postDao.queryBuilder().where(PostDao.Properties.PostId.eq(postId))
-//                .buildCount().forCurrentThread().count() > 0) {
-        if (false) {
+        if (this.postDao.queryBuilder().where(PostDao.Properties.PostId.eq(postId))
+                .buildCount().forCurrentThread().count() > 0) {
             postDataStore = new LocalPostDataStore(postDao);
         } else {
             postDataStore = new CloudPostDataStore(ApiAdapter.getPostService(), postDao, simplePostDao);
