@@ -7,13 +7,19 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import de.greenrobot.dao.query.LazyList;
 import info.xudshen.jandan.data.dao.SimplePostDao;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
+import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.model.SimplePost;
+import info.xudshen.jandan.view.LoadDataView;
 import info.xudshen.jandan.view.fragment.BlankFragment;
 import info.xudshen.jandan.view.fragment.PostDetailFragment;
 import rx.Observable;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -22,14 +28,21 @@ import rx.schedulers.Schedulers;
  */
 public class ItemReaderPagerAdapter extends FragmentStatePagerAdapter {
     private static final Logger logger = LoggerFactory.getLogger(ItemReaderPagerAdapter.class);
-    private ReaderItemType type;
-    private SimplePostDao simplePostDao;
+    private LoadDataView loadDataView;
+    @Inject
+    SimplePostDao simplePostDao;
+    @Named("postList")
+    @Inject
+    IterableUseCase getPostListUseCase;
+
     private LazyList<SimplePost> simplePosts;
 
-    public ItemReaderPagerAdapter(FragmentManager fm, ReaderItemType type, SimplePostDao simplePostDao) {
+    public ItemReaderPagerAdapter(FragmentManager fm, LoadDataView loadDataView) {
         super(fm);
-        this.type = type;
-        this.simplePostDao = simplePostDao;
+        this.loadDataView = loadDataView;
+    }
+
+    public void initialize() {
         this.simplePosts = this.simplePostDao.queryBuilder().orderDesc(SimplePostDao.Properties.Date).listLazyUncached();
     }
 
@@ -37,12 +50,28 @@ public class ItemReaderPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         if (this.simplePosts.size() - 1 == position) {
             //fetch more
-            
-            this.simplePosts = this.simplePostDao.queryBuilder().orderDesc(SimplePostDao.Properties.Date).listLazyUncached();
-            Observable.empty().observeOn(AndroidSchedulers.mainThread()).doOnCompleted(() -> {
-                logger.info("refresh");
-                ItemReaderPagerAdapter.this.notifyDataSetChanged();
-            }).subscribe();
+            this.getPostListUseCase.executeNext(this.loadDataView.bindToLifecycle(), new Subscriber() {
+                @Override
+                public void onCompleted() {
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    ItemReaderPagerAdapter.this.loadDataView.showError("");
+                }
+
+                @Override
+                public void onNext(Object o) {
+                    ItemReaderPagerAdapter.this.simplePosts =
+                            ItemReaderPagerAdapter.this.simplePostDao.queryBuilder()
+                                    .orderDesc(SimplePostDao.Properties.Date).listLazyUncached();
+                    Observable.empty().observeOn(AndroidSchedulers.mainThread()).doOnCompleted(() -> {
+                        logger.info("refresh");
+                        ItemReaderPagerAdapter.this.notifyDataSetChanged();
+                    }).subscribe();
+                }
+            });
         }
         return PostDetailFragment.newInstance(this.simplePosts.get(position).getPostId());
     }

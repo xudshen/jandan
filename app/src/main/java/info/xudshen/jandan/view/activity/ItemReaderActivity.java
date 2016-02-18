@@ -26,24 +26,20 @@ import com.mikepenz.iconics.context.IconicsLayoutInflater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.xudshen.jandan.R;
-import info.xudshen.jandan.data.dao.SimplePostDao;
-import info.xudshen.jandan.domain.enums.ReaderItemType;
-import info.xudshen.jandan.domain.model.SimplePost;
 import info.xudshen.jandan.internal.di.HasComponents;
 import info.xudshen.jandan.internal.di.components.ActivityComponent;
 import info.xudshen.jandan.internal.di.components.DaggerActivityComponent;
 import info.xudshen.jandan.internal.di.components.DaggerPostComponent;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
+import info.xudshen.jandan.view.LoadDataView;
 import info.xudshen.jandan.view.adapter.ItemReaderPagerAdapter;
 import info.xudshen.jandan.view.transition.StackPageTransformer;
 
-public class ItemReaderActivity extends BaseActivity implements HasComponents {
+public class ItemReaderActivity extends BaseActivity implements HasComponents, LoadDataView {
     private static final Logger logger = LoggerFactory.getLogger(ItemReaderActivity.class);
     public static final String ARG_POSITION = "ARG_POSITION";
 
@@ -64,8 +60,6 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents {
 
     private PostComponent postComponent;
     private ActivityComponent activityComponent;
-    @Inject
-    SimplePostDao simplePostDao;
 
     @Override
     protected void initializeInjector() {
@@ -92,7 +86,12 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents {
         //do other
         ButterKnife.bind(this);
 
-        viewPager.setAdapter(new ItemReaderPagerAdapter(getSupportFragmentManager(), ReaderItemType.SimplePost, simplePostDao));
+        ItemReaderPagerAdapter itemReaderPagerAdapter = new ItemReaderPagerAdapter(
+                getSupportFragmentManager(), this);
+        postComponent.inject(itemReaderPagerAdapter);
+        itemReaderPagerAdapter.initialize();
+
+        viewPager.setAdapter(itemReaderPagerAdapter);
         viewPager.setPageTransformer(true, new StackPageTransformer());
         int position = getIntent().getExtras().getInt(ARG_POSITION);
         viewPager.setCurrentItem(position);
@@ -182,6 +181,38 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents {
             super.onBackPressed();
         }
     }
+
+    //<editor-fold desc="Called by presenter">
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showRetry() {
+
+    }
+
+    @Override
+    public void hideRetry() {
+
+    }
+
+    @Override
+    public void showError(String message) {
+
+    }
+
+    @Override
+    public Context context() {
+        return getApplicationContext();
+    }
+    //</editor-fold>
 
     //<editor-fold desc="Comment Animation">
     private int commentFabCx, commentFabCy, commentFabRadius;
