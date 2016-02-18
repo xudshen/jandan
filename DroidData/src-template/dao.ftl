@@ -357,7 +357,7 @@ as property>\"${property.columnName}\"<#if property_has_next>,</#if></#list>);")
 
 </#if>
                 ops.add(ContentProviderOperation.newUpdate(
-                        ContentUris.withAppendedId(CONTENT_URI, key)).build());
+                        ContentUris.withAppendedId(CONTENT_URI, key)).withValue(null, null).build());
             }
         }
 

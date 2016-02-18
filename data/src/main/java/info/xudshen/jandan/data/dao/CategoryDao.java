@@ -232,7 +232,7 @@ public class CategoryDao extends DDAbstractDao<Category, Long> {
                 notifyExtraOb(key);
 
                 ops.add(ContentProviderOperation.newUpdate(
-                        ContentUris.withAppendedId(CONTENT_URI, key)).build());
+                        ContentUris.withAppendedId(CONTENT_URI, key)).withValue(null, null).build());
             }
         }
 
