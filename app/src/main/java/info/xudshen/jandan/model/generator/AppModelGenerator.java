@@ -27,6 +27,8 @@ public class AppModelGenerator extends ModelGenerator {
         addAuthor(schema);
         addCategory(schema);
         addComment(schema);
+
+        addReadLaterItem(schema);
     }
 
     void addMeta(Schema schema) {
@@ -153,6 +155,21 @@ public class AppModelGenerator extends ModelGenerator {
         entity.addContentProvider();
         entity.addImport(GSON_EXPOSE);
         entity.addImport(GSON_SERIALIZEDNAME);
+    }
+
+    void addReadLaterItem(Schema schema) {
+        Entity entity = schema.addEntity("ReadLaterItem");
+
+        entity.addIdProperty();
+        Property readLaterItemId = addLongProperty(entity, "readLaterItemId").bindable(true).getProperty();
+        addEnumProperty(entity, "type", "info.xudshen.jandan.domain.enums.ReaderItemType");
+        addLongProperty(entity, "actualId").bindable(true);
+
+        addTimestampProperty(entity, "addDate").bindable(true);
+
+        addUniqueIndex(entity, readLaterItemId);
+
+        entity.addImport(GSON_EXPOSE);
     }
 
     public static void main(String[] args) throws Exception {

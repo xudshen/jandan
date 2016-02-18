@@ -35,8 +35,7 @@ import info.xudshen.jandan.internal.di.components.DaggerActivityComponent;
 import info.xudshen.jandan.internal.di.components.DaggerPostComponent;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
-import info.xudshen.jandan.internal.di.modules.PostModule;
-import info.xudshen.jandan.view.adapter.ItemReadPagerAdapter;
+import info.xudshen.jandan.view.adapter.ItemReaderPagerAdapter;
 import info.xudshen.jandan.view.transition.StackPageTransformer;
 
 public class ItemReaderActivity extends BaseActivity implements HasComponents {
@@ -85,7 +84,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents {
         //do other
         ButterKnife.bind(this);
 
-        viewPager.setAdapter(new ItemReadPagerAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(new ItemReaderPagerAdapter(getSupportFragmentManager()));
         viewPager.setPageTransformer(true, new StackPageTransformer());
 
         commentFab.setImageDrawable(new IconicsDrawable(this)

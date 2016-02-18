@@ -10,8 +10,8 @@ import info.xudshen.jandan.view.fragment.PostDetailFragment;
 /**
  * Created by xudshen on 16/1/28.
  */
-public class ItemReadPagerAdapter extends FragmentStatePagerAdapter {
-    public ItemReadPagerAdapter(FragmentManager fm) {
+public class ItemReaderPagerAdapter extends FragmentStatePagerAdapter {
+    public ItemReaderPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
