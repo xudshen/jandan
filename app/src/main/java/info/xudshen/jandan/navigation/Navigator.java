@@ -27,11 +27,11 @@ public class Navigator {
     /**
      * temporary disable this
      */
-    public void launchItemReader(BaseActivity fromActivity, View fromView, Long postId) {
+    public void launchItemReader(BaseActivity fromActivity, View fromView, int position) {
         ViewCompat.setTransitionName(fromView, fromActivity.getString(R.string.launch_item_reader_transition));
 
         Intent intent = new Intent(fromActivity, ItemReaderActivity.class);
-        intent.putExtra("postId", postId);
+        intent.putExtra(ItemReaderActivity.ARG_POSITION, position);
 
         ActivityOptionsCompat options = TransitionHelper.makeOptionsCompat(
                 fromActivity, Pair.create(fromView, "profile"));

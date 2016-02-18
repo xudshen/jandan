@@ -17,7 +17,7 @@ import rx.Subscriber;
 /**
  * Created by xudshen on 16/2/16.
  */
-@PerActivity
+//@PerActivity remove this since we need different presenter for each fragment
 public class PostDetailPresenter implements Presenter {
     private static final Logger logger = LoggerFactory.getLogger(PostDetailPresenter.class);
     private PostDetailView postDetailView;
@@ -48,14 +48,14 @@ public class PostDetailPresenter implements Presenter {
         this.postDetailView = null;
     }
 
-    public void initialize() {
-        this.loadPostDetail();
+    public void initialize(Long postId) {
+        this.loadPostDetail(postId);
     }
 
     /**
      * Loads user details.
      */
-    private void loadPostDetail() {
+    private void loadPostDetail(Long postId) {
         this.postDetailView.showLoading();
         this.getPostDetailUseCase.execute(this.postDetailView.bindToLifecycle(),
                 new Subscriber<Post>() {
@@ -74,6 +74,6 @@ public class PostDetailPresenter implements Presenter {
                     public void onNext(Post post) {
                         PostDetailPresenter.this.postDetailView.renderPostDetail(post);
                     }
-                });
+                }, postId);
     }
 }

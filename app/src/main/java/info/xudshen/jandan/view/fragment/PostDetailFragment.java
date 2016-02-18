@@ -16,12 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import butterknife.ButterKnife;
 import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
 import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
-import info.xudshen.jandan.BR;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.databinding.FragmentPostDetailBinding;
@@ -33,17 +30,29 @@ import info.xudshen.jandan.view.PostDetailView;
 
 public class PostDetailFragment extends BaseFragment implements PostDetailView {
     private static final Logger logger = LoggerFactory.getLogger(PostDetailFragment.class);
+    public static final String ARG_POST_ID = "ARG_POST_ID";
 
-    public static PostDetailFragment newInstance() {
-        return new PostDetailFragment();
+    public static PostDetailFragment newInstance(Long postId) {
+        Bundle args = new Bundle();
+        args.putLong(ARG_POST_ID, postId);
+        PostDetailFragment fragment = new PostDetailFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Inject
     PostDetailPresenter postDetailPresenter;
 
+    private Long postId;
     private FragmentPostDetailBinding binding;
 
     public PostDetailFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        postId = getArguments().getLong(ARG_POST_ID);
     }
 
     @Override
@@ -63,7 +72,7 @@ public class PostDetailFragment extends BaseFragment implements PostDetailView {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.postDetailPresenter.setView(this);
-        this.postDetailPresenter.initialize();
+        this.postDetailPresenter.initialize(postId);
     }
 
     @Override

@@ -67,10 +67,9 @@ public class PostListFragment extends BaseFragment implements PostListView {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_post_list, container, false);
 
         postListAdapter.setOnItemClickListener((itemView, position) -> {
-            SimplePost simplePost = simplePostDao.loadEntity(postListAdapter.getItemCursor(position));
-            logger.info("position={}, postId={}", position, simplePost.getPostId());
+            logger.info("position={}", position);
             getNavigator().launchItemReader((BaseActivity) getActivity(),
-                    itemView.findViewById(R.id.post_card_author), simplePost.getPostId());
+                    itemView.findViewById(R.id.post_card_author), position);
         });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());

@@ -26,9 +26,14 @@ import com.mikepenz.iconics.context.IconicsLayoutInflater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.data.dao.SimplePostDao;
+import info.xudshen.jandan.domain.enums.ReaderItemType;
+import info.xudshen.jandan.domain.model.SimplePost;
 import info.xudshen.jandan.internal.di.HasComponents;
 import info.xudshen.jandan.internal.di.components.ActivityComponent;
 import info.xudshen.jandan.internal.di.components.DaggerActivityComponent;
@@ -40,6 +45,7 @@ import info.xudshen.jandan.view.transition.StackPageTransformer;
 
 public class ItemReaderActivity extends BaseActivity implements HasComponents {
     private static final Logger logger = LoggerFactory.getLogger(ItemReaderActivity.class);
+    public static final String ARG_POSITION = "ARG_POSITION";
 
     @Bind(R.id.item_reader_view_pager)
     ViewPager viewPager;
@@ -58,6 +64,8 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents {
 
     private PostComponent postComponent;
     private ActivityComponent activityComponent;
+    @Inject
+    SimplePostDao simplePostDao;
 
     @Override
     protected void initializeInjector() {
@@ -84,8 +92,10 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents {
         //do other
         ButterKnife.bind(this);
 
-        viewPager.setAdapter(new ItemReaderPagerAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(new ItemReaderPagerAdapter(getSupportFragmentManager(), ReaderItemType.SimplePost, simplePostDao));
         viewPager.setPageTransformer(true, new StackPageTransformer());
+        int position = getIntent().getExtras().getInt(ARG_POSITION);
+        viewPager.setCurrentItem(position);
 
         commentFab.setImageDrawable(new IconicsDrawable(this)
                 .icon(GoogleMaterial.Icon.gmd_edit)
