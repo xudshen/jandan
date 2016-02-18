@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
-import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,11 +21,11 @@ import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.dao.SimplePostDao;
 import info.xudshen.jandan.databinding.FragmentPostListBinding;
-import info.xudshen.jandan.domain.model.SimplePost;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PostListPresenter;
 import info.xudshen.jandan.view.PostListView;
 import info.xudshen.jandan.view.activity.BaseActivity;
+import info.xudshen.jandan.view.widget.RefreshDirection;
 
 public class PostListFragment extends BaseFragment implements PostListView {
     private static final Logger logger = LoggerFactory.getLogger(PostListFragment.class);
@@ -75,20 +74,13 @@ public class PostListFragment extends BaseFragment implements PostListView {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         binding.myRecyclerView.setLayoutManager(linearLayoutManager);
         binding.myRecyclerView.setAdapter(postListAdapter);
+        binding.myRecyclerView.setOnLoadMoreListener(() -> {
+            this.postListPresenter.swipeUpStart();
+        });
 
         binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark, R.color.colorAccent);
-        binding.swipeRefreshLayout.setOnRefreshListener((direction) -> {
-            logger.info("refresh {}", direction);
-            switch (direction) {
-                case TOP: {
-                    this.postListPresenter.swipeDownStart();
-                    break;
-                }
-                case BOTTOM: {
-                    this.postListPresenter.swipeUpStart();
-                    break;
-                }
-            }
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> {
+            this.postListPresenter.swipeDownStart();
         });
 
         //init for MaterialViewPager
@@ -143,12 +135,12 @@ public class PostListFragment extends BaseFragment implements PostListView {
     //<editor-fold desc="Called by Presenter"
     @Override
     public void showLoading() {
-        binding.swipeRefreshLayout.setRefreshing(true);
+        binding.swipeRefreshLayout.setRefreshing(true, RefreshDirection.TOP);
     }
 
     @Override
     public void hideLoading() {
-        binding.swipeRefreshLayout.setRefreshing(false);
+        binding.swipeRefreshLayout.setRefreshing(false, RefreshDirection.TOP);
     }
 
     @Override
@@ -168,12 +160,14 @@ public class PostListFragment extends BaseFragment implements PostListView {
 
     @Override
     public void showSwipeUpLoading() {
-        binding.swipeRefreshLayout.setRefreshing(true);
+        binding.swipeRefreshLayout.setRefreshing(true, RefreshDirection.BOTTOM);
+        binding.myRecyclerView.setLoading(true);
     }
 
     @Override
     public void hideSwipeUpLoading() {
-        binding.swipeRefreshLayout.setRefreshing(false);
+        binding.swipeRefreshLayout.setRefreshing(false, RefreshDirection.BOTTOM);
+        binding.myRecyclerView.setLoading(false);
     }
 
     @Override

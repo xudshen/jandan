@@ -9,14 +9,13 @@
             type="info.xudshen.jandan.domain.model.Post" />
     </data>
 
-    <com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
+    <info.xudshen.jandan.view.widget.CustomSwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:direction="both"
         tools:context=".view.fragment.PostListFragment">
 
-        <android.support.v7.widget.RecyclerView
+        <info.xudshen.jandan.view.component.LoadMoreRecyclerView
             android:id="@+id/my_recycler_view"
             android:layout_width="match_parent"
 
@@ -25,7 +24,7 @@
             android:focusable="true"
 
             android:scrollbars="none" />
-    </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>
+    </info.xudshen.jandan.view.widget.CustomSwipeRefreshLayout>
 </layout>
 
 

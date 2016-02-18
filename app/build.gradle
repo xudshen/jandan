@@ -106,7 +106,6 @@ dependencies {
 
     compile dependencies.freemarker
     
-    compile dependencies.swipy
     compile('com.mikepenz:materialdrawer:5.0.0@aar') {
         transitive = true
     }

@@ -72,7 +72,6 @@ ext {
             //greendao
             freemarker     : "org.freemarker:freemarker:${freemarkerVersion}",
             //UI component
-            swipy          : "com.github.orangegangsters:swipy:1.2.0@aar",
     ]
 
     appTestDependencies = [
