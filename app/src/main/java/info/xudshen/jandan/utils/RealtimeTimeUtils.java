@@ -1,5 +1,7 @@
 package info.xudshen.jandan.utils;
 
+import android.text.format.DateUtils;
+
 import java.sql.Timestamp;
 
 /**
@@ -7,6 +9,7 @@ import java.sql.Timestamp;
  */
 public class RealtimeTimeUtils {
     public static String realtime(Timestamp timestamp) {
-        return timestamp != null ? timestamp.toString() : "";
+        if (timestamp == null) return "";
+        return DateUtils.getRelativeTimeSpanString(timestamp.getTime(), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
     }
 }

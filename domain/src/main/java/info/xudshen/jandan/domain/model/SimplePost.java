@@ -31,7 +31,7 @@ public class SimplePost {
     @Expose
     private Timestamp modified;
     @Expose
-    private String commentCount;
+    private Long commentCount;
     @Expose
     private String authorName;
     @Expose
@@ -49,7 +49,7 @@ public class SimplePost {
         this.id = id;
     }
 
-    public SimplePost(Long id, Long postId, String url, String title, String excerpt, String thumbC, Timestamp date, Timestamp modified, String commentCount, String authorName, String categoryDescription, String expireTag) {
+    public SimplePost(Long id, Long postId, String url, String title, String excerpt, String thumbC, Timestamp date, Timestamp modified, Long commentCount, String authorName, String categoryDescription, String expireTag) {
         this.id = id;
         this.postId = postId;
         this.url = url;
@@ -128,11 +128,11 @@ public class SimplePost {
         this.modified = modified;
     }
 
-    public String getCommentCount() {
+    public Long getCommentCount() {
         return commentCount;
     }
 
-    public void setCommentCount(String commentCount) {
+    public void setCommentCount(Long commentCount) {
         this.commentCount = commentCount;
     }
 

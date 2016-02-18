@@ -24,4 +24,5 @@
 
     <string name="launch_item_reader_transition">launch_item_reader_transition</string>
     <string name="press_again_exit">Press Again To Exit</string>
+    <string name="meta_format_comment_count">%d comments</string>
 </resources>

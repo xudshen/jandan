@@ -39,7 +39,7 @@ public class PostObservable extends android.databinding.BaseObservable  implemen
     @Expose
     private Timestamp modified;
     @Expose
-    private String commentCount;
+    private Long commentCount;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -51,7 +51,7 @@ public class PostObservable extends android.databinding.BaseObservable  implemen
         this.id = id;
     }
 
-    public PostObservable(Long id, Long postId, String url, String title, String content, String excerpt, Timestamp date, Timestamp modified, String commentCount) {
+    public PostObservable(Long id, Long postId, String url, String title, String content, String excerpt, Timestamp date, Timestamp modified, Long commentCount) {
         this.id = id;
         this.postId = postId;
         this.url = url;
@@ -152,11 +152,11 @@ public class PostObservable extends android.databinding.BaseObservable  implemen
         this.modified = modified;
     }
 
-    public String getCommentCount() {
+    public Long getCommentCount() {
         return commentCount;
     }
 
-    public void setCommentCount(String commentCount) {
+    public void setCommentCount(Long commentCount) {
         this.commentCount = commentCount;
     }
 

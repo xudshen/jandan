@@ -48,7 +48,7 @@ public class SimplePostDao extends DDAbstractDao<SimplePost, Long> {
         public final static Property ThumbC = new Property(5, String.class, "thumbC", false, "THUMB_C");
         public final static Property Date = new Property(6, Long.class, "date", false, "DATE");
         public final static Property Modified = new Property(7, Long.class, "modified", false, "MODIFIED");
-        public final static Property CommentCount = new Property(8, String.class, "commentCount", false, "COMMENT_COUNT");
+        public final static Property CommentCount = new Property(8, Long.class, "commentCount", false, "COMMENT_COUNT");
         public final static Property AuthorName = new Property(9, String.class, "authorName", false, "AUTHOR_NAME");
         public final static Property CategoryDescription = new Property(10, String.class, "categoryDescription", false, "CATEGORY_DESCRIPTION");
         public final static Property ExpireTag = new Property(11, String.class, "expireTag", false, "EXPIRE_TAG");
@@ -77,7 +77,7 @@ public class SimplePostDao extends DDAbstractDao<SimplePost, Long> {
                 "\"THUMB_C\" TEXT," + // 5: thumbC
                 "\"DATE\" INTEGER," + // 6: date
                 "\"MODIFIED\" INTEGER," + // 7: modified
-                "\"COMMENT_COUNT\" TEXT," + // 8: commentCount
+                "\"COMMENT_COUNT\" INTEGER," + // 8: commentCount
                 "\"AUTHOR_NAME\" TEXT," + // 9: authorName
                 "\"CATEGORY_DESCRIPTION\" TEXT," + // 10: categoryDescription
                 "\"EXPIRE_TAG\" TEXT);"); // 11: expireTag
@@ -137,9 +137,9 @@ public class SimplePostDao extends DDAbstractDao<SimplePost, Long> {
             stmt.bindLong(8, modifiedConverter.convertToDatabaseValue(modified));
         }
  
-        String commentCount = entity.getCommentCount();
+        Long commentCount = entity.getCommentCount();
         if (commentCount != null) {
-            stmt.bindString(9, commentCount);
+            stmt.bindLong(9, commentCount);
         }
  
         String authorName = entity.getAuthorName();
@@ -176,7 +176,7 @@ public class SimplePostDao extends DDAbstractDao<SimplePost, Long> {
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // thumbC
             cursor.isNull(offset + 6) ? null : dateConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 6)), // date
             cursor.isNull(offset + 7) ? null : modifiedConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 7)), // modified
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // commentCount
+            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // commentCount
             cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // authorName
             cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // categoryDescription
             cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11) // expireTag
@@ -195,7 +195,7 @@ public class SimplePostDao extends DDAbstractDao<SimplePost, Long> {
         entity.setThumbC(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setDate(cursor.isNull(offset + 6) ? null : dateConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 6)));
         entity.setModified(cursor.isNull(offset + 7) ? null : modifiedConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 7)));
-        entity.setCommentCount(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setCommentCount(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
         entity.setAuthorName(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
         entity.setCategoryDescription(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
         entity.setExpireTag(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));

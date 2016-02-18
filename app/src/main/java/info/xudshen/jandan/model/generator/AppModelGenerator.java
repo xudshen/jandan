@@ -55,7 +55,7 @@ public class AppModelGenerator extends ModelGenerator {
         addTimestampProperty(entity, "date");
         addTimestampProperty(entity, "modified");
 
-        addStringProperty(entity, "commentCount");
+        addLongProperty(entity, "commentCount");
 
         addUniqueIndex(entity, postId);
 
@@ -78,7 +78,7 @@ public class AppModelGenerator extends ModelGenerator {
         addTimestampProperty(entity, "date");
         addTimestampProperty(entity, "modified");
 
-        addStringProperty(entity, "commentCount");
+        addLongProperty(entity, "commentCount");
 
         addStringProperty(entity, "authorName");
         addStringProperty(entity, "categoryDescription");
