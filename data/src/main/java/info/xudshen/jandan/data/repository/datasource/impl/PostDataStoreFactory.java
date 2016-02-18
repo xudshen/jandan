@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import info.xudshen.jandan.data.api.ApiAdapter;
+import info.xudshen.jandan.data.dao.MetaDao;
 import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.data.dao.SimplePostDao;
 import info.xudshen.jandan.data.repository.datasource.PostDataStore;
@@ -16,14 +17,16 @@ import info.xudshen.jandan.domain.model.SimplePost;
 public class PostDataStoreFactory {
     private final PostDao postDao;
     private final SimplePostDao simplePostDao;
+    private final MetaDao metaDao;
 
     @Inject
-    public PostDataStoreFactory(PostDao postDao, SimplePostDao simplePostDao) {
-        if (postDao == null || simplePostDao == null) {
+    public PostDataStoreFactory(PostDao postDao, SimplePostDao simplePostDao, MetaDao metaDao) {
+        if (postDao == null || simplePostDao == null || metaDao == null) {
             throw new IllegalArgumentException("Constructor parameters cannot be null!!!");
         }
         this.postDao = postDao;
         this.simplePostDao = simplePostDao;
+        this.metaDao = metaDao;
     }
 
     /**
@@ -37,13 +40,15 @@ public class PostDataStoreFactory {
                 .buildCount().forCurrentThread().count() > 0) {
             postDataStore = new LocalPostDataStore(postDao);
         } else {
-            postDataStore = new CloudPostDataStore(ApiAdapter.getPostService(), postDao, simplePostDao);
+            postDataStore = new CloudPostDataStore(ApiAdapter.getPostService(),
+                    postDao, simplePostDao, metaDao);
         }
 
         return postDataStore;
     }
 
     public PostDataStore createCloudDataStore() {
-        return new CloudPostDataStore(ApiAdapter.getPostService(), postDao, simplePostDao);
+        return new CloudPostDataStore(ApiAdapter.getPostService(),
+                postDao, simplePostDao, metaDao);
     }
 }

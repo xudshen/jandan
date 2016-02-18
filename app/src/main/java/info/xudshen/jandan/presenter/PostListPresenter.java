@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import info.xudshen.jandan.data.dao.PostDao;
+import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.internal.di.PerActivity;
 import info.xudshen.jandan.view.PostListView;
@@ -23,12 +24,10 @@ public class PostListPresenter implements Presenter {
 
     private PostListView postListView;
 
-    private UseCase getPostListUseCase;
-
-    private Long page = 1l;
+    private IterableUseCase getPostListUseCase;
 
     @Inject
-    public PostListPresenter(@Named("postList") UseCase getPostListUseCase) {
+    public PostListPresenter(@Named("postList") IterableUseCase getPostListUseCase) {
         this.getPostListUseCase = getPostListUseCase;
     }
 
@@ -69,14 +68,13 @@ public class PostListPresenter implements Presenter {
                     public void onNext(Object o) {
                         PostListPresenter.this.postListView.renderList();
                     }
-                }, page);
+                });
     }
 
     /**
      * load new data
      */
     public void swipeDownStart() {
-        page = 1l;
         initialize();
     }
 
@@ -84,9 +82,8 @@ public class PostListPresenter implements Presenter {
      * load history data
      */
     public void swipeUpStart() {
-        page = page + 1;
         this.postListView.showSwipeUpLoading();
-        this.getPostListUseCase.execute(this.postListView.bindToLifecycle(),
+        this.getPostListUseCase.executeNext(this.postListView.bindToLifecycle(),
                 new Subscriber() {
                     @Override
                     public void onCompleted() {
@@ -102,6 +99,6 @@ public class PostListPresenter implements Presenter {
                     public void onNext(Object o) {
                         PostListPresenter.this.postListView.renderList();
                     }
-                }, page);
+                });
     }
 }

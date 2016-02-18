@@ -23,6 +23,10 @@ public class ModelContentProvider extends ContentProvider {
 
     public static final String AUTHORITY = "info.xudshen.jandan.data.dao.provider";
 
+    public static final String META_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
+            + "/" + MetaDao.TABLENAME;
+    public static final String META_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
+            + "/" + MetaDao.TABLENAME;
     public static final String POST_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
             + "/" + PostDao.TABLENAME;
     public static final String POST_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
@@ -44,21 +48,25 @@ public class ModelContentProvider extends ContentProvider {
     public static final String COMMENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
             + "/" + CommentDao.TABLENAME;
 
-    private static final int POST_DIR = 0x0000;
-    private static final int POST_ID = 0x1000;
-    private static final int SIMPLE_POST_DIR = 0x0001;
-    private static final int SIMPLE_POST_ID = 0x1001;
-    private static final int AUTHOR_DIR = 0x0002;
-    private static final int AUTHOR_ID = 0x1002;
-    private static final int CATEGORY_DIR = 0x0003;
-    private static final int CATEGORY_ID = 0x1003;
-    private static final int COMMENT_DIR = 0x0004;
-    private static final int COMMENT_ID = 0x1004;
+    private static final int META_DIR = 0x0000;
+    private static final int META_ID = 0x1000;
+    private static final int POST_DIR = 0x0001;
+    private static final int POST_ID = 0x1001;
+    private static final int SIMPLE_POST_DIR = 0x0002;
+    private static final int SIMPLE_POST_ID = 0x1002;
+    private static final int AUTHOR_DIR = 0x0003;
+    private static final int AUTHOR_ID = 0x1003;
+    private static final int CATEGORY_DIR = 0x0004;
+    private static final int CATEGORY_ID = 0x1004;
+    private static final int COMMENT_DIR = 0x0005;
+    private static final int COMMENT_ID = 0x1005;
 
     private static final UriMatcher sURIMatcher;
 
     static {
         sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+        sURIMatcher.addURI(AUTHORITY, MetaDao.TABLENAME, META_DIR);
+        sURIMatcher.addURI(AUTHORITY, MetaDao.TABLENAME + "/#", META_ID);
         sURIMatcher.addURI(AUTHORITY, PostDao.TABLENAME, POST_DIR);
         sURIMatcher.addURI(AUTHORITY, PostDao.TABLENAME + "/#", POST_ID);
         sURIMatcher.addURI(AUTHORITY, SimplePostDao.TABLENAME, SIMPLE_POST_DIR);
@@ -100,6 +108,7 @@ public class ModelContentProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
         int uriType = sURIMatcher.match(uri);
         switch (uriType) {
+            case META_ID:
             case POST_ID:
             case SIMPLE_POST_ID:
             case AUTHOR_ID:
@@ -128,6 +137,7 @@ public class ModelContentProvider extends ContentProvider {
                       String[] selectionArgs) {
         int uriType = sURIMatcher.match(uri);
         switch (uriType) {
+            case META_ID:
             case POST_ID:
             case SIMPLE_POST_ID:
             case AUTHOR_ID:
@@ -148,6 +158,14 @@ public class ModelContentProvider extends ContentProvider {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         int uriType = sURIMatcher.match(uri);
         switch (uriType) {
+            case META_DIR:
+                queryBuilder.setTables(MetaDao.TABLENAME);
+                break;
+            case META_ID:
+                queryBuilder.setTables(MetaDao.TABLENAME);
+                queryBuilder.appendWhere(MetaDao.Properties.Id.columnName + "="
+                        + uri.getLastPathSegment());
+                break;
             case POST_DIR:
                 queryBuilder.setTables(PostDao.TABLENAME);
                 break;
@@ -203,6 +221,10 @@ public class ModelContentProvider extends ContentProvider {
     @Override
     public final String getType(Uri uri) {
         switch (sURIMatcher.match(uri)) {
+            case META_DIR:
+                return META_TYPE;
+            case META_ID:
+                return META_ITEM_TYPE;
             case POST_DIR:
                 return POST_TYPE;
             case POST_ID:

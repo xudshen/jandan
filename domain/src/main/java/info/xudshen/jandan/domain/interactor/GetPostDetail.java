@@ -22,7 +22,7 @@ public class GetPostDetail extends UseCase {
 
     @Override
     protected Observable buildUseCaseObservable() {
-        return null;
+        throw new UnsupportedOperationException("need pass a postId");
     }
 
     @Override

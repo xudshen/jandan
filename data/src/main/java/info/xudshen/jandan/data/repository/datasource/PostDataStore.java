@@ -13,5 +13,7 @@ import info.xudshen.jandan.domain.model.Post;
 public interface PostDataStore {
     Observable<Post> post(Long postId);
 
-    Observable<List<SimplePost>> postList(Long page);
+    Observable<List<SimplePost>> postList();
+
+    Observable<List<SimplePost>> postListNext();
 }

@@ -24,6 +24,7 @@ import info.xudshen.jandan.domain.executor.PostExecutionThread;
 import info.xudshen.jandan.domain.executor.ThreadExecutor;
 import info.xudshen.jandan.domain.interactor.GetPostDetail;
 import info.xudshen.jandan.domain.interactor.GetPostList;
+import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.domain.model.Post;
 import info.xudshen.jandan.domain.model.SimplePost;
@@ -93,8 +94,8 @@ public class PostModule {
     @Provides
     @PerActivity
     @Named("postList")
-    UseCase provideGetPostListUseCase(PostRepository postRepository,
-                                      ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+    IterableUseCase provideGetPostListUseCase(PostRepository postRepository,
+                                              ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         return new GetPostList(postRepository, threadExecutor, postExecutionThread);
     }
 }

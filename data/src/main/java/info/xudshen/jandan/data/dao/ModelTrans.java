@@ -5,11 +5,13 @@ import java.util.List;
 
 import info.xudshen.droiddata.dao.IModelTrans;
 import info.xudshen.droiddata.dao.IModelObservable;
+import info.xudshen.jandan.domain.model.Meta;
 import info.xudshen.jandan.domain.model.Post;
 import info.xudshen.jandan.domain.model.SimplePost;
 import info.xudshen.jandan.domain.model.Author;
 import info.xudshen.jandan.domain.model.Category;
 import info.xudshen.jandan.domain.model.Comment;
+import info.xudshen.jandan.data.model.observable.MetaObservable;
 import info.xudshen.jandan.data.model.observable.PostObservable;
 import info.xudshen.jandan.data.model.observable.SimplePostObservable;
 import info.xudshen.jandan.data.model.observable.AuthorObservable;
@@ -18,6 +20,13 @@ import info.xudshen.jandan.data.model.observable.CommentObservable;
 
 public class ModelTrans {
 
+    private static final IModelTrans<Meta, MetaObservable> META_TRANS =
+            new IModelTrans<Meta, MetaObservable>() {
+                @Override
+                public MetaObservable to(Meta entity) {
+                    return new MetaObservable(entity);
+                }
+            };
     private static final IModelTrans<Post, PostObservable> POST_TRANS =
             new IModelTrans<Post, PostObservable>() {
                 @Override
@@ -63,6 +72,33 @@ public class ModelTrans {
     public ModelTrans(DaoSession daoSession) {
         this.daoSession = daoSession;
     }
+
+    //<editor-fold desc="TransMeta">
+    <TO extends IModelObservable> TO transMeta(Meta entity, IModelTrans<Meta, TO> trans) {
+        TO entityOb = trans.to(entity);
+        this.daoSession.getMetaDao().registerExtraOb(entityOb);
+        return entityOb;
+    }
+
+    MetaObservable transMeta(Meta entity) {
+        return transMeta(entity, META_TRANS);
+    }
+
+    <TO extends IModelObservable> Iterable<TO> transMeta(Iterable<Meta> entities, IModelTrans<Meta, TO> trans) {
+        List<TO> list = new ArrayList<>();
+        MetaDao dao = this.daoSession.getMetaDao();
+        for (Meta entity : entities) {
+            TO entityOb = trans.to(entity);
+            list.add(entityOb);
+            dao.registerExtraOb(entityOb);
+        }
+        return list;
+    }
+
+    Iterable<MetaObservable> transMeta(Iterable<Meta> entities) {
+        return transMeta(entities, META_TRANS);
+    }
+    //</editor-fold>
 
     //<editor-fold desc="TransPost">
     <TO extends IModelObservable> TO transPost(Post entity, IModelTrans<Post, TO> trans) {

@@ -10,23 +10,33 @@ import rx.Observable;
 /**
  * Created by xudshen on 16/2/17.
  */
-public class GetPostList extends UseCase {
+public class GetPostList extends IterableUseCase {
     private final PostRepository postRepository;
 
     @Inject
-    public GetPostList(PostRepository postRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+    public GetPostList(PostRepository postRepository,
+                       ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
         this.postRepository = postRepository;
     }
 
     @Override
     protected Observable buildUseCaseObservable() {
-        return null;
+        return this.postRepository.postList();
     }
 
     @Override
     protected Observable buildUseCaseObservable(Long... params) {
-        Long page = params[0];
-        return this.postRepository.postList(page);
+        throw new UnsupportedOperationException("");
+    }
+
+    @Override
+    protected Observable buildIterableUseCaseObservable() {
+        return this.postRepository.postListNextPage();
+    }
+
+    @Override
+    protected Observable buildIterableUseCaseObservable(Long... params) {
+        throw new UnsupportedOperationException("");
     }
 }

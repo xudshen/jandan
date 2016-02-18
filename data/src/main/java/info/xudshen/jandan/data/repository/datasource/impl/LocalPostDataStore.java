@@ -1,5 +1,7 @@
 package info.xudshen.jandan.data.repository.datasource.impl;
 
+import org.apache.commons.lang3.NotImplementedException;
+
 import java.util.List;
 
 import info.xudshen.jandan.data.dao.PostDao;
@@ -41,8 +43,12 @@ public class LocalPostDataStore implements PostDataStore {
     }
 
     @Override
-    public Observable<List<SimplePost>> postList(Long page) {
-        //skip
-        return null;
+    public Observable<List<SimplePost>> postList() {
+        throw new NotImplementedException("");
+    }
+
+    @Override
+    public Observable<List<SimplePost>> postListNext() {
+        throw new NotImplementedException("");
     }
 }

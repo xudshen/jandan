@@ -8,10 +8,12 @@ import java.util.List;
 
 import info.xudshen.jandan.data.api.IPostService;
 import info.xudshen.jandan.data.api.response.PostListResponse;
+import info.xudshen.jandan.data.dao.MetaDao;
 import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.data.dao.SimplePostDao;
 import info.xudshen.jandan.data.repository.datasource.PostDataStore;
 import info.xudshen.jandan.domain.model.Comment;
+import info.xudshen.jandan.domain.model.Meta;
 import info.xudshen.jandan.domain.model.Post;
 import info.xudshen.jandan.domain.model.SimplePost;
 import rx.Observable;
@@ -23,13 +25,16 @@ public class CloudPostDataStore implements PostDataStore {
     private static final Logger logger = LoggerFactory.getLogger(CloudPostDataStore.class);
 
     private final IPostService postService;
+
     private final PostDao postDao;
     private final SimplePostDao simplePostDao;
+    private final MetaDao metaDao;
 
-    public CloudPostDataStore(IPostService postService, PostDao postDao, SimplePostDao simplePostDao) {
+    public CloudPostDataStore(IPostService postService, PostDao postDao, SimplePostDao simplePostDao, MetaDao metaDao) {
         this.postService = postService;
         this.postDao = postDao;
         this.simplePostDao = simplePostDao;
+        this.metaDao = metaDao;
     }
 
     @Override
@@ -49,9 +54,22 @@ public class CloudPostDataStore implements PostDataStore {
                 });
     }
 
+    private Meta getMeta() {
+        Meta meta = null;
+        if (this.metaDao.count() == 0) {
+            meta = new Meta(1l);
+            meta.setPostPage(0l);
+            this.metaDao.insertInTx(meta);
+        } else {
+            meta = this.metaDao.queryBuilder().where(MetaDao.Properties.Id.eq(1l))
+                    .build().forCurrentThread().unique();
+        }
+        return meta;
+    }
+
     @Override
-    public Observable<List<SimplePost>> postList(Long page) {
-        return this.postService.getPostListAsync(page)
+    public Observable<List<SimplePost>> postList() {
+        return this.postService.getPostListAsync(1l)
                 .map(postListResponse -> {
                     List<SimplePost> simplePosts = new ArrayList<SimplePost>();
                     for (PostListResponse.PostWrapper postWrapper : postListResponse.getPosts()) {
@@ -60,11 +78,38 @@ public class CloudPostDataStore implements PostDataStore {
                     return simplePosts;
                 })
                 .doOnNext(simplePosts -> {
-                    if (page == 1l) {
+                    //TODO: not right
+                    CloudPostDataStore.this.simplePostDao.deleteAll();
+                    CloudPostDataStore.this.simplePostDao.insertOrReplaceInTx(simplePosts);
+                })
+                .doOnCompleted(() -> {
+                    Meta meta = getMeta();
+                    meta.setPostPage(1l);
+                    this.metaDao.updateInTx(meta);
+                });
+    }
+
+    @Override
+    public Observable<List<SimplePost>> postListNext() {
+        Meta meta = getMeta();
+        return this.postService.getPostListAsync(meta.getPostPage() + 1)
+                .map(postListResponse -> {
+                    List<SimplePost> simplePosts = new ArrayList<SimplePost>();
+                    for (PostListResponse.PostWrapper postWrapper : postListResponse.getPosts()) {
+                        simplePosts.add(postWrapper.getSimplePost());
+                    }
+                    return simplePosts;
+                })
+                .doOnNext(simplePosts -> {
+                    if (meta.getPostPage() + 1 == 1) {
                         //TODO: not right
                         CloudPostDataStore.this.simplePostDao.deleteAll();
                     }
                     CloudPostDataStore.this.simplePostDao.insertOrReplaceInTx(simplePosts);
+                })
+                .doOnCompleted(() -> {
+                    meta.setPostPage(meta.getPostPage() + 1);
+                    this.metaDao.updateInTx(meta);
                 });
     }
 }

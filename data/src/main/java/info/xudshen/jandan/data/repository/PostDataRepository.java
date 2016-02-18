@@ -31,7 +31,12 @@ public class PostDataRepository implements PostRepository {
     }
 
     @Override
-    public Observable<List<SimplePost>> postList(Long page) {
-        return this.postDataStoreFactory.createCloudDataStore().postList(page);
+    public Observable<List<SimplePost>> postList() {
+        return this.postDataStoreFactory.createCloudDataStore().postList();
+    }
+
+    @Override
+    public Observable<List<SimplePost>> postListNextPage() {
+        return this.postDataStoreFactory.createCloudDataStore().postListNext();
     }
 }
