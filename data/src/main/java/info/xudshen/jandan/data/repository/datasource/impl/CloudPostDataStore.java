@@ -123,6 +123,7 @@ public class CloudPostDataStore implements PostDataStore {
                     for (Comment comment : comments) {
                         comment.setPostId(postId);
                         comment.setContent(HtmlUtils.cleanComment(comment.getContent()));
+                        comment.setCommentTo(HtmlUtils.getCommentTo(comment.getContent()));
                     }
                     commentDao.insertOrReplaceInTx(comments);
                 });
@@ -154,6 +155,7 @@ public class CloudPostDataStore implements PostDataStore {
                     for (Comment comment : comments) {
                         comment.setPostId(postId);
                         comment.setContent(HtmlUtils.cleanComment(comment.getContent()));
+                        comment.setCommentTo(HtmlUtils.getCommentTo(comment.getContent()));
                     }
                     commentDao.insertOrReplaceInTx(comments);
                 });

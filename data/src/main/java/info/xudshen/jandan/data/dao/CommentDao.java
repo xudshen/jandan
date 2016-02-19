@@ -51,6 +51,7 @@ public class CommentDao extends DDAbstractDao<Comment, Long> {
         public final static Property VotePositive = new Property(8, Long.class, "votePositive", false, "VOTE_POSITIVE");
         public final static Property VoteNegative = new Property(9, Long.class, "voteNegative", false, "VOTE_NEGATIVE");
         public final static Property Index = new Property(10, Long.class, "index", false, "INDEX");
+        public final static Property CommentTo = new Property(11, Long.class, "commentTo", false, "COMMENT_TO");
     }
 
     private final TimestampPropertyConverter dateConverter = new TimestampPropertyConverter();
@@ -77,7 +78,8 @@ public class CommentDao extends DDAbstractDao<Comment, Long> {
                 "\"PARENT\" INTEGER," + // 7: parent
                 "\"VOTE_POSITIVE\" INTEGER," + // 8: votePositive
                 "\"VOTE_NEGATIVE\" INTEGER," + // 9: voteNegative
-                "\"INDEX\" INTEGER);"); // 10: index
+                "\"INDEX\" INTEGER," + // 10: index
+                "\"COMMENT_TO\" INTEGER);"); // 11: commentTo
         // Add Indexes
         db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_COMMENT_COMMENT_ID_POST_ID ON COMMENT" +
                 " (\"COMMENT_ID\",\"POST_ID\");");
@@ -148,6 +150,11 @@ public class CommentDao extends DDAbstractDao<Comment, Long> {
         if (index != null) {
             stmt.bindLong(11, index);
         }
+ 
+        Long commentTo = entity.getCommentTo();
+        if (commentTo != null) {
+            stmt.bindLong(12, commentTo);
+        }
     }
 
     /** @inheritdoc */
@@ -170,7 +177,8 @@ public class CommentDao extends DDAbstractDao<Comment, Long> {
             cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // parent
             cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // votePositive
             cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9), // voteNegative
-            cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10) // index
+            cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10), // index
+            cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11) // commentTo
         );
         return entity;
     }
@@ -189,6 +197,7 @@ public class CommentDao extends DDAbstractDao<Comment, Long> {
         entity.setVotePositive(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
         entity.setVoteNegative(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
         entity.setIndex(cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10));
+        entity.setCommentTo(cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11));
     }
     
     /** @inheritdoc */

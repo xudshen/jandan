@@ -36,6 +36,8 @@ public class Comment {
     private Long voteNegative;
     @Expose
     private Long index;
+    @Expose
+    private Long commentTo;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -47,7 +49,7 @@ public class Comment {
         this.id = id;
     }
 
-    public Comment(Long id, Long commentId, Long postId, String name, String url, Timestamp date, String content, Long parent, Long votePositive, Long voteNegative, Long index) {
+    public Comment(Long id, Long commentId, Long postId, String name, String url, Timestamp date, String content, Long parent, Long votePositive, Long voteNegative, Long index, Long commentTo) {
         this.id = id;
         this.commentId = commentId;
         this.postId = postId;
@@ -59,6 +61,7 @@ public class Comment {
         this.votePositive = votePositive;
         this.voteNegative = voteNegative;
         this.index = index;
+        this.commentTo = commentTo;
     }
 
     public Long getId() {
@@ -147,6 +150,14 @@ public class Comment {
 
     public void setIndex(Long index) {
         this.index = index;
+    }
+
+    public Long getCommentTo() {
+        return commentTo;
+    }
+
+    public void setCommentTo(Long commentTo) {
+        this.commentTo = commentTo;
     }
 
     // KEEP METHODS - put your custom methods here

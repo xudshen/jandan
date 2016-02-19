@@ -157,6 +157,8 @@ public class AppModelGenerator extends ModelGenerator {
         addLongProperty(entity, "voteNegative").bindable(true);
         addLongProperty(entity, "index").bindable(true);
 
+        addLongProperty(entity, "commentTo").bindable(true);
+
         addUniqueIndex(entity, commentId, postId);
 
         entity.addContentProvider();

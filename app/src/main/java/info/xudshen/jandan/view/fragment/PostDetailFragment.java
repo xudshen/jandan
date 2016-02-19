@@ -4,11 +4,16 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -135,7 +140,26 @@ public class PostDetailFragment extends BaseFragment implements PostDetailView {
                     .build();
 
             postCommentAdapter.setOnItemClickListener((v, position) -> {
+                Comment comment = commentDao.loadEntity(postCommentAdapter.getItemCursor(position));
+                if (comment != null && comment.getCommentTo() != null) {
+                    Comment commentTo = commentDao.queryBuilder()
+                            .where(CommentDao.Properties.CommentId.eq(comment.getCommentTo()),
+                                    CommentDao.Properties.PostId.eq(postId))
+                            .build().forCurrentThread().unique();
+                    if (commentTo != null) {
+                        Context mContext = PostDetailFragment.this.getContext();
+                        LayoutInflater inflater = (LayoutInflater)
+                                mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+                        ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.post_comment_item_popup, null, false);
+                        viewDataBinding.setVariable(BR.comment, commentTo);
+                        viewDataBinding.executePendingBindings();
+
+                        AlertDialog alertDialog = (new AlertDialog.Builder(mContext))
+                                .setView(viewDataBinding.getRoot()).create();
+                        alertDialog.show();
+                    }
+                }
             });
             binding.postWithCommentList.setAdapter(postCommentAdapter);
 

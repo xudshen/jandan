@@ -44,6 +44,8 @@ public class CommentObservable extends android.databinding.BaseObservable  imple
     private Long voteNegative;
     @Expose
     private Long index;
+    @Expose
+    private Long commentTo;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -55,7 +57,7 @@ public class CommentObservable extends android.databinding.BaseObservable  imple
         this.id = id;
     }
 
-    public CommentObservable(Long id, Long commentId, Long postId, String name, String url, Timestamp date, String content, Long parent, Long votePositive, Long voteNegative, Long index) {
+    public CommentObservable(Long id, Long commentId, Long postId, String name, String url, Timestamp date, String content, Long parent, Long votePositive, Long voteNegative, Long index, Long commentTo) {
         this.id = id;
         this.commentId = commentId;
         this.postId = postId;
@@ -67,6 +69,7 @@ public class CommentObservable extends android.databinding.BaseObservable  imple
         this.votePositive = votePositive;
         this.voteNegative = voteNegative;
         this.index = index;
+        this.commentTo = commentTo;
     }
 
     public Long getId() {
@@ -202,6 +205,19 @@ public class CommentObservable extends android.databinding.BaseObservable  imple
         }
     }
 
+    @Bindable
+    public Long getCommentTo() {
+        return commentTo;
+    }
+
+    public void setCommentTo(Long commentTo) {
+        if ((this.commentTo == null && commentTo != null)
+                || (this.commentTo != null && !this.commentTo.equals(commentTo))) {
+            this.commentTo = commentTo;
+            notifyPropertyChanged(BR.commentTo);
+        }
+    }
+
 
     /**
      * convert entity to entityObservable
@@ -218,6 +234,7 @@ public class CommentObservable extends android.databinding.BaseObservable  imple
         this.votePositive = entity.getVotePositive();
         this.voteNegative = entity.getVoteNegative();
         this.index = entity.getIndex();
+        this.commentTo = entity.getCommentTo();
     }
 
     @Override
@@ -274,6 +291,11 @@ public class CommentObservable extends android.databinding.BaseObservable  imple
                 || (this.index != null && !this.index.equals(entity.getIndex()))) {
             this.index = entity.getIndex();
             propertyChanges.add(BR.index);
+        }
+        if ((this.commentTo == null && entity.getCommentTo() != null)
+                || (this.commentTo != null && !this.commentTo.equals(entity.getCommentTo()))) {
+            this.commentTo = entity.getCommentTo();
+            propertyChanges.add(BR.commentTo);
         }
 
         if (propertyChanges.size() == 1) {
