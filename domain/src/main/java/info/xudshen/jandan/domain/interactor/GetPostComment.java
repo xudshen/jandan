@@ -10,7 +10,7 @@ import rx.Observable;
 /**
  * Created by xudshen on 16/2/19.
  */
-public class GetPostComment extends UseCase {
+public class GetPostComment extends IterableUseCase {
     private final PostRepository postRepository;
 
     @Inject
@@ -28,5 +28,16 @@ public class GetPostComment extends UseCase {
     protected Observable buildUseCaseObservable(Long... params) {
         Long postId = params[0];
         return this.postRepository.postCommentList(postId);
+    }
+
+    @Override
+    protected Observable buildIterableUseCaseObservable() {
+        throw new UnsupportedOperationException("need pass a postId");
+    }
+
+    @Override
+    protected Observable buildIterableUseCaseObservable(Long... params) {
+        Long postId = params[0];
+        return this.postRepository.postCommentListNext(postId);
     }
 }

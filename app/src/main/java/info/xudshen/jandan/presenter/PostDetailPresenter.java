@@ -10,10 +10,12 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.Post;
 import info.xudshen.jandan.view.PostDetailView;
+import info.xudshen.jandan.view.fragment.PostDetailFragment;
 import rx.Subscriber;
 
 /**
@@ -25,11 +27,11 @@ public class PostDetailPresenter implements Presenter {
     private PostDetailView postDetailView;
 
     private final UseCase getPostDetailUseCase;
-    private final UseCase getPostCommentUseCase;
+    private final IterableUseCase getPostCommentUseCase;
 
     @Inject
     public PostDetailPresenter(@Named("postDetail") UseCase getPostDetailUseCase,
-                               @Named("postComment") UseCase getPostCommentUseCase) {
+                               @Named("postComment") IterableUseCase getPostCommentUseCase) {
         this.getPostDetailUseCase = getPostDetailUseCase;
         this.getPostCommentUseCase = getPostCommentUseCase;
     }
@@ -59,7 +61,7 @@ public class PostDetailPresenter implements Presenter {
 
     public void refreshComment(Long postId) {
         this.postDetailView.showSwipeUpLoading();
-        this.getPostCommentUseCase.execute(this.postDetailView.bindToLifecycle(),
+        this.getPostCommentUseCase.executeNext(this.postDetailView.bindToLifecycle(),
                 new Subscriber<List<Comment>>() {
                     @Override
                     public void onCompleted() {
@@ -74,6 +76,9 @@ public class PostDetailPresenter implements Presenter {
 
                     @Override
                     public void onNext(List<Comment> comments) {
+                        if (comments.size() == 0) {
+                            PostDetailPresenter.this.postDetailView.noMoreComments();
+                        }
                     }
                 }, postId);
     }
@@ -92,6 +97,8 @@ public class PostDetailPresenter implements Presenter {
 
                     @Override
                     public void onError(Throwable e) {
+                        PostDetailPresenter.this.postDetailView.hideLoading();
+                        PostDetailPresenter.this.postDetailView.showRetry();
                         //do something
                         logger.error("", e);
                     }

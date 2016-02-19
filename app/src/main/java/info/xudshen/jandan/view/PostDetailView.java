@@ -10,5 +10,7 @@ public interface PostDetailView extends LoadDataView {
 
     void hideSwipeUpLoading();
 
+    void noMoreComments();
+
     void renderPostDetail(Post post);
 }

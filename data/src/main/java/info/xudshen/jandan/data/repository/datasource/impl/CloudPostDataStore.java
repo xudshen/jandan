@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import info.xudshen.jandan.data.api.IPostService;
@@ -115,6 +117,36 @@ public class CloudPostDataStore implements PostDataStore {
         return this.postService.getCommentListAsync(postId)
                 .map(postResponse -> {
                     return postResponse.getPostWrapper().getComments();
+                })
+                .doOnNext(comments -> {
+                    for (Comment comment : comments) {
+                        comment.setPostId(postId);
+                    }
+                    commentDao.insertOrReplaceInTx(comments);
+                });
+    }
+
+    @Override
+    public Observable<List<Comment>> postCommentListNext(Long postId) {
+        return this.postService.getCommentListAsync(postId)
+                .map(postResponse -> {
+                    return postResponse.getPostWrapper().getComments();
+                })
+                .map(comments -> {
+                    List<Comment> commentsInDb = commentDao.queryBuilder().where(CommentDao.Properties.PostId.eq(postId))
+                            .build().forCurrentThread().list();
+                    HashSet<Long> localCommentIds = new HashSet<Long>();
+                    for (Comment comment : commentsInDb) {
+                        localCommentIds.add(comment.getCommentId());
+                    }
+
+                    List<Comment> newComments = new ArrayList<Comment>();
+                    for (Comment comment : comments) {
+                        if (!localCommentIds.contains(comment.getCommentId())) {
+                            newComments.add(comment);
+                        }
+                    }
+                    return newComments;
                 })
                 .doOnNext(comments -> {
                     for (Comment comment : comments) {

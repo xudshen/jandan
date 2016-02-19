@@ -116,35 +116,31 @@ public class PostDetailFragment extends BaseFragment implements PostDetailView {
 
     @Override
     public void renderPostDetail(Post post) {
-        DDBindableCursorLoaderRVHeaderAdapter postCommentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
-                .cursorLoader(getActivity(), CommentDao.CONTENT_URI, null, "post_id = ?", new String[]{postId.toString()}, null)
-                .headerViewHolderCreator((inflater, viewType, parent) -> {
-                    ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.header_post_detail, parent, false);
-                    return new DDBindableViewHolder(viewDataBinding);
-                })
-                .headerViewDataBindingVariableAction(viewDataBinding1 -> {
-                    TextView textView = (TextView) viewDataBinding1.getRoot().findViewById(R.id.post_detail_title);
-                    textView.setText(post.getTitle());
-                    WebView postDetailBody = (WebView) viewDataBinding1.getRoot().findViewById(R.id.post_detail_body);
-                    String summary = post.getContent();
-                    summary = HtmlHelper.formBody(summary);
-                    postDetailBody.loadDataWithBaseURL(null, summary, "text/html; charset=UTF-8", null, null);
-                    postDetailBody.setOnLongClickListener(v -> true);
-                })
-                .itemViewHolderCreator(((inflater1, viewType1, parent1) -> {
-                    ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
-                    return new DDBindableViewHolder(viewDataBinding);
-                }))
-                .itemLayoutSelector(position -> R.layout.post_comment_item)
-                .itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {
-                    Comment comment = commentDao.loadEntity(cursor);
-                    viewDataBinding.setVariable(BR.comment, comment);
-                })
-                .build();
+        if (binding.postWithCommentList.getAdapter() == null) {
+            DDBindableCursorLoaderRVHeaderAdapter postCommentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
+                    .cursorLoader(getActivity(), CommentDao.CONTENT_URI, null, "post_id = ?", new String[]{postId.toString()}, null)
+                    .headerViewHolderCreator((inflater, viewType, parent) -> {
+                        ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.header_post_detail, parent, false);
+                        return new DDBindableViewHolder(viewDataBinding);
+                    })
+                    .headerViewDataBindingVariableAction(viewDataBinding -> {
+                        viewDataBinding.setVariable(BR.post, post);
+                    })
+                    .itemViewHolderCreator(((inflater1, viewType1, parent1) -> {
+                        ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
+                        return new DDBindableViewHolder(viewDataBinding);
+                    }))
+                    .itemLayoutSelector(position -> R.layout.post_comment_item)
+                    .itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {
+                        Comment comment = commentDao.loadEntity(cursor);
+                        viewDataBinding.setVariable(BR.comment, comment);
+                    })
+                    .build();
 
-        binding.postWithCommentList.setAdapter(postCommentAdapter);
+            binding.postWithCommentList.setAdapter(postCommentAdapter);
 
-        getLoaderManager().initLoader(0, null, postCommentAdapter);
+            getLoaderManager().initLoader(0, null, postCommentAdapter);
+        }
     }
 
     @Override
@@ -171,7 +167,7 @@ public class PostDetailFragment extends BaseFragment implements PostDetailView {
 
     @Override
     public void showError(String message) {
-
+        showSnackbar(binding.postWithCommentList, message);
     }
 
     @Override
@@ -182,6 +178,11 @@ public class PostDetailFragment extends BaseFragment implements PostDetailView {
     @Override
     public void hideSwipeUpLoading() {
         binding.postWithCommentLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void noMoreComments() {
+        showSnackbar(binding.postWithCommentList, getString(R.string.post_detail_no_more_comments));
     }
 
     @Override

@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="info.xudshen.jandan.utils.RealtimeTimeUtils" />
+
         <variable
             name="post"
             type="info.xudshen.jandan.domain.model.Post" />
@@ -25,7 +27,7 @@
             android:layout_marginBottom="6dp"
             android:paddingLeft="@dimen/layoutMarginHorizontal"
             android:paddingRight="@dimen/layoutMarginHorizontal"
-            android:text="物理科学家能说服工程师们信3D打印的金属零件吗?" />
+            android:text="@{post.title}" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:text="小脑袋"
+                android:text="@{post.authorName}"
                 android:textColor="@color/colorAccent" />
 
             <TextView
@@ -50,7 +52,15 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
 
-                android:text="\@小学堂" />
+                android:text="\@" />
+
+            <TextView
+                style="@style/PostDetailMeta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+
+                android:text="@{post.categoryDescription}" />
 
             <TextView
                 style="@style/PostDetailMeta"
@@ -59,14 +69,15 @@
                 android:layout_gravity="bottom"
 
                 android:paddingLeft="12dp"
-                android:text="4分钟前" />
+                android:text="@{RealtimeTimeUtils.realtime(post.date)}" />
         </LinearLayout>
 
         <WebView
             android:id="@+id/post_detail_body"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="6dp" />
+            android:layout_marginBottom="6dp"
+            app:webContent="@{post.content}"/>
 
         <TextView
             android:layout_width="match_parent"

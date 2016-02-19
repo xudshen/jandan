@@ -19,4 +19,6 @@ public interface PostRepository {
     Observable<List<SimplePost>> postListNextPage();
 
     Observable<List<Comment>> postCommentList(Long postId);
+
+    Observable<List<Comment>> postCommentListNext(Long postId);
 }

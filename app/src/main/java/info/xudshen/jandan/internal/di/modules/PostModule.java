@@ -99,8 +99,8 @@ public class PostModule {
     @Provides
     @PerActivity
     @Named("postComment")
-    UseCase provideGetPostCommentUseCase(PostRepository postRepository,
-                                         ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+    IterableUseCase provideGetPostCommentUseCase(PostRepository postRepository,
+                                                 ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         return new GetPostComment(postRepository, threadExecutor, postExecutionThread);
     }
 }
