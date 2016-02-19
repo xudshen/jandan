@@ -7,6 +7,7 @@ import java.util.List;
 import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.data.exception.PostNotFoundException;
 import info.xudshen.jandan.data.repository.datasource.PostDataStore;
+import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.Post;
 import info.xudshen.jandan.domain.model.SimplePost;
 import rx.Observable;
@@ -49,6 +50,11 @@ public class LocalPostDataStore implements PostDataStore {
 
     @Override
     public Observable<List<SimplePost>> postListNext() {
+        throw new NotImplementedException("");
+    }
+
+    @Override
+    public Observable<List<Comment>> postCommentList(Long postId) {
         throw new NotImplementedException("");
     }
 }

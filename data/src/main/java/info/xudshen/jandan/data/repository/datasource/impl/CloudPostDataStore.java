@@ -8,6 +8,7 @@ import java.util.List;
 
 import info.xudshen.jandan.data.api.IPostService;
 import info.xudshen.jandan.data.api.response.PostListResponse;
+import info.xudshen.jandan.data.dao.CommentDao;
 import info.xudshen.jandan.data.dao.MetaDao;
 import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.data.dao.SimplePostDao;
@@ -29,24 +30,20 @@ public class CloudPostDataStore implements PostDataStore {
     private final PostDao postDao;
     private final SimplePostDao simplePostDao;
     private final MetaDao metaDao;
+    private final CommentDao commentDao;
 
-    public CloudPostDataStore(IPostService postService, PostDao postDao, SimplePostDao simplePostDao, MetaDao metaDao) {
+    public CloudPostDataStore(IPostService postService, PostDao postDao, SimplePostDao simplePostDao, MetaDao metaDao, CommentDao commentDao) {
         this.postService = postService;
         this.postDao = postDao;
         this.simplePostDao = simplePostDao;
         this.metaDao = metaDao;
+        this.commentDao = commentDao;
     }
 
     @Override
     public Observable<Post> post(Long postId) {
-        return this.postService.getPostAsync(postId, "")
-                .doOnNext(postResponse -> {
-                    logger.info("author {}", postResponse.getPostWrapper().getAuthor().getName());
-                    for (Comment comment : postResponse.getPostWrapper().getComments()) {
-                        logger.info("comment-{}:{}", comment.getName(), comment.getContent());
-                    }
-                })
-                .map(postResponse -> (Post) postResponse.getPostWrapper())
+        return this.postService.getPostAsync(postId)
+                .map(postResponse -> postResponse.getPostWrapper().getPost())
                 .doOnNext(post -> {
                     if (post != null) {
                         CloudPostDataStore.this.postDao.insertOrReplace(post);
@@ -110,6 +107,20 @@ public class CloudPostDataStore implements PostDataStore {
                 .doOnCompleted(() -> {
                     meta.setPostPage(meta.getPostPage() + 1);
                     this.metaDao.updateInTx(meta);
+                });
+    }
+
+    @Override
+    public Observable<List<Comment>> postCommentList(Long postId) {
+        return this.postService.getCommentListAsync(postId)
+                .map(postResponse -> {
+                    return postResponse.getPostWrapper().getComments();
+                })
+                .doOnNext(comments -> {
+                    for (Comment comment : comments) {
+                        comment.setPostId(postId);
+                    }
+                    commentDao.insertOrReplaceInTx(comments);
                 });
     }
 }

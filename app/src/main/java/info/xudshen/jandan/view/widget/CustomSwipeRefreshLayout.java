@@ -19,7 +19,14 @@ package info.xudshen.jandan.view.widget;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
+import android.support.v4.view.MotionEventCompat;
+import android.support.v4.view.NestedScrollingChild;
+import android.support.v4.view.NestedScrollingChildHelper;
+import android.support.v4.view.NestedScrollingParent;
+import android.support.v4.view.NestedScrollingParentHelper;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -31,15 +38,6 @@ import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Transformation;
 import android.widget.AbsListView;
-
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
-import android.support.v4.view.MotionEventCompat;
-import android.support.v4.view.NestedScrollingChild;
-import android.support.v4.view.NestedScrollingChildHelper;
-import android.support.v4.view.NestedScrollingParent;
-import android.support.v4.view.NestedScrollingParentHelper;
-import android.support.v4.view.ViewCompat;
 
 /**
  * The SwipeRefreshLayout should be used whenever the user can refresh the

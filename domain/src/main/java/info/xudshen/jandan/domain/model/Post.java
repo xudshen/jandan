@@ -32,6 +32,14 @@ public class Post {
     private Timestamp modified;
     @Expose
     private Long commentCount;
+    @Expose
+    private Long authorId;
+    @Expose
+    private String authorName;
+    @Expose
+    private Long categoryId;
+    @Expose
+    private String categoryDescription;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -43,7 +51,7 @@ public class Post {
         this.id = id;
     }
 
-    public Post(Long id, Long postId, String url, String title, String content, String excerpt, Timestamp date, Timestamp modified, Long commentCount) {
+    public Post(Long id, Long postId, String url, String title, String content, String excerpt, Timestamp date, Timestamp modified, Long commentCount, Long authorId, String authorName, Long categoryId, String categoryDescription) {
         this.id = id;
         this.postId = postId;
         this.url = url;
@@ -53,6 +61,10 @@ public class Post {
         this.date = date;
         this.modified = modified;
         this.commentCount = commentCount;
+        this.authorId = authorId;
+        this.authorName = authorName;
+        this.categoryId = categoryId;
+        this.categoryDescription = categoryDescription;
     }
 
     public Long getId() {
@@ -125,6 +137,38 @@ public class Post {
 
     public void setCommentCount(Long commentCount) {
         this.commentCount = commentCount;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getCategoryDescription() {
+        return categoryDescription;
+    }
+
+    public void setCategoryDescription(String categoryDescription) {
+        this.categoryDescription = categoryDescription;
     }
 
     // KEEP METHODS - put your custom methods here

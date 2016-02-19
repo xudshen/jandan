@@ -2,6 +2,7 @@ package info.xudshen.jandan.domain.repository;
 
 import java.util.List;
 
+import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.SimplePost;
 import rx.Observable;
 
@@ -16,4 +17,6 @@ public interface PostRepository {
     Observable<List<SimplePost>> postList();
 
     Observable<List<SimplePost>> postListNextPage();
+
+    Observable<List<Comment>> postCommentList(Long postId);
 }

@@ -49,6 +49,10 @@ public class PostDao extends DDAbstractDao<Post, Long> {
         public final static Property Date = new Property(6, Long.class, "date", false, "DATE");
         public final static Property Modified = new Property(7, Long.class, "modified", false, "MODIFIED");
         public final static Property CommentCount = new Property(8, Long.class, "commentCount", false, "COMMENT_COUNT");
+        public final static Property AuthorId = new Property(9, Long.class, "authorId", false, "AUTHOR_ID");
+        public final static Property AuthorName = new Property(10, String.class, "authorName", false, "AUTHOR_NAME");
+        public final static Property CategoryId = new Property(11, Long.class, "categoryId", false, "CATEGORY_ID");
+        public final static Property CategoryDescription = new Property(12, String.class, "categoryDescription", false, "CATEGORY_DESCRIPTION");
     }
 
     private final TimestampPropertyConverter dateConverter = new TimestampPropertyConverter();
@@ -74,7 +78,11 @@ public class PostDao extends DDAbstractDao<Post, Long> {
                 "\"EXCERPT\" TEXT," + // 5: excerpt
                 "\"DATE\" INTEGER," + // 6: date
                 "\"MODIFIED\" INTEGER," + // 7: modified
-                "\"COMMENT_COUNT\" INTEGER);"); // 8: commentCount
+                "\"COMMENT_COUNT\" INTEGER," + // 8: commentCount
+                "\"AUTHOR_ID\" INTEGER," + // 9: authorId
+                "\"AUTHOR_NAME\" TEXT," + // 10: authorName
+                "\"CATEGORY_ID\" INTEGER," + // 11: categoryId
+                "\"CATEGORY_DESCRIPTION\" TEXT);"); // 12: categoryDescription
         // Add Indexes
         db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_POST_POST_ID ON POST" +
                 " (\"POST_ID\");");
@@ -135,6 +143,26 @@ public class PostDao extends DDAbstractDao<Post, Long> {
         if (commentCount != null) {
             stmt.bindLong(9, commentCount);
         }
+ 
+        Long authorId = entity.getAuthorId();
+        if (authorId != null) {
+            stmt.bindLong(10, authorId);
+        }
+ 
+        String authorName = entity.getAuthorName();
+        if (authorName != null) {
+            stmt.bindString(11, authorName);
+        }
+ 
+        Long categoryId = entity.getCategoryId();
+        if (categoryId != null) {
+            stmt.bindLong(12, categoryId);
+        }
+ 
+        String categoryDescription = entity.getCategoryDescription();
+        if (categoryDescription != null) {
+            stmt.bindString(13, categoryDescription);
+        }
     }
 
     /** @inheritdoc */
@@ -155,7 +183,11 @@ public class PostDao extends DDAbstractDao<Post, Long> {
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // excerpt
             cursor.isNull(offset + 6) ? null : dateConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 6)), // date
             cursor.isNull(offset + 7) ? null : modifiedConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 7)), // modified
-            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8) // commentCount
+            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // commentCount
+            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9), // authorId
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // authorName
+            cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11), // categoryId
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12) // categoryDescription
         );
         return entity;
     }
@@ -172,6 +204,10 @@ public class PostDao extends DDAbstractDao<Post, Long> {
         entity.setDate(cursor.isNull(offset + 6) ? null : dateConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 6)));
         entity.setModified(cursor.isNull(offset + 7) ? null : modifiedConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 7)));
         entity.setCommentCount(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
+        entity.setAuthorId(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
+        entity.setAuthorName(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setCategoryId(cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11));
+        entity.setCategoryDescription(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
     }
     
     /** @inheritdoc */

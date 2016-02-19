@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import info.xudshen.jandan.domain.model.Author;
+import info.xudshen.jandan.domain.model.Category;
 import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.Post;
 
@@ -63,6 +64,8 @@ public class PostResponse {
         @Expose
         private Author author;
         @Expose
+        private List<Category> categories;
+        @Expose
         private List<Comment> comments;
         @Expose
         private HashMap<String, Object> customFields;
@@ -76,6 +79,14 @@ public class PostResponse {
 
         public void setAuthor(Author author) {
             this.author = author;
+        }
+
+        public List<Category> getCategories() {
+            return categories;
+        }
+
+        public void setCategories(List<Category> categories) {
+            this.categories = categories;
         }
 
         public List<Comment> getComments() {
@@ -92,6 +103,18 @@ public class PostResponse {
 
         public void setCustomFields(HashMap<String, Object> customFields) {
             this.customFields = customFields;
+        }
+
+        public Post getPost() {
+            if (this.getAuthor() != null) {
+                this.setAuthorId(this.getAuthor().getAuthorId());
+                this.setAuthorName(this.getAuthor().getName());
+            }
+            if (this.getCategories() != null && this.getCategories().size() > 0) {
+                this.setCategoryId(this.getCategories().get(0).getCategoryId());
+                this.setCategoryDescription(this.getCategories().get(0).getDescription());
+            }
+            return this;
         }
     }
 }

@@ -12,16 +12,13 @@ import javax.inject.Named;
 
 import de.greenrobot.dao.query.LazyList;
 import info.xudshen.jandan.data.dao.SimplePostDao;
-import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.model.SimplePost;
 import info.xudshen.jandan.view.LoadDataView;
-import info.xudshen.jandan.view.fragment.BlankFragment;
 import info.xudshen.jandan.view.fragment.PostDetailFragment;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by xudshen on 16/1/28.

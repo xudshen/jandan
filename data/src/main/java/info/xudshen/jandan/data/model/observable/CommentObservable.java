@@ -27,6 +27,8 @@ public class CommentObservable extends android.databinding.BaseObservable  imple
     @SerializedName("id")
     private Long commentId;
     @Expose
+    private Long postId;
+    @Expose
     private String name;
     @Expose
     private String url;
@@ -53,9 +55,10 @@ public class CommentObservable extends android.databinding.BaseObservable  imple
         this.id = id;
     }
 
-    public CommentObservable(Long id, Long commentId, String name, String url, Timestamp date, String content, Long parent, Long votePositive, Long voteNegative, Long index) {
+    public CommentObservable(Long id, Long commentId, Long postId, String name, String url, Timestamp date, String content, Long parent, Long votePositive, Long voteNegative, Long index) {
         this.id = id;
         this.commentId = commentId;
+        this.postId = postId;
         this.name = name;
         this.url = url;
         this.date = date;
@@ -84,6 +87,19 @@ public class CommentObservable extends android.databinding.BaseObservable  imple
                 || (this.commentId != null && !this.commentId.equals(commentId))) {
             this.commentId = commentId;
             notifyPropertyChanged(BR.commentId);
+        }
+    }
+
+    @Bindable
+    public Long getPostId() {
+        return postId;
+    }
+
+    public void setPostId(Long postId) {
+        if ((this.postId == null && postId != null)
+                || (this.postId != null && !this.postId.equals(postId))) {
+            this.postId = postId;
+            notifyPropertyChanged(BR.postId);
         }
     }
 
@@ -193,6 +209,7 @@ public class CommentObservable extends android.databinding.BaseObservable  imple
     public CommentObservable(Comment entity) {
         this.id = entity.getId();
         this.commentId = entity.getCommentId();
+        this.postId = entity.getPostId();
         this.name = entity.getName();
         this.url = entity.getUrl();
         this.date = entity.getDate();
@@ -216,6 +233,11 @@ public class CommentObservable extends android.databinding.BaseObservable  imple
                 || (this.commentId != null && !this.commentId.equals(entity.getCommentId()))) {
             this.commentId = entity.getCommentId();
             propertyChanges.add(BR.commentId);
+        }
+        if ((this.postId == null && entity.getPostId() != null)
+                || (this.postId != null && !this.postId.equals(entity.getPostId()))) {
+            this.postId = entity.getPostId();
+            propertyChanges.add(BR.postId);
         }
         if ((this.name == null && entity.getName() != null)
                 || (this.name != null && !this.name.equals(entity.getName()))) {

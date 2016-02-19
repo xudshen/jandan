@@ -8,9 +8,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
-import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.internal.di.PerActivity;
 import info.xudshen.jandan.view.PostListView;
 import rx.Subscriber;

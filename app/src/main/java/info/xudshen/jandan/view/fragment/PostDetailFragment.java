@@ -19,9 +19,11 @@ import javax.inject.Inject;
 
 import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
 import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
+import info.xudshen.jandan.BR;
 import info.xudshen.jandan.R;
-import info.xudshen.jandan.data.dao.PostDao;
+import info.xudshen.jandan.data.dao.CommentDao;
 import info.xudshen.jandan.databinding.FragmentPostDetailBinding;
+import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.Post;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PostDetailPresenter;
@@ -42,6 +44,8 @@ public class PostDetailFragment extends BaseFragment implements PostDetailView {
 
     @Inject
     PostDetailPresenter postDetailPresenter;
+    @Inject
+    CommentDao commentDao;
 
     private Long postId;
     private FragmentPostDetailBinding binding;
@@ -65,6 +69,17 @@ public class PostDetailFragment extends BaseFragment implements PostDetailView {
                              Bundle savedInstanceState) {
         this.inject();
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_post_detail, container, false);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        binding.postWithCommentList.setLayoutManager(linearLayoutManager);
+
+        binding.postWithCommentLayout.setOnRefreshListener(direction -> {
+            switch (direction) {
+                case BOTTOM: {
+                    PostDetailFragment.this.postDetailPresenter.refreshComment(postId);
+                }
+            }
+        });
         return binding.getRoot();
     }
 
@@ -101,11 +116,8 @@ public class PostDetailFragment extends BaseFragment implements PostDetailView {
 
     @Override
     public void renderPostDetail(Post post) {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        binding.postWithCommentList.setLayoutManager(linearLayoutManager);
-
         DDBindableCursorLoaderRVHeaderAdapter postCommentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
-                .cursorLoader(getActivity(), PostDao.CONTENT_URI, null, null, null, "post_id desc")
+                .cursorLoader(getActivity(), CommentDao.CONTENT_URI, null, "post_id = ?", new String[]{postId.toString()}, null)
                 .headerViewHolderCreator((inflater, viewType, parent) -> {
                     ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.header_post_detail, parent, false);
                     return new DDBindableViewHolder(viewDataBinding);
@@ -123,8 +135,10 @@ public class PostDetailFragment extends BaseFragment implements PostDetailView {
                     ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
                     return new DDBindableViewHolder(viewDataBinding);
                 }))
-                .itemLayoutSelector(position -> R.layout.post_card_view)
+                .itemLayoutSelector(position -> R.layout.post_comment_item)
                 .itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {
+                    Comment comment = commentDao.loadEntity(cursor);
+                    viewDataBinding.setVariable(BR.comment, comment);
                 })
                 .build();
 
@@ -162,12 +176,12 @@ public class PostDetailFragment extends BaseFragment implements PostDetailView {
 
     @Override
     public void showSwipeUpLoading() {
-
+        binding.postWithCommentLayout.setRefreshing(true);
     }
 
     @Override
     public void hideSwipeUpLoading() {
-
+        binding.postWithCommentLayout.setRefreshing(false);
     }
 
     @Override

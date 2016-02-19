@@ -19,6 +19,8 @@ public class Comment {
     @SerializedName("id")
     private Long commentId;
     @Expose
+    private Long postId;
+    @Expose
     private String name;
     @Expose
     private String url;
@@ -45,9 +47,10 @@ public class Comment {
         this.id = id;
     }
 
-    public Comment(Long id, Long commentId, String name, String url, Timestamp date, String content, Long parent, Long votePositive, Long voteNegative, Long index) {
+    public Comment(Long id, Long commentId, Long postId, String name, String url, Timestamp date, String content, Long parent, Long votePositive, Long voteNegative, Long index) {
         this.id = id;
         this.commentId = commentId;
+        this.postId = postId;
         this.name = name;
         this.url = url;
         this.date = date;
@@ -72,6 +75,14 @@ public class Comment {
 
     public void setCommentId(Long commentId) {
         this.commentId = commentId;
+    }
+
+    public Long getPostId() {
+        return postId;
+    }
+
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
 
     public String getName() {

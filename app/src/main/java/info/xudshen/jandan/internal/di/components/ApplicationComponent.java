@@ -14,8 +14,6 @@ import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.data.dao.SimplePostDao;
 import info.xudshen.jandan.domain.executor.PostExecutionThread;
 import info.xudshen.jandan.domain.executor.ThreadExecutor;
-import info.xudshen.jandan.domain.model.Category;
-import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.repository.PostRepository;
 import info.xudshen.jandan.internal.di.modules.ApplicationModule;
 import info.xudshen.jandan.internal.di.modules.DaoModule;

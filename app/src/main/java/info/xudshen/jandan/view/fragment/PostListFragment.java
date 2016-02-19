@@ -19,7 +19,6 @@ import javax.inject.Named;
 import butterknife.ButterKnife;
 import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
 import info.xudshen.jandan.R;
-import info.xudshen.jandan.data.dao.SimplePostDao;
 import info.xudshen.jandan.databinding.FragmentPostListBinding;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PostListPresenter;
@@ -36,8 +35,6 @@ public class PostListFragment extends BaseFragment implements PostListView {
 
     @Inject
     PostListPresenter postListPresenter;
-    @Inject
-    SimplePostDao simplePostDao;
     @Inject
     @Named("postListAdapter")
     DDBindableCursorLoaderRVHeaderAdapter postListAdapter;

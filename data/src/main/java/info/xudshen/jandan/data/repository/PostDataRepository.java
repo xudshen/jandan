@@ -7,6 +7,7 @@ import javax.inject.Singleton;
 
 import info.xudshen.jandan.data.repository.datasource.PostDataStore;
 import info.xudshen.jandan.data.repository.datasource.impl.PostDataStoreFactory;
+import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.Post;
 import info.xudshen.jandan.domain.model.SimplePost;
 import info.xudshen.jandan.domain.repository.PostRepository;
@@ -38,5 +39,10 @@ public class PostDataRepository implements PostRepository {
     @Override
     public Observable<List<SimplePost>> postListNextPage() {
         return this.postDataStoreFactory.createCloudDataStore().postListNext();
+    }
+
+    @Override
+    public Observable<List<Comment>> postCommentList(Long postId) {
+        return this.postDataStoreFactory.createCloudDataStore().postCommentList(postId);
     }
 }

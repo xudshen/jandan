@@ -40,6 +40,14 @@ public class PostObservable extends android.databinding.BaseObservable  implemen
     private Timestamp modified;
     @Expose
     private Long commentCount;
+    @Expose
+    private Long authorId;
+    @Expose
+    private String authorName;
+    @Expose
+    private Long categoryId;
+    @Expose
+    private String categoryDescription;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -51,7 +59,7 @@ public class PostObservable extends android.databinding.BaseObservable  implemen
         this.id = id;
     }
 
-    public PostObservable(Long id, Long postId, String url, String title, String content, String excerpt, Timestamp date, Timestamp modified, Long commentCount) {
+    public PostObservable(Long id, Long postId, String url, String title, String content, String excerpt, Timestamp date, Timestamp modified, Long commentCount, Long authorId, String authorName, Long categoryId, String categoryDescription) {
         this.id = id;
         this.postId = postId;
         this.url = url;
@@ -61,6 +69,10 @@ public class PostObservable extends android.databinding.BaseObservable  implemen
         this.date = date;
         this.modified = modified;
         this.commentCount = commentCount;
+        this.authorId = authorId;
+        this.authorName = authorName;
+        this.categoryId = categoryId;
+        this.categoryDescription = categoryDescription;
     }
 
     public Long getId() {
@@ -160,6 +172,38 @@ public class PostObservable extends android.databinding.BaseObservable  implemen
         this.commentCount = commentCount;
     }
 
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getCategoryDescription() {
+        return categoryDescription;
+    }
+
+    public void setCategoryDescription(String categoryDescription) {
+        this.categoryDescription = categoryDescription;
+    }
+
 
     /**
      * convert entity to entityObservable
@@ -174,6 +218,10 @@ public class PostObservable extends android.databinding.BaseObservable  implemen
         this.date = entity.getDate();
         this.modified = entity.getModified();
         this.commentCount = entity.getCommentCount();
+        this.authorId = entity.getAuthorId();
+        this.authorName = entity.getAuthorName();
+        this.categoryId = entity.getCategoryId();
+        this.categoryDescription = entity.getCategoryDescription();
     }
 
     @Override
@@ -213,6 +261,10 @@ public class PostObservable extends android.databinding.BaseObservable  implemen
         this.date = entity.getDate();
         this.modified = entity.getModified();
         this.commentCount = entity.getCommentCount();
+        this.authorId = entity.getAuthorId();
+        this.authorName = entity.getAuthorName();
+        this.categoryId = entity.getCategoryId();
+        this.categoryDescription = entity.getCategoryDescription();
 
         if (propertyChanges.size() == 1) {
             notifyPropertyChanged(propertyChanges.get(0));

@@ -13,14 +13,21 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/post_with_comment_list"
+        <com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
+            android:id="@+id/post_with_comment_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/md_white_1000"
-            android:clickable="true"
-            android:focusable="true"
-            android:scrollbars="none"
-            android:visibility="gone" />
+            app:direction="bottom">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/post_with_comment_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/md_white_1000"
+                android:clickable="true"
+                android:focusable="true"
+                android:scrollbars="none"
+                android:visibility="gone" />
+        </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>
     </FrameLayout>
 </layout>

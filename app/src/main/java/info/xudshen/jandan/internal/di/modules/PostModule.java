@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.v7.widget.PopupMenu;
-import android.webkit.WebView;
-import android.widget.ImageView;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,19 +16,17 @@ import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter
 import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
 import info.xudshen.jandan.BR;
 import info.xudshen.jandan.R;
-import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.data.dao.SimplePostDao;
 import info.xudshen.jandan.domain.executor.PostExecutionThread;
 import info.xudshen.jandan.domain.executor.ThreadExecutor;
+import info.xudshen.jandan.domain.interactor.GetPostComment;
 import info.xudshen.jandan.domain.interactor.GetPostDetail;
 import info.xudshen.jandan.domain.interactor.GetPostList;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
-import info.xudshen.jandan.domain.model.Post;
 import info.xudshen.jandan.domain.model.SimplePost;
 import info.xudshen.jandan.domain.repository.PostRepository;
 import info.xudshen.jandan.internal.di.PerActivity;
-import info.xudshen.jandan.utils.HtmlHelper;
 
 /**
  * Created by xudshen on 16/1/7.
@@ -97,5 +93,14 @@ public class PostModule {
     IterableUseCase provideGetPostListUseCase(PostRepository postRepository,
                                               ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         return new GetPostList(postRepository, threadExecutor, postExecutionThread);
+    }
+
+
+    @Provides
+    @PerActivity
+    @Named("postComment")
+    UseCase provideGetPostCommentUseCase(PostRepository postRepository,
+                                         ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+        return new GetPostComment(postRepository, threadExecutor, postExecutionThread);
     }
 }

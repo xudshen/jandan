@@ -57,6 +57,11 @@ public class AppModelGenerator extends ModelGenerator {
 
         addLongProperty(entity, "commentCount");
 
+        addLongProperty(entity, "authorId");
+        addStringProperty(entity, "authorName");
+        addLongProperty(entity, "categoryId");
+        addStringProperty(entity, "categoryDescription");
+
         addUniqueIndex(entity, postId);
 
         entity.addContentProvider();
@@ -140,6 +145,7 @@ public class AppModelGenerator extends ModelGenerator {
         Property commentId = addLongProperty(entity, "commentId")
                 .codeBeforeField("@Expose\n    @SerializedName(\"id\")")
                 .bindable(true).getProperty();
+        Property postId = addLongProperty(entity, "postId").bindable(true).getProperty();
         addStringProperty(entity, "name").bindable(true);
         addStringProperty(entity, "url").bindable(true);
         addTimestampProperty(entity, "date");
@@ -151,7 +157,7 @@ public class AppModelGenerator extends ModelGenerator {
         addLongProperty(entity, "voteNegative").bindable(true);
         addLongProperty(entity, "index").bindable(true);
 
-        addUniqueIndex(entity, commentId);
+        addUniqueIndex(entity, commentId, postId);
 
         entity.addContentProvider();
         entity.addImport(GSON_EXPOSE);
