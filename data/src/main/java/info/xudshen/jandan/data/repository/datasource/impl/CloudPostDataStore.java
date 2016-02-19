@@ -15,6 +15,7 @@ import info.xudshen.jandan.data.dao.MetaDao;
 import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.data.dao.SimplePostDao;
 import info.xudshen.jandan.data.repository.datasource.PostDataStore;
+import info.xudshen.jandan.data.utils.HtmlUtils;
 import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.Meta;
 import info.xudshen.jandan.domain.model.Post;
@@ -121,6 +122,7 @@ public class CloudPostDataStore implements PostDataStore {
                 .doOnNext(comments -> {
                     for (Comment comment : comments) {
                         comment.setPostId(postId);
+                        comment.setContent(HtmlUtils.cleanComment(comment.getContent()));
                     }
                     commentDao.insertOrReplaceInTx(comments);
                 });
@@ -151,6 +153,7 @@ public class CloudPostDataStore implements PostDataStore {
                 .doOnNext(comments -> {
                     for (Comment comment : comments) {
                         comment.setPostId(postId);
+                        comment.setContent(HtmlUtils.cleanComment(comment.getContent()));
                     }
                     commentDao.insertOrReplaceInTx(comments);
                 });

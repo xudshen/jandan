@@ -44,6 +44,7 @@ dependencies {
     compile dependencies.rxJava
     compile dependencies.rxAndroid
     compile dependencies.gson
+    compile 'net.sourceforge.jregex:jregex:1.2_01'
 
     compile dependencies.retrofit
     compile dependencies.retrofitRxjava

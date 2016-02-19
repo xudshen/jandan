@@ -9,8 +9,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.TextView;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +25,6 @@ import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.Post;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PostDetailPresenter;
-import info.xudshen.jandan.utils.HtmlHelper;
 import info.xudshen.jandan.view.PostDetailView;
 
 public class PostDetailFragment extends BaseFragment implements PostDetailView {
@@ -137,6 +134,9 @@ public class PostDetailFragment extends BaseFragment implements PostDetailView {
                     })
                     .build();
 
+            postCommentAdapter.setOnItemClickListener((v, position) -> {
+
+            });
             binding.postWithCommentList.setAdapter(postCommentAdapter);
 
             getLoaderManager().initLoader(0, null, postCommentAdapter);

@@ -20,7 +20,6 @@
         android:paddingTop="@dimen/layoutMarginVertical">
 
         <TextView
-            android:id="@+id/post_detail_title"
             style="@style/PostDetailTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,7 +37,6 @@
             android:paddingRight="@dimen/layoutMarginHorizontal">
 
             <TextView
-                android:id="@+id/post_detail_author"
                 style="@style/PostDetailMeta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -73,11 +71,10 @@
         </LinearLayout>
 
         <WebView
-            android:id="@+id/post_detail_body"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="6dp"
-            app:webContent="@{post.content}"/>
+            app:webContent="@{post.content}" />
 
         <TextView
             android:layout_width="match_parent"

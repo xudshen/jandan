@@ -15,7 +15,6 @@ import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.Post;
 import info.xudshen.jandan.view.PostDetailView;
-import info.xudshen.jandan.view.fragment.PostDetailFragment;
 import rx.Subscriber;
 
 /**

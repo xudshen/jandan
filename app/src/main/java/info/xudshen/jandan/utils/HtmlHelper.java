@@ -1,11 +1,17 @@
 package info.xudshen.jandan.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Created by xudshen on 16/1/30.
  */
 public class HtmlHelper {
+    private static final Logger logger = LoggerFactory.getLogger(HtmlHelper.class);
+
     public static String formBody(String body) {
         body = body.replace("\\n", "");
+        body = body.replace("\n", "");
         body = body.replace("<p><img", "<p class=\"p-with-image\"><img");
         return new StringBuffer("")
                 .append("<html><head>")

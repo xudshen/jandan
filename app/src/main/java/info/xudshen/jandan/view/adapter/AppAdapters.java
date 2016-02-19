@@ -2,8 +2,10 @@ package info.xudshen.jandan.view.adapter;
 
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.Drawable;
+import android.text.Html;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
@@ -32,5 +34,11 @@ public class AppAdapters {
         content = HtmlHelper.formBody(content);
         webView.loadDataWithBaseURL(null, content, "text/html; charset=UTF-8", null, null);
         webView.setOnLongClickListener(v -> true);
+    }
+
+
+    @BindingAdapter(value = {"richText"})
+    public static void setTextviewRichText(TextView textView, String content) {
+        textView.setText(Html.fromHtml(content));
     }
 }
