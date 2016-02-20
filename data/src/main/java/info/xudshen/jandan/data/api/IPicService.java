@@ -1,5 +1,6 @@
-package info.xudshen.jandan.data.api.response;
+package info.xudshen.jandan.data.api;
 
+import info.xudshen.jandan.data.api.response.PicListResponse;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import rx.Observable;

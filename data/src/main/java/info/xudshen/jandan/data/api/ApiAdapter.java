@@ -1,6 +1,5 @@
 package info.xudshen.jandan.data.api;
 
-import info.xudshen.jandan.data.api.response.IPicService;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;

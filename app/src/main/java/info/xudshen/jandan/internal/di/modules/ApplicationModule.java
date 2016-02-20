@@ -13,9 +13,11 @@ import info.xudshen.jandan.UIThread;
 import info.xudshen.jandan.data.dao.DaoMaster;
 import info.xudshen.jandan.data.dao.DaoSession;
 import info.xudshen.jandan.data.executor.JobExecutor;
+import info.xudshen.jandan.data.repository.PicDataRepository;
 import info.xudshen.jandan.data.repository.PostDataRepository;
 import info.xudshen.jandan.domain.executor.PostExecutionThread;
 import info.xudshen.jandan.domain.executor.ThreadExecutor;
+import info.xudshen.jandan.domain.repository.PicRepository;
 import info.xudshen.jandan.domain.repository.PostRepository;
 import info.xudshen.jandan.navigation.Navigator;
 
@@ -68,5 +70,11 @@ public class ApplicationModule {
     @Singleton
     PostRepository providePostRepository(PostDataRepository postDataRepository) {
         return postDataRepository;
+    }
+
+    @Provides
+    @Singleton
+    PicRepository providePicRepository(PicDataRepository picDataRepository) {
+        return picDataRepository;
     }
 }

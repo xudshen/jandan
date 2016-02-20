@@ -9,7 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.presenter.PicListPresenter;
 import info.xudshen.jandan.view.fragment.BlankFragment;
+import info.xudshen.jandan.view.fragment.PicListFragment;
 import info.xudshen.jandan.view.fragment.PostListFragment;
 
 /**
@@ -41,7 +43,7 @@ public class PostHubFragmentPagerAdapter extends FragmentStatePagerAdapter {
                 return PostListFragment.newInstance();
             }
             case 2: {
-                return BlankFragment.newInstance(position);
+                return PicListFragment.newInstance();
             }
             case 3: {
                 return BlankFragment.newInstance(position);

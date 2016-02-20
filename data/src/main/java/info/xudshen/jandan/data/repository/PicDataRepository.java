@@ -24,11 +24,11 @@ public class PicDataRepository implements PicRepository {
 
     @Override
     public Observable<List<PicItem>> picList() {
-        return null;
+        return this.picDataStoreFactory.createCloudDataStore().picList();
     }
 
     @Override
     public Observable<List<PicItem>> picListNextPage() {
-        return null;
+        return this.picDataStoreFactory.createCloudDataStore().picListNext();
     }
 }

@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import info.xudshen.jandan.data.utils.HtmlUtils;
 import info.xudshen.jandan.domain.model.PicItem;
 
 /**
@@ -38,23 +39,12 @@ public class PicListResponse {
     }
 
     public class PicItemWrapper extends PicItem {
-        @Expose
-        @SerializedName("pics")
-        private List<String> picList;
-
         public PicItemWrapper() {
         }
 
-        public List<String> getPicList() {
-            return picList;
-        }
-
-        public void setPicList(List<String> picList) {
-            this.picList = picList;
-        }
-
         public PicItem getPicItem() {
-            this.setPics(Joiner.on(",").skipNulls().join(picList));
+            List<String> urlList = HtmlUtils.getPicUrlList(getPicTextContent());
+            this.setPics(Joiner.on(",").skipNulls().join(urlList));
             return this;
         }
     }

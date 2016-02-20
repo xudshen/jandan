@@ -1,13 +1,19 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="info.xudshen.jandan.view.fragment.PicListFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <info.xudshen.jandan.view.widget.CustomSwipeRefreshLayout
+        android:id="@+id/picListLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="string/hello_blank_fragment" />
+        android:layout_height="wrap_content">
 
-</FrameLayout>
+        <info.xudshen.jandan.view.component.LoadMoreRecyclerView
+            android:id="@+id/picListView"
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+
+            android:scrollbars="none" />
+    </info.xudshen.jandan.view.widget.CustomSwipeRefreshLayout>
+</layout>

@@ -14,19 +14,18 @@ import info.xudshen.jandan.view.DataListView;
 import rx.Subscriber;
 
 /**
- * Created by xudshen on 16/1/7.
+ * Created by xudshen on 16/2/20.
  */
 @PerActivity
-public class PostListPresenter implements Presenter {
-    private static final Logger logger = LoggerFactory.getLogger(PostListPresenter.class);
+public class PicListPresenter implements Presenter {
+    private static final Logger logger = LoggerFactory.getLogger(PicListPresenter.class);
 
     private DataListView dataListView;
-
-    private IterableUseCase getPostListUseCase;
+    private IterableUseCase getPicListUseCase;
 
     @Inject
-    public PostListPresenter(@Named("postList") IterableUseCase getPostListUseCase) {
-        this.getPostListUseCase = getPostListUseCase;
+    public PicListPresenter(@Named("picList") IterableUseCase getPicListUseCase) {
+        this.getPicListUseCase = getPicListUseCase;
     }
 
     public void setView(@NonNull DataListView dataListView) {
@@ -50,11 +49,11 @@ public class PostListPresenter implements Presenter {
 
     public void initialize() {
         this.dataListView.showLoading();
-        this.getPostListUseCase.execute(this.dataListView.bindToLifecycle(),
+        this.getPicListUseCase.execute(this.dataListView.bindToLifecycle(),
                 new Subscriber() {
                     @Override
                     public void onCompleted() {
-                        PostListPresenter.this.dataListView.hideLoading();
+                        PicListPresenter.this.dataListView.hideLoading();
                     }
 
                     @Override
@@ -64,7 +63,7 @@ public class PostListPresenter implements Presenter {
 
                     @Override
                     public void onNext(Object o) {
-                        PostListPresenter.this.dataListView.renderList();
+                        PicListPresenter.this.dataListView.renderList();
                     }
                 });
     }
@@ -81,11 +80,11 @@ public class PostListPresenter implements Presenter {
      */
     public void swipeUpStart() {
         this.dataListView.showSwipeUpLoading();
-        this.getPostListUseCase.executeNext(this.dataListView.bindToLifecycle(),
+        this.getPicListUseCase.executeNext(this.dataListView.bindToLifecycle(),
                 new Subscriber() {
                     @Override
                     public void onCompleted() {
-                        PostListPresenter.this.dataListView.hideSwipeUpLoading();
+                        PicListPresenter.this.dataListView.hideSwipeUpLoading();
                     }
 
                     @Override
@@ -95,7 +94,7 @@ public class PostListPresenter implements Presenter {
 
                     @Override
                     public void onNext(Object o) {
-                        PostListPresenter.this.dataListView.renderList();
+                        PicListPresenter.this.dataListView.renderList();
                     }
                 });
     }

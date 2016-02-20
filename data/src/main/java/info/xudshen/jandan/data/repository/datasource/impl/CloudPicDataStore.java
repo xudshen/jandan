@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-import info.xudshen.jandan.data.api.response.IPicService;
+import info.xudshen.jandan.data.api.IPicService;
 import info.xudshen.jandan.data.api.response.PicListResponse;
 import info.xudshen.jandan.data.dao.MetaDao;
 import info.xudshen.jandan.data.dao.PicItemDao;

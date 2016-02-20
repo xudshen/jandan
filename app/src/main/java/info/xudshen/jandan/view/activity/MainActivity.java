@@ -16,7 +16,9 @@ import info.xudshen.jandan.R;
 import info.xudshen.jandan.internal.di.HasComponents;
 import info.xudshen.jandan.internal.di.components.ActivityComponent;
 import info.xudshen.jandan.internal.di.components.DaggerActivityComponent;
+import info.xudshen.jandan.internal.di.components.DaggerPicComponent;
 import info.xudshen.jandan.internal.di.components.DaggerPostComponent;
+import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
 import info.xudshen.jandan.view.fragment.HomeFragment;
@@ -28,6 +30,7 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
     Drawer drawer;
 
     private PostComponent postComponent;
+    private PicComponent picComponent;
     private ActivityComponent activityComponent;
 
     @Override
@@ -40,6 +43,11 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
         activityComponent.inject(this);
 
         postComponent = DaggerPostComponent.builder()
+                .applicationComponent(getApplicationComponent())
+                .activityModule(activityModule)
+                .build();
+
+        picComponent = DaggerPicComponent.builder()
                 .applicationComponent(getApplicationComponent())
                 .activityModule(activityModule)
                 .build();
@@ -136,6 +144,9 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
         }
         if (componentType.isInstance(this.postComponent)) {
             return (C) this.postComponent;
+        }
+        if (componentType.isInstance(this.picComponent)) {
+            return (C) this.picComponent;
         }
         throw new IllegalStateException("componentType=" + componentType.getSimpleName() + " not found");
     }

@@ -37,7 +37,6 @@ public class PicItem {
     @Expose
     @SerializedName("text_content")
     private String picTextContent;
-    @Expose
     private String pics;
 
     // KEEP FIELDS - put your custom fields here

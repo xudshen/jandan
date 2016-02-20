@@ -1,33 +1,164 @@
 package info.xudshen.jandan.view.fragment;
 
-
+import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.databinding.FragmentPicListBinding;
+import info.xudshen.jandan.internal.di.components.PicComponent;
+import info.xudshen.jandan.internal.di.components.PostComponent;
+import info.xudshen.jandan.presenter.PicListPresenter;
+import info.xudshen.jandan.view.DataListView;
+import info.xudshen.jandan.view.activity.BaseActivity;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class PicListFragment extends BaseFragment {
+public class PicListFragment extends BaseFragment implements DataListView {
+    private static final Logger logger = LoggerFactory.getLogger(PicListFragment.class);
 
+    public static PicListFragment newInstance() {
+        Bundle args = new Bundle();
+
+        PicListFragment fragment = new PicListFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Inject
+    PicListPresenter picListPresenter;
+    @Inject
+    @Named("picListAdapter")
+    DDBindableCursorLoaderRVHeaderAdapter picListAdapter;
+
+    private FragmentPicListBinding binding;
 
     public PicListFragment() {
     }
 
     @Override
     protected void inject() {
-
+        this.getComponent(PicComponent.class).inject(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        this.inject();
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pic_list, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pic_list, container, false);
+
+        picListAdapter.setOnItemClickListener((itemView, position) -> {
+            logger.info("position={}", position);
+            getNavigator().launchItemReader((BaseActivity) getActivity(),
+                    itemView.findViewById(R.id.post_card_author), position);
+        });
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        binding.picListView.setLayoutManager(linearLayoutManager);
+        binding.picListView.setAdapter(picListAdapter);
+        binding.picListView.setOnLoadMoreListener(() -> {
+            this.picListPresenter.swipeUpStart();
+        });
+
+        binding.picListLayout.setColorSchemeResources(R.color.colorPrimaryDark, R.color.colorAccent);
+        binding.picListLayout.setOnRefreshListener(() -> {
+            this.picListPresenter.swipeDownStart();
+        });
+
+        //init for MaterialViewPager
+        MaterialViewPagerHelper.registerRecyclerView(getActivity(), binding.picListView, null);
+        //start load data in db
+        getLoaderManager().initLoader(0, null, picListAdapter);
+        return binding.getRoot();
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        this.picListPresenter.setView(this);
+        this.picListPresenter.initialize();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.picListPresenter.resume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        this.picListPresenter.resume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.picListPresenter.destroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+    //<editor-fold desc="Called by Presenter">
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showRetry() {
+
+    }
+
+    @Override
+    public void hideRetry() {
+
+    }
+
+    @Override
+    public void showError(String message) {
+
+    }
+
+    @Override
+    public void showSwipeUpLoading() {
+
+    }
+
+    @Override
+    public void hideSwipeUpLoading() {
+
+    }
+
+    @Override
+    public void renderList() {
+
+    }
+
+    @Override
+    public Context context() {
+        return getActivity().getApplicationContext();
+    }
+    //</editor-fold>
 }

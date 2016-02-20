@@ -22,11 +22,11 @@ import info.xudshen.jandan.R;
 import info.xudshen.jandan.databinding.FragmentPostListBinding;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PostListPresenter;
-import info.xudshen.jandan.view.PostListView;
+import info.xudshen.jandan.view.DataListView;
 import info.xudshen.jandan.view.activity.BaseActivity;
 import info.xudshen.jandan.view.widget.RefreshDirection;
 
-public class PostListFragment extends BaseFragment implements PostListView {
+public class PostListFragment extends BaseFragment implements DataListView {
     private static final Logger logger = LoggerFactory.getLogger(PostListFragment.class);
 
     public static PostListFragment newInstance() {

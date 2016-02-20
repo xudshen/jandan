@@ -10,10 +10,12 @@ import info.xudshen.jandan.data.dao.CategoryDao;
 import info.xudshen.jandan.data.dao.CommentDao;
 import info.xudshen.jandan.data.dao.DaoSession;
 import info.xudshen.jandan.data.dao.MetaDao;
+import info.xudshen.jandan.data.dao.PicItemDao;
 import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.data.dao.SimplePostDao;
 import info.xudshen.jandan.domain.executor.PostExecutionThread;
 import info.xudshen.jandan.domain.executor.ThreadExecutor;
+import info.xudshen.jandan.domain.repository.PicRepository;
 import info.xudshen.jandan.domain.repository.PostRepository;
 import info.xudshen.jandan.internal.di.modules.ApplicationModule;
 import info.xudshen.jandan.internal.di.modules.DaoModule;
@@ -41,6 +43,8 @@ public interface ApplicationComponent {
 
     PostRepository postRepository();
 
+    PicRepository picRepository();
+
     MetaDao metaDao();
 
     PostDao postDao();
@@ -52,4 +56,6 @@ public interface ApplicationComponent {
     CategoryDao categoryDao();
 
     CommentDao commentDao();
+
+    PicItemDao picItemDao();
 }
