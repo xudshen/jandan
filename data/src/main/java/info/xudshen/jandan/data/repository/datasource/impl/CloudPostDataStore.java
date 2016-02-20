@@ -70,16 +70,16 @@ public class CloudPostDataStore implements PostDataStore {
                     CloudPostDataStore.this.simplePostDao.insertOrReplaceInTx(simplePosts);
                 })
                 .doOnCompleted(() -> {
-                    Meta meta = DataStoreHelper.getMeta(this.metaDao);
-                    meta.setPostPage(1l);
-                    this.metaDao.update(meta);
+                    Meta postPage = DataStoreHelper.getMeta(this.metaDao, DataStoreHelper.POST_KEY);
+                    postPage.setLongValue(1l);
+                    this.metaDao.update(postPage);
                 });
     }
 
     @Override
     public Observable<List<SimplePost>> postListNext() {
-        Meta meta = DataStoreHelper.getMeta(this.metaDao);
-        return this.postService.getPostListAsync(meta.getPostPage() + 1)
+        Meta postPage = DataStoreHelper.getMeta(this.metaDao, DataStoreHelper.POST_KEY);
+        return this.postService.getPostListAsync(postPage.getLongValue() + 1)
                 .map(postListResponse -> {
                     List<SimplePost> simplePosts = new ArrayList<SimplePost>();
                     for (PostListResponse.PostWrapper postWrapper : postListResponse.getPosts()) {
@@ -88,15 +88,15 @@ public class CloudPostDataStore implements PostDataStore {
                     return simplePosts;
                 })
                 .doOnNext(simplePosts -> {
-                    if (meta.getPostPage() + 1 == 1) {
+                    if (postPage.getLongValue() + 1 == 1) {
                         //TODO: not right
                         CloudPostDataStore.this.simplePostDao.deleteAll();
                     }
                     CloudPostDataStore.this.simplePostDao.insertOrReplaceInTx(simplePosts);
                 })
                 .doOnCompleted(() -> {
-                    meta.setPostPage(meta.getPostPage() + 1);
-                    this.metaDao.update(meta);
+                    postPage.setLongValue(postPage.getLongValue() + 1);
+                    this.metaDao.update(postPage);
                 });
     }
 

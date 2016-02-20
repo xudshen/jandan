@@ -36,8 +36,12 @@ public class AppModelGenerator extends ModelGenerator {
         Entity entity = schema.addEntity("Meta");
 
         entity.addIdProperty();
-        addLongProperty(entity, "postPage").bindable(true);
-        addLongProperty(entity, "picPage").bindable(true);
+        Property key = addStringProperty(entity, "key").bindable(true).getProperty();
+        addStringProperty(entity, "value").bindable(true);
+        addLongProperty(entity, "longValue").bindable(true);
+        addTimestampProperty(entity, "timeValue").bindable(true);
+
+        addUniqueIndex(entity, key);
 
         entity.addContentProvider();
         entity.addImport(GSON_EXPOSE);

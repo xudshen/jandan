@@ -25,6 +25,7 @@ import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PicListPresenter;
 import info.xudshen.jandan.view.DataListView;
 import info.xudshen.jandan.view.activity.BaseActivity;
+import info.xudshen.jandan.view.widget.RefreshDirection;
 
 public class PicListFragment extends BaseFragment implements DataListView {
     private static final Logger logger = LoggerFactory.getLogger(PicListFragment.class);
@@ -70,11 +71,13 @@ public class PicListFragment extends BaseFragment implements DataListView {
         binding.picListView.setLayoutManager(linearLayoutManager);
         binding.picListView.setAdapter(picListAdapter);
         binding.picListView.setOnLoadMoreListener(() -> {
+            logger.info("OnLoadMoreListener");
             this.picListPresenter.swipeUpStart();
         });
 
         binding.picListLayout.setColorSchemeResources(R.color.colorPrimaryDark, R.color.colorAccent);
         binding.picListLayout.setOnRefreshListener(() -> {
+            logger.info("OnRefreshListener");
             this.picListPresenter.swipeDownStart();
         });
 
@@ -118,12 +121,12 @@ public class PicListFragment extends BaseFragment implements DataListView {
     //<editor-fold desc="Called by Presenter">
     @Override
     public void showLoading() {
-
+        binding.picListLayout.setRefreshing(true, RefreshDirection.TOP);
     }
 
     @Override
     public void hideLoading() {
-
+        binding.picListLayout.setRefreshing(false, RefreshDirection.TOP);
     }
 
     @Override
@@ -143,12 +146,14 @@ public class PicListFragment extends BaseFragment implements DataListView {
 
     @Override
     public void showSwipeUpLoading() {
-
+        binding.picListLayout.setRefreshing(true, RefreshDirection.BOTTOM);
+        binding.picListView.setLoading(true);
     }
 
     @Override
     public void hideSwipeUpLoading() {
-
+        binding.picListLayout.setRefreshing(false, RefreshDirection.BOTTOM);
+        binding.picListView.setLoading(false);
     }
 
     @Override

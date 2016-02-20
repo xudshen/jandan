@@ -20,22 +20,22 @@ public class GetPicList extends IterableUseCase {
     }
 
     @Override
-    protected Observable buildIterableUseCaseObservable() {
+    protected Observable buildUseCaseObservable() {
         return this.picRepository.picList();
     }
 
     @Override
-    protected Observable buildIterableUseCaseObservable(Long... params) {
+    protected Observable buildUseCaseObservable(Long... params) {
         throw new UnsupportedOperationException("");
     }
 
     @Override
-    protected Observable buildUseCaseObservable() {
+    protected Observable buildIterableUseCaseObservable() {
         return this.picRepository.picListNextPage();
     }
 
     @Override
-    protected Observable buildUseCaseObservable(Long... params) {
+    protected Observable buildIterableUseCaseObservable(Long... params) {
         throw new UnsupportedOperationException("");
     }
 }

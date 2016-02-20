@@ -4,6 +4,7 @@ import info.xudshen.data.BR;
 
 import com.google.gson.annotations.Expose;
 import info.xudshen.droiddata.dao.IModelObservable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +23,13 @@ public class MetaObservable extends android.databinding.BaseObservable  implemen
 
     private Long id;
     @Expose
-    private Long postPage;
+    private String key;
     @Expose
-    private Long picPage;
+    private String value;
+    @Expose
+    private Long longValue;
+    @Expose
+    private Timestamp timeValue;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -36,10 +41,12 @@ public class MetaObservable extends android.databinding.BaseObservable  implemen
         this.id = id;
     }
 
-    public MetaObservable(Long id, Long postPage, Long picPage) {
+    public MetaObservable(Long id, String key, String value, Long longValue, Timestamp timeValue) {
         this.id = id;
-        this.postPage = postPage;
-        this.picPage = picPage;
+        this.key = key;
+        this.value = value;
+        this.longValue = longValue;
+        this.timeValue = timeValue;
     }
 
     public Long getId() {
@@ -51,28 +58,54 @@ public class MetaObservable extends android.databinding.BaseObservable  implemen
     }
 
     @Bindable
-    public Long getPostPage() {
-        return postPage;
+    public String getKey() {
+        return key;
     }
 
-    public void setPostPage(Long postPage) {
-        if ((this.postPage == null && postPage != null)
-                || (this.postPage != null && !this.postPage.equals(postPage))) {
-            this.postPage = postPage;
-            notifyPropertyChanged(BR.postPage);
+    public void setKey(String key) {
+        if ((this.key == null && key != null)
+                || (this.key != null && !this.key.equals(key))) {
+            this.key = key;
+            notifyPropertyChanged(BR.key);
         }
     }
 
     @Bindable
-    public Long getPicPage() {
-        return picPage;
+    public String getValue() {
+        return value;
     }
 
-    public void setPicPage(Long picPage) {
-        if ((this.picPage == null && picPage != null)
-                || (this.picPage != null && !this.picPage.equals(picPage))) {
-            this.picPage = picPage;
-            notifyPropertyChanged(BR.picPage);
+    public void setValue(String value) {
+        if ((this.value == null && value != null)
+                || (this.value != null && !this.value.equals(value))) {
+            this.value = value;
+            notifyPropertyChanged(BR.value);
+        }
+    }
+
+    @Bindable
+    public Long getLongValue() {
+        return longValue;
+    }
+
+    public void setLongValue(Long longValue) {
+        if ((this.longValue == null && longValue != null)
+                || (this.longValue != null && !this.longValue.equals(longValue))) {
+            this.longValue = longValue;
+            notifyPropertyChanged(BR.longValue);
+        }
+    }
+
+    @Bindable
+    public Timestamp getTimeValue() {
+        return timeValue;
+    }
+
+    public void setTimeValue(Timestamp timeValue) {
+        if ((this.timeValue == null && timeValue != null)
+                || (this.timeValue != null && !this.timeValue.equals(timeValue))) {
+            this.timeValue = timeValue;
+            notifyPropertyChanged(BR.timeValue);
         }
     }
 
@@ -82,8 +115,10 @@ public class MetaObservable extends android.databinding.BaseObservable  implemen
      */
     public MetaObservable(Meta entity) {
         this.id = entity.getId();
-        this.postPage = entity.getPostPage();
-        this.picPage = entity.getPicPage();
+        this.key = entity.getKey();
+        this.value = entity.getValue();
+        this.longValue = entity.getLongValue();
+        this.timeValue = entity.getTimeValue();
     }
 
     @Override
@@ -95,15 +130,25 @@ public class MetaObservable extends android.databinding.BaseObservable  implemen
     public void refresh(Meta entity) {
         List<Integer> propertyChanges = new ArrayList<>();
         this.id = entity.getId();
-        if ((this.postPage == null && entity.getPostPage() != null)
-                || (this.postPage != null && !this.postPage.equals(entity.getPostPage()))) {
-            this.postPage = entity.getPostPage();
-            propertyChanges.add(BR.postPage);
+        if ((this.key == null && entity.getKey() != null)
+                || (this.key != null && !this.key.equals(entity.getKey()))) {
+            this.key = entity.getKey();
+            propertyChanges.add(BR.key);
         }
-        if ((this.picPage == null && entity.getPicPage() != null)
-                || (this.picPage != null && !this.picPage.equals(entity.getPicPage()))) {
-            this.picPage = entity.getPicPage();
-            propertyChanges.add(BR.picPage);
+        if ((this.value == null && entity.getValue() != null)
+                || (this.value != null && !this.value.equals(entity.getValue()))) {
+            this.value = entity.getValue();
+            propertyChanges.add(BR.value);
+        }
+        if ((this.longValue == null && entity.getLongValue() != null)
+                || (this.longValue != null && !this.longValue.equals(entity.getLongValue()))) {
+            this.longValue = entity.getLongValue();
+            propertyChanges.add(BR.longValue);
+        }
+        if ((this.timeValue == null && entity.getTimeValue() != null)
+                || (this.timeValue != null && !this.timeValue.equals(entity.getTimeValue()))) {
+            this.timeValue = entity.getTimeValue();
+            propertyChanges.add(BR.timeValue);
         }
 
         if (propertyChanges.size() == 1) {

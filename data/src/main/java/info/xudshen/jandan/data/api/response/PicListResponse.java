@@ -43,7 +43,7 @@ public class PicListResponse {
         }
 
         public PicItem getPicItem() {
-            List<String> urlList = HtmlUtils.getPicUrlList(getPicTextContent());
+            List<String> urlList = HtmlUtils.getPicUrlList(getPicContent());
             this.setPics(Joiner.on(",").skipNulls().join(urlList));
             return this;
         }

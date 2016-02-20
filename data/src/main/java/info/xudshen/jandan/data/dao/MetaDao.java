@@ -17,6 +17,8 @@ import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
 
 import info.xudshen.droiddata.dao.IModelObservable;
+import info.xudshen.droiddata.dao.converter.TimestampPropertyConverter;
+import java.sql.Timestamp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,10 +41,13 @@ public class MetaDao extends DDAbstractDao<Meta, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property PostPage = new Property(1, Long.class, "postPage", false, "POST_PAGE");
-        public final static Property PicPage = new Property(2, Long.class, "picPage", false, "PIC_PAGE");
+        public final static Property Key = new Property(1, String.class, "key", false, "KEY");
+        public final static Property Value = new Property(2, String.class, "value", false, "VALUE");
+        public final static Property LongValue = new Property(3, Long.class, "longValue", false, "LONG_VALUE");
+        public final static Property TimeValue = new Property(4, Long.class, "timeValue", false, "TIME_VALUE");
     }
 
+    private final TimestampPropertyConverter timeValueConverter = new TimestampPropertyConverter();
 
     public MetaDao(DaoConfig config) {
         super(config);
@@ -57,8 +62,13 @@ public class MetaDao extends DDAbstractDao<Meta, Long> {
         String constraint = ifNotExists ? "IF NOT EXISTS " : "";
         db.execSQL("CREATE TABLE " + constraint + "\"META\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"POST_PAGE\" INTEGER," + // 1: postPage
-                "\"PIC_PAGE\" INTEGER);"); // 2: picPage
+                "\"KEY\" TEXT," + // 1: key
+                "\"VALUE\" TEXT," + // 2: value
+                "\"LONG_VALUE\" INTEGER," + // 3: longValue
+                "\"TIME_VALUE\" INTEGER);"); // 4: timeValue
+        // Add Indexes
+        db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_META_KEY ON META" +
+                " (\"KEY\");");
     }
 
     /** Drops the underlying database table. */
@@ -77,14 +87,24 @@ public class MetaDao extends DDAbstractDao<Meta, Long> {
             stmt.bindLong(1, id);
         }
  
-        Long postPage = entity.getPostPage();
-        if (postPage != null) {
-            stmt.bindLong(2, postPage);
+        String key = entity.getKey();
+        if (key != null) {
+            stmt.bindString(2, key);
         }
  
-        Long picPage = entity.getPicPage();
-        if (picPage != null) {
-            stmt.bindLong(3, picPage);
+        String value = entity.getValue();
+        if (value != null) {
+            stmt.bindString(3, value);
+        }
+ 
+        Long longValue = entity.getLongValue();
+        if (longValue != null) {
+            stmt.bindLong(4, longValue);
+        }
+ 
+        Timestamp timeValue = entity.getTimeValue();
+        if (timeValue != null) {
+            stmt.bindLong(5, timeValueConverter.convertToDatabaseValue(timeValue));
         }
     }
 
@@ -99,8 +119,10 @@ public class MetaDao extends DDAbstractDao<Meta, Long> {
     protected Meta readEntity(Cursor cursor, int offset) {
         Meta entity = new Meta( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // postPage
-            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2) // picPage
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // key
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // value
+            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // longValue
+            cursor.isNull(offset + 4) ? null : timeValueConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 4)) // timeValue
         );
         return entity;
     }
@@ -109,8 +131,10 @@ public class MetaDao extends DDAbstractDao<Meta, Long> {
     @Override
     protected void readEntity(Cursor cursor, Meta entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setPostPage(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
-        entity.setPicPage(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
+        entity.setKey(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setValue(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setLongValue(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
+        entity.setTimeValue(cursor.isNull(offset + 4) ? null : timeValueConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 4)));
     }
     
     /** @inheritdoc */

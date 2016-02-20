@@ -46,16 +46,16 @@ public class CloudPicDataStore implements PicDataStore {
                     CloudPicDataStore.this.picItemDao.insertOrReplaceInTx(picItems);
                 })
                 .doOnCompleted(() -> {
-                    Meta meta = DataStoreHelper.getMeta(this.metaDao);
-                    meta.setPicPage(1l);
-                    this.metaDao.update(meta);
+                    Meta picPage = DataStoreHelper.getMeta(this.metaDao, DataStoreHelper.PIC_KEY);
+                    picPage.setLongValue(1l);
+                    this.metaDao.update(picPage);
                 });
     }
 
     @Override
     public Observable<List<PicItem>> picListNext() {
-        Meta meta = DataStoreHelper.getMeta(this.metaDao);
-        return this.picService.getPicListAsync(meta.getPicPage() + 1)
+        Meta picPage = DataStoreHelper.getMeta(this.metaDao, DataStoreHelper.PIC_KEY);
+        return this.picService.getPicListAsync(picPage.getLongValue() + 1)
                 .map(picListResponse -> {
                     List<PicItem> picItems = new ArrayList<PicItem>();
                     for (PicListResponse.PicItemWrapper wrapper : picListResponse.getList()) {
@@ -64,15 +64,15 @@ public class CloudPicDataStore implements PicDataStore {
                     return picItems;
                 })
                 .doOnNext(picItems -> {
-                    if (meta.getPicPage() + 1 == 1) {
+                    if (picPage.getLongValue() + 1 == 1) {
                         //TODO: not right
                         CloudPicDataStore.this.picItemDao.deleteAll();
                     }
                     CloudPicDataStore.this.picItemDao.insertOrReplaceInTx(picItems);
                 })
                 .doOnCompleted(() -> {
-                    meta.setPicPage(meta.getPicPage() + 1);
-                    this.metaDao.update(meta);
+                    picPage.setLongValue(picPage.getLongValue() + 1);
+                    this.metaDao.update(picPage);
                 });
     }
 }
