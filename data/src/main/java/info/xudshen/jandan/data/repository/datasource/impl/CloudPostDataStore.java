@@ -54,19 +54,6 @@ public class CloudPostDataStore implements PostDataStore {
                 });
     }
 
-    private Meta getMeta() {
-        Meta meta = null;
-        if (this.metaDao.count() == 0) {
-            meta = new Meta(1l);
-            meta.setPostPage(0l);
-            this.metaDao.insertInTx(meta);
-        } else {
-            meta = this.metaDao.queryBuilder().where(MetaDao.Properties.Id.eq(1l))
-                    .build().forCurrentThread().unique();
-        }
-        return meta;
-    }
-
     @Override
     public Observable<List<SimplePost>> postList() {
         return this.postService.getPostListAsync(1l)
@@ -83,15 +70,15 @@ public class CloudPostDataStore implements PostDataStore {
                     CloudPostDataStore.this.simplePostDao.insertOrReplaceInTx(simplePosts);
                 })
                 .doOnCompleted(() -> {
-                    Meta meta = getMeta();
+                    Meta meta = DataStoreHelper.getMeta(this.metaDao);
                     meta.setPostPage(1l);
-                    this.metaDao.updateInTx(meta);
+                    this.metaDao.update(meta);
                 });
     }
 
     @Override
     public Observable<List<SimplePost>> postListNext() {
-        Meta meta = getMeta();
+        Meta meta = DataStoreHelper.getMeta(this.metaDao);
         return this.postService.getPostListAsync(meta.getPostPage() + 1)
                 .map(postListResponse -> {
                     List<SimplePost> simplePosts = new ArrayList<SimplePost>();
@@ -109,7 +96,7 @@ public class CloudPostDataStore implements PostDataStore {
                 })
                 .doOnCompleted(() -> {
                     meta.setPostPage(meta.getPostPage() + 1);
-                    this.metaDao.updateInTx(meta);
+                    this.metaDao.update(meta);
                 });
     }
 

@@ -1,5 +1,6 @@
 package info.xudshen.jandan.data.api;
 
+import info.xudshen.jandan.data.api.response.IPicService;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -28,8 +29,13 @@ public class ApiAdapter {
     }
 
     private static final IPostService POST_SERVICE = createRetrofitService(IPostService.class, BASE_URL);
+    private static final IPicService PIC_SERVICE = createRetrofitService(IPicService.class, BASE_URL);
 
     public static IPostService getPostService() {
         return POST_SERVICE;
+    }
+
+    public static IPicService getPicService() {
+        return PIC_SERVICE;
     }
 }

@@ -22,6 +22,7 @@ import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by xudshen on 16/1/28.
+ * for post list
  */
 public class ItemReaderPagerAdapter extends FragmentStatePagerAdapter {
     private static final Logger logger = LoggerFactory.getLogger(ItemReaderPagerAdapter.class);
