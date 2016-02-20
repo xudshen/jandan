@@ -43,9 +43,12 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
     @Expose
     private Long voteNegative;
     @Expose
+    @SerializedName("comment_content")
+    private String picContent;
+    @Expose
     @SerializedName("text_content")
     private String picTextContent;
-    @Expose
+    
     private String pics;
 
     // KEEP FIELDS - put your custom fields here
@@ -58,7 +61,7 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
         this.id = id;
     }
 
-    public PicItemObservable(Long id, Long picId, String picAuthor, String picAuthorEmail, String picAuthorUrl, Timestamp date, Long votePositive, Long voteNegative, String picTextContent, String pics) {
+    public PicItemObservable(Long id, Long picId, String picAuthor, String picAuthorEmail, String picAuthorUrl, Timestamp date, Long votePositive, Long voteNegative, String picContent, String picTextContent, String pics) {
         this.id = id;
         this.picId = picId;
         this.picAuthor = picAuthor;
@@ -67,6 +70,7 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
         this.date = date;
         this.votePositive = votePositive;
         this.voteNegative = voteNegative;
+        this.picContent = picContent;
         this.picTextContent = picTextContent;
         this.pics = pics;
     }
@@ -171,6 +175,19 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
     }
 
     @Bindable
+    public String getPicContent() {
+        return picContent;
+    }
+
+    public void setPicContent(String picContent) {
+        if ((this.picContent == null && picContent != null)
+                || (this.picContent != null && !this.picContent.equals(picContent))) {
+            this.picContent = picContent;
+            notifyPropertyChanged(BR.picContent);
+        }
+    }
+
+    @Bindable
     public String getPicTextContent() {
         return picTextContent;
     }
@@ -209,6 +226,7 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
         this.date = entity.getDate();
         this.votePositive = entity.getVotePositive();
         this.voteNegative = entity.getVoteNegative();
+        this.picContent = entity.getPicContent();
         this.picTextContent = entity.getPicTextContent();
         this.pics = entity.getPics();
     }
@@ -256,6 +274,11 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
                 || (this.voteNegative != null && !this.voteNegative.equals(entity.getVoteNegative()))) {
             this.voteNegative = entity.getVoteNegative();
             propertyChanges.add(BR.voteNegative);
+        }
+        if ((this.picContent == null && entity.getPicContent() != null)
+                || (this.picContent != null && !this.picContent.equals(entity.getPicContent()))) {
+            this.picContent = entity.getPicContent();
+            propertyChanges.add(BR.picContent);
         }
         if ((this.picTextContent == null && entity.getPicTextContent() != null)
                 || (this.picTextContent != null && !this.picTextContent.equals(entity.getPicTextContent()))) {

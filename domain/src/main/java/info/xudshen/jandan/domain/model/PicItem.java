@@ -35,8 +35,12 @@ public class PicItem {
     @Expose
     private Long voteNegative;
     @Expose
+    @SerializedName("comment_content")
+    private String picContent;
+    @Expose
     @SerializedName("text_content")
     private String picTextContent;
+    
     private String pics;
 
     // KEEP FIELDS - put your custom fields here
@@ -49,7 +53,7 @@ public class PicItem {
         this.id = id;
     }
 
-    public PicItem(Long id, Long picId, String picAuthor, String picAuthorEmail, String picAuthorUrl, Timestamp date, Long votePositive, Long voteNegative, String picTextContent, String pics) {
+    public PicItem(Long id, Long picId, String picAuthor, String picAuthorEmail, String picAuthorUrl, Timestamp date, Long votePositive, Long voteNegative, String picContent, String picTextContent, String pics) {
         this.id = id;
         this.picId = picId;
         this.picAuthor = picAuthor;
@@ -58,6 +62,7 @@ public class PicItem {
         this.date = date;
         this.votePositive = votePositive;
         this.voteNegative = voteNegative;
+        this.picContent = picContent;
         this.picTextContent = picTextContent;
         this.pics = pics;
     }
@@ -124,6 +129,14 @@ public class PicItem {
 
     public void setVoteNegative(Long voteNegative) {
         this.voteNegative = voteNegative;
+    }
+
+    public String getPicContent() {
+        return picContent;
+    }
+
+    public void setPicContent(String picContent) {
+        this.picContent = picContent;
     }
 
     public String getPicTextContent() {

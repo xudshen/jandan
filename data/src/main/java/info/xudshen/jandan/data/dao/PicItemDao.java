@@ -48,8 +48,9 @@ public class PicItemDao extends DDAbstractDao<PicItem, Long> {
         public final static Property Date = new Property(5, Long.class, "date", false, "DATE");
         public final static Property VotePositive = new Property(6, Long.class, "votePositive", false, "VOTE_POSITIVE");
         public final static Property VoteNegative = new Property(7, Long.class, "voteNegative", false, "VOTE_NEGATIVE");
-        public final static Property PicTextContent = new Property(8, String.class, "picTextContent", false, "PIC_TEXT_CONTENT");
-        public final static Property Pics = new Property(9, String.class, "pics", false, "PICS");
+        public final static Property PicContent = new Property(8, String.class, "picContent", false, "PIC_CONTENT");
+        public final static Property PicTextContent = new Property(9, String.class, "picTextContent", false, "PIC_TEXT_CONTENT");
+        public final static Property Pics = new Property(10, String.class, "pics", false, "PICS");
     }
 
     private final TimestampPropertyConverter dateConverter = new TimestampPropertyConverter();
@@ -74,8 +75,9 @@ public class PicItemDao extends DDAbstractDao<PicItem, Long> {
                 "\"DATE\" INTEGER," + // 5: date
                 "\"VOTE_POSITIVE\" INTEGER," + // 6: votePositive
                 "\"VOTE_NEGATIVE\" INTEGER," + // 7: voteNegative
-                "\"PIC_TEXT_CONTENT\" TEXT," + // 8: picTextContent
-                "\"PICS\" TEXT);"); // 9: pics
+                "\"PIC_CONTENT\" TEXT," + // 8: picContent
+                "\"PIC_TEXT_CONTENT\" TEXT," + // 9: picTextContent
+                "\"PICS\" TEXT);"); // 10: pics
     }
 
     /** Drops the underlying database table. */
@@ -129,14 +131,19 @@ public class PicItemDao extends DDAbstractDao<PicItem, Long> {
             stmt.bindLong(8, voteNegative);
         }
  
+        String picContent = entity.getPicContent();
+        if (picContent != null) {
+            stmt.bindString(9, picContent);
+        }
+ 
         String picTextContent = entity.getPicTextContent();
         if (picTextContent != null) {
-            stmt.bindString(9, picTextContent);
+            stmt.bindString(10, picTextContent);
         }
  
         String pics = entity.getPics();
         if (pics != null) {
-            stmt.bindString(10, pics);
+            stmt.bindString(11, pics);
         }
     }
 
@@ -158,8 +165,9 @@ public class PicItemDao extends DDAbstractDao<PicItem, Long> {
             cursor.isNull(offset + 5) ? null : dateConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 5)), // date
             cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // votePositive
             cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // voteNegative
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // picTextContent
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9) // pics
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // picContent
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // picTextContent
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10) // pics
         );
         return entity;
     }
@@ -175,8 +183,9 @@ public class PicItemDao extends DDAbstractDao<PicItem, Long> {
         entity.setDate(cursor.isNull(offset + 5) ? null : dateConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 5)));
         entity.setVotePositive(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
         entity.setVoteNegative(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
-        entity.setPicTextContent(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setPics(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setPicContent(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setPicTextContent(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setPics(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
     }
     
     /** @inheritdoc */
