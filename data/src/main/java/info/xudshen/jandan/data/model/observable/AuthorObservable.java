@@ -30,11 +30,11 @@ public class AuthorObservable extends android.databinding.BaseObservable  implem
     @Expose
     private String name;
     @Expose
-    private String first_name;
+    private String firstName;
     @Expose
-    private String last_name;
+    private String lastName;
     @Expose
-    private String nick_name;
+    private String nickName;
     @Expose
     private String url;
     @Expose
@@ -50,14 +50,14 @@ public class AuthorObservable extends android.databinding.BaseObservable  implem
         this.id = id;
     }
 
-    public AuthorObservable(Long id, Long authorId, String slug, String name, String first_name, String last_name, String nick_name, String url, String description) {
+    public AuthorObservable(Long id, Long authorId, String slug, String name, String firstName, String lastName, String nickName, String url, String description) {
         this.id = id;
         this.authorId = authorId;
         this.slug = slug;
         this.name = name;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.nick_name = nick_name;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.nickName = nickName;
         this.url = url;
         this.description = description;
     }
@@ -110,41 +110,41 @@ public class AuthorObservable extends android.databinding.BaseObservable  implem
     }
 
     @Bindable
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        if ((this.first_name == null && first_name != null)
-                || (this.first_name != null && !this.first_name.equals(first_name))) {
-            this.first_name = first_name;
-            notifyPropertyChanged(BR.first_name);
+    public void setFirstName(String firstName) {
+        if ((this.firstName == null && firstName != null)
+                || (this.firstName != null && !this.firstName.equals(firstName))) {
+            this.firstName = firstName;
+            notifyPropertyChanged(BR.firstName);
         }
     }
 
     @Bindable
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        if ((this.last_name == null && last_name != null)
-                || (this.last_name != null && !this.last_name.equals(last_name))) {
-            this.last_name = last_name;
-            notifyPropertyChanged(BR.last_name);
+    public void setLastName(String lastName) {
+        if ((this.lastName == null && lastName != null)
+                || (this.lastName != null && !this.lastName.equals(lastName))) {
+            this.lastName = lastName;
+            notifyPropertyChanged(BR.lastName);
         }
     }
 
     @Bindable
-    public String getNick_name() {
-        return nick_name;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setNick_name(String nick_name) {
-        if ((this.nick_name == null && nick_name != null)
-                || (this.nick_name != null && !this.nick_name.equals(nick_name))) {
-            this.nick_name = nick_name;
-            notifyPropertyChanged(BR.nick_name);
+    public void setNickName(String nickName) {
+        if ((this.nickName == null && nickName != null)
+                || (this.nickName != null && !this.nickName.equals(nickName))) {
+            this.nickName = nickName;
+            notifyPropertyChanged(BR.nickName);
         }
     }
 
@@ -183,9 +183,9 @@ public class AuthorObservable extends android.databinding.BaseObservable  implem
         this.authorId = entity.getAuthorId();
         this.slug = entity.getSlug();
         this.name = entity.getName();
-        this.first_name = entity.getFirst_name();
-        this.last_name = entity.getLast_name();
-        this.nick_name = entity.getNick_name();
+        this.firstName = entity.getFirstName();
+        this.lastName = entity.getLastName();
+        this.nickName = entity.getNickName();
         this.url = entity.getUrl();
         this.description = entity.getDescription();
     }
@@ -214,20 +214,20 @@ public class AuthorObservable extends android.databinding.BaseObservable  implem
             this.name = entity.getName();
             propertyChanges.add(BR.name);
         }
-        if ((this.first_name == null && entity.getFirst_name() != null)
-                || (this.first_name != null && !this.first_name.equals(entity.getFirst_name()))) {
-            this.first_name = entity.getFirst_name();
-            propertyChanges.add(BR.first_name);
+        if ((this.firstName == null && entity.getFirstName() != null)
+                || (this.firstName != null && !this.firstName.equals(entity.getFirstName()))) {
+            this.firstName = entity.getFirstName();
+            propertyChanges.add(BR.firstName);
         }
-        if ((this.last_name == null && entity.getLast_name() != null)
-                || (this.last_name != null && !this.last_name.equals(entity.getLast_name()))) {
-            this.last_name = entity.getLast_name();
-            propertyChanges.add(BR.last_name);
+        if ((this.lastName == null && entity.getLastName() != null)
+                || (this.lastName != null && !this.lastName.equals(entity.getLastName()))) {
+            this.lastName = entity.getLastName();
+            propertyChanges.add(BR.lastName);
         }
-        if ((this.nick_name == null && entity.getNick_name() != null)
-                || (this.nick_name != null && !this.nick_name.equals(entity.getNick_name()))) {
-            this.nick_name = entity.getNick_name();
-            propertyChanges.add(BR.nick_name);
+        if ((this.nickName == null && entity.getNickName() != null)
+                || (this.nickName != null && !this.nickName.equals(entity.getNickName()))) {
+            this.nickName = entity.getNickName();
+            propertyChanges.add(BR.nickName);
         }
         if ((this.url == null && entity.getUrl() != null)
                 || (this.url != null && !this.url.equals(entity.getUrl()))) {

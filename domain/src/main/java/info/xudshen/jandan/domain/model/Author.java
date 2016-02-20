@@ -22,11 +22,11 @@ public class Author {
     @Expose
     private String name;
     @Expose
-    private String first_name;
+    private String firstName;
     @Expose
-    private String last_name;
+    private String lastName;
     @Expose
-    private String nick_name;
+    private String nickName;
     @Expose
     private String url;
     @Expose
@@ -42,14 +42,14 @@ public class Author {
         this.id = id;
     }
 
-    public Author(Long id, Long authorId, String slug, String name, String first_name, String last_name, String nick_name, String url, String description) {
+    public Author(Long id, Long authorId, String slug, String name, String firstName, String lastName, String nickName, String url, String description) {
         this.id = id;
         this.authorId = authorId;
         this.slug = slug;
         this.name = name;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.nick_name = nick_name;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.nickName = nickName;
         this.url = url;
         this.description = description;
     }
@@ -86,28 +86,28 @@ public class Author {
         this.name = name;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getNick_name() {
-        return nick_name;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setNick_name(String nick_name) {
-        this.nick_name = nick_name;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getUrl() {

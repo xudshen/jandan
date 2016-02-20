@@ -23,6 +23,8 @@ public class MetaObservable extends android.databinding.BaseObservable  implemen
     private Long id;
     @Expose
     private Long postPage;
+    @Expose
+    private Long picPage;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -34,9 +36,10 @@ public class MetaObservable extends android.databinding.BaseObservable  implemen
         this.id = id;
     }
 
-    public MetaObservable(Long id, Long postPage) {
+    public MetaObservable(Long id, Long postPage, Long picPage) {
         this.id = id;
         this.postPage = postPage;
+        this.picPage = picPage;
     }
 
     public Long getId() {
@@ -60,6 +63,19 @@ public class MetaObservable extends android.databinding.BaseObservable  implemen
         }
     }
 
+    @Bindable
+    public Long getPicPage() {
+        return picPage;
+    }
+
+    public void setPicPage(Long picPage) {
+        if ((this.picPage == null && picPage != null)
+                || (this.picPage != null && !this.picPage.equals(picPage))) {
+            this.picPage = picPage;
+            notifyPropertyChanged(BR.picPage);
+        }
+    }
+
 
     /**
      * convert entity to entityObservable
@@ -67,6 +83,7 @@ public class MetaObservable extends android.databinding.BaseObservable  implemen
     public MetaObservable(Meta entity) {
         this.id = entity.getId();
         this.postPage = entity.getPostPage();
+        this.picPage = entity.getPicPage();
     }
 
     @Override
@@ -82,6 +99,11 @@ public class MetaObservable extends android.databinding.BaseObservable  implemen
                 || (this.postPage != null && !this.postPage.equals(entity.getPostPage()))) {
             this.postPage = entity.getPostPage();
             propertyChanges.add(BR.postPage);
+        }
+        if ((this.picPage == null && entity.getPicPage() != null)
+                || (this.picPage != null && !this.picPage.equals(entity.getPicPage()))) {
+            this.picPage = entity.getPicPage();
+            propertyChanges.add(BR.picPage);
         }
 
         if (propertyChanges.size() == 1) {

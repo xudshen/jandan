@@ -43,7 +43,7 @@ public class CategoryDao extends DDAbstractDao<Category, Long> {
         public final static Property Slug = new Property(2, String.class, "slug", false, "SLUG");
         public final static Property Title = new Property(3, String.class, "title", false, "TITLE");
         public final static Property Description = new Property(4, String.class, "description", false, "DESCRIPTION");
-        public final static Property Post_count = new Property(5, String.class, "post_count", false, "POST_COUNT");
+        public final static Property PostCount = new Property(5, String.class, "postCount", false, "POST_COUNT");
     }
 
 
@@ -64,7 +64,7 @@ public class CategoryDao extends DDAbstractDao<Category, Long> {
                 "\"SLUG\" TEXT," + // 2: slug
                 "\"TITLE\" TEXT," + // 3: title
                 "\"DESCRIPTION\" TEXT," + // 4: description
-                "\"POST_COUNT\" TEXT);"); // 5: post_count
+                "\"POST_COUNT\" TEXT);"); // 5: postCount
         // Add Indexes
         db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_CATEGORY_CATEGORY_ID ON CATEGORY" +
                 " (\"CATEGORY_ID\");");
@@ -106,9 +106,9 @@ public class CategoryDao extends DDAbstractDao<Category, Long> {
             stmt.bindString(5, description);
         }
  
-        String post_count = entity.getPost_count();
-        if (post_count != null) {
-            stmt.bindString(6, post_count);
+        String postCount = entity.getPostCount();
+        if (postCount != null) {
+            stmt.bindString(6, postCount);
         }
     }
 
@@ -127,7 +127,7 @@ public class CategoryDao extends DDAbstractDao<Category, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // slug
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // title
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // description
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // post_count
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // postCount
         );
         return entity;
     }
@@ -140,7 +140,7 @@ public class CategoryDao extends DDAbstractDao<Category, Long> {
         entity.setSlug(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setTitle(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setDescription(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setPost_count(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setPostCount(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
     }
     
     /** @inheritdoc */

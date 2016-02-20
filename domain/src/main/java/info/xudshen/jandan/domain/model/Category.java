@@ -24,7 +24,7 @@ public class Category {
     @Expose
     private String description;
     @Expose
-    private String post_count;
+    private String postCount;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -36,13 +36,13 @@ public class Category {
         this.id = id;
     }
 
-    public Category(Long id, Long categoryId, String slug, String title, String description, String post_count) {
+    public Category(Long id, Long categoryId, String slug, String title, String description, String postCount) {
         this.id = id;
         this.categoryId = categoryId;
         this.slug = slug;
         this.title = title;
         this.description = description;
-        this.post_count = post_count;
+        this.postCount = postCount;
     }
 
     public Long getId() {
@@ -85,12 +85,12 @@ public class Category {
         this.description = description;
     }
 
-    public String getPost_count() {
-        return post_count;
+    public String getPostCount() {
+        return postCount;
     }
 
-    public void setPost_count(String post_count) {
-        this.post_count = post_count;
+    public void setPostCount(String postCount) {
+        this.postCount = postCount;
     }
 
     // KEEP METHODS - put your custom methods here

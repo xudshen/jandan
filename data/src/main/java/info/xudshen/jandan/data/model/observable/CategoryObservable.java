@@ -32,7 +32,7 @@ public class CategoryObservable extends android.databinding.BaseObservable  impl
     @Expose
     private String description;
     @Expose
-    private String post_count;
+    private String postCount;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -44,13 +44,13 @@ public class CategoryObservable extends android.databinding.BaseObservable  impl
         this.id = id;
     }
 
-    public CategoryObservable(Long id, Long categoryId, String slug, String title, String description, String post_count) {
+    public CategoryObservable(Long id, Long categoryId, String slug, String title, String description, String postCount) {
         this.id = id;
         this.categoryId = categoryId;
         this.slug = slug;
         this.title = title;
         this.description = description;
-        this.post_count = post_count;
+        this.postCount = postCount;
     }
 
     public Long getId() {
@@ -114,15 +114,15 @@ public class CategoryObservable extends android.databinding.BaseObservable  impl
     }
 
     @Bindable
-    public String getPost_count() {
-        return post_count;
+    public String getPostCount() {
+        return postCount;
     }
 
-    public void setPost_count(String post_count) {
-        if ((this.post_count == null && post_count != null)
-                || (this.post_count != null && !this.post_count.equals(post_count))) {
-            this.post_count = post_count;
-            notifyPropertyChanged(BR.post_count);
+    public void setPostCount(String postCount) {
+        if ((this.postCount == null && postCount != null)
+                || (this.postCount != null && !this.postCount.equals(postCount))) {
+            this.postCount = postCount;
+            notifyPropertyChanged(BR.postCount);
         }
     }
 
@@ -136,7 +136,7 @@ public class CategoryObservable extends android.databinding.BaseObservable  impl
         this.slug = entity.getSlug();
         this.title = entity.getTitle();
         this.description = entity.getDescription();
-        this.post_count = entity.getPost_count();
+        this.postCount = entity.getPostCount();
     }
 
     @Override
@@ -168,10 +168,10 @@ public class CategoryObservable extends android.databinding.BaseObservable  impl
             this.description = entity.getDescription();
             propertyChanges.add(BR.description);
         }
-        if ((this.post_count == null && entity.getPost_count() != null)
-                || (this.post_count != null && !this.post_count.equals(entity.getPost_count()))) {
-            this.post_count = entity.getPost_count();
-            propertyChanges.add(BR.post_count);
+        if ((this.postCount == null && entity.getPostCount() != null)
+                || (this.postCount != null && !this.postCount.equals(entity.getPostCount()))) {
+            this.postCount = entity.getPostCount();
+            propertyChanges.add(BR.postCount);
         }
 
         if (propertyChanges.size() == 1) {

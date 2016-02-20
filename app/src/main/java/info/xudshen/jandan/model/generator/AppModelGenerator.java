@@ -29,6 +29,7 @@ public class AppModelGenerator extends ModelGenerator {
         addComment(schema);
 
         addReadLaterItem(schema);
+        addPic(schema);
     }
 
     void addMeta(Schema schema) {
@@ -36,6 +37,7 @@ public class AppModelGenerator extends ModelGenerator {
 
         entity.addIdProperty();
         addLongProperty(entity, "postPage").bindable(true);
+        addLongProperty(entity, "picPage").bindable(true);
 
         entity.addContentProvider();
         entity.addImport(GSON_EXPOSE);
@@ -106,9 +108,9 @@ public class AppModelGenerator extends ModelGenerator {
                 .bindable(true).getProperty();
         addStringProperty(entity, "slug").bindable(true);
         addStringProperty(entity, "name").bindable(true);
-        addStringProperty(entity, "first_name").bindable(true);
-        addStringProperty(entity, "last_name").bindable(true);
-        addStringProperty(entity, "nick_name").bindable(true);
+        addStringProperty(entity, "firstName").bindable(true);
+        addStringProperty(entity, "lastName").bindable(true);
+        addStringProperty(entity, "nickName").bindable(true);
         addStringProperty(entity, "url").bindable(true);
         addStringProperty(entity, "description").bindable(true);
 
@@ -129,7 +131,7 @@ public class AppModelGenerator extends ModelGenerator {
         addStringProperty(entity, "slug").bindable(true);
         addStringProperty(entity, "title").bindable(true);
         addStringProperty(entity, "description").bindable(true);
-        addStringProperty(entity, "post_count").bindable(true);
+        addStringProperty(entity, "postCount").bindable(true);
 
         addUniqueIndex(entity, categoryId);
 
@@ -160,6 +162,27 @@ public class AppModelGenerator extends ModelGenerator {
         addLongProperty(entity, "commentTo").bindable(true);
 
         addUniqueIndex(entity, commentId, postId);
+
+        entity.addContentProvider();
+        entity.addImport(GSON_EXPOSE);
+        entity.addImport(GSON_SERIALIZEDNAME);
+    }
+
+    void addPic(Schema schema) {
+        Entity entity = schema.addEntity("PicItem");
+
+        entity.addIdProperty();
+        addLongProperty(entity, "picId").codeBeforeField("@Expose\n    @SerializedName(\"comment_ID\")").bindable(true);
+        addStringProperty(entity, "picAuthor").codeBeforeField("@Expose\n    @SerializedName(\"comment_author\")").bindable(true);
+        addStringProperty(entity, "picAuthorEmail").codeBeforeField("@Expose\n    @SerializedName(\"comment_author_email\")").bindable(true);
+        addStringProperty(entity, "picAuthorUrl").codeBeforeField("@Expose\n    @SerializedName(\"comment_author_url\")").bindable(true);
+        addTimestampProperty(entity, "date").codeBeforeField("@Expose\n    @SerializedName(\"comment_date\")").bindable(true);
+
+        addLongProperty(entity, "votePositive").bindable(true);
+        addLongProperty(entity, "voteNegative").bindable(true);
+
+        addStringProperty(entity, "picTextContent").codeBeforeField("@Expose\n    @SerializedName(\"text_content\")").bindable(true);
+        addStringProperty(entity, "pics").bindable(true);
 
         entity.addContentProvider();
         entity.addImport(GSON_EXPOSE);

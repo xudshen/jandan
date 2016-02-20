@@ -42,9 +42,9 @@ public class AuthorDao extends DDAbstractDao<Author, Long> {
         public final static Property AuthorId = new Property(1, Long.class, "authorId", false, "AUTHOR_ID");
         public final static Property Slug = new Property(2, String.class, "slug", false, "SLUG");
         public final static Property Name = new Property(3, String.class, "name", false, "NAME");
-        public final static Property First_name = new Property(4, String.class, "first_name", false, "FIRST_NAME");
-        public final static Property Last_name = new Property(5, String.class, "last_name", false, "LAST_NAME");
-        public final static Property Nick_name = new Property(6, String.class, "nick_name", false, "NICK_NAME");
+        public final static Property FirstName = new Property(4, String.class, "firstName", false, "FIRST_NAME");
+        public final static Property LastName = new Property(5, String.class, "lastName", false, "LAST_NAME");
+        public final static Property NickName = new Property(6, String.class, "nickName", false, "NICK_NAME");
         public final static Property Url = new Property(7, String.class, "url", false, "URL");
         public final static Property Description = new Property(8, String.class, "description", false, "DESCRIPTION");
     }
@@ -66,9 +66,9 @@ public class AuthorDao extends DDAbstractDao<Author, Long> {
                 "\"AUTHOR_ID\" INTEGER," + // 1: authorId
                 "\"SLUG\" TEXT," + // 2: slug
                 "\"NAME\" TEXT," + // 3: name
-                "\"FIRST_NAME\" TEXT," + // 4: first_name
-                "\"LAST_NAME\" TEXT," + // 5: last_name
-                "\"NICK_NAME\" TEXT," + // 6: nick_name
+                "\"FIRST_NAME\" TEXT," + // 4: firstName
+                "\"LAST_NAME\" TEXT," + // 5: lastName
+                "\"NICK_NAME\" TEXT," + // 6: nickName
                 "\"URL\" TEXT," + // 7: url
                 "\"DESCRIPTION\" TEXT);"); // 8: description
         // Add Indexes
@@ -107,19 +107,19 @@ public class AuthorDao extends DDAbstractDao<Author, Long> {
             stmt.bindString(4, name);
         }
  
-        String first_name = entity.getFirst_name();
-        if (first_name != null) {
-            stmt.bindString(5, first_name);
+        String firstName = entity.getFirstName();
+        if (firstName != null) {
+            stmt.bindString(5, firstName);
         }
  
-        String last_name = entity.getLast_name();
-        if (last_name != null) {
-            stmt.bindString(6, last_name);
+        String lastName = entity.getLastName();
+        if (lastName != null) {
+            stmt.bindString(6, lastName);
         }
  
-        String nick_name = entity.getNick_name();
-        if (nick_name != null) {
-            stmt.bindString(7, nick_name);
+        String nickName = entity.getNickName();
+        if (nickName != null) {
+            stmt.bindString(7, nickName);
         }
  
         String url = entity.getUrl();
@@ -147,9 +147,9 @@ public class AuthorDao extends DDAbstractDao<Author, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // authorId
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // slug
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // name
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // first_name
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // last_name
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // nick_name
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // firstName
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // lastName
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // nickName
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // url
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8) // description
         );
@@ -163,9 +163,9 @@ public class AuthorDao extends DDAbstractDao<Author, Long> {
         entity.setAuthorId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
         entity.setSlug(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setFirst_name(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setLast_name(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setNick_name(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setFirstName(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setLastName(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setNickName(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setUrl(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setDescription(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
     }

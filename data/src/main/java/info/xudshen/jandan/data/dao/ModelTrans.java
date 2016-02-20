@@ -11,12 +11,14 @@ import info.xudshen.jandan.domain.model.SimplePost;
 import info.xudshen.jandan.domain.model.Author;
 import info.xudshen.jandan.domain.model.Category;
 import info.xudshen.jandan.domain.model.Comment;
+import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.data.model.observable.MetaObservable;
 import info.xudshen.jandan.data.model.observable.PostObservable;
 import info.xudshen.jandan.data.model.observable.SimplePostObservable;
 import info.xudshen.jandan.data.model.observable.AuthorObservable;
 import info.xudshen.jandan.data.model.observable.CategoryObservable;
 import info.xudshen.jandan.data.model.observable.CommentObservable;
+import info.xudshen.jandan.data.model.observable.PicItemObservable;
 
 public class ModelTrans {
 
@@ -60,6 +62,13 @@ public class ModelTrans {
                 @Override
                 public CommentObservable to(Comment entity) {
                     return new CommentObservable(entity);
+                }
+            };
+    private static final IModelTrans<PicItem, PicItemObservable> PIC_ITEM_TRANS =
+            new IModelTrans<PicItem, PicItemObservable>() {
+                @Override
+                public PicItemObservable to(PicItem entity) {
+                    return new PicItemObservable(entity);
                 }
             };
 
@@ -232,6 +241,33 @@ public class ModelTrans {
 
     Iterable<CommentObservable> transComment(Iterable<Comment> entities) {
         return transComment(entities, COMMENT_TRANS);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="TransPicItem">
+    <TO extends IModelObservable> TO transPicItem(PicItem entity, IModelTrans<PicItem, TO> trans) {
+        TO entityOb = trans.to(entity);
+        this.daoSession.getPicItemDao().registerExtraOb(entityOb);
+        return entityOb;
+    }
+
+    PicItemObservable transPicItem(PicItem entity) {
+        return transPicItem(entity, PIC_ITEM_TRANS);
+    }
+
+    <TO extends IModelObservable> Iterable<TO> transPicItem(Iterable<PicItem> entities, IModelTrans<PicItem, TO> trans) {
+        List<TO> list = new ArrayList<>();
+        PicItemDao dao = this.daoSession.getPicItemDao();
+        for (PicItem entity : entities) {
+            TO entityOb = trans.to(entity);
+            list.add(entityOb);
+            dao.registerExtraOb(entityOb);
+        }
+        return list;
+    }
+
+    Iterable<PicItemObservable> transPicItem(Iterable<PicItem> entities) {
+        return transPicItem(entities, PIC_ITEM_TRANS);
     }
     //</editor-fold>
 }

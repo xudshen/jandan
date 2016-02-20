@@ -15,6 +15,8 @@ public class Meta {
     private Long id;
     @Expose
     private Long postPage;
+    @Expose
+    private Long picPage;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -26,9 +28,10 @@ public class Meta {
         this.id = id;
     }
 
-    public Meta(Long id, Long postPage) {
+    public Meta(Long id, Long postPage, Long picPage) {
         this.id = id;
         this.postPage = postPage;
+        this.picPage = picPage;
     }
 
     public Long getId() {
@@ -45,6 +48,14 @@ public class Meta {
 
     public void setPostPage(Long postPage) {
         this.postPage = postPage;
+    }
+
+    public Long getPicPage() {
+        return picPage;
+    }
+
+    public void setPicPage(Long picPage) {
+        this.picPage = picPage;
     }
 
     // KEEP METHODS - put your custom methods here
