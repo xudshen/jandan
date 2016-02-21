@@ -35,7 +35,7 @@
                 android:layout_row="0"
                 android:layout_rowSpan="2"
                 android:scaleType="centerCrop"
-                android:src="@{item.thumbC}"
+                app:thumb="@{item.thumbC}"
                 app:placeHolder="@{@drawable/post_placeholder}" />
 
             <LinearLayout

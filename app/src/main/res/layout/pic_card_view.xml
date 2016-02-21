@@ -6,6 +6,8 @@
 
         <import type="info.xudshen.jandan.utils.RealtimeTimeUtils" />
 
+        <import type="info.xudshen.jandan.utils.LayoutHelper" />
+
         <variable
             name="item"
             type="info.xudshen.jandan.domain.model.PicItem" />
@@ -13,7 +15,7 @@
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="96dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/cardMarginVertical"
         android:layout_marginLeft="@dimen/cardMarginHorizontal"
         android:layout_marginRight="@dimen/cardMarginHorizontal"
@@ -21,12 +23,18 @@
         android:clickable="true"
         android:focusable="true">
 
-        <GridLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
-            android:columnCount="7"
-            android:rowCount="2">
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                app:fullImage="@{LayoutHelper.firstUrl(item.pics)}"
+                app:placeHolder="@{@drawable/post_placeholder}" />
 
             <TextView
                 style="@style/PostCardMeta"
@@ -38,6 +46,6 @@
                 android:paddingBottom="12dp"
                 android:text="@{item.pics}" />
 
-        </GridLayout>
+        </LinearLayout>
     </android.support.v7.widget.CardView>
 </layout>

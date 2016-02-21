@@ -64,7 +64,7 @@ public class PicListFragment extends BaseFragment implements DataListView {
         picListAdapter.setOnItemClickListener((itemView, position) -> {
             logger.info("position={}", position);
             getNavigator().launchItemReader((BaseActivity) getActivity(),
-                    itemView.findViewById(R.id.post_card_author), position);
+                    itemView, position);
         });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());

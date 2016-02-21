@@ -213,8 +213,4 @@ public class PostDetailFragment extends BaseFragment implements PostDetailView {
     public Context context() {
         return getActivity().getApplicationContext();
     }
-
-    int toPx(int dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
-    }
 }
