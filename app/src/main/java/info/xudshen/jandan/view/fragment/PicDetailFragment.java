@@ -10,8 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.common.base.Splitter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -44,6 +48,8 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
 
     @Inject
     PicDetailPresenter picDetailPresenter;
+    @Inject
+    CommentDao commentDao;
 
     private Long picId;
     private FragmentPicDetailBinding binding;
@@ -107,14 +113,15 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
     @Override
     public void renderItemDetail(PicItem item) {
         if (binding.itemWithCommentList.getAdapter() == null) {
+            List<String> urlList = Splitter.on(",").splitToList(item.getPics());
             DDBindableCursorLoaderRVHeaderAdapter picCommentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
-                    .cursorLoader(getActivity(), CommentDao.CONTENT_URI, null, "post_id = ?", new String[]{picId.toString()}, null)
+                    .cursorLoader(getActivity(), CommentDao.CONTENT_URI, null, "post_id = ?", new String[]{"76032"}, null)
                     .headerViewHolderCreator((inflater, viewType, parent) -> {
-                        ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.header_pic_detail, parent, false);
+                        ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.pic_single_item, parent, false);
                         return new DDBindableViewHolder(viewDataBinding);
                     })
                     .headerViewDataBindingVariableAction(viewDataBinding -> {
-                        viewDataBinding.setVariable(BR.picItem, item);
+                        viewDataBinding.setVariable(BR.url, urlList.get(0));
                     })
                     .itemViewHolderCreator(((inflater1, viewType1, parent1) -> {
                         ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
@@ -122,6 +129,8 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
                     }))
                     .itemLayoutSelector(position -> R.layout.post_comment_item)
                     .itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {
+                        Comment comment = commentDao.loadEntity(cursor);
+                        viewDataBinding.setVariable(BR.comment, comment);
                     })
                     .build();
             binding.itemWithCommentList.setAdapter(picCommentAdapter);

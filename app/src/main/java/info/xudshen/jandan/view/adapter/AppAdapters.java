@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
@@ -48,8 +49,8 @@ public class AppAdapters {
     }
 
     @BindingAdapter(value = {"picThumb", "placeHolder"})
-    public static void setFullImageUrl(ImageView view, String url,
-                                       Drawable placeHolder) {
+    public static void setThumbImageUrl(ImageView view, String url,
+                                        Drawable placeHolder) {
         DrawableTypeRequest<String> request = Glide.with(view.getContext())
                 .load(url);
         request.asBitmap();
@@ -90,24 +91,73 @@ public class AppAdapters {
 
                     @Override
                     public String getId() {
-                        return "info.xudshen.jandan.transform.TestTransform";
+                        return "info.xudshen.jandan.transform.ThumbTransform";
                     }
                 })
                 .crossFade()
                 .into(view);
     }
 
+    @BindingAdapter(value = {"picFull", "placeHolder"})
+    public static void setFullImageUrl(ImageView view, String url,
+                                       Drawable placeHolder) {
+        DrawableTypeRequest<String> request = Glide.with(view.getContext()).load(url);
+        if (placeHolder != null) {
+            request.placeholder(placeHolder);
+        }
+
+        if (url.endsWith("gif")) {
+            request.diskCacheStrategy(DiskCacheStrategy.SOURCE).crossFade().into(view);
+        } else {
+            request
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .transform(new BitmapTransformation(view.getContext()) {
+                        @Override
+                        protected Bitmap transform(BitmapPool pool, Bitmap toTransform,
+                                                   int outWidth, int outHeight) {
+                            int width = outWidth;
+                            int height = toTransform.getHeight() * outWidth / toTransform.getWidth();
+
+                            Bitmap result = pool.get(width, height, Bitmap.Config.ARGB_8888);
+                            if (result == null) {
+                                // Use ARGB_8888 since we're going to add alpha to the image.
+                                result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                            }
+                            TransformationUtils.setAlpha(toTransform, result);
+
+                            Canvas canvas = new Canvas(result);
+                            Paint paint = new Paint(Paint.DITHER_FLAG | Paint.FILTER_BITMAP_FLAG);
+                            canvas.drawBitmap(toTransform, new Rect(0, 0, toTransform.getWidth(), toTransform.getHeight()),
+                                    new Rect(0, 0, width, height), paint);
+
+                            return result;
+                        }
+
+                        @Override
+                        public String getId() {
+                            return "info.xudshen.jandan.transform.FullTransform";
+                        }
+                    })
+                    .crossFade()
+                    .into(view);
+        }
+    }
+
     @BindingAdapter(value = {"webContent"})
     public static void setWebviewContent(WebView webView, String content) {
-        content = HtmlHelper.formBody(content);
-        webView.loadDataWithBaseURL(null, content, "text/html; charset=UTF-8", null, null);
-        webView.setOnLongClickListener(v -> true);
+        if (content != null) {
+            content = HtmlHelper.formBody(content);
+            webView.loadDataWithBaseURL(null, content, "text/html; charset=UTF-8", null, null);
+            webView.setOnLongClickListener(v -> true);
+        }
     }
 
 
     @BindingAdapter(value = {"richText"})
     public static void setTextviewRichText(TextView textView, String content) {
-        textView.setText(Html.fromHtml(content));
+        if (content != null) {
+            textView.setText(Html.fromHtml(content));
+        }
     }
 
     @BindingAdapter(value = {"paddingBottom"})
