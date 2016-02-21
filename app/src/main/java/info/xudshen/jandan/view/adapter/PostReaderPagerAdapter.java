@@ -24,8 +24,8 @@ import rx.android.schedulers.AndroidSchedulers;
  * Created by xudshen on 16/1/28.
  * for post list
  */
-public class ItemReaderPagerAdapter extends FragmentStatePagerAdapter {
-    private static final Logger logger = LoggerFactory.getLogger(ItemReaderPagerAdapter.class);
+public class PostReaderPagerAdapter extends FragmentStatePagerAdapter {
+    private static final Logger logger = LoggerFactory.getLogger(PostReaderPagerAdapter.class);
     private LoadDataView loadDataView;
     @Inject
     SimplePostDao simplePostDao;
@@ -35,7 +35,7 @@ public class ItemReaderPagerAdapter extends FragmentStatePagerAdapter {
 
     private LazyList<SimplePost> simplePosts;
 
-    public ItemReaderPagerAdapter(FragmentManager fm, LoadDataView loadDataView) {
+    public PostReaderPagerAdapter(FragmentManager fm, LoadDataView loadDataView) {
         super(fm);
         this.loadDataView = loadDataView;
     }
@@ -56,17 +56,17 @@ public class ItemReaderPagerAdapter extends FragmentStatePagerAdapter {
 
                 @Override
                 public void onError(Throwable e) {
-                    ItemReaderPagerAdapter.this.loadDataView.showError("");
+                    PostReaderPagerAdapter.this.loadDataView.showError("");
                 }
 
                 @Override
                 public void onNext(Object o) {
-                    ItemReaderPagerAdapter.this.simplePosts =
-                            ItemReaderPagerAdapter.this.simplePostDao.queryBuilder()
+                    PostReaderPagerAdapter.this.simplePosts =
+                            PostReaderPagerAdapter.this.simplePostDao.queryBuilder()
                                     .orderDesc(SimplePostDao.Properties.Date).listLazyUncached();
                     Observable.empty().observeOn(AndroidSchedulers.mainThread()).doOnCompleted(() -> {
                         logger.info("refresh");
-                        ItemReaderPagerAdapter.this.notifyDataSetChanged();
+                        PostReaderPagerAdapter.this.notifyDataSetChanged();
                     }).subscribe();
                 }
             });

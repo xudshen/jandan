@@ -36,7 +36,7 @@ import info.xudshen.jandan.internal.di.components.DaggerPostComponent;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
 import info.xudshen.jandan.view.LoadDataView;
-import info.xudshen.jandan.view.adapter.ItemReaderPagerAdapter;
+import info.xudshen.jandan.view.adapter.PostReaderPagerAdapter;
 import info.xudshen.jandan.view.transition.StackPageTransformer;
 
 public class ItemReaderActivity extends BaseActivity implements HasComponents, LoadDataView {
@@ -86,12 +86,12 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
         //do other
         ButterKnife.bind(this);
 
-        ItemReaderPagerAdapter itemReaderPagerAdapter = new ItemReaderPagerAdapter(
+        PostReaderPagerAdapter postReaderPagerAdapter = new PostReaderPagerAdapter(
                 getSupportFragmentManager(), this);
-        postComponent.inject(itemReaderPagerAdapter);
-        itemReaderPagerAdapter.initialize();
+        postComponent.inject(postReaderPagerAdapter);
+        postReaderPagerAdapter.initialize();
 
-        viewPager.setAdapter(itemReaderPagerAdapter);
+        viewPager.setAdapter(postReaderPagerAdapter);
         viewPager.setPageTransformer(true, new StackPageTransformer());
         int position = getIntent().getExtras().getInt(ARG_POSITION);
         viewPager.setCurrentItem(position);
