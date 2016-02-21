@@ -9,6 +9,8 @@ import rx.Observable;
  * Created by xudshen on 16/2/20.
  */
 public interface PicDataStore {
+    Observable<PicItem> pic(Long picId);
+
     Observable<List<PicItem>> picList();
 
     Observable<List<PicItem>> picListNext();

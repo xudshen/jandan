@@ -20,6 +20,7 @@ import javax.inject.Named;
 import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.databinding.FragmentPicListBinding;
+import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PicListPresenter;
@@ -63,8 +64,8 @@ public class PicListFragment extends BaseFragment implements DataListView {
 
         picListAdapter.setOnItemClickListener((itemView, position) -> {
             logger.info("position={}", position);
-//            getNavigator().launchItemReader((BaseActivity) getActivity(),
-//                    itemView, position);
+            getNavigator().launchItemReader((BaseActivity) getActivity(),
+                    itemView, position, ReaderItemType.SimplePic);
         });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());

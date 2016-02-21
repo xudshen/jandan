@@ -14,7 +14,7 @@ import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.Post;
-import info.xudshen.jandan.view.PostDetailView;
+import info.xudshen.jandan.view.DataDetailView;
 import rx.Subscriber;
 
 /**
@@ -23,7 +23,7 @@ import rx.Subscriber;
 //@PerActivity remove this since we need different presenter for each fragment
 public class PostDetailPresenter implements Presenter {
     private static final Logger logger = LoggerFactory.getLogger(PostDetailPresenter.class);
-    private PostDetailView postDetailView;
+    private DataDetailView<Post> dataDetailView;
 
     private final UseCase getPostDetailUseCase;
     private final IterableUseCase getPostCommentUseCase;
@@ -35,8 +35,8 @@ public class PostDetailPresenter implements Presenter {
         this.getPostCommentUseCase = getPostCommentUseCase;
     }
 
-    public void setView(@NonNull PostDetailView postDetailView) {
-        this.postDetailView = postDetailView;
+    public void setView(@NonNull DataDetailView<Post> dataDetailView) {
+        this.dataDetailView = dataDetailView;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class PostDetailPresenter implements Presenter {
 
     @Override
     public void destroy() {
-        this.postDetailView = null;
+        this.dataDetailView = null;
     }
 
     public void initialize(Long postId) {
@@ -59,24 +59,24 @@ public class PostDetailPresenter implements Presenter {
     }
 
     public void refreshComment(Long postId) {
-        this.postDetailView.showSwipeUpLoading();
-        this.getPostCommentUseCase.executeNext(this.postDetailView.bindToLifecycle(),
+        this.dataDetailView.showSwipeUpLoading();
+        this.getPostCommentUseCase.executeNext(this.dataDetailView.bindToLifecycle(),
                 new Subscriber<List<Comment>>() {
                     @Override
                     public void onCompleted() {
-                        PostDetailPresenter.this.postDetailView.hideSwipeUpLoading();
+                        PostDetailPresenter.this.dataDetailView.hideSwipeUpLoading();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        PostDetailPresenter.this.postDetailView.hideSwipeUpLoading();
-                        PostDetailPresenter.this.postDetailView.showError("");
+                        PostDetailPresenter.this.dataDetailView.hideSwipeUpLoading();
+                        PostDetailPresenter.this.dataDetailView.showError("");
                     }
 
                     @Override
                     public void onNext(List<Comment> comments) {
                         if (comments.size() == 0) {
-                            PostDetailPresenter.this.postDetailView.noMoreComments();
+                            PostDetailPresenter.this.dataDetailView.noMoreComments();
                         }
                     }
                 }, postId);
@@ -86,25 +86,25 @@ public class PostDetailPresenter implements Presenter {
      * Loads user details.
      */
     private void loadPostDetail(Long postId) {
-        this.postDetailView.showLoading();
-        this.getPostDetailUseCase.execute(this.postDetailView.bindToLifecycle(),
+        this.dataDetailView.showLoading();
+        this.getPostDetailUseCase.execute(this.dataDetailView.bindToLifecycle(),
                 new Subscriber<Post>() {
                     @Override
                     public void onCompleted() {
-                        PostDetailPresenter.this.postDetailView.hideLoading();
+                        PostDetailPresenter.this.dataDetailView.hideLoading();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        PostDetailPresenter.this.postDetailView.hideLoading();
-                        PostDetailPresenter.this.postDetailView.showRetry();
+                        PostDetailPresenter.this.dataDetailView.hideLoading();
+                        PostDetailPresenter.this.dataDetailView.showRetry();
                         //do something
                         logger.error("", e);
                     }
 
                     @Override
                     public void onNext(Post post) {
-                        PostDetailPresenter.this.postDetailView.renderPostDetail(post);
+                        PostDetailPresenter.this.dataDetailView.renderItemDetail(post);
                     }
                 }, postId);
     }

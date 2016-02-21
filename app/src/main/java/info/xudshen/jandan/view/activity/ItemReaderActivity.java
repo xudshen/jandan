@@ -29,19 +29,24 @@ import org.slf4j.LoggerFactory;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.internal.di.HasComponents;
 import info.xudshen.jandan.internal.di.components.ActivityComponent;
 import info.xudshen.jandan.internal.di.components.DaggerActivityComponent;
+import info.xudshen.jandan.internal.di.components.DaggerPicComponent;
 import info.xudshen.jandan.internal.di.components.DaggerPostComponent;
+import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
 import info.xudshen.jandan.view.LoadDataView;
+import info.xudshen.jandan.view.adapter.PicReaderPagerAdapter;
 import info.xudshen.jandan.view.adapter.PostReaderPagerAdapter;
 import info.xudshen.jandan.view.transition.StackPageTransformer;
 
 public class ItemReaderActivity extends BaseActivity implements HasComponents, LoadDataView {
     private static final Logger logger = LoggerFactory.getLogger(ItemReaderActivity.class);
     public static final String ARG_POSITION = "ARG_POSITION";
+    public static final String ARG_READER_TYPE = "ARG_READER_TYPE";
 
     @Bind(R.id.item_reader_view_pager)
     ViewPager viewPager;
@@ -59,6 +64,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
     FloatingActionButton commentSendFab;
 
     private PostComponent postComponent;
+    private PicComponent picComponent;
     private ActivityComponent activityComponent;
 
     @Override
@@ -74,6 +80,11 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
                 .applicationComponent(getApplicationComponent())
                 .activityModule(activityModule)
                 .build();
+
+        picComponent = DaggerPicComponent.builder()
+                .applicationComponent(getApplicationComponent())
+                .activityModule(activityModule)
+                .build();
     }
 
     @Override
@@ -86,12 +97,26 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
         //do other
         ButterKnife.bind(this);
 
-        PostReaderPagerAdapter postReaderPagerAdapter = new PostReaderPagerAdapter(
-                getSupportFragmentManager(), this);
-        postComponent.inject(postReaderPagerAdapter);
-        postReaderPagerAdapter.initialize();
+        ReaderItemType type = (ReaderItemType) getIntent().getExtras().getSerializable(ARG_READER_TYPE);
+        switch (type) {
+            case SimplePost: {
+                PostReaderPagerAdapter postReaderPagerAdapter = new PostReaderPagerAdapter(
+                        getSupportFragmentManager(), this);
+                postComponent.inject(postReaderPagerAdapter);
+                postReaderPagerAdapter.initialize();
+                viewPager.setAdapter(postReaderPagerAdapter);
+                break;
+            }
+            case SimplePic: {
+                PicReaderPagerAdapter picReaderPagerAdapter = new PicReaderPagerAdapter(
+                        getSupportFragmentManager(), this);
+                picComponent.inject(picReaderPagerAdapter);
+                picReaderPagerAdapter.initialize();
+                viewPager.setAdapter(picReaderPagerAdapter);
+                break;
+            }
+        }
 
-        viewPager.setAdapter(postReaderPagerAdapter);
         viewPager.setPageTransformer(true, new StackPageTransformer());
         int position = getIntent().getExtras().getInt(ARG_POSITION);
         viewPager.setCurrentItem(position);
@@ -147,6 +172,9 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
         }
         if (componentType.isInstance(this.postComponent)) {
             return (C) this.postComponent;
+        }
+        if (componentType.isInstance(this.picComponent)) {
+            return (C) this.picComponent;
         }
         throw new IllegalStateException("componentType=" + componentType.getSimpleName() + " not found");
     }

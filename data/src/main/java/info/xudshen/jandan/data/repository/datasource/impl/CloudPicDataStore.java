@@ -1,5 +1,6 @@
 package info.xudshen.jandan.data.repository.datasource.impl;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +30,11 @@ public class CloudPicDataStore implements PicDataStore {
         this.picService = picService;
         this.picItemDao = picItemDao;
         this.metaDao = metaDao;
+    }
+
+    @Override
+    public Observable<PicItem> pic(Long picId) {
+        throw new NotImplementedException("");
     }
 
     @Override

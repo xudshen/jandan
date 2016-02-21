@@ -18,8 +18,10 @@ import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.dao.PicItemDao;
 import info.xudshen.jandan.domain.executor.PostExecutionThread;
 import info.xudshen.jandan.domain.executor.ThreadExecutor;
+import info.xudshen.jandan.domain.interactor.GetPicDetail;
 import info.xudshen.jandan.domain.interactor.GetPicList;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
+import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.domain.repository.PicRepository;
 import info.xudshen.jandan.internal.di.PerActivity;
@@ -55,6 +57,14 @@ public class PicModule {
                     viewDataBinding.setVariable(BR.item, picItem);
                 })
                 .build();
+    }
+
+    @Provides
+    @PerActivity
+    @Named("picDetail")
+    UseCase provideGetPicDetailUseCase(PicRepository picRepository,
+                                       ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+        return new GetPicDetail(picRepository, threadExecutor, postExecutionThread);
     }
 
     @Provides

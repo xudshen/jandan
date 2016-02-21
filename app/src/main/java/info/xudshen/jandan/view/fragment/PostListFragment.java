@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
 import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.databinding.FragmentPostListBinding;
+import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PostListPresenter;
 import info.xudshen.jandan.view.DataListView;
@@ -65,7 +66,7 @@ public class PostListFragment extends BaseFragment implements DataListView {
         postListAdapter.setOnItemClickListener((itemView, position) -> {
             logger.info("position={}", position);
             getNavigator().launchItemReader((BaseActivity) getActivity(),
-                    itemView.findViewById(R.id.post_card_author), position);
+                    itemView.findViewById(R.id.post_card_author), position, ReaderItemType.SimplePost);
         });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());

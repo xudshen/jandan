@@ -25,6 +25,12 @@ public class PicDataStoreFactory {
         this.metaDao = metaDao;
     }
 
+    public PicDataStore createLocalCloudDataStore() {
+        PicDataStore picDataStore = new LocalPicDataStore(picItemDao);
+        return picDataStore;
+    }
+
+
     public PicDataStore createCloudDataStore() {
         return new CloudPicDataStore(ApiAdapter.getPicService(),
                 picItemDao, metaDao);

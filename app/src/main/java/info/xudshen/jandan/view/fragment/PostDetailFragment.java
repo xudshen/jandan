@@ -6,14 +6,9 @@ import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +25,9 @@ import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.Post;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PostDetailPresenter;
-import info.xudshen.jandan.view.PostDetailView;
+import info.xudshen.jandan.view.DataDetailView;
 
-public class PostDetailFragment extends BaseFragment implements PostDetailView {
+public class PostDetailFragment extends BaseFragment implements DataDetailView<Post> {
     private static final Logger logger = LoggerFactory.getLogger(PostDetailFragment.class);
     public static final String ARG_POST_ID = "ARG_POST_ID";
 
@@ -117,7 +112,7 @@ public class PostDetailFragment extends BaseFragment implements PostDetailView {
     }
 
     @Override
-    public void renderPostDetail(Post post) {
+    public void renderItemDetail(Post post) {
         if (binding.postWithCommentList.getAdapter() == null) {
             DDBindableCursorLoaderRVHeaderAdapter postCommentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
                     .cursorLoader(getActivity(), CommentDao.CONTENT_URI, null, "post_id = ?", new String[]{postId.toString()}, null)

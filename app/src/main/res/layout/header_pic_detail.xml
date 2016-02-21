@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="info.xudshen.jandan.utils.RealtimeTimeUtils" />
+
+        <variable
+            name="picItem"
+            type="info.xudshen.jandan.domain.model.PicItem" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/layoutMarginVertical"
+        android:paddingTop="@dimen/layoutMarginVertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="@dimen/layoutMarginHorizontal"
+            android:text="所有评论" />
+
+    </LinearLayout>
+</layout>

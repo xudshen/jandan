@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.view.activity.BaseActivity;
 import info.xudshen.jandan.view.activity.ItemReaderActivity;
 import info.xudshen.jandan.view.activity.TransitionHelper;
@@ -27,11 +28,12 @@ public class Navigator {
     /**
      * temporary disable this
      */
-    public void launchItemReader(BaseActivity fromActivity, View fromView, int position) {
+    public void launchItemReader(BaseActivity fromActivity, View fromView, int position, ReaderItemType readerItemType) {
         ViewCompat.setTransitionName(fromView, fromActivity.getString(R.string.launch_item_reader_transition));
 
         Intent intent = new Intent(fromActivity, ItemReaderActivity.class);
         intent.putExtra(ItemReaderActivity.ARG_POSITION, position);
+        intent.putExtra(ItemReaderActivity.ARG_READER_TYPE, readerItemType);
 
         ActivityOptionsCompat options = TransitionHelper.makeOptionsCompat(
                 fromActivity, Pair.create(fromView, "profile"));
