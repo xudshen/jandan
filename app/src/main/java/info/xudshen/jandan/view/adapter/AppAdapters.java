@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
+import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,10 +47,9 @@ public class AppAdapters {
                 .into(view);
     }
 
-    @BindingAdapter(value = {"fullImage", "placeHolder"})
+    @BindingAdapter(value = {"picThumb", "placeHolder"})
     public static void setFullImageUrl(ImageView view, String url,
                                        Drawable placeHolder) {
-        url = LayoutHelper.thumb(url);
         DrawableTypeRequest<String> request = Glide.with(view.getContext())
                 .load(url);
         request.asBitmap();
@@ -107,5 +108,13 @@ public class AppAdapters {
     @BindingAdapter(value = {"richText"})
     public static void setTextviewRichText(TextView textView, String content) {
         textView.setText(Html.fromHtml(content));
+    }
+
+    @BindingAdapter(value = {"paddingBottom"})
+    public static void setPaddingBottom(View view, float height) {
+        view.setPadding(view.getPaddingLeft(),
+                view.getPaddingTop(),
+                view.getPaddingRight(),
+                (int) height);
     }
 }

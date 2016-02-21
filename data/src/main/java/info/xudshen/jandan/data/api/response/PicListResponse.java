@@ -8,11 +8,16 @@ import java.util.List;
 
 import info.xudshen.jandan.data.utils.HtmlUtils;
 import info.xudshen.jandan.domain.model.PicItem;
+import jregex.Matcher;
+import jregex.Pattern;
 
 /**
  * Created by xudshen on 16/2/20.
  */
 public class PicListResponse {
+    public static final Pattern ImageUrlPattern =
+            new Pattern("({http}http|https):\\/\\/({host}\\S+?)\\/({size}\\S+?)\\/({id}\\S+?)\\.({type}\\S+)");
+
     @Expose
     private String status;
     @Expose
@@ -45,7 +50,33 @@ public class PicListResponse {
         public PicItem getPicItem() {
             List<String> urlList = HtmlUtils.getPicUrlList(getPicContent());
             this.setPics(Joiner.on(",").skipNulls().join(urlList));
+            this.setPicCount(Long.valueOf(urlList.size()));
+            this.setPicFirst(PicListResponse.thumb(urlList.get(0)));
+
+            this.setHasGif(false);
+            for (String url : urlList) {
+                if (url.endsWith(".gif")) {
+                    this.setHasGif(true);
+                    break;
+                }
+            }
             return this;
         }
+    }
+
+    public static String thumb(String url) {
+        Matcher matcher = ImageUrlPattern.matcher(url);
+        if (matcher.find()) {
+            String http = matcher.group("http"),
+                    host = matcher.group("host"),
+                    size = matcher.group("size"),
+                    id = matcher.group("id"),
+                    type = matcher.group("type");
+            if (type.equals("gif")) {
+                String newUrl = String.format("%s://%s/%s/%s.%s", http, host, "thumbnail", id, type);
+                return newUrl;
+            } else return url;
+        }
+        return url;
     }
 }

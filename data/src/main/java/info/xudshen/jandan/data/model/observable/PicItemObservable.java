@@ -50,6 +50,12 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
     private String picTextContent;
     
     private String pics;
+    @Expose
+    private String picFirst;
+    @Expose
+    private Long picCount;
+    @Expose
+    private Boolean hasGif;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -61,7 +67,7 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
         this.id = id;
     }
 
-    public PicItemObservable(Long id, Long picId, String picAuthor, String picAuthorEmail, String picAuthorUrl, Timestamp date, Long votePositive, Long voteNegative, String picContent, String picTextContent, String pics) {
+    public PicItemObservable(Long id, Long picId, String picAuthor, String picAuthorEmail, String picAuthorUrl, Timestamp date, Long votePositive, Long voteNegative, String picContent, String picTextContent, String pics, String picFirst, Long picCount, Boolean hasGif) {
         this.id = id;
         this.picId = picId;
         this.picAuthor = picAuthor;
@@ -73,6 +79,9 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
         this.picContent = picContent;
         this.picTextContent = picTextContent;
         this.pics = pics;
+        this.picFirst = picFirst;
+        this.picCount = picCount;
+        this.hasGif = hasGif;
     }
 
     public Long getId() {
@@ -213,6 +222,45 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
         }
     }
 
+    @Bindable
+    public String getPicFirst() {
+        return picFirst;
+    }
+
+    public void setPicFirst(String picFirst) {
+        if ((this.picFirst == null && picFirst != null)
+                || (this.picFirst != null && !this.picFirst.equals(picFirst))) {
+            this.picFirst = picFirst;
+            notifyPropertyChanged(BR.picFirst);
+        }
+    }
+
+    @Bindable
+    public Long getPicCount() {
+        return picCount;
+    }
+
+    public void setPicCount(Long picCount) {
+        if ((this.picCount == null && picCount != null)
+                || (this.picCount != null && !this.picCount.equals(picCount))) {
+            this.picCount = picCount;
+            notifyPropertyChanged(BR.picCount);
+        }
+    }
+
+    @Bindable
+    public Boolean getHasGif() {
+        return hasGif;
+    }
+
+    public void setHasGif(Boolean hasGif) {
+        if ((this.hasGif == null && hasGif != null)
+                || (this.hasGif != null && !this.hasGif.equals(hasGif))) {
+            this.hasGif = hasGif;
+            notifyPropertyChanged(BR.hasGif);
+        }
+    }
+
 
     /**
      * convert entity to entityObservable
@@ -229,6 +277,9 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
         this.picContent = entity.getPicContent();
         this.picTextContent = entity.getPicTextContent();
         this.pics = entity.getPics();
+        this.picFirst = entity.getPicFirst();
+        this.picCount = entity.getPicCount();
+        this.hasGif = entity.getHasGif();
     }
 
     @Override
@@ -289,6 +340,21 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
                 || (this.pics != null && !this.pics.equals(entity.getPics()))) {
             this.pics = entity.getPics();
             propertyChanges.add(BR.pics);
+        }
+        if ((this.picFirst == null && entity.getPicFirst() != null)
+                || (this.picFirst != null && !this.picFirst.equals(entity.getPicFirst()))) {
+            this.picFirst = entity.getPicFirst();
+            propertyChanges.add(BR.picFirst);
+        }
+        if ((this.picCount == null && entity.getPicCount() != null)
+                || (this.picCount != null && !this.picCount.equals(entity.getPicCount()))) {
+            this.picCount = entity.getPicCount();
+            propertyChanges.add(BR.picCount);
+        }
+        if ((this.hasGif == null && entity.getHasGif() != null)
+                || (this.hasGif != null && !this.hasGif.equals(entity.getHasGif()))) {
+            this.hasGif = entity.getHasGif();
+            propertyChanges.add(BR.hasGif);
         }
 
         if (propertyChanges.size() == 1) {

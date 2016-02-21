@@ -188,6 +188,9 @@ public class AppModelGenerator extends ModelGenerator {
         addStringProperty(entity, "picContent").codeBeforeField("@Expose\n    @SerializedName(\"comment_content\")").bindable(true);
         addStringProperty(entity, "picTextContent").codeBeforeField("@Expose\n    @SerializedName(\"text_content\")").bindable(true);
         addStringProperty(entity, "pics").codeBeforeField("").bindable(true);
+        addStringProperty(entity, "picFirst").bindable(true);
+        addLongProperty(entity, "picCount").bindable(true);
+        addBooleanProperty(entity, "hasGif").bindable(true);
 
         entity.addContentProvider();
         entity.addImport(GSON_EXPOSE);

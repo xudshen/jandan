@@ -51,6 +51,9 @@ public class PicItemDao extends DDAbstractDao<PicItem, Long> {
         public final static Property PicContent = new Property(8, String.class, "picContent", false, "PIC_CONTENT");
         public final static Property PicTextContent = new Property(9, String.class, "picTextContent", false, "PIC_TEXT_CONTENT");
         public final static Property Pics = new Property(10, String.class, "pics", false, "PICS");
+        public final static Property PicFirst = new Property(11, String.class, "picFirst", false, "PIC_FIRST");
+        public final static Property PicCount = new Property(12, Long.class, "picCount", false, "PIC_COUNT");
+        public final static Property HasGif = new Property(13, Boolean.class, "hasGif", false, "HAS_GIF");
     }
 
     private final TimestampPropertyConverter dateConverter = new TimestampPropertyConverter();
@@ -77,7 +80,10 @@ public class PicItemDao extends DDAbstractDao<PicItem, Long> {
                 "\"VOTE_NEGATIVE\" INTEGER," + // 7: voteNegative
                 "\"PIC_CONTENT\" TEXT," + // 8: picContent
                 "\"PIC_TEXT_CONTENT\" TEXT," + // 9: picTextContent
-                "\"PICS\" TEXT);"); // 10: pics
+                "\"PICS\" TEXT," + // 10: pics
+                "\"PIC_FIRST\" TEXT," + // 11: picFirst
+                "\"PIC_COUNT\" INTEGER," + // 12: picCount
+                "\"HAS_GIF\" INTEGER);"); // 13: hasGif
     }
 
     /** Drops the underlying database table. */
@@ -145,6 +151,21 @@ public class PicItemDao extends DDAbstractDao<PicItem, Long> {
         if (pics != null) {
             stmt.bindString(11, pics);
         }
+ 
+        String picFirst = entity.getPicFirst();
+        if (picFirst != null) {
+            stmt.bindString(12, picFirst);
+        }
+ 
+        Long picCount = entity.getPicCount();
+        if (picCount != null) {
+            stmt.bindLong(13, picCount);
+        }
+ 
+        Boolean hasGif = entity.getHasGif();
+        if (hasGif != null) {
+            stmt.bindLong(14, hasGif ? 1L: 0L);
+        }
     }
 
     /** @inheritdoc */
@@ -167,7 +188,10 @@ public class PicItemDao extends DDAbstractDao<PicItem, Long> {
             cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // voteNegative
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // picContent
             cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // picTextContent
-            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10) // pics
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // pics
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // picFirst
+            cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12), // picCount
+            cursor.isNull(offset + 13) ? null : cursor.getShort(offset + 13) != 0 // hasGif
         );
         return entity;
     }
@@ -186,6 +210,9 @@ public class PicItemDao extends DDAbstractDao<PicItem, Long> {
         entity.setPicContent(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
         entity.setPicTextContent(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
         entity.setPics(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setPicFirst(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setPicCount(cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12));
+        entity.setHasGif(cursor.isNull(offset + 13) ? null : cursor.getShort(offset + 13) != 0);
     }
     
     /** @inheritdoc */

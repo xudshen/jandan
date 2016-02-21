@@ -42,6 +42,12 @@ public class PicItem {
     private String picTextContent;
     
     private String pics;
+    @Expose
+    private String picFirst;
+    @Expose
+    private Long picCount;
+    @Expose
+    private Boolean hasGif;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -53,7 +59,7 @@ public class PicItem {
         this.id = id;
     }
 
-    public PicItem(Long id, Long picId, String picAuthor, String picAuthorEmail, String picAuthorUrl, Timestamp date, Long votePositive, Long voteNegative, String picContent, String picTextContent, String pics) {
+    public PicItem(Long id, Long picId, String picAuthor, String picAuthorEmail, String picAuthorUrl, Timestamp date, Long votePositive, Long voteNegative, String picContent, String picTextContent, String pics, String picFirst, Long picCount, Boolean hasGif) {
         this.id = id;
         this.picId = picId;
         this.picAuthor = picAuthor;
@@ -65,6 +71,9 @@ public class PicItem {
         this.picContent = picContent;
         this.picTextContent = picTextContent;
         this.pics = pics;
+        this.picFirst = picFirst;
+        this.picCount = picCount;
+        this.hasGif = hasGif;
     }
 
     public Long getId() {
@@ -153,6 +162,30 @@ public class PicItem {
 
     public void setPics(String pics) {
         this.pics = pics;
+    }
+
+    public String getPicFirst() {
+        return picFirst;
+    }
+
+    public void setPicFirst(String picFirst) {
+        this.picFirst = picFirst;
+    }
+
+    public Long getPicCount() {
+        return picCount;
+    }
+
+    public void setPicCount(Long picCount) {
+        this.picCount = picCount;
+    }
+
+    public Boolean getHasGif() {
+        return hasGif;
+    }
+
+    public void setHasGif(Boolean hasGif) {
+        this.hasGif = hasGif;
     }
 
     // KEEP METHODS - put your custom methods here
