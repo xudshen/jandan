@@ -30,6 +30,7 @@ public class AppModelGenerator extends ModelGenerator {
 
         addReadLaterItem(schema);
         addPic(schema);
+        addPicComment(schema);
     }
 
     void addMeta(Schema schema) {
@@ -186,7 +187,7 @@ public class AppModelGenerator extends ModelGenerator {
         addLongProperty(entity, "voteNegative").bindable(true);
 
         addLongProperty(entity, "commentCount").bindable(true);
-        addLongProperty(entity, "commentThreadId").bindable(true);
+        addStringProperty(entity, "picThreadId").bindable(true);
 
         addStringProperty(entity, "picContent").codeBeforeField("@Expose\n    @SerializedName(\"comment_content\")").bindable(true);
         addStringProperty(entity, "picTextContent").codeBeforeField("@Expose\n    @SerializedName(\"text_content\")").bindable(true);
@@ -194,6 +195,28 @@ public class AppModelGenerator extends ModelGenerator {
         addStringProperty(entity, "picFirst").bindable(true);
         addLongProperty(entity, "picCount").bindable(true);
         addBooleanProperty(entity, "hasGif").bindable(true);
+
+        entity.addContentProvider();
+        entity.addImport(GSON_EXPOSE);
+        entity.addImport(GSON_SERIALIZEDNAME);
+    }
+
+    void addPicComment(Schema schema) {
+        Entity entity = schema.addEntity("PicComment");
+
+        entity.addIdProperty();
+        addLongProperty(entity, "picCommentId").codeBeforeField("@Expose\n    @SerializedName(\"post_id\")").bindable(true);
+        addLongProperty(entity, "picId").bindable(true);
+        addLongProperty(entity, "picThreadId").codeBeforeField("@Expose\n    @SerializedName(\"thread_id\")").bindable(true);
+
+        addStringProperty(entity, "message").bindable(true);
+        addTimestampProperty(entity, "date").codeBeforeField("@Expose\n    @SerializedName(\"created_at\")").bindable(true);
+        addStringProperty(entity, "parentCommentId").codeBeforeField("@Expose\n    @SerializedName(\"parent_id\")").bindable(true);
+
+        addStringProperty(entity, "authorId").bindable(true);
+        addStringProperty(entity, "authorName").bindable(true);
+        addStringProperty(entity, "authorAvatar").bindable(true);
+        addStringProperty(entity, "authorUrl").bindable(true);
 
         entity.addContentProvider();
         entity.addImport(GSON_EXPOSE);

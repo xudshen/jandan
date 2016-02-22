@@ -37,7 +37,7 @@ public class PicItem {
     @Expose
     private Long commentCount;
     @Expose
-    private Long commentThreadId;
+    private String picThreadId;
     @Expose
     @SerializedName("comment_content")
     private String picContent;
@@ -63,7 +63,7 @@ public class PicItem {
         this.id = id;
     }
 
-    public PicItem(Long id, Long picId, String picAuthor, String picAuthorEmail, String picAuthorUrl, Timestamp date, Long votePositive, Long voteNegative, Long commentCount, Long commentThreadId, String picContent, String picTextContent, String pics, String picFirst, Long picCount, Boolean hasGif) {
+    public PicItem(Long id, Long picId, String picAuthor, String picAuthorEmail, String picAuthorUrl, Timestamp date, Long votePositive, Long voteNegative, Long commentCount, String picThreadId, String picContent, String picTextContent, String pics, String picFirst, Long picCount, Boolean hasGif) {
         this.id = id;
         this.picId = picId;
         this.picAuthor = picAuthor;
@@ -73,7 +73,7 @@ public class PicItem {
         this.votePositive = votePositive;
         this.voteNegative = voteNegative;
         this.commentCount = commentCount;
-        this.commentThreadId = commentThreadId;
+        this.picThreadId = picThreadId;
         this.picContent = picContent;
         this.picTextContent = picTextContent;
         this.pics = pics;
@@ -154,12 +154,12 @@ public class PicItem {
         this.commentCount = commentCount;
     }
 
-    public Long getCommentThreadId() {
-        return commentThreadId;
+    public String getPicThreadId() {
+        return picThreadId;
     }
 
-    public void setCommentThreadId(Long commentThreadId) {
-        this.commentThreadId = commentThreadId;
+    public void setPicThreadId(String picThreadId) {
+        this.picThreadId = picThreadId;
     }
 
     public String getPicContent() {

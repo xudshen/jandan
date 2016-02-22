@@ -25,7 +25,7 @@ public class CommentCountResponse {
 
     public class CommentCount {
         @Expose
-        Long threadId;
+        String threadId;
         @Expose
         @SerializedName("comments")
         Long count;
@@ -35,11 +35,11 @@ public class CommentCountResponse {
         public CommentCount() {
         }
 
-        public Long getThreadId() {
+        public String getThreadId() {
             return threadId;
         }
 
-        public void setThreadId(Long threadId) {
+        public void setThreadId(String threadId) {
             this.threadId = threadId;
         }
 

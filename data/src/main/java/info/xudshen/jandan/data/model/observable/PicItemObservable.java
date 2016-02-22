@@ -45,7 +45,7 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
     @Expose
     private Long commentCount;
     @Expose
-    private Long commentThreadId;
+    private String picThreadId;
     @Expose
     @SerializedName("comment_content")
     private String picContent;
@@ -71,7 +71,7 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
         this.id = id;
     }
 
-    public PicItemObservable(Long id, Long picId, String picAuthor, String picAuthorEmail, String picAuthorUrl, Timestamp date, Long votePositive, Long voteNegative, Long commentCount, Long commentThreadId, String picContent, String picTextContent, String pics, String picFirst, Long picCount, Boolean hasGif) {
+    public PicItemObservable(Long id, Long picId, String picAuthor, String picAuthorEmail, String picAuthorUrl, Timestamp date, Long votePositive, Long voteNegative, Long commentCount, String picThreadId, String picContent, String picTextContent, String pics, String picFirst, Long picCount, Boolean hasGif) {
         this.id = id;
         this.picId = picId;
         this.picAuthor = picAuthor;
@@ -81,7 +81,7 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
         this.votePositive = votePositive;
         this.voteNegative = voteNegative;
         this.commentCount = commentCount;
-        this.commentThreadId = commentThreadId;
+        this.picThreadId = picThreadId;
         this.picContent = picContent;
         this.picTextContent = picTextContent;
         this.pics = pics;
@@ -203,15 +203,15 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
     }
 
     @Bindable
-    public Long getCommentThreadId() {
-        return commentThreadId;
+    public String getPicThreadId() {
+        return picThreadId;
     }
 
-    public void setCommentThreadId(Long commentThreadId) {
-        if ((this.commentThreadId == null && commentThreadId != null)
-                || (this.commentThreadId != null && !this.commentThreadId.equals(commentThreadId))) {
-            this.commentThreadId = commentThreadId;
-            notifyPropertyChanged(BR.commentThreadId);
+    public void setPicThreadId(String picThreadId) {
+        if ((this.picThreadId == null && picThreadId != null)
+                || (this.picThreadId != null && !this.picThreadId.equals(picThreadId))) {
+            this.picThreadId = picThreadId;
+            notifyPropertyChanged(BR.picThreadId);
         }
     }
 
@@ -307,7 +307,7 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
         this.votePositive = entity.getVotePositive();
         this.voteNegative = entity.getVoteNegative();
         this.commentCount = entity.getCommentCount();
-        this.commentThreadId = entity.getCommentThreadId();
+        this.picThreadId = entity.getPicThreadId();
         this.picContent = entity.getPicContent();
         this.picTextContent = entity.getPicTextContent();
         this.pics = entity.getPics();
@@ -365,10 +365,10 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
             this.commentCount = entity.getCommentCount();
             propertyChanges.add(BR.commentCount);
         }
-        if ((this.commentThreadId == null && entity.getCommentThreadId() != null)
-                || (this.commentThreadId != null && !this.commentThreadId.equals(entity.getCommentThreadId()))) {
-            this.commentThreadId = entity.getCommentThreadId();
-            propertyChanges.add(BR.commentThreadId);
+        if ((this.picThreadId == null && entity.getPicThreadId() != null)
+                || (this.picThreadId != null && !this.picThreadId.equals(entity.getPicThreadId()))) {
+            this.picThreadId = entity.getPicThreadId();
+            propertyChanges.add(BR.picThreadId);
         }
         if ((this.picContent == null && entity.getPicContent() != null)
                 || (this.picContent != null && !this.picContent.equals(entity.getPicContent()))) {

@@ -51,6 +51,10 @@ public class ModelContentProvider extends ContentProvider {
             + "/" + PicItemDao.TABLENAME;
     public static final String PIC_ITEM_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
             + "/" + PicItemDao.TABLENAME;
+    public static final String PIC_COMMENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
+            + "/" + PicCommentDao.TABLENAME;
+    public static final String PIC_COMMENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
+            + "/" + PicCommentDao.TABLENAME;
 
     private static final int META_DIR = 0x0000;
     private static final int META_ID = 0x1000;
@@ -66,6 +70,8 @@ public class ModelContentProvider extends ContentProvider {
     private static final int COMMENT_ID = 0x1005;
     private static final int PIC_ITEM_DIR = 0x0006;
     private static final int PIC_ITEM_ID = 0x1006;
+    private static final int PIC_COMMENT_DIR = 0x0007;
+    private static final int PIC_COMMENT_ID = 0x1007;
 
     private static final UriMatcher sURIMatcher;
 
@@ -85,6 +91,8 @@ public class ModelContentProvider extends ContentProvider {
         sURIMatcher.addURI(AUTHORITY, CommentDao.TABLENAME + "/#", COMMENT_ID);
         sURIMatcher.addURI(AUTHORITY, PicItemDao.TABLENAME, PIC_ITEM_DIR);
         sURIMatcher.addURI(AUTHORITY, PicItemDao.TABLENAME + "/#", PIC_ITEM_ID);
+        sURIMatcher.addURI(AUTHORITY, PicCommentDao.TABLENAME, PIC_COMMENT_DIR);
+        sURIMatcher.addURI(AUTHORITY, PicCommentDao.TABLENAME + "/#", PIC_COMMENT_ID);
     }
 
     /**
@@ -123,6 +131,7 @@ public class ModelContentProvider extends ContentProvider {
             case CATEGORY_ID:
             case COMMENT_ID:
             case PIC_ITEM_ID:
+            case PIC_COMMENT_ID:
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -153,6 +162,7 @@ public class ModelContentProvider extends ContentProvider {
             case CATEGORY_ID:
             case COMMENT_ID:
             case PIC_ITEM_ID:
+            case PIC_COMMENT_ID:
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -224,6 +234,14 @@ public class ModelContentProvider extends ContentProvider {
                 queryBuilder.appendWhere(PicItemDao.Properties.Id.columnName + "="
                         + uri.getLastPathSegment());
                 break;
+            case PIC_COMMENT_DIR:
+                queryBuilder.setTables(PicCommentDao.TABLENAME);
+                break;
+            case PIC_COMMENT_ID:
+                queryBuilder.setTables(PicCommentDao.TABLENAME);
+                queryBuilder.appendWhere(PicCommentDao.Properties.Id.columnName + "="
+                        + uri.getLastPathSegment());
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
@@ -267,6 +285,10 @@ public class ModelContentProvider extends ContentProvider {
                 return PIC_ITEM_TYPE;
             case PIC_ITEM_ID:
                 return PIC_ITEM_ITEM_TYPE;
+            case PIC_COMMENT_DIR:
+                return PIC_COMMENT_TYPE;
+            case PIC_COMMENT_ID:
+                return PIC_COMMENT_ITEM_TYPE;
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
