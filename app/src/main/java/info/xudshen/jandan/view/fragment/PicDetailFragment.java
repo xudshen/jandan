@@ -23,9 +23,12 @@ import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter
 import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
 import info.xudshen.jandan.BR;
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.data.constants.Constants;
 import info.xudshen.jandan.data.dao.CommentDao;
+import info.xudshen.jandan.data.dao.PicCommentDao;
 import info.xudshen.jandan.databinding.FragmentPicDetailBinding;
 import info.xudshen.jandan.domain.model.Comment;
+import info.xudshen.jandan.domain.model.PicComment;
 import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.presenter.PicDetailPresenter;
@@ -49,7 +52,7 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
     @Inject
     PicDetailPresenter picDetailPresenter;
     @Inject
-    CommentDao commentDao;
+    PicCommentDao picCommentDao;
 
     private boolean isDataLoaded = false;
     private Long picId;
@@ -129,7 +132,7 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
         if (binding.itemWithCommentList.getAdapter() == null) {
             List<String> urlList = Splitter.on(",").splitToList(item.getPics());
             DDBindableCursorLoaderRVHeaderAdapter picCommentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
-                    .cursorLoader(getActivity(), CommentDao.CONTENT_URI, null, "post_id = ?", new String[]{"76032"}, null)
+                    .cursorLoader(getActivity(), PicCommentDao.CONTENT_URI, null, "PIC_THREAD_KEY = ?", new String[]{Constants.THREAD_PREFIX + picId}, null)
                     .headerViewHolderCreator((inflater, viewType, parent) -> {
                         ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, headerPicDetailSelector(urlList.size()), parent, false);
                         return new DDBindableViewHolder(viewDataBinding);
@@ -142,10 +145,10 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
                         ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
                         return new DDBindableViewHolder(viewDataBinding);
                     }))
-                    .itemLayoutSelector(position -> R.layout.post_comment_item)
+                    .itemLayoutSelector(position -> R.layout.pic_comment_item)
                     .itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {
-                        Comment comment = commentDao.loadEntity(cursor);
-                        viewDataBinding.setVariable(BR.comment, comment);
+                        PicComment picComment = picCommentDao.loadEntity(cursor);
+                        viewDataBinding.setVariable(BR.comment, picComment);
                     })
                     .build();
             binding.itemWithCommentList.setAdapter(picCommentAdapter);

@@ -16,6 +16,7 @@ import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.data.dao.SimplePostDao;
 import info.xudshen.jandan.domain.executor.PostExecutionThread;
 import info.xudshen.jandan.domain.executor.ThreadExecutor;
+import info.xudshen.jandan.domain.repository.CommentRepository;
 import info.xudshen.jandan.domain.repository.PicRepository;
 import info.xudshen.jandan.domain.repository.PostRepository;
 import info.xudshen.jandan.internal.di.modules.ApplicationModule;
@@ -45,6 +46,8 @@ public interface ApplicationComponent {
     PostRepository postRepository();
 
     PicRepository picRepository();
+
+    CommentRepository commentRepository();
 
     MetaDao metaDao();
 

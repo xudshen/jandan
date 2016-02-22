@@ -5,10 +5,15 @@ import android.support.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import info.xudshen.jandan.data.constants.Constants;
+import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
+import info.xudshen.jandan.domain.model.PicComment;
 import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.view.DataDetailView;
 import rx.Subscriber;
@@ -18,10 +23,13 @@ public class PicDetailPresenter implements Presenter {
     private DataDetailView<PicItem> dataDetailView;
 
     private final UseCase getPicDetailUseCase;
+    private final IterableUseCase getPicCommentUseCase;
 
     @Inject
-    public PicDetailPresenter(@Named("picDetail") UseCase getPicDetailUseCase) {
+    public PicDetailPresenter(@Named("picDetail") UseCase getPicDetailUseCase,
+                              @Named("picComment") IterableUseCase getPicCommentUseCase) {
         this.getPicDetailUseCase = getPicDetailUseCase;
+        this.getPicCommentUseCase = getPicCommentUseCase;
     }
 
     public void setView(@NonNull DataDetailView<PicItem> dataDetailView) {
@@ -47,8 +55,26 @@ public class PicDetailPresenter implements Presenter {
         this.loadPicDetail(postId);
     }
 
-    public void refreshComment(Long postId) {
+    public void refreshComment(Long picId) {
         this.dataDetailView.showSwipeUpLoading();
+        this.getPicCommentUseCase.executeNext(this.dataDetailView.bindToLifecycle(),
+                new Subscriber<List<PicComment>>() {
+                    @Override
+                    public void onCompleted() {
+                        PicDetailPresenter.this.dataDetailView.hideSwipeUpLoading();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        PicDetailPresenter.this.dataDetailView.hideSwipeUpLoading();
+                        PicDetailPresenter.this.dataDetailView.showError("");
+                    }
+
+                    @Override
+                    public void onNext(List<PicComment> o) {
+
+                    }
+                }, Constants.THREAD_PREFIX + picId);
     }
 
     /**

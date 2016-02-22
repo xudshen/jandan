@@ -1,5 +1,6 @@
 package info.xudshen.jandan.data.repository.datasource.impl;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import info.xudshen.jandan.data.api.ApiAdapter;
@@ -15,6 +16,7 @@ public class CommentDataStoreFactory {
     private final PicCommentDao picCommentDao;
     private final MetaDao metaDao;
 
+    @Inject
     public CommentDataStoreFactory(PicCommentDao picCommentDao, MetaDao metaDao) {
         if (picCommentDao == null || metaDao == null) {
             throw new IllegalArgumentException("Constructor parameters cannot be null!!!");
