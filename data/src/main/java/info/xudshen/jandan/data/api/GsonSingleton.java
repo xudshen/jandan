@@ -22,7 +22,7 @@ public class GsonSingleton {
         duoshuoGson = new GsonBuilder().enableComplexMapKeySerialization()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .excludeFieldsWithoutExposeAnnotation()
-                .setDateFormat("yyyy-MM-ddTHH:mm:ssZ")
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                 .create();
     }
 
