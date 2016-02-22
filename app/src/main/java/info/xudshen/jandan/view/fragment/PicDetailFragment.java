@@ -30,6 +30,7 @@ import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.presenter.PicDetailPresenter;
 import info.xudshen.jandan.view.DataDetailView;
+import info.xudshen.jandan.view.component.ProgressImageView;
 
 /**
  * Created by xudshen on 16/2/21.
@@ -122,6 +123,8 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
                     })
                     .headerViewDataBindingVariableAction(viewDataBinding -> {
                         viewDataBinding.setVariable(BR.url, urlList.get(0));
+                        ProgressImageView progressImageView = (ProgressImageView) viewDataBinding.getRoot().findViewById(R.id.progress_image_view);
+                        progressImageView.load(urlList.get(0));
                     })
                     .itemViewHolderCreator(((inflater1, viewType1, parent1) -> {
                         ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
