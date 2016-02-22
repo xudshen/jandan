@@ -185,6 +185,9 @@ public class AppModelGenerator extends ModelGenerator {
         addLongProperty(entity, "votePositive").bindable(true);
         addLongProperty(entity, "voteNegative").bindable(true);
 
+        addLongProperty(entity, "commentCount").bindable(true);
+        addLongProperty(entity, "commentThreadId").bindable(true);
+
         addStringProperty(entity, "picContent").codeBeforeField("@Expose\n    @SerializedName(\"comment_content\")").bindable(true);
         addStringProperty(entity, "picTextContent").codeBeforeField("@Expose\n    @SerializedName(\"text_content\")").bindable(true);
         addStringProperty(entity, "pics").codeBeforeField("").bindable(true);

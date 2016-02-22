@@ -16,6 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ApiAdapter {
     public static String BASE_URL = "http://i.jandan.net";
+    public static String DUOSHUO_URL = "http://jandan.duoshuo.com";
 
     static <T> T createRetrofitService(final Class<T> clazz, final String baseUrl) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -49,6 +50,7 @@ public class ApiAdapter {
 
     private static final IPostService POST_SERVICE = createRetrofitService(IPostService.class, BASE_URL);
     private static final IPicService PIC_SERVICE = createRetrofitService(IPicService.class, BASE_URL);
+    private static final ICommentService COMMENT_SERVICE = createRetrofitService(ICommentService.class, DUOSHUO_URL);
 
     public static IPostService getPostService() {
         return POST_SERVICE;
@@ -56,5 +58,9 @@ public class ApiAdapter {
 
     public static IPicService getPicService() {
         return PIC_SERVICE;
+    }
+
+    public static ICommentService getCommentService() {
+        return COMMENT_SERVICE;
     }
 }

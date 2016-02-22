@@ -48,12 +48,14 @@ public class PicItemDao extends DDAbstractDao<PicItem, Long> {
         public final static Property Date = new Property(5, Long.class, "date", false, "DATE");
         public final static Property VotePositive = new Property(6, Long.class, "votePositive", false, "VOTE_POSITIVE");
         public final static Property VoteNegative = new Property(7, Long.class, "voteNegative", false, "VOTE_NEGATIVE");
-        public final static Property PicContent = new Property(8, String.class, "picContent", false, "PIC_CONTENT");
-        public final static Property PicTextContent = new Property(9, String.class, "picTextContent", false, "PIC_TEXT_CONTENT");
-        public final static Property Pics = new Property(10, String.class, "pics", false, "PICS");
-        public final static Property PicFirst = new Property(11, String.class, "picFirst", false, "PIC_FIRST");
-        public final static Property PicCount = new Property(12, Long.class, "picCount", false, "PIC_COUNT");
-        public final static Property HasGif = new Property(13, Boolean.class, "hasGif", false, "HAS_GIF");
+        public final static Property CommentCount = new Property(8, Long.class, "commentCount", false, "COMMENT_COUNT");
+        public final static Property CommentThreadId = new Property(9, Long.class, "commentThreadId", false, "COMMENT_THREAD_ID");
+        public final static Property PicContent = new Property(10, String.class, "picContent", false, "PIC_CONTENT");
+        public final static Property PicTextContent = new Property(11, String.class, "picTextContent", false, "PIC_TEXT_CONTENT");
+        public final static Property Pics = new Property(12, String.class, "pics", false, "PICS");
+        public final static Property PicFirst = new Property(13, String.class, "picFirst", false, "PIC_FIRST");
+        public final static Property PicCount = new Property(14, Long.class, "picCount", false, "PIC_COUNT");
+        public final static Property HasGif = new Property(15, Boolean.class, "hasGif", false, "HAS_GIF");
     }
 
     private final TimestampPropertyConverter dateConverter = new TimestampPropertyConverter();
@@ -78,12 +80,14 @@ public class PicItemDao extends DDAbstractDao<PicItem, Long> {
                 "\"DATE\" INTEGER," + // 5: date
                 "\"VOTE_POSITIVE\" INTEGER," + // 6: votePositive
                 "\"VOTE_NEGATIVE\" INTEGER," + // 7: voteNegative
-                "\"PIC_CONTENT\" TEXT," + // 8: picContent
-                "\"PIC_TEXT_CONTENT\" TEXT," + // 9: picTextContent
-                "\"PICS\" TEXT," + // 10: pics
-                "\"PIC_FIRST\" TEXT," + // 11: picFirst
-                "\"PIC_COUNT\" INTEGER," + // 12: picCount
-                "\"HAS_GIF\" INTEGER);"); // 13: hasGif
+                "\"COMMENT_COUNT\" INTEGER," + // 8: commentCount
+                "\"COMMENT_THREAD_ID\" INTEGER," + // 9: commentThreadId
+                "\"PIC_CONTENT\" TEXT," + // 10: picContent
+                "\"PIC_TEXT_CONTENT\" TEXT," + // 11: picTextContent
+                "\"PICS\" TEXT," + // 12: pics
+                "\"PIC_FIRST\" TEXT," + // 13: picFirst
+                "\"PIC_COUNT\" INTEGER," + // 14: picCount
+                "\"HAS_GIF\" INTEGER);"); // 15: hasGif
     }
 
     /** Drops the underlying database table. */
@@ -137,34 +141,44 @@ public class PicItemDao extends DDAbstractDao<PicItem, Long> {
             stmt.bindLong(8, voteNegative);
         }
  
+        Long commentCount = entity.getCommentCount();
+        if (commentCount != null) {
+            stmt.bindLong(9, commentCount);
+        }
+ 
+        Long commentThreadId = entity.getCommentThreadId();
+        if (commentThreadId != null) {
+            stmt.bindLong(10, commentThreadId);
+        }
+ 
         String picContent = entity.getPicContent();
         if (picContent != null) {
-            stmt.bindString(9, picContent);
+            stmt.bindString(11, picContent);
         }
  
         String picTextContent = entity.getPicTextContent();
         if (picTextContent != null) {
-            stmt.bindString(10, picTextContent);
+            stmt.bindString(12, picTextContent);
         }
  
         String pics = entity.getPics();
         if (pics != null) {
-            stmt.bindString(11, pics);
+            stmt.bindString(13, pics);
         }
  
         String picFirst = entity.getPicFirst();
         if (picFirst != null) {
-            stmt.bindString(12, picFirst);
+            stmt.bindString(14, picFirst);
         }
  
         Long picCount = entity.getPicCount();
         if (picCount != null) {
-            stmt.bindLong(13, picCount);
+            stmt.bindLong(15, picCount);
         }
  
         Boolean hasGif = entity.getHasGif();
         if (hasGif != null) {
-            stmt.bindLong(14, hasGif ? 1L: 0L);
+            stmt.bindLong(16, hasGif ? 1L: 0L);
         }
     }
 
@@ -186,12 +200,14 @@ public class PicItemDao extends DDAbstractDao<PicItem, Long> {
             cursor.isNull(offset + 5) ? null : dateConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 5)), // date
             cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // votePositive
             cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // voteNegative
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // picContent
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // picTextContent
-            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // pics
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // picFirst
-            cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12), // picCount
-            cursor.isNull(offset + 13) ? null : cursor.getShort(offset + 13) != 0 // hasGif
+            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // commentCount
+            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9), // commentThreadId
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // picContent
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // picTextContent
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // pics
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // picFirst
+            cursor.isNull(offset + 14) ? null : cursor.getLong(offset + 14), // picCount
+            cursor.isNull(offset + 15) ? null : cursor.getShort(offset + 15) != 0 // hasGif
         );
         return entity;
     }
@@ -207,12 +223,14 @@ public class PicItemDao extends DDAbstractDao<PicItem, Long> {
         entity.setDate(cursor.isNull(offset + 5) ? null : dateConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 5)));
         entity.setVotePositive(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
         entity.setVoteNegative(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
-        entity.setPicContent(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setPicTextContent(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setPics(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
-        entity.setPicFirst(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setPicCount(cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12));
-        entity.setHasGif(cursor.isNull(offset + 13) ? null : cursor.getShort(offset + 13) != 0);
+        entity.setCommentCount(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
+        entity.setCommentThreadId(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
+        entity.setPicContent(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setPicTextContent(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setPics(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setPicFirst(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
+        entity.setPicCount(cursor.isNull(offset + 14) ? null : cursor.getLong(offset + 14));
+        entity.setHasGif(cursor.isNull(offset + 15) ? null : cursor.getShort(offset + 15) != 0);
     }
     
     /** @inheritdoc */

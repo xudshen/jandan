@@ -43,6 +43,10 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
     @Expose
     private Long voteNegative;
     @Expose
+    private Long commentCount;
+    @Expose
+    private Long commentThreadId;
+    @Expose
     @SerializedName("comment_content")
     private String picContent;
     @Expose
@@ -67,7 +71,7 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
         this.id = id;
     }
 
-    public PicItemObservable(Long id, Long picId, String picAuthor, String picAuthorEmail, String picAuthorUrl, Timestamp date, Long votePositive, Long voteNegative, String picContent, String picTextContent, String pics, String picFirst, Long picCount, Boolean hasGif) {
+    public PicItemObservable(Long id, Long picId, String picAuthor, String picAuthorEmail, String picAuthorUrl, Timestamp date, Long votePositive, Long voteNegative, Long commentCount, Long commentThreadId, String picContent, String picTextContent, String pics, String picFirst, Long picCount, Boolean hasGif) {
         this.id = id;
         this.picId = picId;
         this.picAuthor = picAuthor;
@@ -76,6 +80,8 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
         this.date = date;
         this.votePositive = votePositive;
         this.voteNegative = voteNegative;
+        this.commentCount = commentCount;
+        this.commentThreadId = commentThreadId;
         this.picContent = picContent;
         this.picTextContent = picTextContent;
         this.pics = pics;
@@ -184,6 +190,32 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
     }
 
     @Bindable
+    public Long getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(Long commentCount) {
+        if ((this.commentCount == null && commentCount != null)
+                || (this.commentCount != null && !this.commentCount.equals(commentCount))) {
+            this.commentCount = commentCount;
+            notifyPropertyChanged(BR.commentCount);
+        }
+    }
+
+    @Bindable
+    public Long getCommentThreadId() {
+        return commentThreadId;
+    }
+
+    public void setCommentThreadId(Long commentThreadId) {
+        if ((this.commentThreadId == null && commentThreadId != null)
+                || (this.commentThreadId != null && !this.commentThreadId.equals(commentThreadId))) {
+            this.commentThreadId = commentThreadId;
+            notifyPropertyChanged(BR.commentThreadId);
+        }
+    }
+
+    @Bindable
     public String getPicContent() {
         return picContent;
     }
@@ -274,6 +306,8 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
         this.date = entity.getDate();
         this.votePositive = entity.getVotePositive();
         this.voteNegative = entity.getVoteNegative();
+        this.commentCount = entity.getCommentCount();
+        this.commentThreadId = entity.getCommentThreadId();
         this.picContent = entity.getPicContent();
         this.picTextContent = entity.getPicTextContent();
         this.pics = entity.getPics();
@@ -325,6 +359,16 @@ public class PicItemObservable extends android.databinding.BaseObservable  imple
                 || (this.voteNegative != null && !this.voteNegative.equals(entity.getVoteNegative()))) {
             this.voteNegative = entity.getVoteNegative();
             propertyChanges.add(BR.voteNegative);
+        }
+        if ((this.commentCount == null && entity.getCommentCount() != null)
+                || (this.commentCount != null && !this.commentCount.equals(entity.getCommentCount()))) {
+            this.commentCount = entity.getCommentCount();
+            propertyChanges.add(BR.commentCount);
+        }
+        if ((this.commentThreadId == null && entity.getCommentThreadId() != null)
+                || (this.commentThreadId != null && !this.commentThreadId.equals(entity.getCommentThreadId()))) {
+            this.commentThreadId = entity.getCommentThreadId();
+            propertyChanges.add(BR.commentThreadId);
         }
         if ((this.picContent == null && entity.getPicContent() != null)
                 || (this.picContent != null && !this.picContent.equals(entity.getPicContent()))) {

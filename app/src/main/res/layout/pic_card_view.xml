@@ -6,6 +6,8 @@
 
         <import type="info.xudshen.jandan.utils.RealtimeTimeUtils" />
 
+        <import type="info.xudshen.jandan.utils.HtmlHelper" />
+
         <import type="android.view.View" />
 
         <import type="com.google.common.base.Strings" />
@@ -127,7 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:text="{faw-comment} 11"
+                    android:text="@{HtmlHelper.commentCount(item.commentCount)}"
                     android:textColor="@color/secondary_text"
                     android:textColorHighlight="@color/colorAccent" />
 

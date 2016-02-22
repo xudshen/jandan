@@ -30,4 +30,8 @@ public class HtmlHelper {
                 .append("</body></html>")
                 .toString();
     }
+
+    public static String commentCount(Long count) {
+        return "{faw-comment} " + count;
+    }
 }
