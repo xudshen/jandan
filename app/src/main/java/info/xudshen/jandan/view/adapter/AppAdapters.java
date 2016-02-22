@@ -25,6 +25,7 @@ import com.squareup.picasso.RequestCreator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import info.xudshen.jandan.data.utils.HtmlUtils;
 import info.xudshen.jandan.utils.HtmlHelper;
 import info.xudshen.jandan.utils.LayoutHelper;
@@ -46,6 +47,20 @@ public class AppAdapters {
             requestCreator.placeholder(placeHolder);
         }
         requestCreator.resize(96, 96)
+                .centerCrop()
+                .into(view);
+    }
+
+    @BindingAdapter(value = {"avatar", "placeHolder"})
+    public static void setAvatarUrl(CircleImageView view, String url,
+                                    Drawable placeHolder) {
+
+        RequestCreator requestCreator =
+                Picasso.with(view.getContext()).load(url);
+        if (placeHolder != null) {
+            requestCreator.placeholder(placeHolder);
+        }
+        requestCreator.resize(48, 48)
                 .centerCrop()
                 .into(view);
     }

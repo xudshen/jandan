@@ -19,6 +19,17 @@
         android:paddingTop="10dp"
         android:rowCount="3">
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="16dp"
+            android:layout_rowSpan="2"
+            app:avatar="@{comment.authorAvatar}"
+            app:civ_border_color="@color/almostWhite"
+            app:civ_border_width="1dp"
+            app:placeHolder="@{@drawable/post_placeholder}" />
+
         <TextView
             style="@style/PostDetailMetaHighlight"
             android:layout_width="wrap_content"
@@ -37,7 +48,7 @@
             style="@style/PostDetailComment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_columnSpan="4"
+            android:layout_columnSpan="3"
             android:layout_marginTop="5dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"

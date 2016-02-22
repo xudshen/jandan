@@ -110,6 +110,8 @@ dependencies {
     compile dependencies.freemarker
     
     compile dependencies.swipy
+
+    compile 'de.hdodenhof:circleimageview:2.0.0'
     compile('com.mikepenz:materialdrawer:5.0.0@aar') {
         transitive = true
     }
