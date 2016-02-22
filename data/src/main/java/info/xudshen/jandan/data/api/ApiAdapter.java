@@ -1,5 +1,7 @@
 package info.xudshen.jandan.data.api;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -18,7 +20,7 @@ public class ApiAdapter {
     public static String BASE_URL = "http://i.jandan.net";
     public static String DUOSHUO_URL = "http://jandan.duoshuo.com";
 
-    static <T> T createRetrofitService(final Class<T> clazz, final String baseUrl) {
+    static <T> T createRetrofitService(final Class<T> clazz, final String baseUrl, Gson gson) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder()
@@ -40,7 +42,7 @@ public class ApiAdapter {
 
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create(GsonSingleton.getInstance().getGson()))
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)
                 .build();
@@ -48,9 +50,12 @@ public class ApiAdapter {
         return service;
     }
 
-    private static final IPostService POST_SERVICE = createRetrofitService(IPostService.class, BASE_URL);
-    private static final IPicService PIC_SERVICE = createRetrofitService(IPicService.class, BASE_URL);
-    private static final ICommentService COMMENT_SERVICE = createRetrofitService(ICommentService.class, DUOSHUO_URL);
+    private static final IPostService POST_SERVICE = createRetrofitService(
+            IPostService.class, BASE_URL, GsonSingleton.getInstance().getGson());
+    private static final IPicService PIC_SERVICE = createRetrofitService(
+            IPicService.class, BASE_URL, GsonSingleton.getInstance().getGson());
+    private static final ICommentService COMMENT_SERVICE = createRetrofitService(
+            ICommentService.class, DUOSHUO_URL, GsonSingleton.getInstance().getDuoshuoGson());
 
     public static IPostService getPostService() {
         return POST_SERVICE;

@@ -177,7 +177,7 @@ public class AppModelGenerator extends ModelGenerator {
         Entity entity = schema.addEntity("PicItem");
 
         entity.addIdProperty();
-        addLongProperty(entity, "picId").codeBeforeField("@Expose\n    @SerializedName(\"comment_ID\")").bindable(true);
+        Property picId = addLongProperty(entity, "picId").codeBeforeField("@Expose\n    @SerializedName(\"comment_ID\")").bindable(true).getProperty();
         addStringProperty(entity, "picAuthor").codeBeforeField("@Expose\n    @SerializedName(\"comment_author\")").bindable(true);
         addStringProperty(entity, "picAuthorEmail").codeBeforeField("@Expose\n    @SerializedName(\"comment_author_email\")").bindable(true);
         addStringProperty(entity, "picAuthorUrl").codeBeforeField("@Expose\n    @SerializedName(\"comment_author_url\")").bindable(true);
@@ -196,6 +196,8 @@ public class AppModelGenerator extends ModelGenerator {
         addLongProperty(entity, "picCount").bindable(true);
         addBooleanProperty(entity, "hasGif").bindable(true);
 
+        addUniqueIndex(entity, picId);
+
         entity.addContentProvider();
         entity.addImport(GSON_EXPOSE);
         entity.addImport(GSON_SERIALIZEDNAME);
@@ -205,9 +207,9 @@ public class AppModelGenerator extends ModelGenerator {
         Entity entity = schema.addEntity("PicComment");
 
         entity.addIdProperty();
-        addLongProperty(entity, "picCommentId").codeBeforeField("@Expose\n    @SerializedName(\"post_id\")").bindable(true);
-        addLongProperty(entity, "picId").bindable(true);
-        addLongProperty(entity, "picThreadId").codeBeforeField("@Expose\n    @SerializedName(\"thread_id\")").bindable(true);
+        Property picCommentId = addStringProperty(entity, "picCommentId").codeBeforeField("@Expose\n    @SerializedName(\"post_id\")").bindable(true).getProperty();
+        addStringProperty(entity, "picThreadId").codeBeforeField("@Expose\n    @SerializedName(\"thread_id\")").bindable(true);
+        Property picThreadKey = addStringProperty(entity, "picThreadKey").bindable(true).getProperty();
 
         addStringProperty(entity, "message").bindable(true);
         addTimestampProperty(entity, "date").codeBeforeField("@Expose\n    @SerializedName(\"created_at\")").bindable(true);
@@ -217,6 +219,8 @@ public class AppModelGenerator extends ModelGenerator {
         addStringProperty(entity, "authorName").bindable(true);
         addStringProperty(entity, "authorAvatar").bindable(true);
         addStringProperty(entity, "authorUrl").bindable(true);
+
+        addUniqueIndex(entity, picCommentId, picThreadKey);
 
         entity.addContentProvider();
         entity.addImport(GSON_EXPOSE);

@@ -26,8 +26,8 @@ public class GetPostDetail extends UseCase {
     }
 
     @Override
-    protected Observable buildUseCaseObservable(Long... params) {
-        Long postId = params[0];
+    protected Observable buildUseCaseObservable(Object... params) {
+        Long postId = (Long) params[0];
         return this.postRepository.post(postId);
     }
 }

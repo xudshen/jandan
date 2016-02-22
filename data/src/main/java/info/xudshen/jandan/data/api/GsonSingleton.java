@@ -10,12 +10,19 @@ import com.google.gson.GsonBuilder;
 public class GsonSingleton {
     private static GsonSingleton mInstance = null;
     private Gson gson;
+    private Gson duoshuoGson;
 
     public GsonSingleton() {
         gson = new GsonBuilder().enableComplexMapKeySerialization()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .excludeFieldsWithoutExposeAnnotation()
                 .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .create();
+
+        duoshuoGson = new GsonBuilder().enableComplexMapKeySerialization()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .excludeFieldsWithoutExposeAnnotation()
+                .setDateFormat("yyyy-MM-ddTHH:mm:ssZ")
                 .create();
     }
 
@@ -28,5 +35,9 @@ public class GsonSingleton {
 
     public Gson getGson() {
         return gson;
+    }
+
+    public Gson getDuoshuoGson() {
+        return duoshuoGson;
     }
 }

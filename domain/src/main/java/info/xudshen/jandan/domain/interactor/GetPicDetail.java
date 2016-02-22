@@ -26,8 +26,8 @@ public class GetPicDetail extends UseCase {
     }
 
     @Override
-    protected Observable buildUseCaseObservable(Long... params) {
-        Long picId = params[0];
+    protected Observable buildUseCaseObservable(Object... params) {
+        Long picId = (Long) params[0];
         return this.picRepository.pic(picId);
     }
 }

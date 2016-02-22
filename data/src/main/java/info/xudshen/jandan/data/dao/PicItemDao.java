@@ -88,6 +88,9 @@ public class PicItemDao extends DDAbstractDao<PicItem, Long> {
                 "\"PIC_FIRST\" TEXT," + // 13: picFirst
                 "\"PIC_COUNT\" INTEGER," + // 14: picCount
                 "\"HAS_GIF\" INTEGER);"); // 15: hasGif
+        // Add Indexes
+        db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_PIC_ITEM_PIC_ID ON PIC_ITEM" +
+                " (\"PIC_ID\");");
     }
 
     /** Drops the underlying database table. */

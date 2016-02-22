@@ -16,7 +16,7 @@ public abstract class IterableUseCase extends UseCase {
 
     protected abstract Observable buildIterableUseCaseObservable();
 
-    protected abstract Observable buildIterableUseCaseObservable(Long... params);
+    protected abstract Observable buildIterableUseCaseObservable(Object... params);
 
     @SuppressWarnings("unchecked")
     public void executeNext(Observable.Transformer transformer, Subscriber UseCaseSubscriber) {
@@ -29,7 +29,7 @@ public abstract class IterableUseCase extends UseCase {
 
     @SuppressWarnings("unchecked")
     public void executeNext(Observable.Transformer transformer, Subscriber UseCaseSubscriber,
-                            Long... params) {
+                            Object... params) {
         this.buildIterableUseCaseObservable(params)
                 .compose(transformer)
                 .subscribeOn(Schedulers.from(threadExecutor))

@@ -25,8 +25,8 @@ public class GetPostComment extends IterableUseCase {
     }
 
     @Override
-    protected Observable buildUseCaseObservable(Long... params) {
-        Long postId = params[0];
+    protected Observable buildUseCaseObservable(Object... params) {
+        Long postId = (Long) params[0];
         return this.postRepository.postCommentList(postId);
     }
 
@@ -36,8 +36,8 @@ public class GetPostComment extends IterableUseCase {
     }
 
     @Override
-    protected Observable buildIterableUseCaseObservable(Long... params) {
-        Long postId = params[0];
+    protected Observable buildIterableUseCaseObservable(Object... params) {
+        Long postId = (Long) params[0];
         return this.postRepository.postCommentListNext(postId);
     }
 }

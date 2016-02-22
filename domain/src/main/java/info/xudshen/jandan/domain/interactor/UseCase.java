@@ -50,7 +50,7 @@ public abstract class UseCase {
      */
     protected abstract Observable buildUseCaseObservable();
 
-    protected abstract Observable buildUseCaseObservable(Long... params);
+    protected abstract Observable buildUseCaseObservable(Object... params);
 
     /**
      * Executes the current use case.
@@ -68,7 +68,7 @@ public abstract class UseCase {
 
     @SuppressWarnings("unchecked")
     public void execute(Observable.Transformer transformer, Subscriber UseCaseSubscriber,
-                        Long... params) {
+                        Object... params) {
         this.buildUseCaseObservable(params)
                 .compose(transformer)
                 .subscribeOn(Schedulers.from(threadExecutor))

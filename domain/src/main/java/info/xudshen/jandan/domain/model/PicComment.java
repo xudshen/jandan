@@ -17,12 +17,12 @@ public class PicComment {
     private Long id;
     @Expose
     @SerializedName("post_id")
-    private Long picCommentId;
-    @Expose
-    private Long picId;
+    private String picCommentId;
     @Expose
     @SerializedName("thread_id")
-    private Long picThreadId;
+    private String picThreadId;
+    @Expose
+    private String picThreadKey;
     @Expose
     private String message;
     @Expose
@@ -50,11 +50,11 @@ public class PicComment {
         this.id = id;
     }
 
-    public PicComment(Long id, Long picCommentId, Long picId, Long picThreadId, String message, Timestamp date, String parentCommentId, String authorId, String authorName, String authorAvatar, String authorUrl) {
+    public PicComment(Long id, String picCommentId, String picThreadId, String picThreadKey, String message, Timestamp date, String parentCommentId, String authorId, String authorName, String authorAvatar, String authorUrl) {
         this.id = id;
         this.picCommentId = picCommentId;
-        this.picId = picId;
         this.picThreadId = picThreadId;
+        this.picThreadKey = picThreadKey;
         this.message = message;
         this.date = date;
         this.parentCommentId = parentCommentId;
@@ -72,28 +72,28 @@ public class PicComment {
         this.id = id;
     }
 
-    public Long getPicCommentId() {
+    public String getPicCommentId() {
         return picCommentId;
     }
 
-    public void setPicCommentId(Long picCommentId) {
+    public void setPicCommentId(String picCommentId) {
         this.picCommentId = picCommentId;
     }
 
-    public Long getPicId() {
-        return picId;
-    }
-
-    public void setPicId(Long picId) {
-        this.picId = picId;
-    }
-
-    public Long getPicThreadId() {
+    public String getPicThreadId() {
         return picThreadId;
     }
 
-    public void setPicThreadId(Long picThreadId) {
+    public void setPicThreadId(String picThreadId) {
         this.picThreadId = picThreadId;
+    }
+
+    public String getPicThreadKey() {
+        return picThreadKey;
+    }
+
+    public void setPicThreadKey(String picThreadKey) {
+        this.picThreadKey = picThreadKey;
     }
 
     public String getMessage() {

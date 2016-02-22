@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
 
+import info.xudshen.jandan.data.constants.Constants;
+
 /**
  * Created by xudshen on 16/2/22.
  */
@@ -60,7 +62,7 @@ public class CommentCountResponse {
         }
 
         public Long getPicId() {
-            String id = this.threadKey.substring("comment-".length(), this.threadKey.length());
+            String id = this.threadKey.substring(Constants.THREAD_PREFIX.length(), this.threadKey.length());
             return Long.valueOf(id);
         }
     }

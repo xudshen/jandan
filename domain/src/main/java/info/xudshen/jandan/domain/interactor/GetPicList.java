@@ -25,7 +25,7 @@ public class GetPicList extends IterableUseCase {
     }
 
     @Override
-    protected Observable buildUseCaseObservable(Long... params) {
+    protected Observable buildUseCaseObservable(Object... params) {
         throw new UnsupportedOperationException("");
     }
 
@@ -35,7 +35,7 @@ public class GetPicList extends IterableUseCase {
     }
 
     @Override
-    protected Observable buildIterableUseCaseObservable(Long... params) {
+    protected Observable buildIterableUseCaseObservable(Object... params) {
         throw new UnsupportedOperationException("");
     }
 }

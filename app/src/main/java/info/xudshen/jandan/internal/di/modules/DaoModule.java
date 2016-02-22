@@ -9,6 +9,7 @@ import info.xudshen.jandan.data.dao.CategoryDao;
 import info.xudshen.jandan.data.dao.CommentDao;
 import info.xudshen.jandan.data.dao.DaoSession;
 import info.xudshen.jandan.data.dao.MetaDao;
+import info.xudshen.jandan.data.dao.PicCommentDao;
 import info.xudshen.jandan.data.dao.PicItemDao;
 import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.data.dao.SimplePostDao;
@@ -59,5 +60,11 @@ public class DaoModule {
     @Singleton
     PicItemDao providePicItemDao(DaoSession daoSession) {
         return daoSession.getPicItemDao();
+    }
+
+    @Provides
+    @Singleton
+    PicCommentDao providePicCommentDao(DaoSession daoSession) {
+        return daoSession.getPicCommentDao();
     }
 }

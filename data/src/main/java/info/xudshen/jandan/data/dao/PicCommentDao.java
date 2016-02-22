@@ -41,9 +41,9 @@ public class PicCommentDao extends DDAbstractDao<PicComment, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property PicCommentId = new Property(1, Long.class, "picCommentId", false, "PIC_COMMENT_ID");
-        public final static Property PicId = new Property(2, Long.class, "picId", false, "PIC_ID");
-        public final static Property PicThreadId = new Property(3, Long.class, "picThreadId", false, "PIC_THREAD_ID");
+        public final static Property PicCommentId = new Property(1, String.class, "picCommentId", false, "PIC_COMMENT_ID");
+        public final static Property PicThreadId = new Property(2, String.class, "picThreadId", false, "PIC_THREAD_ID");
+        public final static Property PicThreadKey = new Property(3, String.class, "picThreadKey", false, "PIC_THREAD_KEY");
         public final static Property Message = new Property(4, String.class, "message", false, "MESSAGE");
         public final static Property Date = new Property(5, Long.class, "date", false, "DATE");
         public final static Property ParentCommentId = new Property(6, String.class, "parentCommentId", false, "PARENT_COMMENT_ID");
@@ -68,9 +68,9 @@ public class PicCommentDao extends DDAbstractDao<PicComment, Long> {
         String constraint = ifNotExists ? "IF NOT EXISTS " : "";
         db.execSQL("CREATE TABLE " + constraint + "\"PIC_COMMENT\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"PIC_COMMENT_ID\" INTEGER," + // 1: picCommentId
-                "\"PIC_ID\" INTEGER," + // 2: picId
-                "\"PIC_THREAD_ID\" INTEGER," + // 3: picThreadId
+                "\"PIC_COMMENT_ID\" TEXT," + // 1: picCommentId
+                "\"PIC_THREAD_ID\" TEXT," + // 2: picThreadId
+                "\"PIC_THREAD_KEY\" TEXT," + // 3: picThreadKey
                 "\"MESSAGE\" TEXT," + // 4: message
                 "\"DATE\" INTEGER," + // 5: date
                 "\"PARENT_COMMENT_ID\" TEXT," + // 6: parentCommentId
@@ -78,6 +78,9 @@ public class PicCommentDao extends DDAbstractDao<PicComment, Long> {
                 "\"AUTHOR_NAME\" TEXT," + // 8: authorName
                 "\"AUTHOR_AVATAR\" TEXT," + // 9: authorAvatar
                 "\"AUTHOR_URL\" TEXT);"); // 10: authorUrl
+        // Add Indexes
+        db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_PIC_COMMENT_PIC_COMMENT_ID_PIC_THREAD_KEY ON PIC_COMMENT" +
+                " (\"PIC_COMMENT_ID\",\"PIC_THREAD_KEY\");");
     }
 
     /** Drops the underlying database table. */
@@ -96,19 +99,19 @@ public class PicCommentDao extends DDAbstractDao<PicComment, Long> {
             stmt.bindLong(1, id);
         }
  
-        Long picCommentId = entity.getPicCommentId();
+        String picCommentId = entity.getPicCommentId();
         if (picCommentId != null) {
-            stmt.bindLong(2, picCommentId);
+            stmt.bindString(2, picCommentId);
         }
  
-        Long picId = entity.getPicId();
-        if (picId != null) {
-            stmt.bindLong(3, picId);
-        }
- 
-        Long picThreadId = entity.getPicThreadId();
+        String picThreadId = entity.getPicThreadId();
         if (picThreadId != null) {
-            stmt.bindLong(4, picThreadId);
+            stmt.bindString(3, picThreadId);
+        }
+ 
+        String picThreadKey = entity.getPicThreadKey();
+        if (picThreadKey != null) {
+            stmt.bindString(4, picThreadKey);
         }
  
         String message = entity.getMessage();
@@ -158,9 +161,9 @@ public class PicCommentDao extends DDAbstractDao<PicComment, Long> {
     protected PicComment readEntity(Cursor cursor, int offset) {
         PicComment entity = new PicComment( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // picCommentId
-            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // picId
-            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // picThreadId
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // picCommentId
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // picThreadId
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // picThreadKey
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // message
             cursor.isNull(offset + 5) ? null : dateConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 5)), // date
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // parentCommentId
@@ -176,9 +179,9 @@ public class PicCommentDao extends DDAbstractDao<PicComment, Long> {
     @Override
     protected void readEntity(Cursor cursor, PicComment entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setPicCommentId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
-        entity.setPicId(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
-        entity.setPicThreadId(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
+        entity.setPicCommentId(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setPicThreadId(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setPicThreadKey(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setMessage(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setDate(cursor.isNull(offset + 5) ? null : dateConverter.convertToEntityProperty(Timestamp.class, cursor.getLong(offset + 5)));
         entity.setParentCommentId(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));

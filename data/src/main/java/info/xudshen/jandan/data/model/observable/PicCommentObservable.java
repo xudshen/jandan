@@ -25,12 +25,12 @@ public class PicCommentObservable extends android.databinding.BaseObservable  im
     private Long id;
     @Expose
     @SerializedName("post_id")
-    private Long picCommentId;
-    @Expose
-    private Long picId;
+    private String picCommentId;
     @Expose
     @SerializedName("thread_id")
-    private Long picThreadId;
+    private String picThreadId;
+    @Expose
+    private String picThreadKey;
     @Expose
     private String message;
     @Expose
@@ -58,11 +58,11 @@ public class PicCommentObservable extends android.databinding.BaseObservable  im
         this.id = id;
     }
 
-    public PicCommentObservable(Long id, Long picCommentId, Long picId, Long picThreadId, String message, Timestamp date, String parentCommentId, String authorId, String authorName, String authorAvatar, String authorUrl) {
+    public PicCommentObservable(Long id, String picCommentId, String picThreadId, String picThreadKey, String message, Timestamp date, String parentCommentId, String authorId, String authorName, String authorAvatar, String authorUrl) {
         this.id = id;
         this.picCommentId = picCommentId;
-        this.picId = picId;
         this.picThreadId = picThreadId;
+        this.picThreadKey = picThreadKey;
         this.message = message;
         this.date = date;
         this.parentCommentId = parentCommentId;
@@ -81,11 +81,11 @@ public class PicCommentObservable extends android.databinding.BaseObservable  im
     }
 
     @Bindable
-    public Long getPicCommentId() {
+    public String getPicCommentId() {
         return picCommentId;
     }
 
-    public void setPicCommentId(Long picCommentId) {
+    public void setPicCommentId(String picCommentId) {
         if ((this.picCommentId == null && picCommentId != null)
                 || (this.picCommentId != null && !this.picCommentId.equals(picCommentId))) {
             this.picCommentId = picCommentId;
@@ -94,28 +94,28 @@ public class PicCommentObservable extends android.databinding.BaseObservable  im
     }
 
     @Bindable
-    public Long getPicId() {
-        return picId;
-    }
-
-    public void setPicId(Long picId) {
-        if ((this.picId == null && picId != null)
-                || (this.picId != null && !this.picId.equals(picId))) {
-            this.picId = picId;
-            notifyPropertyChanged(BR.picId);
-        }
-    }
-
-    @Bindable
-    public Long getPicThreadId() {
+    public String getPicThreadId() {
         return picThreadId;
     }
 
-    public void setPicThreadId(Long picThreadId) {
+    public void setPicThreadId(String picThreadId) {
         if ((this.picThreadId == null && picThreadId != null)
                 || (this.picThreadId != null && !this.picThreadId.equals(picThreadId))) {
             this.picThreadId = picThreadId;
             notifyPropertyChanged(BR.picThreadId);
+        }
+    }
+
+    @Bindable
+    public String getPicThreadKey() {
+        return picThreadKey;
+    }
+
+    public void setPicThreadKey(String picThreadKey) {
+        if ((this.picThreadKey == null && picThreadKey != null)
+                || (this.picThreadKey != null && !this.picThreadKey.equals(picThreadKey))) {
+            this.picThreadKey = picThreadKey;
+            notifyPropertyChanged(BR.picThreadKey);
         }
     }
 
@@ -217,8 +217,8 @@ public class PicCommentObservable extends android.databinding.BaseObservable  im
     public PicCommentObservable(PicComment entity) {
         this.id = entity.getId();
         this.picCommentId = entity.getPicCommentId();
-        this.picId = entity.getPicId();
         this.picThreadId = entity.getPicThreadId();
+        this.picThreadKey = entity.getPicThreadKey();
         this.message = entity.getMessage();
         this.date = entity.getDate();
         this.parentCommentId = entity.getParentCommentId();
@@ -242,15 +242,15 @@ public class PicCommentObservable extends android.databinding.BaseObservable  im
             this.picCommentId = entity.getPicCommentId();
             propertyChanges.add(BR.picCommentId);
         }
-        if ((this.picId == null && entity.getPicId() != null)
-                || (this.picId != null && !this.picId.equals(entity.getPicId()))) {
-            this.picId = entity.getPicId();
-            propertyChanges.add(BR.picId);
-        }
         if ((this.picThreadId == null && entity.getPicThreadId() != null)
                 || (this.picThreadId != null && !this.picThreadId.equals(entity.getPicThreadId()))) {
             this.picThreadId = entity.getPicThreadId();
             propertyChanges.add(BR.picThreadId);
+        }
+        if ((this.picThreadKey == null && entity.getPicThreadKey() != null)
+                || (this.picThreadKey != null && !this.picThreadKey.equals(entity.getPicThreadKey()))) {
+            this.picThreadKey = entity.getPicThreadKey();
+            propertyChanges.add(BR.picThreadKey);
         }
         if ((this.message == null && entity.getMessage() != null)
                 || (this.message != null && !this.message.equals(entity.getMessage()))) {

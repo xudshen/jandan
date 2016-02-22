@@ -1,6 +1,5 @@
 package info.xudshen.jandan.data.repository.datasource.impl;
 
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
@@ -15,6 +14,7 @@ import info.xudshen.jandan.data.api.ICommentService;
 import info.xudshen.jandan.data.api.IPicService;
 import info.xudshen.jandan.data.api.response.CommentCountResponse;
 import info.xudshen.jandan.data.api.response.PicListResponse;
+import info.xudshen.jandan.data.constants.Constants;
 import info.xudshen.jandan.data.dao.MetaDao;
 import info.xudshen.jandan.data.dao.PicItemDao;
 import info.xudshen.jandan.data.repository.datasource.PicDataStore;
@@ -45,7 +45,7 @@ public class CloudPicDataStore implements PicDataStore {
 
         this.refreshComment = picItems -> {
             commentService.getPicCommentCount(Joiner.on(",").join(Lists.transform(picItems,
-                    picItem -> "comment-" + picItem.getPicId())))
+                    picItem -> Constants.THREAD_PREFIX + picItem.getPicId())))
                     .subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
                     .subscribe(commentCountResponse -> {
                         //TODO: optimize this with tx
