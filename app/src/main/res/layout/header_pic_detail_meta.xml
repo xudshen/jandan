@@ -6,6 +6,8 @@
 
         <import type="info.xudshen.jandan.utils.RealtimeTimeUtils" />
 
+        <import type="info.xudshen.jandan.utils.HtmlHelper" />
+
         <import type="java.util.List" />
 
         <import type="android.view.View" />
@@ -54,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="OO 11"
+                android:text="@{HtmlHelper.voteOO(picItem.votePositive)}"
                 android:textColor="@color/secondary_text"
                 android:textColorHighlight="@color/colorAccent" />
 
@@ -63,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="XX 11"
+                android:text="@{HtmlHelper.voteXX(picItem.voteNegative)}"
                 android:textColor="@color/secondary_text"
                 android:textColorHighlight="@color/colorAccent" />
         </LinearLayout>

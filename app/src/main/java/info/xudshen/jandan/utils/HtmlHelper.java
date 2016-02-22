@@ -32,6 +32,14 @@ public class HtmlHelper {
     }
 
     public static String commentCount(Long count) {
-        return "{faw-comment} " + count;
+        return "{faw-comment}  " + count;
+    }
+
+    public static String voteOO(Long count) {
+        return "OO  " + count;
+    }
+
+    public static String voteXX(Long count) {
+        return "XX  " + count;
     }
 }

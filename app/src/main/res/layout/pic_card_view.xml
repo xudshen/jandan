@@ -111,7 +111,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:text="OO 11"
+                    android:text="@{HtmlHelper.voteOO(item.votePositive)}"
                     android:textColor="@color/secondary_text"
                     android:textColorHighlight="@color/colorAccent" />
 
@@ -120,7 +120,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:text="XX 11"
+                    android:text="@{HtmlHelper.voteXX(item.voteNegative)}"
                     android:textColor="@color/secondary_text"
                     android:textColorHighlight="@color/colorAccent" />
 

@@ -6,6 +6,8 @@
 
         <import type="info.xudshen.jandan.utils.RealtimeTimeUtils" />
 
+        <import type="info.xudshen.jandan.utils.HtmlHelper" />
+
         <variable
             name="comment"
             type="info.xudshen.jandan.domain.model.Comment" />
@@ -37,14 +39,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
-            android:text="OO 1" />
+            android:text="@{HtmlHelper.voteOO(comment.votePositive)}" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:paddingRight="16dp"
-            android:text="XX 1" />
+            android:text="@{HtmlHelper.voteXX(comment.voteNegative)}" />
 
         <TextView
             style="@style/PostDetailComment"

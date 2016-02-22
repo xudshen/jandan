@@ -1,6 +1,7 @@
 package info.xudshen.jandan.data.api.response;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
 
@@ -14,6 +15,7 @@ public class CommentListResponse {
     private Cursor cursor;
 
     @Expose
+    @SerializedName("parentPosts")
     private HashMap<String, PicCommentWrapper> parentPosts;
 
     public CommentListResponse() {
@@ -39,7 +41,7 @@ public class CommentListResponse {
         @Expose
         private Long total;
         @Expose
-        private Long cursor;
+        private Long pages;
 
         public Cursor() {
         }
@@ -52,12 +54,9 @@ public class CommentListResponse {
             this.total = total;
         }
 
-        public Long getCursor() {
-            return cursor;
-        }
-
-        public void setCursor(Long cursor) {
-            this.cursor = cursor;
+        public Cursor(Long total, Long pages) {
+            this.total = total;
+            this.pages = pages;
         }
     }
 
