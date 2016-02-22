@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
-        android:layout_weight="1"
-        android:text="hehe"
-        android:textSize="18sp" />
+        android:adjustViewBounds="true"
+        android:src="@drawable/post_placeholder" />
+
 
     <ProgressBar
-        android:id="@+id/progress"
+        android:id="@+id/progress_image_view_progress_bar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:max="100"
         android:progress="0" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="heheeee" />
-
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/progress_image_view_progress_bar"
+        android:background="@color/secondary_text"
+        android:text="112112121"
+        android:textColor="@color/md_white_1000"
+        android:textSize="12sp" />
 </merge>
 

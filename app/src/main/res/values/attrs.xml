@@ -1,1 +1,6 @@
-<resources></resources>
+<resources>
+    <declare-styleable name="ProgressImageView">
+        <attr name="showProgressText" format="boolean" />
+        <attr name="showProgressBar" format="boolean" />
+    </declare-styleable>
+</resources>

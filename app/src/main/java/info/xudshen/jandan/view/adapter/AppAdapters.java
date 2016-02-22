@@ -25,8 +25,10 @@ import com.squareup.picasso.RequestCreator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import info.xudshen.jandan.data.utils.HtmlUtils;
 import info.xudshen.jandan.utils.HtmlHelper;
 import info.xudshen.jandan.utils.LayoutHelper;
+import info.xudshen.jandan.view.component.ProgressImageView;
 
 /**
  * Created by xudshen on 16/2/18.
@@ -99,48 +101,9 @@ public class AppAdapters {
     }
 
     @BindingAdapter(value = {"picFull", "placeHolder"})
-    public static void setFullImageUrl(ImageView view, String url,
+    public static void setFullImageUrl(ProgressImageView view, String url,
                                        Drawable placeHolder) {
-        DrawableTypeRequest<String> request = Glide.with(view.getContext()).load(url);
-        if (placeHolder != null) {
-            request.placeholder(placeHolder);
-        }
-
-        if (url.endsWith("gif")) {
-            request.diskCacheStrategy(DiskCacheStrategy.SOURCE).crossFade().into(view);
-        } else {
-            request
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .transform(new BitmapTransformation(view.getContext()) {
-                        @Override
-                        protected Bitmap transform(BitmapPool pool, Bitmap toTransform,
-                                                   int outWidth, int outHeight) {
-                            int width = outWidth;
-                            int height = toTransform.getHeight() * outWidth / toTransform.getWidth();
-
-                            Bitmap result = pool.get(width, height, Bitmap.Config.ARGB_8888);
-                            if (result == null) {
-                                // Use ARGB_8888 since we're going to add alpha to the image.
-                                result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-                            }
-                            TransformationUtils.setAlpha(toTransform, result);
-
-                            Canvas canvas = new Canvas(result);
-                            Paint paint = new Paint(Paint.DITHER_FLAG | Paint.FILTER_BITMAP_FLAG);
-                            canvas.drawBitmap(toTransform, new Rect(0, 0, toTransform.getWidth(), toTransform.getHeight()),
-                                    new Rect(0, 0, width, height), paint);
-
-                            return result;
-                        }
-
-                        @Override
-                        public String getId() {
-                            return "info.xudshen.jandan.transform.FullTransform";
-                        }
-                    })
-                    .crossFade()
-                    .into(view);
-        }
+        view.load(HtmlUtils.fullSize(url), placeHolder);
     }
 
     @BindingAdapter(value = {"webContent"})

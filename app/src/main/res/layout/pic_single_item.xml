@@ -22,6 +22,10 @@
         <info.xudshen.jandan.view.component.ProgressImageView
             android:id="@+id/progress_image_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:picFull="@{url}"
+            app:placeHolder="@{@drawable/post_placeholder}"
+            app:showProgressBar="true"
+            app:showProgressText="true" />
     </LinearLayout>
 </layout>

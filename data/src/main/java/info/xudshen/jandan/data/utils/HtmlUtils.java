@@ -20,6 +20,9 @@ public class HtmlUtils {
     private static final Pattern picUrlPattern
             = new Pattern("<img\\s+src=\"({url}\\S+)\"(\\s|\\S)+?(<\\/img>|\\/>)");
 
+    public static final Pattern ImageUrlPattern =
+            new Pattern("({http}http|https):\\/\\/({host}\\S+?)\\/({size}\\S+?)\\/({id}\\S+?)\\.({type}\\S+)");
+
     public static String cleanComment(String comment) {
         comment = comment.replace("\\n", "");
         comment = comment.replace("\n", "");
@@ -49,5 +52,37 @@ public class HtmlUtils {
             urlList.add(matcher.group("url"));
         }
         return urlList;
+    }
+
+    public static String thumb(String url) {
+        Matcher matcher = ImageUrlPattern.matcher(url);
+        if (matcher.find()) {
+            String http = matcher.group("http"),
+                    host = matcher.group("host"),
+                    size = matcher.group("size"),
+                    id = matcher.group("id"),
+                    type = matcher.group("type");
+            if (type.equals("gif")) {
+                String newUrl = String.format("%s://%s/%s/%s.%s", http, host, "thumbnail", id, type);
+                return newUrl;
+            } else return url;
+        }
+        return url;
+    }
+
+    public static String fullSize(String url) {
+        Matcher matcher = ImageUrlPattern.matcher(url);
+        if (matcher.find()) {
+            String http = matcher.group("http"),
+                    host = matcher.group("host"),
+                    size = matcher.group("size"),
+                    id = matcher.group("id"),
+                    type = matcher.group("type");
+            if (type.equals("gif")) {
+                String newUrl = String.format("%s://%s/%s/%s.%s", http, host, "bmiddle", id, type);
+                return newUrl;
+            } else return url;
+        }
+        return url;
     }
 }
