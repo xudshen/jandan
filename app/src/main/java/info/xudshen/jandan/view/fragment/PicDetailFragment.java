@@ -52,6 +52,7 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
     @Inject
     CommentDao commentDao;
 
+    private boolean isDataLoaded = false;
     private Long picId;
     private FragmentPicDetailBinding binding;
 
@@ -89,7 +90,9 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.picDetailPresenter.setView(this);
-        this.picDetailPresenter.initialize(picId);
+        if (!isDataLoaded && getUserVisibleHint()) {
+            this.picDetailPresenter.initialize(picId);
+        }
     }
 
     @Override
@@ -108,6 +111,17 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
     public void onDestroy() {
         super.onDestroy();
         this.picDetailPresenter.destroy();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if (getView() != null && !isDataLoaded) {
+                isDataLoaded = true;
+                this.picDetailPresenter.initialize(picId);
+            }
+        }
     }
 
     //<editor-fold desc="Called by presenter">

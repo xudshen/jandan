@@ -24,6 +24,8 @@ import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.request.target.Target;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.utils.glide.ProgressTarget;
@@ -83,48 +85,24 @@ public class ProgressImageView extends RelativeLayout {
     }
 
     public void load(String url, Drawable placeHolder) {
-        target.setModel(url); // update target's cache
-        DrawableTypeRequest<String> request = Glide.with(getContext()).load(url);
-        if (placeHolder != null) {
-            request.placeholder(placeHolder);
-        }
-
         if (url.endsWith("gif")) {
+            target.setModel(url); // update target's cache
+            DrawableTypeRequest<String> request = Glide.with(getContext()).load(url);
+            if (placeHolder != null) {
+                request.placeholder(placeHolder);
+            }
+
             request.diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .centerCrop() // needs explicit transformation, because we're using a custom target
                     .crossFade().into(target);
         } else {
-            request
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .transform(new BitmapTransformation(getContext()) {
-                        @Override
-                        protected Bitmap transform(BitmapPool pool, Bitmap toTransform,
-                                                   int outWidth, int outHeight) {
-                            int width = outWidth;
-                            int height = toTransform.getHeight() * outWidth / toTransform.getWidth();
-
-                            Bitmap result = pool.get(width, height, Bitmap.Config.ARGB_8888);
-                            if (result == null) {
-                                // Use ARGB_8888 since we're going to add alpha to the image.
-                                result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-                            }
-                            TransformationUtils.setAlpha(toTransform, result);
-
-                            Canvas canvas = new Canvas(result);
-                            Paint paint = new Paint(Paint.DITHER_FLAG | Paint.FILTER_BITMAP_FLAG);
-                            canvas.drawBitmap(toTransform, new Rect(0, 0, toTransform.getWidth(), toTransform.getHeight()),
-                                    new Rect(0, 0, width, height), paint);
-
-                            return result;
-                        }
-
-                        @Override
-                        public String getId() {
-                            return "info.xudshen.jandan.transform.FullTransform";
-                        }
-                    })
-                    .crossFade()
-                    .into(target);
+            progressTextView.setVisibility(GONE);
+            progressBar.setVisibility(GONE);
+            RequestCreator request = Picasso.with(getContext()).load(url);
+            if (placeHolder != null) {
+                request.placeholder(placeHolder);
+            }
+            request.into(imageView);
         }
     }
 
