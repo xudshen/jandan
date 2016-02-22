@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="info.xudshen.jandan.utils.RealtimeTimeUtils" />
+
+        <import type="java.util.List" />
+
+        <import type="android.view.View" />
+
+        <import type="com.google.common.base.Strings" />
+
+        <variable
+            name="picItem"
+            type="info.xudshen.jandan.domain.model.PicItem" />
+
+    </data>
+
+
+    <merge>
+
+        <View style="@style/Divider" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/PostDetailMeta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingLeft="@dimen/layoutMarginHorizontal"
+                android:text="@{picItem.picAuthor}"
+                android:textColor="@color/colorAccent" />
+
+            <TextView
+                style="@style/PostDetailMeta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+
+                android:paddingLeft="@dimen/layoutMarginHorizontal"
+                android:text="@{RealtimeTimeUtils.realtime(picItem.date)}" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="OO 11"
+                android:textColor="@color/secondary_text"
+                android:textColorHighlight="@color/colorAccent" />
+
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="XX 11"
+                android:textColor="@color/secondary_text"
+                android:textColorHighlight="@color/colorAccent" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/PostCardMeta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:paddingBottom="@dimen/picItemMargin"
+            android:paddingLeft="@dimen/layoutMarginHorizontal"
+            android:paddingRight="@dimen/layoutMarginHorizontal"
+            android:paddingTop="8dp"
+            android:visibility="@{Strings.isNullOrEmpty(picItem.picTextContent) ? View.GONE : View.VISIBLE}"
+            app:richText="@{picItem.picTextContent}" />
+
+        <View style="@style/Divider" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/almostWhite"
+            android:paddingBottom="10dp"
+            android:paddingLeft="@dimen/layoutMarginHorizontal"
+            android:paddingTop="12dp"
+            android:text="所有评论" />
+    </merge>
+</layout>

@@ -5,8 +5,14 @@
     <data>
 
         <variable
-            name="url"
-            type="java.lang.String" />
+            name="picItem"
+            type="info.xudshen.jandan.domain.model.PicItem" />
+
+        <import type="java.util.List" />
+
+        <variable
+            name="urls"
+            type="List&lt;String>" />
     </data>
 
     <LinearLayout
@@ -14,18 +20,18 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{url}" />
-
         <info.xudshen.jandan.view.component.ProgressImageView
             android:id="@+id/progress_image_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:picFull="@{url}"
+            app:picFull="@{urls[0]}"
             app:placeHolder="@{@drawable/post_placeholder}"
             app:showProgressBar="true"
             app:showProgressText="true" />
+
+        <include
+            layout="@layout/pic_item_meta"
+            app:picItem="@{picItem}" />
+
     </LinearLayout>
 </layout>

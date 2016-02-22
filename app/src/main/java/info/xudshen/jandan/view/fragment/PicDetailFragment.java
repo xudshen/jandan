@@ -136,9 +136,8 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
                         return new DDBindableViewHolder(viewDataBinding);
                     })
                     .headerViewDataBindingVariableAction(viewDataBinding -> {
-                        viewDataBinding.setVariable(BR.url, urlList.get(0));
-//                        ProgressImageView progressImageView = (ProgressImageView) viewDataBinding.getRoot().findViewById(R.id.progress_image_view);
-//                        progressImageView.load(urlList.get(0));
+                        viewDataBinding.setVariable(BR.urls, urlList);
+                        viewDataBinding.setVariable(BR.picItem, item);
                     })
                     .itemViewHolderCreator(((inflater1, viewType1, parent1) -> {
                         ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
