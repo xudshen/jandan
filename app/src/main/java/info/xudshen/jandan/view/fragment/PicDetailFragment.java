@@ -30,7 +30,6 @@ import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.presenter.PicDetailPresenter;
 import info.xudshen.jandan.view.DataDetailView;
-import info.xudshen.jandan.view.component.ProgressImageView;
 
 /**
  * Created by xudshen on 16/2/21.
@@ -132,7 +131,7 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
             DDBindableCursorLoaderRVHeaderAdapter picCommentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
                     .cursorLoader(getActivity(), CommentDao.CONTENT_URI, null, "post_id = ?", new String[]{"76032"}, null)
                     .headerViewHolderCreator((inflater, viewType, parent) -> {
-                        ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.pic_single_item, parent, false);
+                        ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, headerPicDetailSelector(urlList.size()), parent, false);
                         return new DDBindableViewHolder(viewDataBinding);
                     })
                     .headerViewDataBindingVariableAction(viewDataBinding -> {
@@ -202,4 +201,33 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
         return getActivity().getApplicationContext();
     }
     //</editor-fold>
+
+    private int headerPicDetailSelector(int size) {
+        switch (size) {
+            case 1:
+                return R.layout.header_pic_detail_1;
+            case 2:
+                return R.layout.header_pic_detail_2;
+            case 3:
+                return R.layout.header_pic_detail_3;
+            case 4:
+                return R.layout.header_pic_detail_4;
+            case 5:
+                return R.layout.header_pic_detail_5;
+            case 6:
+                return R.layout.header_pic_detail_6;
+            case 7:
+                return R.layout.header_pic_detail_7;
+            case 8:
+                return R.layout.header_pic_detail_8;
+            case 9:
+                return R.layout.header_pic_detail_9;
+            case 10:
+                return R.layout.header_pic_detail_10;
+            case 11:
+                return R.layout.header_pic_detail_11;
+            default:
+                return R.layout.header_pic_detail_1;
+        }
+    }
 }

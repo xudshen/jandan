@@ -21,16 +21,28 @@
         android:orientation="vertical">
 
         <info.xudshen.jandan.view.component.ProgressImageView
-            android:id="@+id/progress_image_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/ProgressImageViewStyle"
             app:picFull="@{urls[0]}"
-            app:placeHolder="@{@drawable/post_placeholder}"
-            app:showProgressBar="true"
-            app:showProgressText="true" />
+            app:placeHolder="@{@drawable/post_placeholder}" />
+
+        <View style="@style/Divider" />
+
+        <info.xudshen.jandan.view.component.ProgressImageView
+            style="@style/ProgressImageViewStyle"
+            app:picFull="@{urls[1]}"
+            app:placeHolder="@{@drawable/post_placeholder}" />
+
+        <View style="@style/Divider" />
+
+        <info.xudshen.jandan.view.component.ProgressImageView
+            style="@style/ProgressImageViewStyle"
+            app:picFull="@{urls[2]}"
+            app:placeHolder="@{@drawable/post_placeholder}" />
+
+        <View style="@style/Divider" />
 
         <include
-            layout="@layout/pic_item_meta"
+            layout="@layout/header_pic_detail_meta"
             app:picItem="@{picItem}" />
 
     </LinearLayout>
