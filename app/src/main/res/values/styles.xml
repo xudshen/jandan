@@ -87,6 +87,12 @@
         <item name="android:lineSpacingMultiplier">1.2</item>
     </style>
 
+    <style name="JokeDetail">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/secondary_text</item>
+        <item name="android:lineSpacingMultiplier">1.2</item>
+    </style>
+
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>

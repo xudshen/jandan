@@ -65,7 +65,7 @@
             </LinearLayout>
 
             <TextView
-                style="@style/PostDetailMeta"
+                style="@style/JokeDetail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -73,8 +73,7 @@
                 android:paddingLeft="@dimen/picItemMarginHorizontal"
                 android:paddingRight="@dimen/picItemMarginHorizontal"
                 android:paddingTop="8dp"
-                android:text="@{item.textContent}"
-                android:visibility="@{Strings.isNullOrEmpty(item.textContent) ? View.GONE : View.VISIBLE}" />
+                android:text="@{item.textContent}" />
 
             <View style="@style/Divider" />
 

@@ -33,12 +33,15 @@ import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.internal.di.HasComponents;
 import info.xudshen.jandan.internal.di.components.ActivityComponent;
 import info.xudshen.jandan.internal.di.components.DaggerActivityComponent;
+import info.xudshen.jandan.internal.di.components.DaggerJokeComponent;
 import info.xudshen.jandan.internal.di.components.DaggerPicComponent;
 import info.xudshen.jandan.internal.di.components.DaggerPostComponent;
+import info.xudshen.jandan.internal.di.components.JokeComponent;
 import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
 import info.xudshen.jandan.view.LoadDataView;
+import info.xudshen.jandan.view.adapter.JokeReaderPagerAdapter;
 import info.xudshen.jandan.view.adapter.PicReaderPagerAdapter;
 import info.xudshen.jandan.view.adapter.PostReaderPagerAdapter;
 import info.xudshen.jandan.view.transition.StackPageTransformer;
@@ -65,6 +68,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
 
     private PostComponent postComponent;
     private PicComponent picComponent;
+    private JokeComponent jokeComponent;
     private ActivityComponent activityComponent;
 
     @Override
@@ -82,6 +86,11 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
                 .build();
 
         picComponent = DaggerPicComponent.builder()
+                .applicationComponent(getApplicationComponent())
+                .activityModule(activityModule)
+                .build();
+
+        jokeComponent = DaggerJokeComponent.builder()
                 .applicationComponent(getApplicationComponent())
                 .activityModule(activityModule)
                 .build();
@@ -113,6 +122,14 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
                 picComponent.inject(picReaderPagerAdapter);
                 picReaderPagerAdapter.initialize();
                 viewPager.setAdapter(picReaderPagerAdapter);
+                break;
+            }
+            case SimpleJoke: {
+                JokeReaderPagerAdapter jokeReaderPagerAdapter = new JokeReaderPagerAdapter(
+                        getSupportFragmentManager(), this);
+                jokeComponent.inject(jokeReaderPagerAdapter);
+                jokeReaderPagerAdapter.initialize();
+                viewPager.setAdapter(jokeReaderPagerAdapter);
                 break;
             }
         }
@@ -175,6 +192,9 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
         }
         if (componentType.isInstance(this.picComponent)) {
             return (C) this.picComponent;
+        }
+        if (componentType.isInstance(this.jokeComponent)) {
+            return (C) this.jokeComponent;
         }
         throw new IllegalStateException("componentType=" + componentType.getSimpleName() + " not found");
     }

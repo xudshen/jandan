@@ -4,6 +4,8 @@ import dagger.Component;
 import info.xudshen.jandan.internal.di.PerActivity;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
 import info.xudshen.jandan.internal.di.modules.JokeModule;
+import info.xudshen.jandan.view.adapter.JokeReaderPagerAdapter;
+import info.xudshen.jandan.view.fragment.JokeDetailFragment;
 import info.xudshen.jandan.view.fragment.JokeListFragment;
 
 /**
@@ -12,9 +14,9 @@ import info.xudshen.jandan.view.fragment.JokeListFragment;
 @PerActivity
 @Component(dependencies = ApplicationComponent.class, modules = {ActivityModule.class, JokeModule.class})
 public interface JokeComponent {
-//    void inject(JokeDetailFragment jokeDetailFragment);
+    void inject(JokeDetailFragment jokeDetailFragment);
 
     void inject(JokeListFragment jokeListFragment);
 
-//    void inject(JokeReaderPagerAdapter jokeReaderPagerAdapter);
+    void inject(JokeReaderPagerAdapter jokeReaderPagerAdapter);
 }
