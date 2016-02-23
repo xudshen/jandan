@@ -12,6 +12,8 @@ import info.xudshen.jandan.domain.model.Author;
 import info.xudshen.jandan.domain.model.Category;
 import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.PicItem;
+import info.xudshen.jandan.domain.model.JokeItem;
+import info.xudshen.jandan.domain.model.VideoItem;
 import info.xudshen.jandan.domain.model.DuoshuoComment;
 import info.xudshen.jandan.data.model.observable.MetaObservable;
 import info.xudshen.jandan.data.model.observable.PostObservable;
@@ -20,6 +22,8 @@ import info.xudshen.jandan.data.model.observable.AuthorObservable;
 import info.xudshen.jandan.data.model.observable.CategoryObservable;
 import info.xudshen.jandan.data.model.observable.CommentObservable;
 import info.xudshen.jandan.data.model.observable.PicItemObservable;
+import info.xudshen.jandan.data.model.observable.JokeItemObservable;
+import info.xudshen.jandan.data.model.observable.VideoItemObservable;
 import info.xudshen.jandan.data.model.observable.DuoshuoCommentObservable;
 
 public class ModelTrans {
@@ -71,6 +75,20 @@ public class ModelTrans {
                 @Override
                 public PicItemObservable to(PicItem entity) {
                     return new PicItemObservable(entity);
+                }
+            };
+    private static final IModelTrans<JokeItem, JokeItemObservable> JOKE_ITEM_TRANS =
+            new IModelTrans<JokeItem, JokeItemObservable>() {
+                @Override
+                public JokeItemObservable to(JokeItem entity) {
+                    return new JokeItemObservable(entity);
+                }
+            };
+    private static final IModelTrans<VideoItem, VideoItemObservable> VIDEO_ITEM_TRANS =
+            new IModelTrans<VideoItem, VideoItemObservable>() {
+                @Override
+                public VideoItemObservable to(VideoItem entity) {
+                    return new VideoItemObservable(entity);
                 }
             };
     private static final IModelTrans<DuoshuoComment, DuoshuoCommentObservable> DUOSHUO_COMMENT_TRANS =
@@ -277,6 +295,60 @@ public class ModelTrans {
 
     Iterable<PicItemObservable> transPicItem(Iterable<PicItem> entities) {
         return transPicItem(entities, PIC_ITEM_TRANS);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="TransJokeItem">
+    <TO extends IModelObservable> TO transJokeItem(JokeItem entity, IModelTrans<JokeItem, TO> trans) {
+        TO entityOb = trans.to(entity);
+        this.daoSession.getJokeItemDao().registerExtraOb(entityOb);
+        return entityOb;
+    }
+
+    JokeItemObservable transJokeItem(JokeItem entity) {
+        return transJokeItem(entity, JOKE_ITEM_TRANS);
+    }
+
+    <TO extends IModelObservable> Iterable<TO> transJokeItem(Iterable<JokeItem> entities, IModelTrans<JokeItem, TO> trans) {
+        List<TO> list = new ArrayList<>();
+        JokeItemDao dao = this.daoSession.getJokeItemDao();
+        for (JokeItem entity : entities) {
+            TO entityOb = trans.to(entity);
+            list.add(entityOb);
+            dao.registerExtraOb(entityOb);
+        }
+        return list;
+    }
+
+    Iterable<JokeItemObservable> transJokeItem(Iterable<JokeItem> entities) {
+        return transJokeItem(entities, JOKE_ITEM_TRANS);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="TransVideoItem">
+    <TO extends IModelObservable> TO transVideoItem(VideoItem entity, IModelTrans<VideoItem, TO> trans) {
+        TO entityOb = trans.to(entity);
+        this.daoSession.getVideoItemDao().registerExtraOb(entityOb);
+        return entityOb;
+    }
+
+    VideoItemObservable transVideoItem(VideoItem entity) {
+        return transVideoItem(entity, VIDEO_ITEM_TRANS);
+    }
+
+    <TO extends IModelObservable> Iterable<TO> transVideoItem(Iterable<VideoItem> entities, IModelTrans<VideoItem, TO> trans) {
+        List<TO> list = new ArrayList<>();
+        VideoItemDao dao = this.daoSession.getVideoItemDao();
+        for (VideoItem entity : entities) {
+            TO entityOb = trans.to(entity);
+            list.add(entityOb);
+            dao.registerExtraOb(entityOb);
+        }
+        return list;
+    }
+
+    Iterable<VideoItemObservable> transVideoItem(Iterable<VideoItem> entities) {
+        return transVideoItem(entities, VIDEO_ITEM_TRANS);
     }
     //</editor-fold>
 

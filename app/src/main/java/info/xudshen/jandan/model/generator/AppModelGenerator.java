@@ -30,6 +30,8 @@ public class AppModelGenerator extends ModelGenerator {
 
         addReadLaterItem(schema);
         addPic(schema);
+        addJoke(schema);
+        addVideo(schema);
         addDuoshuoComment(schema);
     }
 
@@ -178,25 +180,85 @@ public class AppModelGenerator extends ModelGenerator {
 
         entity.addIdProperty();
         Property picId = addLongProperty(entity, "picId").codeBeforeField("@Expose\n    @SerializedName(\"comment_ID\")").bindable(true).getProperty();
-        addStringProperty(entity, "picAuthor").codeBeforeField("@Expose\n    @SerializedName(\"comment_author\")").bindable(true);
-        addStringProperty(entity, "picAuthorEmail").codeBeforeField("@Expose\n    @SerializedName(\"comment_author_email\")").bindable(true);
-        addStringProperty(entity, "picAuthorUrl").codeBeforeField("@Expose\n    @SerializedName(\"comment_author_url\")").bindable(true);
+        addStringProperty(entity, "author").codeBeforeField("@Expose\n    @SerializedName(\"comment_author\")").bindable(true);
+        addStringProperty(entity, "authorEmail").codeBeforeField("@Expose\n    @SerializedName(\"comment_author_email\")").bindable(true);
+        addStringProperty(entity, "authorUrl").codeBeforeField("@Expose\n    @SerializedName(\"comment_author_url\")").bindable(true);
         addTimestampProperty(entity, "date").codeBeforeField("@Expose\n    @SerializedName(\"comment_date\")").bindable(true);
 
         addLongProperty(entity, "votePositive").bindable(true);
         addLongProperty(entity, "voteNegative").bindable(true);
 
         addLongProperty(entity, "commentCount").bindable(true);
-        addStringProperty(entity, "picThreadId").bindable(true);
+        addStringProperty(entity, "threadId").bindable(true);
 
-        addStringProperty(entity, "picContent").codeBeforeField("@Expose\n    @SerializedName(\"comment_content\")").bindable(true);
-        addStringProperty(entity, "picTextContent").codeBeforeField("@Expose\n    @SerializedName(\"text_content\")").bindable(true);
+        addStringProperty(entity, "content").codeBeforeField("@Expose\n    @SerializedName(\"comment_content\")").bindable(true);
+        addStringProperty(entity, "textContent").codeBeforeField("@Expose\n    @SerializedName(\"text_content\")").bindable(true);
         addStringProperty(entity, "pics").codeBeforeField("").bindable(true);
         addStringProperty(entity, "picFirst").bindable(true);
         addLongProperty(entity, "picCount").bindable(true);
         addBooleanProperty(entity, "hasGif").bindable(true);
 
         addUniqueIndex(entity, picId);
+
+        entity.addContentProvider();
+        entity.addImport(GSON_EXPOSE);
+        entity.addImport(GSON_SERIALIZEDNAME);
+    }
+
+    void addJoke(Schema schema) {
+        Entity entity = schema.addEntity("JokeItem");
+
+        entity.addIdProperty();
+        Property jokeId = addLongProperty(entity, "jokeId").codeBeforeField("@Expose\n    @SerializedName(\"comment_ID\")").bindable(true).getProperty();
+        addStringProperty(entity, "author").codeBeforeField("@Expose\n    @SerializedName(\"comment_author\")").bindable(true);
+        addStringProperty(entity, "authorEmail").codeBeforeField("@Expose\n    @SerializedName(\"comment_author_email\")").bindable(true);
+        addStringProperty(entity, "authorUrl").codeBeforeField("@Expose\n    @SerializedName(\"comment_author_url\")").bindable(true);
+        addTimestampProperty(entity, "date").codeBeforeField("@Expose\n    @SerializedName(\"comment_date\")").bindable(true);
+
+        addLongProperty(entity, "votePositive").bindable(true);
+        addLongProperty(entity, "voteNegative").bindable(true);
+
+        addLongProperty(entity, "commentCount").bindable(true);
+        addStringProperty(entity, "threadId").bindable(true);
+
+        addStringProperty(entity, "content").codeBeforeField("@Expose\n    @SerializedName(\"comment_content\")").bindable(true);
+        addStringProperty(entity, "textContent").codeBeforeField("@Expose\n    @SerializedName(\"text_content\")").bindable(true);
+
+        addUniqueIndex(entity, jokeId);
+
+        entity.addContentProvider();
+        entity.addImport(GSON_EXPOSE);
+        entity.addImport(GSON_SERIALIZEDNAME);
+    }
+
+    void addVideo(Schema schema) {
+        Entity entity = schema.addEntity("VideoItem");
+
+        entity.addIdProperty();
+        Property videoId = addLongProperty(entity, "videoId").codeBeforeField("@Expose\n    @SerializedName(\"comment_ID\")").bindable(true).getProperty();
+        addStringProperty(entity, "author").codeBeforeField("@Expose\n    @SerializedName(\"comment_author\")").bindable(true);
+        addStringProperty(entity, "authorEmail").codeBeforeField("@Expose\n    @SerializedName(\"comment_author_email\")").bindable(true);
+        addStringProperty(entity, "authorUrl").codeBeforeField("@Expose\n    @SerializedName(\"comment_author_url\")").bindable(true);
+        addTimestampProperty(entity, "date").codeBeforeField("@Expose\n    @SerializedName(\"comment_date\")").bindable(true);
+
+        addLongProperty(entity, "votePositive").bindable(true);
+        addLongProperty(entity, "voteNegative").bindable(true);
+
+        addLongProperty(entity, "commentCount").bindable(true);
+        addStringProperty(entity, "threadId").bindable(true);
+
+        addStringProperty(entity, "content").codeBeforeField("@Expose\n    @SerializedName(\"comment_content\")").bindable(true);
+        addStringProperty(entity, "textContent").codeBeforeField("@Expose\n    @SerializedName(\"text_content\")").bindable(true);
+
+        addStringProperty(entity, "videoThumbnail").bindable(true);
+        addStringProperty(entity, "videoTitle").bindable(true);
+        addStringProperty(entity, "videoDescription").bindable(true);
+        addLongProperty(entity, "videoDuration").bindable(true);
+        addStringProperty(entity, "videoLink").bindable(true);
+        addStringProperty(entity, "videoPlayer").bindable(true);
+        addStringProperty(entity, "videoSource").bindable(true);
+
+        addUniqueIndex(entity, videoId);
 
         entity.addContentProvider();
         entity.addImport(GSON_EXPOSE);

@@ -51,6 +51,14 @@ public class ModelContentProvider extends ContentProvider {
             + "/" + PicItemDao.TABLENAME;
     public static final String PIC_ITEM_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
             + "/" + PicItemDao.TABLENAME;
+    public static final String JOKE_ITEM_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
+            + "/" + JokeItemDao.TABLENAME;
+    public static final String JOKE_ITEM_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
+            + "/" + JokeItemDao.TABLENAME;
+    public static final String VIDEO_ITEM_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
+            + "/" + VideoItemDao.TABLENAME;
+    public static final String VIDEO_ITEM_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
+            + "/" + VideoItemDao.TABLENAME;
     public static final String DUOSHUO_COMMENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
             + "/" + DuoshuoCommentDao.TABLENAME;
     public static final String DUOSHUO_COMMENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
@@ -70,8 +78,12 @@ public class ModelContentProvider extends ContentProvider {
     private static final int COMMENT_ID = 0x1005;
     private static final int PIC_ITEM_DIR = 0x0006;
     private static final int PIC_ITEM_ID = 0x1006;
-    private static final int DUOSHUO_COMMENT_DIR = 0x0007;
-    private static final int DUOSHUO_COMMENT_ID = 0x1007;
+    private static final int JOKE_ITEM_DIR = 0x0007;
+    private static final int JOKE_ITEM_ID = 0x1007;
+    private static final int VIDEO_ITEM_DIR = 0x0008;
+    private static final int VIDEO_ITEM_ID = 0x1008;
+    private static final int DUOSHUO_COMMENT_DIR = 0x0009;
+    private static final int DUOSHUO_COMMENT_ID = 0x1009;
 
     private static final UriMatcher sURIMatcher;
 
@@ -91,6 +103,10 @@ public class ModelContentProvider extends ContentProvider {
         sURIMatcher.addURI(AUTHORITY, CommentDao.TABLENAME + "/#", COMMENT_ID);
         sURIMatcher.addURI(AUTHORITY, PicItemDao.TABLENAME, PIC_ITEM_DIR);
         sURIMatcher.addURI(AUTHORITY, PicItemDao.TABLENAME + "/#", PIC_ITEM_ID);
+        sURIMatcher.addURI(AUTHORITY, JokeItemDao.TABLENAME, JOKE_ITEM_DIR);
+        sURIMatcher.addURI(AUTHORITY, JokeItemDao.TABLENAME + "/#", JOKE_ITEM_ID);
+        sURIMatcher.addURI(AUTHORITY, VideoItemDao.TABLENAME, VIDEO_ITEM_DIR);
+        sURIMatcher.addURI(AUTHORITY, VideoItemDao.TABLENAME + "/#", VIDEO_ITEM_ID);
         sURIMatcher.addURI(AUTHORITY, DuoshuoCommentDao.TABLENAME, DUOSHUO_COMMENT_DIR);
         sURIMatcher.addURI(AUTHORITY, DuoshuoCommentDao.TABLENAME + "/#", DUOSHUO_COMMENT_ID);
     }
@@ -131,6 +147,8 @@ public class ModelContentProvider extends ContentProvider {
             case CATEGORY_ID:
             case COMMENT_ID:
             case PIC_ITEM_ID:
+            case JOKE_ITEM_ID:
+            case VIDEO_ITEM_ID:
             case DUOSHUO_COMMENT_ID:
                 break;
             default:
@@ -162,6 +180,8 @@ public class ModelContentProvider extends ContentProvider {
             case CATEGORY_ID:
             case COMMENT_ID:
             case PIC_ITEM_ID:
+            case JOKE_ITEM_ID:
+            case VIDEO_ITEM_ID:
             case DUOSHUO_COMMENT_ID:
                 break;
             default:
@@ -234,6 +254,22 @@ public class ModelContentProvider extends ContentProvider {
                 queryBuilder.appendWhere(PicItemDao.Properties.Id.columnName + "="
                         + uri.getLastPathSegment());
                 break;
+            case JOKE_ITEM_DIR:
+                queryBuilder.setTables(JokeItemDao.TABLENAME);
+                break;
+            case JOKE_ITEM_ID:
+                queryBuilder.setTables(JokeItemDao.TABLENAME);
+                queryBuilder.appendWhere(JokeItemDao.Properties.Id.columnName + "="
+                        + uri.getLastPathSegment());
+                break;
+            case VIDEO_ITEM_DIR:
+                queryBuilder.setTables(VideoItemDao.TABLENAME);
+                break;
+            case VIDEO_ITEM_ID:
+                queryBuilder.setTables(VideoItemDao.TABLENAME);
+                queryBuilder.appendWhere(VideoItemDao.Properties.Id.columnName + "="
+                        + uri.getLastPathSegment());
+                break;
             case DUOSHUO_COMMENT_DIR:
                 queryBuilder.setTables(DuoshuoCommentDao.TABLENAME);
                 break;
@@ -285,6 +321,14 @@ public class ModelContentProvider extends ContentProvider {
                 return PIC_ITEM_TYPE;
             case PIC_ITEM_ID:
                 return PIC_ITEM_ITEM_TYPE;
+            case JOKE_ITEM_DIR:
+                return JOKE_ITEM_TYPE;
+            case JOKE_ITEM_ID:
+                return JOKE_ITEM_ITEM_TYPE;
+            case VIDEO_ITEM_DIR:
+                return VIDEO_ITEM_TYPE;
+            case VIDEO_ITEM_ID:
+                return VIDEO_ITEM_ITEM_TYPE;
             case DUOSHUO_COMMENT_DIR:
                 return DUOSHUO_COMMENT_TYPE;
             case DUOSHUO_COMMENT_ID:

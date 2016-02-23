@@ -49,14 +49,14 @@
                 android:paddingLeft="@dimen/picItemMarginHorizontal"
                 android:paddingRight="@dimen/picItemMargin"
                 android:paddingTop="@dimen/picItemMargin"
-                app:paddingBottom="@{Strings.isNullOrEmpty(item.picTextContent) ? @dimen/picItemMargin : @dimen/picItemNoMargin}">
+                app:paddingBottom="@{Strings.isNullOrEmpty(item.textContent) ? @dimen/picItemMargin : @dimen/picItemNoMargin}">
 
                 <TextView
                     style="@style/PostDetailMetaHighlight"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
 
-                    android:text="@{item.picAuthor}" />
+                    android:text="@{item.author}" />
 
                 <TextView
                     style="@style/PostDetailMeta"
@@ -96,8 +96,8 @@
                 android:paddingLeft="@dimen/picItemMarginHorizontal"
                 android:paddingRight="@dimen/picItemMarginHorizontal"
                 android:paddingTop="8dp"
-                android:visibility="@{Strings.isNullOrEmpty(item.picTextContent) ? View.GONE : View.VISIBLE}"
-                app:richText="@{item.picTextContent}" />
+                android:visibility="@{Strings.isNullOrEmpty(item.textContent) ? View.GONE : View.VISIBLE}"
+                app:richText="@{item.textContent}" />
 
             <View style="@style/Divider" />
 

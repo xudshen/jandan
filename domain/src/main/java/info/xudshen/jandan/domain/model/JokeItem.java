@@ -10,14 +10,14 @@ import android.databinding.Bindable;
 // KEEP INCLUDES - put your custom includes here
 // KEEP INCLUDES END
 /**
- * Entity mapped to table "PIC_ITEM".
+ * Entity mapped to table "JOKE_ITEM".
  */
-public class PicItem {
+public class JokeItem {
 
     private Long id;
     @Expose
     @SerializedName("comment_ID")
-    private Long picId;
+    private Long jokeId;
     @Expose
     @SerializedName("comment_author")
     private String author;
@@ -44,28 +44,20 @@ public class PicItem {
     @Expose
     @SerializedName("text_content")
     private String textContent;
-    
-    private String pics;
-    @Expose
-    private String picFirst;
-    @Expose
-    private Long picCount;
-    @Expose
-    private Boolean hasGif;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
 
-    public PicItem() {
+    public JokeItem() {
     }
 
-    public PicItem(Long id) {
+    public JokeItem(Long id) {
         this.id = id;
     }
 
-    public PicItem(Long id, Long picId, String author, String authorEmail, String authorUrl, Timestamp date, Long votePositive, Long voteNegative, Long commentCount, String threadId, String content, String textContent, String pics, String picFirst, Long picCount, Boolean hasGif) {
+    public JokeItem(Long id, Long jokeId, String author, String authorEmail, String authorUrl, Timestamp date, Long votePositive, Long voteNegative, Long commentCount, String threadId, String content, String textContent) {
         this.id = id;
-        this.picId = picId;
+        this.jokeId = jokeId;
         this.author = author;
         this.authorEmail = authorEmail;
         this.authorUrl = authorUrl;
@@ -76,10 +68,6 @@ public class PicItem {
         this.threadId = threadId;
         this.content = content;
         this.textContent = textContent;
-        this.pics = pics;
-        this.picFirst = picFirst;
-        this.picCount = picCount;
-        this.hasGif = hasGif;
     }
 
     public Long getId() {
@@ -90,12 +78,12 @@ public class PicItem {
         this.id = id;
     }
 
-    public Long getPicId() {
-        return picId;
+    public Long getJokeId() {
+        return jokeId;
     }
 
-    public void setPicId(Long picId) {
-        this.picId = picId;
+    public void setJokeId(Long jokeId) {
+        this.jokeId = jokeId;
     }
 
     public String getAuthor() {
@@ -176,38 +164,6 @@ public class PicItem {
 
     public void setTextContent(String textContent) {
         this.textContent = textContent;
-    }
-
-    public String getPics() {
-        return pics;
-    }
-
-    public void setPics(String pics) {
-        this.pics = pics;
-    }
-
-    public String getPicFirst() {
-        return picFirst;
-    }
-
-    public void setPicFirst(String picFirst) {
-        this.picFirst = picFirst;
-    }
-
-    public Long getPicCount() {
-        return picCount;
-    }
-
-    public void setPicCount(Long picCount) {
-        this.picCount = picCount;
-    }
-
-    public Boolean getHasGif() {
-        return hasGif;
-    }
-
-    public void setHasGif(Boolean hasGif) {
-        this.hasGif = hasGif;
     }
 
     // KEEP METHODS - put your custom methods here

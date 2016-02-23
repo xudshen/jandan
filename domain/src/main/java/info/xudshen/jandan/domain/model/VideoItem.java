@@ -10,14 +10,14 @@ import android.databinding.Bindable;
 // KEEP INCLUDES - put your custom includes here
 // KEEP INCLUDES END
 /**
- * Entity mapped to table "PIC_ITEM".
+ * Entity mapped to table "VIDEO_ITEM".
  */
-public class PicItem {
+public class VideoItem {
 
     private Long id;
     @Expose
     @SerializedName("comment_ID")
-    private Long picId;
+    private Long videoId;
     @Expose
     @SerializedName("comment_author")
     private String author;
@@ -44,28 +44,34 @@ public class PicItem {
     @Expose
     @SerializedName("text_content")
     private String textContent;
-    
-    private String pics;
     @Expose
-    private String picFirst;
+    private String videoThumbnail;
     @Expose
-    private Long picCount;
+    private String videoTitle;
     @Expose
-    private Boolean hasGif;
+    private String videoDescription;
+    @Expose
+    private Long videoDuration;
+    @Expose
+    private String videoLink;
+    @Expose
+    private String videoPlayer;
+    @Expose
+    private String videoSource;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
 
-    public PicItem() {
+    public VideoItem() {
     }
 
-    public PicItem(Long id) {
+    public VideoItem(Long id) {
         this.id = id;
     }
 
-    public PicItem(Long id, Long picId, String author, String authorEmail, String authorUrl, Timestamp date, Long votePositive, Long voteNegative, Long commentCount, String threadId, String content, String textContent, String pics, String picFirst, Long picCount, Boolean hasGif) {
+    public VideoItem(Long id, Long videoId, String author, String authorEmail, String authorUrl, Timestamp date, Long votePositive, Long voteNegative, Long commentCount, String threadId, String content, String textContent, String videoThumbnail, String videoTitle, String videoDescription, Long videoDuration, String videoLink, String videoPlayer, String videoSource) {
         this.id = id;
-        this.picId = picId;
+        this.videoId = videoId;
         this.author = author;
         this.authorEmail = authorEmail;
         this.authorUrl = authorUrl;
@@ -76,10 +82,13 @@ public class PicItem {
         this.threadId = threadId;
         this.content = content;
         this.textContent = textContent;
-        this.pics = pics;
-        this.picFirst = picFirst;
-        this.picCount = picCount;
-        this.hasGif = hasGif;
+        this.videoThumbnail = videoThumbnail;
+        this.videoTitle = videoTitle;
+        this.videoDescription = videoDescription;
+        this.videoDuration = videoDuration;
+        this.videoLink = videoLink;
+        this.videoPlayer = videoPlayer;
+        this.videoSource = videoSource;
     }
 
     public Long getId() {
@@ -90,12 +99,12 @@ public class PicItem {
         this.id = id;
     }
 
-    public Long getPicId() {
-        return picId;
+    public Long getVideoId() {
+        return videoId;
     }
 
-    public void setPicId(Long picId) {
-        this.picId = picId;
+    public void setVideoId(Long videoId) {
+        this.videoId = videoId;
     }
 
     public String getAuthor() {
@@ -178,36 +187,60 @@ public class PicItem {
         this.textContent = textContent;
     }
 
-    public String getPics() {
-        return pics;
+    public String getVideoThumbnail() {
+        return videoThumbnail;
     }
 
-    public void setPics(String pics) {
-        this.pics = pics;
+    public void setVideoThumbnail(String videoThumbnail) {
+        this.videoThumbnail = videoThumbnail;
     }
 
-    public String getPicFirst() {
-        return picFirst;
+    public String getVideoTitle() {
+        return videoTitle;
     }
 
-    public void setPicFirst(String picFirst) {
-        this.picFirst = picFirst;
+    public void setVideoTitle(String videoTitle) {
+        this.videoTitle = videoTitle;
     }
 
-    public Long getPicCount() {
-        return picCount;
+    public String getVideoDescription() {
+        return videoDescription;
     }
 
-    public void setPicCount(Long picCount) {
-        this.picCount = picCount;
+    public void setVideoDescription(String videoDescription) {
+        this.videoDescription = videoDescription;
     }
 
-    public Boolean getHasGif() {
-        return hasGif;
+    public Long getVideoDuration() {
+        return videoDuration;
     }
 
-    public void setHasGif(Boolean hasGif) {
-        this.hasGif = hasGif;
+    public void setVideoDuration(Long videoDuration) {
+        this.videoDuration = videoDuration;
+    }
+
+    public String getVideoLink() {
+        return videoLink;
+    }
+
+    public void setVideoLink(String videoLink) {
+        this.videoLink = videoLink;
+    }
+
+    public String getVideoPlayer() {
+        return videoPlayer;
+    }
+
+    public void setVideoPlayer(String videoPlayer) {
+        this.videoPlayer = videoPlayer;
+    }
+
+    public String getVideoSource() {
+        return videoSource;
+    }
+
+    public void setVideoSource(String videoSource) {
+        this.videoSource = videoSource;
     }
 
     // KEEP METHODS - put your custom methods here

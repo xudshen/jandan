@@ -57,7 +57,7 @@ public class CloudPicDataStore implements PicDataStore {
                             PicItem picItem = CloudPicDataStore.this.picItemDao.queryBuilder().where(PicItemDao.Properties.PicId.eq(picId)).unique();
                             if (picItem != null) {
                                 picItem.setCommentCount(commentCount.getCount());
-                                picItem.setPicThreadId(commentCount.getThreadId());
+                                picItem.setThreadId(commentCount.getThreadId());
                                 picItemList.add(picItem);
                             }
                         }
