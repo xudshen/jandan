@@ -17,12 +17,14 @@ import info.xudshen.jandan.data.repository.CommentDataRepository;
 import info.xudshen.jandan.data.repository.JokeDataRepository;
 import info.xudshen.jandan.data.repository.PicDataRepository;
 import info.xudshen.jandan.data.repository.PostDataRepository;
+import info.xudshen.jandan.data.repository.VideoDataRepository;
 import info.xudshen.jandan.domain.executor.PostExecutionThread;
 import info.xudshen.jandan.domain.executor.ThreadExecutor;
 import info.xudshen.jandan.domain.repository.CommentRepository;
 import info.xudshen.jandan.domain.repository.JokeRepository;
 import info.xudshen.jandan.domain.repository.PicRepository;
 import info.xudshen.jandan.domain.repository.PostRepository;
+import info.xudshen.jandan.domain.repository.VideoRepository;
 import info.xudshen.jandan.navigation.Navigator;
 
 /**
@@ -86,6 +88,12 @@ public class ApplicationModule {
     @Singleton
     JokeRepository provideJokeRepository(JokeDataRepository jokeDataRepository) {
         return jokeDataRepository;
+    }
+
+    @Provides
+    @Singleton
+    VideoRepository provideVideoRepository(VideoDataRepository videoDataRepository) {
+        return videoDataRepository;
     }
 
     @Provides

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="info.xudshen.jandan.utils.RealtimeTimeUtils" />
+
+        <import type="info.xudshen.jandan.utils.HtmlHelper" />
+
+        <import type="android.view.View" />
+
+        <import type="com.google.common.base.Strings" />
+
+        <variable
+            name="item"
+            type="info.xudshen.jandan.domain.model.VideoItem" />
+    </data>
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/cardMarginVertical"
+        android:layout_marginLeft="@dimen/cardMarginHorizontal"
+        android:layout_marginRight="@dimen/cardMarginHorizontal"
+        android:layout_marginTop="@dimen/cardMarginVertical"
+        android:clickable="true"
+        android:focusable="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                app:picThumb="@{item.videoThumbnail}"
+                app:placeHolder="@{@drawable/post_placeholder}" />
+
+            <View style="@style/Divider" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</layout>

@@ -22,6 +22,7 @@ import info.xudshen.jandan.domain.repository.CommentRepository;
 import info.xudshen.jandan.domain.repository.JokeRepository;
 import info.xudshen.jandan.domain.repository.PicRepository;
 import info.xudshen.jandan.domain.repository.PostRepository;
+import info.xudshen.jandan.domain.repository.VideoRepository;
 import info.xudshen.jandan.internal.di.modules.ApplicationModule;
 import info.xudshen.jandan.internal.di.modules.DaoModule;
 import info.xudshen.jandan.navigation.Navigator;
@@ -51,6 +52,8 @@ public interface ApplicationComponent {
     PicRepository picRepository();
 
     JokeRepository jokeRepository();
+
+    VideoRepository videoRepository();
 
     CommentRepository commentRepository();
 

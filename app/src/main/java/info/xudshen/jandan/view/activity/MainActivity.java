@@ -19,9 +19,11 @@ import info.xudshen.jandan.internal.di.components.DaggerActivityComponent;
 import info.xudshen.jandan.internal.di.components.DaggerJokeComponent;
 import info.xudshen.jandan.internal.di.components.DaggerPicComponent;
 import info.xudshen.jandan.internal.di.components.DaggerPostComponent;
+import info.xudshen.jandan.internal.di.components.DaggerVideoComponent;
 import info.xudshen.jandan.internal.di.components.JokeComponent;
 import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.internal.di.components.PostComponent;
+import info.xudshen.jandan.internal.di.components.VideoComponent;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
 import info.xudshen.jandan.view.fragment.HomeFragment;
 import info.xudshen.jandan.view.fragment.ReadLaterFragment;
@@ -34,6 +36,7 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
     private PostComponent postComponent;
     private PicComponent picComponent;
     private JokeComponent jokeComponent;
+    private VideoComponent videoComponent;
     private ActivityComponent activityComponent;
 
     @Override
@@ -56,6 +59,11 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
                 .build();
 
         jokeComponent = DaggerJokeComponent.builder()
+                .applicationComponent(getApplicationComponent())
+                .activityModule(activityModule)
+                .build();
+
+        videoComponent = DaggerVideoComponent.builder()
                 .applicationComponent(getApplicationComponent())
                 .activityModule(activityModule)
                 .build();
@@ -158,6 +166,9 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
         }
         if (componentType.isInstance(this.jokeComponent)) {
             return (C) this.jokeComponent;
+        }
+        if (componentType.isInstance(this.videoComponent)) {
+            return (C) this.videoComponent;
         }
         throw new IllegalStateException("componentType=" + componentType.getSimpleName() + " not found");
     }

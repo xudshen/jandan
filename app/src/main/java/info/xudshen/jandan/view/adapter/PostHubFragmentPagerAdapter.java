@@ -14,6 +14,7 @@ import info.xudshen.jandan.view.fragment.BlankFragment;
 import info.xudshen.jandan.view.fragment.JokeListFragment;
 import info.xudshen.jandan.view.fragment.PicListFragment;
 import info.xudshen.jandan.view.fragment.PostListFragment;
+import info.xudshen.jandan.view.fragment.VideoListFragment;
 
 /**
  * Created by xudshen on 16/1/11.
@@ -50,7 +51,7 @@ public class PostHubFragmentPagerAdapter extends FragmentStatePagerAdapter {
                 return JokeListFragment.newInstance();
             }
             case 4: {
-                return BlankFragment.newInstance(position);
+                return VideoListFragment.newInstance();
             }
             default: {
                 return BlankFragment.newInstance(999);
