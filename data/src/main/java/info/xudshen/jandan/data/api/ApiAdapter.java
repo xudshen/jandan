@@ -52,8 +52,8 @@ public class ApiAdapter {
 
     private static final IPostService POST_SERVICE = createRetrofitService(
             IPostService.class, BASE_URL, GsonSingleton.getInstance().getGson());
-    private static final IPicService PIC_SERVICE = createRetrofitService(
-            IPicService.class, BASE_URL, GsonSingleton.getInstance().getGson());
+    private static final ICommonItemService COMMON_ITEM_SERVICE = createRetrofitService(
+            ICommonItemService.class, BASE_URL, GsonSingleton.getInstance().getGson());
     private static final ICommentService COMMENT_SERVICE = createRetrofitService(
             ICommentService.class, DUOSHUO_URL, GsonSingleton.getInstance().getDuoshuoGson());
 
@@ -61,8 +61,8 @@ public class ApiAdapter {
         return POST_SERVICE;
     }
 
-    public static IPicService getPicService() {
-        return PIC_SERVICE;
+    public static ICommonItemService getCommonItemService() {
+        return COMMON_ITEM_SERVICE;
     }
 
     public static ICommentService getCommentService() {

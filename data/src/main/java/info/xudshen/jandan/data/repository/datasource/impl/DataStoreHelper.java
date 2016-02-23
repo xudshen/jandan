@@ -9,6 +9,8 @@ import info.xudshen.jandan.domain.model.Meta;
 public class DataStoreHelper {
     public static final String POST_KEY = "post_page";
     public static final String PIC_KEY = "pic_page";
+    public static final String JOKE_KEY = "joke_page";
+    public static final String VIDEO_KEY = "video_page";
 
     public static Meta getMeta(MetaDao metaDao, String key) {
         Meta meta = null;

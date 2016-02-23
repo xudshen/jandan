@@ -9,10 +9,12 @@ import info.xudshen.jandan.data.dao.CategoryDao;
 import info.xudshen.jandan.data.dao.CommentDao;
 import info.xudshen.jandan.data.dao.DaoSession;
 import info.xudshen.jandan.data.dao.DuoshuoCommentDao;
+import info.xudshen.jandan.data.dao.JokeItemDao;
 import info.xudshen.jandan.data.dao.MetaDao;
 import info.xudshen.jandan.data.dao.PicItemDao;
 import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.data.dao.SimplePostDao;
+import info.xudshen.jandan.data.dao.VideoItemDao;
 
 /**
  * Created by xudshen on 16/1/7.
@@ -60,6 +62,18 @@ public class DaoModule {
     @Singleton
     PicItemDao providePicItemDao(DaoSession daoSession) {
         return daoSession.getPicItemDao();
+    }
+
+    @Provides
+    @Singleton
+    JokeItemDao provideJokeItemDao(DaoSession daoSession) {
+        return daoSession.getJokeItemDao();
+    }
+
+    @Provides
+    @Singleton
+    VideoItemDao provideVideoItemDao(DaoSession daoSession) {
+        return daoSession.getVideoItemDao();
     }
 
     @Provides

@@ -61,7 +61,7 @@ public class CommentCountResponse {
             this.threadKey = threadKey;
         }
 
-        public Long getPicId() {
+        public Long getCommonItemId() {
             String id = this.threadKey.substring(Constants.THREAD_PREFIX.length(), this.threadKey.length());
             return Long.valueOf(id);
         }

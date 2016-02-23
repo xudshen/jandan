@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import info.xudshen.jandan.data.api.ICommentService;
-import info.xudshen.jandan.data.api.IPicService;
+import info.xudshen.jandan.data.api.ICommonItemService;
 import info.xudshen.jandan.data.api.response.CommentCountResponse;
 import info.xudshen.jandan.data.api.response.PicListResponse;
 import info.xudshen.jandan.data.constants.Constants;
@@ -30,21 +30,21 @@ import rx.schedulers.Schedulers;
 public class CloudPicDataStore implements PicDataStore {
     private static final Logger logger = LoggerFactory.getLogger(CloudPicDataStore.class);
 
-    private final IPicService picService;
+    private final ICommonItemService picService;
     private final ICommentService commentService;
     private final PicItemDao picItemDao;
     private final MetaDao metaDao;
 
     private Action1<List<PicItem>> refreshComment;
 
-    public CloudPicDataStore(IPicService picService, ICommentService commentService, PicItemDao picItemDao, MetaDao metaDao) {
+    public CloudPicDataStore(ICommonItemService picService, ICommentService commentService, PicItemDao picItemDao, MetaDao metaDao) {
         this.picService = picService;
         this.commentService = commentService;
         this.picItemDao = picItemDao;
         this.metaDao = metaDao;
 
         this.refreshComment = picItems -> {
-            commentService.getDuoshuoCommentList(Joiner.on(",").join(Lists.transform(picItems,
+            CloudPicDataStore.this.commentService.getDuoshuoCommentList(Joiner.on(",").join(Lists.transform(picItems,
                     picItem -> Constants.THREAD_PREFIX + picItem.getPicId())))
                     .subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
                     .subscribe(commentCountResponse -> {
@@ -52,7 +52,7 @@ public class CloudPicDataStore implements PicDataStore {
                         List<PicItem> picItemList = new ArrayList<PicItem>();
                         for (String key : commentCountResponse.getResponse().keySet()) {
                             CommentCountResponse.CommentCount commentCount = commentCountResponse.getResponse().get(key);
-                            Long picId = commentCount.getPicId();
+                            Long picId = commentCount.getCommonItemId();
                             logger.info("{}:{}", commentCount.getThreadKey(), commentCount.getCount());
                             PicItem picItem = CloudPicDataStore.this.picItemDao.queryBuilder().where(PicItemDao.Properties.PicId.eq(picId)).unique();
                             if (picItem != null) {

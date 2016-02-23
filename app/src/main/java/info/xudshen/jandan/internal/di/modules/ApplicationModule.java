@@ -14,11 +14,13 @@ import info.xudshen.jandan.data.dao.DaoMaster;
 import info.xudshen.jandan.data.dao.DaoSession;
 import info.xudshen.jandan.data.executor.JobExecutor;
 import info.xudshen.jandan.data.repository.CommentDataRepository;
+import info.xudshen.jandan.data.repository.JokeDataRepository;
 import info.xudshen.jandan.data.repository.PicDataRepository;
 import info.xudshen.jandan.data.repository.PostDataRepository;
 import info.xudshen.jandan.domain.executor.PostExecutionThread;
 import info.xudshen.jandan.domain.executor.ThreadExecutor;
 import info.xudshen.jandan.domain.repository.CommentRepository;
+import info.xudshen.jandan.domain.repository.JokeRepository;
 import info.xudshen.jandan.domain.repository.PicRepository;
 import info.xudshen.jandan.domain.repository.PostRepository;
 import info.xudshen.jandan.navigation.Navigator;
@@ -78,6 +80,12 @@ public class ApplicationModule {
     @Singleton
     PicRepository providePicRepository(PicDataRepository picDataRepository) {
         return picDataRepository;
+    }
+
+    @Provides
+    @Singleton
+    JokeRepository provideJokeRepository(JokeDataRepository jokeDataRepository) {
+        return jokeDataRepository;
     }
 
     @Provides

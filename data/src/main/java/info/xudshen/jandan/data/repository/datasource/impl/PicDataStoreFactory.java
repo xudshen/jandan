@@ -32,7 +32,7 @@ public class PicDataStoreFactory {
 
 
     public PicDataStore createCloudDataStore() {
-        return new CloudPicDataStore(ApiAdapter.getPicService(), ApiAdapter.getCommentService(),
+        return new CloudPicDataStore(ApiAdapter.getCommonItemService(), ApiAdapter.getCommentService(),
                 picItemDao, metaDao);
     }
 }

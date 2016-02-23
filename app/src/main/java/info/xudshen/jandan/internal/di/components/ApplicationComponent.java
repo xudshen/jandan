@@ -10,13 +10,16 @@ import info.xudshen.jandan.data.dao.CategoryDao;
 import info.xudshen.jandan.data.dao.CommentDao;
 import info.xudshen.jandan.data.dao.DaoSession;
 import info.xudshen.jandan.data.dao.DuoshuoCommentDao;
+import info.xudshen.jandan.data.dao.JokeItemDao;
 import info.xudshen.jandan.data.dao.MetaDao;
 import info.xudshen.jandan.data.dao.PicItemDao;
 import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.data.dao.SimplePostDao;
+import info.xudshen.jandan.data.dao.VideoItemDao;
 import info.xudshen.jandan.domain.executor.PostExecutionThread;
 import info.xudshen.jandan.domain.executor.ThreadExecutor;
 import info.xudshen.jandan.domain.repository.CommentRepository;
+import info.xudshen.jandan.domain.repository.JokeRepository;
 import info.xudshen.jandan.domain.repository.PicRepository;
 import info.xudshen.jandan.domain.repository.PostRepository;
 import info.xudshen.jandan.internal.di.modules.ApplicationModule;
@@ -47,6 +50,8 @@ public interface ApplicationComponent {
 
     PicRepository picRepository();
 
+    JokeRepository jokeRepository();
+
     CommentRepository commentRepository();
 
     MetaDao metaDao();
@@ -62,6 +67,10 @@ public interface ApplicationComponent {
     CommentDao commentDao();
 
     PicItemDao picItemDao();
+
+    JokeItemDao jokeItemDao();
+
+    VideoItemDao videoItemDao();
 
     DuoshuoCommentDao duoshuoCommentDao();
 }
