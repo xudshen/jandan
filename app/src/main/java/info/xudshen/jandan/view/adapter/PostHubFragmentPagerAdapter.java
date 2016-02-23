@@ -21,7 +21,7 @@ import info.xudshen.jandan.view.fragment.VideoListFragment;
  */
 public class PostHubFragmentPagerAdapter extends FragmentStatePagerAdapter {
     private static final Logger logger = LoggerFactory.getLogger(PostHubFragmentPagerAdapter.class);
-    final int PAGE_COUNT = 5;
+    final int PAGE_COUNT = 4;
     private Context context;
 
     public PostHubFragmentPagerAdapter(FragmentManager fm, Context context) {
@@ -36,21 +36,17 @@ public class PostHubFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        logger.info(position + "");
         switch (position) {
             case 0: {
-                return BlankFragment.newInstance(position);
-            }
-            case 1: {
                 return PostListFragment.newInstance();
             }
-            case 2: {
+            case 1: {
                 return PicListFragment.newInstance();
             }
-            case 3: {
+            case 2: {
                 return JokeListFragment.newInstance();
             }
-            case 4: {
+            case 3: {
                 return VideoListFragment.newInstance();
             }
             default: {
@@ -64,18 +60,15 @@ public class PostHubFragmentPagerAdapter extends FragmentStatePagerAdapter {
         // Generate title based on item position
         switch (position) {
             case 0: {
-                return context.getText(R.string.tab_item_ranking);
-            }
-            case 1: {
                 return context.getText(R.string.tab_item_posts);
             }
-            case 2: {
+            case 1: {
                 return context.getText(R.string.tab_item_pics);
             }
-            case 3: {
+            case 2: {
                 return context.getText(R.string.tab_item_jokes);
             }
-            case 4: {
+            case 3: {
                 return context.getText(R.string.tab_item_movies);
             }
             default: {
