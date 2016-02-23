@@ -71,7 +71,7 @@
         </LinearLayout>
 
         <TextView
-            style="@style/PostCardMeta"
+            style="@style/PostDetailMeta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 

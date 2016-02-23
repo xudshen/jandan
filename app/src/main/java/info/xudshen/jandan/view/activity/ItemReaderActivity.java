@@ -36,14 +36,17 @@ import info.xudshen.jandan.internal.di.components.DaggerActivityComponent;
 import info.xudshen.jandan.internal.di.components.DaggerJokeComponent;
 import info.xudshen.jandan.internal.di.components.DaggerPicComponent;
 import info.xudshen.jandan.internal.di.components.DaggerPostComponent;
+import info.xudshen.jandan.internal.di.components.DaggerVideoComponent;
 import info.xudshen.jandan.internal.di.components.JokeComponent;
 import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.internal.di.components.PostComponent;
+import info.xudshen.jandan.internal.di.components.VideoComponent;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
 import info.xudshen.jandan.view.LoadDataView;
 import info.xudshen.jandan.view.adapter.JokeReaderPagerAdapter;
 import info.xudshen.jandan.view.adapter.PicReaderPagerAdapter;
 import info.xudshen.jandan.view.adapter.PostReaderPagerAdapter;
+import info.xudshen.jandan.view.adapter.VideoReaderPagerAdapter;
 import info.xudshen.jandan.view.transition.StackPageTransformer;
 
 public class ItemReaderActivity extends BaseActivity implements HasComponents, LoadDataView {
@@ -69,6 +72,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
     private PostComponent postComponent;
     private PicComponent picComponent;
     private JokeComponent jokeComponent;
+    private VideoComponent videoComponent;
     private ActivityComponent activityComponent;
 
     @Override
@@ -91,6 +95,11 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
                 .build();
 
         jokeComponent = DaggerJokeComponent.builder()
+                .applicationComponent(getApplicationComponent())
+                .activityModule(activityModule)
+                .build();
+
+        videoComponent = DaggerVideoComponent.builder()
                 .applicationComponent(getApplicationComponent())
                 .activityModule(activityModule)
                 .build();
@@ -130,6 +139,14 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
                 jokeComponent.inject(jokeReaderPagerAdapter);
                 jokeReaderPagerAdapter.initialize();
                 viewPager.setAdapter(jokeReaderPagerAdapter);
+                break;
+            }
+            case SimpleVideo: {
+                VideoReaderPagerAdapter videoReaderPagerAdapter = new VideoReaderPagerAdapter(
+                        getSupportFragmentManager(), this);
+                videoComponent.inject(videoReaderPagerAdapter);
+                videoReaderPagerAdapter.initialize();
+                viewPager.setAdapter(videoReaderPagerAdapter);
                 break;
             }
         }
@@ -195,6 +212,9 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
         }
         if (componentType.isInstance(this.jokeComponent)) {
             return (C) this.jokeComponent;
+        }
+        if (componentType.isInstance(this.videoComponent)) {
+            return (C) this.videoComponent;
         }
         throw new IllegalStateException("componentType=" + componentType.getSimpleName() + " not found");
     }
