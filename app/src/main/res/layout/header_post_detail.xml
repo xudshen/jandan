@@ -16,7 +16,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/layoutMarginVertical"
         android:paddingTop="@dimen/layoutMarginVertical">
 
         <TextView
@@ -78,14 +77,26 @@
 
         <View style="@style/Divider" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/almostWhite"
-            android:paddingBottom="10dp"
-            android:paddingLeft="@dimen/layoutMarginHorizontal"
-            android:paddingTop="12dp"
-            android:text="所有评论" />
+            android:background="@color/almostWhite">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:paddingBottom="10dp"
+                android:paddingLeft="@dimen/layoutMarginHorizontal"
+                android:paddingTop="12dp"
+                android:text="@{@string/meta_format_all_comment_count(post.commentCount)}" />
+
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/comment_click_to_refresh"
+                android:textColor="@color/accent_color" />
+        </LinearLayout>
     </LinearLayout>
 </layout>

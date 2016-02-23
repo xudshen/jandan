@@ -24,4 +24,6 @@
     <string name="press_again_exit">再按退出</string>
     <string name="meta_format_comment_count">%d 评论</string>
     <string name="post_detail_no_more_comments">没有更多评论了惹</string>
+    <string name="meta_format_all_comment_count">所有评论 (%d)</string>
+    <string name="comment_click_to_refresh">点击刷新</string>
 </resources>
