@@ -12,6 +12,7 @@ import info.xudshen.jandan.data.dao.DaoSession;
 import info.xudshen.jandan.data.dao.DuoshuoCommentDao;
 import info.xudshen.jandan.data.dao.JokeItemDao;
 import info.xudshen.jandan.data.dao.MetaDao;
+import info.xudshen.jandan.data.dao.ModelTrans;
 import info.xudshen.jandan.data.dao.PicItemDao;
 import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.data.dao.SimplePostDao;
@@ -46,6 +47,8 @@ public interface ApplicationComponent {
     PostExecutionThread postExecutionThread();
 
     DaoSession daoSession();
+
+    ModelTrans modelTrans();
 
     PostRepository postRepository();
 

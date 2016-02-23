@@ -110,17 +110,17 @@ public class ModelTrans {
     }
 
     //<editor-fold desc="TransMeta">
-    <TO extends IModelObservable> TO transMeta(Meta entity, IModelTrans<Meta, TO> trans) {
+    public <TO extends IModelObservable> TO transMeta(Meta entity, IModelTrans<Meta, TO> trans) {
         TO entityOb = trans.to(entity);
         this.daoSession.getMetaDao().registerExtraOb(entityOb);
         return entityOb;
     }
 
-    MetaObservable transMeta(Meta entity) {
+    public MetaObservable transMeta(Meta entity) {
         return transMeta(entity, META_TRANS);
     }
 
-    <TO extends IModelObservable> Iterable<TO> transMeta(Iterable<Meta> entities, IModelTrans<Meta, TO> trans) {
+    public <TO extends IModelObservable> Iterable<TO> transMeta(Iterable<Meta> entities, IModelTrans<Meta, TO> trans) {
         List<TO> list = new ArrayList<>();
         MetaDao dao = this.daoSession.getMetaDao();
         for (Meta entity : entities) {
@@ -131,23 +131,23 @@ public class ModelTrans {
         return list;
     }
 
-    Iterable<MetaObservable> transMeta(Iterable<Meta> entities) {
+    public Iterable<MetaObservable> transMeta(Iterable<Meta> entities) {
         return transMeta(entities, META_TRANS);
     }
     //</editor-fold>
 
     //<editor-fold desc="TransPost">
-    <TO extends IModelObservable> TO transPost(Post entity, IModelTrans<Post, TO> trans) {
+    public <TO extends IModelObservable> TO transPost(Post entity, IModelTrans<Post, TO> trans) {
         TO entityOb = trans.to(entity);
         this.daoSession.getPostDao().registerExtraOb(entityOb);
         return entityOb;
     }
 
-    PostObservable transPost(Post entity) {
+    public PostObservable transPost(Post entity) {
         return transPost(entity, POST_TRANS);
     }
 
-    <TO extends IModelObservable> Iterable<TO> transPost(Iterable<Post> entities, IModelTrans<Post, TO> trans) {
+    public <TO extends IModelObservable> Iterable<TO> transPost(Iterable<Post> entities, IModelTrans<Post, TO> trans) {
         List<TO> list = new ArrayList<>();
         PostDao dao = this.daoSession.getPostDao();
         for (Post entity : entities) {
@@ -158,23 +158,23 @@ public class ModelTrans {
         return list;
     }
 
-    Iterable<PostObservable> transPost(Iterable<Post> entities) {
+    public Iterable<PostObservable> transPost(Iterable<Post> entities) {
         return transPost(entities, POST_TRANS);
     }
     //</editor-fold>
 
     //<editor-fold desc="TransSimplePost">
-    <TO extends IModelObservable> TO transSimplePost(SimplePost entity, IModelTrans<SimplePost, TO> trans) {
+    public <TO extends IModelObservable> TO transSimplePost(SimplePost entity, IModelTrans<SimplePost, TO> trans) {
         TO entityOb = trans.to(entity);
         this.daoSession.getSimplePostDao().registerExtraOb(entityOb);
         return entityOb;
     }
 
-    SimplePostObservable transSimplePost(SimplePost entity) {
+    public SimplePostObservable transSimplePost(SimplePost entity) {
         return transSimplePost(entity, SIMPLE_POST_TRANS);
     }
 
-    <TO extends IModelObservable> Iterable<TO> transSimplePost(Iterable<SimplePost> entities, IModelTrans<SimplePost, TO> trans) {
+    public <TO extends IModelObservable> Iterable<TO> transSimplePost(Iterable<SimplePost> entities, IModelTrans<SimplePost, TO> trans) {
         List<TO> list = new ArrayList<>();
         SimplePostDao dao = this.daoSession.getSimplePostDao();
         for (SimplePost entity : entities) {
@@ -185,23 +185,23 @@ public class ModelTrans {
         return list;
     }
 
-    Iterable<SimplePostObservable> transSimplePost(Iterable<SimplePost> entities) {
+    public Iterable<SimplePostObservable> transSimplePost(Iterable<SimplePost> entities) {
         return transSimplePost(entities, SIMPLE_POST_TRANS);
     }
     //</editor-fold>
 
     //<editor-fold desc="TransAuthor">
-    <TO extends IModelObservable> TO transAuthor(Author entity, IModelTrans<Author, TO> trans) {
+    public <TO extends IModelObservable> TO transAuthor(Author entity, IModelTrans<Author, TO> trans) {
         TO entityOb = trans.to(entity);
         this.daoSession.getAuthorDao().registerExtraOb(entityOb);
         return entityOb;
     }
 
-    AuthorObservable transAuthor(Author entity) {
+    public AuthorObservable transAuthor(Author entity) {
         return transAuthor(entity, AUTHOR_TRANS);
     }
 
-    <TO extends IModelObservable> Iterable<TO> transAuthor(Iterable<Author> entities, IModelTrans<Author, TO> trans) {
+    public <TO extends IModelObservable> Iterable<TO> transAuthor(Iterable<Author> entities, IModelTrans<Author, TO> trans) {
         List<TO> list = new ArrayList<>();
         AuthorDao dao = this.daoSession.getAuthorDao();
         for (Author entity : entities) {
@@ -212,23 +212,23 @@ public class ModelTrans {
         return list;
     }
 
-    Iterable<AuthorObservable> transAuthor(Iterable<Author> entities) {
+    public Iterable<AuthorObservable> transAuthor(Iterable<Author> entities) {
         return transAuthor(entities, AUTHOR_TRANS);
     }
     //</editor-fold>
 
     //<editor-fold desc="TransCategory">
-    <TO extends IModelObservable> TO transCategory(Category entity, IModelTrans<Category, TO> trans) {
+    public <TO extends IModelObservable> TO transCategory(Category entity, IModelTrans<Category, TO> trans) {
         TO entityOb = trans.to(entity);
         this.daoSession.getCategoryDao().registerExtraOb(entityOb);
         return entityOb;
     }
 
-    CategoryObservable transCategory(Category entity) {
+    public CategoryObservable transCategory(Category entity) {
         return transCategory(entity, CATEGORY_TRANS);
     }
 
-    <TO extends IModelObservable> Iterable<TO> transCategory(Iterable<Category> entities, IModelTrans<Category, TO> trans) {
+    public <TO extends IModelObservable> Iterable<TO> transCategory(Iterable<Category> entities, IModelTrans<Category, TO> trans) {
         List<TO> list = new ArrayList<>();
         CategoryDao dao = this.daoSession.getCategoryDao();
         for (Category entity : entities) {
@@ -239,23 +239,23 @@ public class ModelTrans {
         return list;
     }
 
-    Iterable<CategoryObservable> transCategory(Iterable<Category> entities) {
+    public Iterable<CategoryObservable> transCategory(Iterable<Category> entities) {
         return transCategory(entities, CATEGORY_TRANS);
     }
     //</editor-fold>
 
     //<editor-fold desc="TransComment">
-    <TO extends IModelObservable> TO transComment(Comment entity, IModelTrans<Comment, TO> trans) {
+    public <TO extends IModelObservable> TO transComment(Comment entity, IModelTrans<Comment, TO> trans) {
         TO entityOb = trans.to(entity);
         this.daoSession.getCommentDao().registerExtraOb(entityOb);
         return entityOb;
     }
 
-    CommentObservable transComment(Comment entity) {
+    public CommentObservable transComment(Comment entity) {
         return transComment(entity, COMMENT_TRANS);
     }
 
-    <TO extends IModelObservable> Iterable<TO> transComment(Iterable<Comment> entities, IModelTrans<Comment, TO> trans) {
+    public <TO extends IModelObservable> Iterable<TO> transComment(Iterable<Comment> entities, IModelTrans<Comment, TO> trans) {
         List<TO> list = new ArrayList<>();
         CommentDao dao = this.daoSession.getCommentDao();
         for (Comment entity : entities) {
@@ -266,23 +266,23 @@ public class ModelTrans {
         return list;
     }
 
-    Iterable<CommentObservable> transComment(Iterable<Comment> entities) {
+    public Iterable<CommentObservable> transComment(Iterable<Comment> entities) {
         return transComment(entities, COMMENT_TRANS);
     }
     //</editor-fold>
 
     //<editor-fold desc="TransPicItem">
-    <TO extends IModelObservable> TO transPicItem(PicItem entity, IModelTrans<PicItem, TO> trans) {
+    public <TO extends IModelObservable> TO transPicItem(PicItem entity, IModelTrans<PicItem, TO> trans) {
         TO entityOb = trans.to(entity);
         this.daoSession.getPicItemDao().registerExtraOb(entityOb);
         return entityOb;
     }
 
-    PicItemObservable transPicItem(PicItem entity) {
+    public PicItemObservable transPicItem(PicItem entity) {
         return transPicItem(entity, PIC_ITEM_TRANS);
     }
 
-    <TO extends IModelObservable> Iterable<TO> transPicItem(Iterable<PicItem> entities, IModelTrans<PicItem, TO> trans) {
+    public <TO extends IModelObservable> Iterable<TO> transPicItem(Iterable<PicItem> entities, IModelTrans<PicItem, TO> trans) {
         List<TO> list = new ArrayList<>();
         PicItemDao dao = this.daoSession.getPicItemDao();
         for (PicItem entity : entities) {
@@ -293,23 +293,23 @@ public class ModelTrans {
         return list;
     }
 
-    Iterable<PicItemObservable> transPicItem(Iterable<PicItem> entities) {
+    public Iterable<PicItemObservable> transPicItem(Iterable<PicItem> entities) {
         return transPicItem(entities, PIC_ITEM_TRANS);
     }
     //</editor-fold>
 
     //<editor-fold desc="TransJokeItem">
-    <TO extends IModelObservable> TO transJokeItem(JokeItem entity, IModelTrans<JokeItem, TO> trans) {
+    public <TO extends IModelObservable> TO transJokeItem(JokeItem entity, IModelTrans<JokeItem, TO> trans) {
         TO entityOb = trans.to(entity);
         this.daoSession.getJokeItemDao().registerExtraOb(entityOb);
         return entityOb;
     }
 
-    JokeItemObservable transJokeItem(JokeItem entity) {
+    public JokeItemObservable transJokeItem(JokeItem entity) {
         return transJokeItem(entity, JOKE_ITEM_TRANS);
     }
 
-    <TO extends IModelObservable> Iterable<TO> transJokeItem(Iterable<JokeItem> entities, IModelTrans<JokeItem, TO> trans) {
+    public <TO extends IModelObservable> Iterable<TO> transJokeItem(Iterable<JokeItem> entities, IModelTrans<JokeItem, TO> trans) {
         List<TO> list = new ArrayList<>();
         JokeItemDao dao = this.daoSession.getJokeItemDao();
         for (JokeItem entity : entities) {
@@ -320,23 +320,23 @@ public class ModelTrans {
         return list;
     }
 
-    Iterable<JokeItemObservable> transJokeItem(Iterable<JokeItem> entities) {
+    public Iterable<JokeItemObservable> transJokeItem(Iterable<JokeItem> entities) {
         return transJokeItem(entities, JOKE_ITEM_TRANS);
     }
     //</editor-fold>
 
     //<editor-fold desc="TransVideoItem">
-    <TO extends IModelObservable> TO transVideoItem(VideoItem entity, IModelTrans<VideoItem, TO> trans) {
+    public <TO extends IModelObservable> TO transVideoItem(VideoItem entity, IModelTrans<VideoItem, TO> trans) {
         TO entityOb = trans.to(entity);
         this.daoSession.getVideoItemDao().registerExtraOb(entityOb);
         return entityOb;
     }
 
-    VideoItemObservable transVideoItem(VideoItem entity) {
+    public VideoItemObservable transVideoItem(VideoItem entity) {
         return transVideoItem(entity, VIDEO_ITEM_TRANS);
     }
 
-    <TO extends IModelObservable> Iterable<TO> transVideoItem(Iterable<VideoItem> entities, IModelTrans<VideoItem, TO> trans) {
+    public <TO extends IModelObservable> Iterable<TO> transVideoItem(Iterable<VideoItem> entities, IModelTrans<VideoItem, TO> trans) {
         List<TO> list = new ArrayList<>();
         VideoItemDao dao = this.daoSession.getVideoItemDao();
         for (VideoItem entity : entities) {
@@ -347,23 +347,23 @@ public class ModelTrans {
         return list;
     }
 
-    Iterable<VideoItemObservable> transVideoItem(Iterable<VideoItem> entities) {
+    public Iterable<VideoItemObservable> transVideoItem(Iterable<VideoItem> entities) {
         return transVideoItem(entities, VIDEO_ITEM_TRANS);
     }
     //</editor-fold>
 
     //<editor-fold desc="TransDuoshuoComment">
-    <TO extends IModelObservable> TO transDuoshuoComment(DuoshuoComment entity, IModelTrans<DuoshuoComment, TO> trans) {
+    public <TO extends IModelObservable> TO transDuoshuoComment(DuoshuoComment entity, IModelTrans<DuoshuoComment, TO> trans) {
         TO entityOb = trans.to(entity);
         this.daoSession.getDuoshuoCommentDao().registerExtraOb(entityOb);
         return entityOb;
     }
 
-    DuoshuoCommentObservable transDuoshuoComment(DuoshuoComment entity) {
+    public DuoshuoCommentObservable transDuoshuoComment(DuoshuoComment entity) {
         return transDuoshuoComment(entity, DUOSHUO_COMMENT_TRANS);
     }
 
-    <TO extends IModelObservable> Iterable<TO> transDuoshuoComment(Iterable<DuoshuoComment> entities, IModelTrans<DuoshuoComment, TO> trans) {
+    public <TO extends IModelObservable> Iterable<TO> transDuoshuoComment(Iterable<DuoshuoComment> entities, IModelTrans<DuoshuoComment, TO> trans) {
         List<TO> list = new ArrayList<>();
         DuoshuoCommentDao dao = this.daoSession.getDuoshuoCommentDao();
         for (DuoshuoComment entity : entities) {
@@ -374,7 +374,7 @@ public class ModelTrans {
         return list;
     }
 
-    Iterable<DuoshuoCommentObservable> transDuoshuoComment(Iterable<DuoshuoComment> entities) {
+    public Iterable<DuoshuoCommentObservable> transDuoshuoComment(Iterable<DuoshuoComment> entities) {
         return transDuoshuoComment(entities, DUOSHUO_COMMENT_TRANS);
     }
     //</editor-fold>

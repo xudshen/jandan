@@ -9,7 +9,7 @@
 
         <variable
             name="post"
-            type="info.xudshen.jandan.domain.model.Post" />
+            type="info.xudshen.jandan.data.model.observable.PostObservable" />
     </data>
 
     <LinearLayout

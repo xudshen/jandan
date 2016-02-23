@@ -20,6 +20,7 @@ import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
 import info.xudshen.jandan.BR;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.dao.CommentDao;
+import info.xudshen.jandan.data.model.observable.PostObservable;
 import info.xudshen.jandan.databinding.FragmentPostDetailBinding;
 import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.Post;
@@ -27,7 +28,7 @@ import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PostDetailPresenter;
 import info.xudshen.jandan.view.DataDetailView;
 
-public class PostDetailFragment extends BaseFragment implements DataDetailView<Post> {
+public class PostDetailFragment extends BaseFragment implements DataDetailView<PostObservable> {
     private static final Logger logger = LoggerFactory.getLogger(PostDetailFragment.class);
     public static final String ARG_POST_ID = "ARG_POST_ID";
 
@@ -112,7 +113,7 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
     }
 
     @Override
-    public void renderItemDetail(Post post) {
+    public void renderItemDetail(PostObservable postObservable) {
         if (binding.postWithCommentList.getAdapter() == null) {
             DDBindableCursorLoaderRVHeaderAdapter postCommentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
                     .cursorLoader(getActivity(), CommentDao.CONTENT_URI, null, CommentDao.Properties.PostId.columnName + " = ?", new String[]{postId.toString()}, null)
@@ -121,7 +122,7 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
                         return new DDBindableViewHolder(viewDataBinding);
                     })
                     .headerViewDataBindingVariableAction(viewDataBinding -> {
-                        viewDataBinding.setVariable(BR.post, post);
+                        viewDataBinding.setVariable(BR.post, postObservable);
                     })
                     .itemViewHolderCreator(((inflater1, viewType1, parent1) -> {
                         ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);

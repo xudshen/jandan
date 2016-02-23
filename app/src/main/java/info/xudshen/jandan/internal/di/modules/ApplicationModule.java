@@ -12,6 +12,7 @@ import info.xudshen.jandan.JandanApp;
 import info.xudshen.jandan.UIThread;
 import info.xudshen.jandan.data.dao.DaoMaster;
 import info.xudshen.jandan.data.dao.DaoSession;
+import info.xudshen.jandan.data.dao.ModelTrans;
 import info.xudshen.jandan.data.executor.JobExecutor;
 import info.xudshen.jandan.data.repository.CommentDataRepository;
 import info.xudshen.jandan.data.repository.JokeDataRepository;
@@ -70,6 +71,12 @@ public class ApplicationModule {
         SQLiteDatabase db = openHelper.getWritableDatabase();
 
         return (new DaoMaster(db)).newSession().setContext(this.application);
+    }
+
+    @Provides
+    @Singleton
+    ModelTrans provideModelTrans(DaoSession daoSession){
+        return new ModelTrans(daoSession);
     }
 
     @Provides

@@ -123,6 +123,12 @@ public class CloudPostDataStore implements PostDataStore {
                     return postResponse.getPostWrapper().getComments();
                 })
                 .map(comments -> {
+                    //update post
+                    Post post = postDao.queryBuilder().where(PostDao.Properties.PostId.eq(postId))
+                            .build().forCurrentThread().unique();
+                    post.setCommentCount(Long.valueOf(comments.size()));
+                    postDao.update(post);
+
                     List<Comment> commentsInDb = commentDao.queryBuilder().where(CommentDao.Properties.PostId.eq(postId))
                             .build().forCurrentThread().list();
                     HashSet<Long> localCommentIds = new HashSet<Long>();

@@ -10,6 +10,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import info.xudshen.jandan.data.dao.ModelTrans;
+import info.xudshen.jandan.data.dao.PostDao;
+import info.xudshen.jandan.data.model.observable.PostObservable;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.domain.model.Comment;
@@ -23,19 +26,22 @@ import rx.Subscriber;
 //@PerActivity remove this since we need different presenter for each fragment
 public class PostDetailPresenter implements Presenter {
     private static final Logger logger = LoggerFactory.getLogger(PostDetailPresenter.class);
-    private DataDetailView<Post> dataDetailView;
+    private DataDetailView<PostObservable> dataDetailView;
 
+    private final ModelTrans modelTrans;
     private final UseCase getPostDetailUseCase;
     private final IterableUseCase getPostCommentUseCase;
 
     @Inject
     public PostDetailPresenter(@Named("postDetail") UseCase getPostDetailUseCase,
-                               @Named("postComment") IterableUseCase getPostCommentUseCase) {
+                               @Named("postComment") IterableUseCase getPostCommentUseCase,
+                               ModelTrans modelTrans) {
         this.getPostDetailUseCase = getPostDetailUseCase;
         this.getPostCommentUseCase = getPostCommentUseCase;
+        this.modelTrans = modelTrans;
     }
 
-    public void setView(@NonNull DataDetailView<Post> dataDetailView) {
+    public void setView(@NonNull DataDetailView<PostObservable> dataDetailView) {
         this.dataDetailView = dataDetailView;
     }
 
@@ -104,7 +110,8 @@ public class PostDetailPresenter implements Presenter {
 
                     @Override
                     public void onNext(Post post) {
-                        PostDetailPresenter.this.dataDetailView.renderItemDetail(post);
+                        PostObservable postObservable = PostDetailPresenter.this.modelTrans.transPost(post);
+                        PostDetailPresenter.this.dataDetailView.renderItemDetail(postObservable);
                     }
                 }, postId);
     }
