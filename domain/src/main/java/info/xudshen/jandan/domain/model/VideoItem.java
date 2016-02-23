@@ -51,7 +51,7 @@ public class VideoItem {
     @Expose
     private String videoDescription;
     @Expose
-    private Long videoDuration;
+    private Float videoDuration;
     @Expose
     private String videoLink;
     @Expose
@@ -69,7 +69,7 @@ public class VideoItem {
         this.id = id;
     }
 
-    public VideoItem(Long id, Long videoId, String author, String authorEmail, String authorUrl, Timestamp date, Long votePositive, Long voteNegative, Long commentCount, String threadId, String content, String textContent, String videoThumbnail, String videoTitle, String videoDescription, Long videoDuration, String videoLink, String videoPlayer, String videoSource) {
+    public VideoItem(Long id, Long videoId, String author, String authorEmail, String authorUrl, Timestamp date, Long votePositive, Long voteNegative, Long commentCount, String threadId, String content, String textContent, String videoThumbnail, String videoTitle, String videoDescription, Float videoDuration, String videoLink, String videoPlayer, String videoSource) {
         this.id = id;
         this.videoId = videoId;
         this.author = author;
@@ -211,11 +211,11 @@ public class VideoItem {
         this.videoDescription = videoDescription;
     }
 
-    public Long getVideoDuration() {
+    public Float getVideoDuration() {
         return videoDuration;
     }
 
-    public void setVideoDuration(Long videoDuration) {
+    public void setVideoDuration(Float videoDuration) {
         this.videoDuration = videoDuration;
     }
 

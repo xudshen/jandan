@@ -55,7 +55,7 @@ public class VideoItemDao extends DDAbstractDao<VideoItem, Long> {
         public final static Property VideoThumbnail = new Property(12, String.class, "videoThumbnail", false, "VIDEO_THUMBNAIL");
         public final static Property VideoTitle = new Property(13, String.class, "videoTitle", false, "VIDEO_TITLE");
         public final static Property VideoDescription = new Property(14, String.class, "videoDescription", false, "VIDEO_DESCRIPTION");
-        public final static Property VideoDuration = new Property(15, Long.class, "videoDuration", false, "VIDEO_DURATION");
+        public final static Property VideoDuration = new Property(15, Float.class, "videoDuration", false, "VIDEO_DURATION");
         public final static Property VideoLink = new Property(16, String.class, "videoLink", false, "VIDEO_LINK");
         public final static Property VideoPlayer = new Property(17, String.class, "videoPlayer", false, "VIDEO_PLAYER");
         public final static Property VideoSource = new Property(18, String.class, "videoSource", false, "VIDEO_SOURCE");
@@ -90,7 +90,7 @@ public class VideoItemDao extends DDAbstractDao<VideoItem, Long> {
                 "\"VIDEO_THUMBNAIL\" TEXT," + // 12: videoThumbnail
                 "\"VIDEO_TITLE\" TEXT," + // 13: videoTitle
                 "\"VIDEO_DESCRIPTION\" TEXT," + // 14: videoDescription
-                "\"VIDEO_DURATION\" INTEGER," + // 15: videoDuration
+                "\"VIDEO_DURATION\" REAL," + // 15: videoDuration
                 "\"VIDEO_LINK\" TEXT," + // 16: videoLink
                 "\"VIDEO_PLAYER\" TEXT," + // 17: videoPlayer
                 "\"VIDEO_SOURCE\" TEXT);"); // 18: videoSource
@@ -185,9 +185,9 @@ public class VideoItemDao extends DDAbstractDao<VideoItem, Long> {
             stmt.bindString(15, videoDescription);
         }
  
-        Long videoDuration = entity.getVideoDuration();
+        Float videoDuration = entity.getVideoDuration();
         if (videoDuration != null) {
-            stmt.bindLong(16, videoDuration);
+            stmt.bindDouble(16, videoDuration);
         }
  
         String videoLink = entity.getVideoLink();
@@ -231,7 +231,7 @@ public class VideoItemDao extends DDAbstractDao<VideoItem, Long> {
             cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // videoThumbnail
             cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // videoTitle
             cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // videoDescription
-            cursor.isNull(offset + 15) ? null : cursor.getLong(offset + 15), // videoDuration
+            cursor.isNull(offset + 15) ? null : cursor.getFloat(offset + 15), // videoDuration
             cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16), // videoLink
             cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17), // videoPlayer
             cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18) // videoSource
@@ -257,7 +257,7 @@ public class VideoItemDao extends DDAbstractDao<VideoItem, Long> {
         entity.setVideoThumbnail(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
         entity.setVideoTitle(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
         entity.setVideoDescription(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
-        entity.setVideoDuration(cursor.isNull(offset + 15) ? null : cursor.getLong(offset + 15));
+        entity.setVideoDuration(cursor.isNull(offset + 15) ? null : cursor.getFloat(offset + 15));
         entity.setVideoLink(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
         entity.setVideoPlayer(cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17));
         entity.setVideoSource(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));

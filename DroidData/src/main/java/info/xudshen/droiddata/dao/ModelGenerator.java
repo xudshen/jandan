@@ -23,6 +23,10 @@ public abstract class ModelGenerator {
         return entity.addDoubleProperty(propertyName).codeBeforeField(GSON_EXPOSE_ANNOTAION);
     }
 
+    protected static Property.PropertyBuilder addFloatPropertyy(Entity entity, String propertyName) {
+        return entity.addFloatProperty(propertyName).codeBeforeField(GSON_EXPOSE_ANNOTAION);
+    }
+
     protected static Property.PropertyBuilder addLongProperty(Entity entity, String propertyName) {
         return entity.addLongProperty(propertyName).codeBeforeField(GSON_EXPOSE_ANNOTAION);
     }

@@ -27,20 +27,129 @@
         android:clickable="true"
         android:focusable="true">
 
-        <LinearLayout
+        <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <ImageView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                app:picThumb="@{item.videoThumbnail}"
-                app:placeHolder="@{@drawable/post_placeholder}" />
+                android:background="?attr/selectableItemBackground"
+                android:orientation="vertical">
 
-            <View style="@style/Divider" />
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/video_thumb"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    app:picThumb="@{item.videoThumbnail}"
+                    app:placeHolder="@{@drawable/post_placeholder}" />
+
+                <View style="@style/Divider" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/picItemMarginHorizontal"
+                    android:paddingRight="@dimen/picItemMargin"
+                    android:paddingTop="@dimen/picItemMargin"
+                    app:paddingBottom="@{Strings.isNullOrEmpty(item.textContent) ? @dimen/picItemMargin : @dimen/picItemNoMargin}">
+
+                    <TextView
+                        style="@style/PostDetailMetaHighlight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+
+                        android:text="@{item.author}" />
+
+                    <TextView
+                        style="@style/PostDetailMeta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+
+                        android:layout_marginLeft="16dp"
+                        android:text="@{RealtimeTimeUtils.realtime(item.date)}" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/PostDetailMeta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:paddingBottom="@dimen/picItemMargin"
+                    android:paddingLeft="@dimen/picItemMarginHorizontal"
+                    android:paddingRight="@dimen/picItemMarginHorizontal"
+                    android:paddingTop="8dp"
+                    app:richText="@{item.videoTitle}" />
+
+                <View style="@style/Divider" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:text="@{HtmlHelper.voteOO(item.votePositive)}"
+                        android:textColor="@color/secondary_text"
+                        android:textColorHighlight="@color/colorAccent" />
+
+                    <Button
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:text="@{HtmlHelper.voteXX(item.voteNegative)}"
+                        android:textColor="@color/secondary_text"
+                        android:textColorHighlight="@color/colorAccent" />
+
+                    <com.mikepenz.iconics.view.IconicsButton
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:text="@{HtmlHelper.commentCount(item.commentCount)}"
+                        android:textColor="@color/secondary_text"
+                        android:textColorHighlight="@color/colorAccent" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:id="@+id/pic_card_more_btn"
+                        style="@style/SmallIconButton"
+                        android:layout_gravity="right|bottom|end"
+                        android:layout_marginBottom="6dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_marginTop="6dp"
+
+                        app:ico_color="@color/md_black_1000"
+                        app:ico_icon="gmd_more_vert"
+                        app:ico_padding="10dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/play_buttom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:clickable="true"
+                app:layout_anchor="@id/video_thumb"
+                app:layout_anchorGravity="bottom|right" />
+        </android.support.design.widget.CoordinatorLayout>
     </android.support.v7.widget.CardView>
 </layout>

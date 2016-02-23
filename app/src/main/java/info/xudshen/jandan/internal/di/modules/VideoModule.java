@@ -3,6 +3,10 @@ package info.xudshen.jandan.internal.di.modules;
 import android.app.Activity;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.support.design.widget.FloatingActionButton;
+
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +55,12 @@ public class VideoModule {
                 })
                 .itemViewHolderCreator(((inflater1, viewType1, parent1) -> {
                     ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
+                    FloatingActionButton button = (FloatingActionButton) viewDataBinding.getRoot().findViewById(R.id.play_buttom);
+                    button.setImageDrawable(new IconicsDrawable(activity)
+                            .icon(GoogleMaterial.Icon.gmd_play_circle_filled)
+                            .color(activity.getResources().getColor(R.color.md_white_1000))
+                            .sizeDp(20)
+                            .paddingDp(2));
                     return new DDBindableViewHolder(viewDataBinding);
                 }))
                 .itemLayoutSelector(position -> R.layout.video_card_view)
@@ -65,7 +75,7 @@ public class VideoModule {
     @PerActivity
     @Named("videoDetail")
     UseCase provideGetVideoDetailUseCase(VideoRepository videoRepository,
-                                       ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+                                         ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         return new GetVideoDetail(videoRepository, threadExecutor, postExecutionThread);
     }
 
@@ -73,7 +83,7 @@ public class VideoModule {
     @PerActivity
     @Named("videoList")
     IterableUseCase provideGetVideoListUseCase(VideoRepository videoRepository,
-                                             ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+                                               ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         return new GetVideoList(videoRepository, threadExecutor, postExecutionThread);
     }
 

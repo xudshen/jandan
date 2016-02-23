@@ -54,7 +54,6 @@ public class AppAdapters {
     @BindingAdapter(value = {"avatar", "placeHolder"})
     public static void setAvatarUrl(CircleImageView view, String url,
                                     Drawable placeHolder) {
-
         RequestCreator requestCreator =
                 Picasso.with(view.getContext()).load(url);
         if (placeHolder != null) {
@@ -74,7 +73,6 @@ public class AppAdapters {
         if (placeHolder != null) {
             request.placeholder(placeHolder);
         }
-        String id = url.substring(url.length() - 8, url.length());
         request
                 .transform(new BitmapTransformation(view.getContext()) {
                     @Override
@@ -83,12 +81,6 @@ public class AppAdapters {
                         int width = outWidth;
                         int height = Math.min(toTransform.getHeight() * outWidth / toTransform.getWidth(),
                                 LayoutHelper.toPx(view.getContext(), 480));
-
-                        logger.info("[{}]out={},{}, bitmap={},{}, resize={},{}",
-                                id,
-                                outWidth, outHeight,
-                                toTransform.getWidth(), toTransform.getHeight(),
-                                width, height);
 
                         Bitmap result = pool.get(width, height, Bitmap.Config.ARGB_8888);
                         if (result == null) {

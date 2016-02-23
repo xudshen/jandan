@@ -253,7 +253,7 @@ public class AppModelGenerator extends ModelGenerator {
         addStringProperty(entity, "videoThumbnail").bindable(true);
         addStringProperty(entity, "videoTitle").bindable(true);
         addStringProperty(entity, "videoDescription").bindable(true);
-        addLongProperty(entity, "videoDuration").bindable(true);
+        addFloatPropertyy(entity, "videoDuration").bindable(true);
         addStringProperty(entity, "videoLink").bindable(true);
         addStringProperty(entity, "videoPlayer").bindable(true);
         addStringProperty(entity, "videoSource").bindable(true);

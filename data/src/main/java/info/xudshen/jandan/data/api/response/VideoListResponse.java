@@ -47,7 +47,7 @@ public class VideoListResponse {
         @Expose
         private String thumbnail;
         @Expose
-        private Long duration;
+        private Float duration;
         @Expose
         private String link;
         @Expose
@@ -82,11 +82,11 @@ public class VideoListResponse {
             this.thumbnail = thumbnail;
         }
 
-        public Long getDuration() {
+        public Float getDuration() {
             return duration;
         }
 
-        public void setDuration(Long duration) {
+        public void setDuration(Float duration) {
             this.duration = duration;
         }
 

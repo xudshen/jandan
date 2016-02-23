@@ -59,7 +59,7 @@ public class VideoItemObservable extends android.databinding.BaseObservable  imp
     @Expose
     private String videoDescription;
     @Expose
-    private Long videoDuration;
+    private Float videoDuration;
     @Expose
     private String videoLink;
     @Expose
@@ -77,7 +77,7 @@ public class VideoItemObservable extends android.databinding.BaseObservable  imp
         this.id = id;
     }
 
-    public VideoItemObservable(Long id, Long videoId, String author, String authorEmail, String authorUrl, Timestamp date, Long votePositive, Long voteNegative, Long commentCount, String threadId, String content, String textContent, String videoThumbnail, String videoTitle, String videoDescription, Long videoDuration, String videoLink, String videoPlayer, String videoSource) {
+    public VideoItemObservable(Long id, Long videoId, String author, String authorEmail, String authorUrl, Timestamp date, Long votePositive, Long voteNegative, Long commentCount, String threadId, String content, String textContent, String videoThumbnail, String videoTitle, String videoDescription, Float videoDuration, String videoLink, String videoPlayer, String videoSource) {
         this.id = id;
         this.videoId = videoId;
         this.author = author;
@@ -290,11 +290,11 @@ public class VideoItemObservable extends android.databinding.BaseObservable  imp
     }
 
     @Bindable
-    public Long getVideoDuration() {
+    public Float getVideoDuration() {
         return videoDuration;
     }
 
-    public void setVideoDuration(Long videoDuration) {
+    public void setVideoDuration(Float videoDuration) {
         if ((this.videoDuration == null && videoDuration != null)
                 || (this.videoDuration != null && !this.videoDuration.equals(videoDuration))) {
             this.videoDuration = videoDuration;
