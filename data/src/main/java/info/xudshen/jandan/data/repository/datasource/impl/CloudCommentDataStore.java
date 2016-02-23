@@ -37,9 +37,7 @@ public class CloudCommentDataStore implements CommentDataStore {
         return this.commentService.getDuoshuoCommentList(threadKey, 1l, Constants.PAGE_SIZE)
                 .map(commentListResponse -> {
                     List<DuoshuoComment> duoshuoComments = new ArrayList<DuoshuoComment>();
-                    for (String key : commentListResponse.getParentPosts().keySet()) {
-                        CommentListResponse.DuoshuoCommentWrapper wrapper =
-                                commentListResponse.getParentPosts().get(key);
+                    for (CommentListResponse.DuoshuoCommentWrapper wrapper : commentListResponse.getCommentList()) {
                         DuoshuoComment duoshuoComment = wrapper.getDuoshuoComment();
                         duoshuoComment.setThreadKey(threadKey);
                         duoshuoComments.add(duoshuoComment);
@@ -65,22 +63,25 @@ public class CloudCommentDataStore implements CommentDataStore {
         return this.commentService.getDuoshuoCommentList(threadKey, commentPage.getLongValue() + 1, Constants.PAGE_SIZE)
                 .map(commentListResponse -> {
                     List<DuoshuoComment> duoshuoComments = new ArrayList<DuoshuoComment>();
-                    for (String key : commentListResponse.getParentPosts().keySet()) {
-                        CommentListResponse.DuoshuoCommentWrapper wrapper =
-                                commentListResponse.getParentPosts().get(key);
+                    for (CommentListResponse.DuoshuoCommentWrapper wrapper : commentListResponse.getCommentList()) {
                         DuoshuoComment duoshuoComment = wrapper.getDuoshuoComment();
                         duoshuoComment.setThreadKey(threadKey);
                         duoshuoComments.add(duoshuoComment);
                     }
                     return duoshuoComments;
                 })
-                .doOnNext(duoshuoComments -> {
-                    if (commentPage.getLongValue() + 1 == 1) {
-                        CloudCommentDataStore.this.duoshuoCommentDao.queryBuilder()
-                                .where(DuoshuoCommentDao.Properties.ThreadKey.eq(threadKey))
-                                .buildDelete().executeDeleteWithoutDetachingEntities();
+                .map(duoshuoComments -> {
+                    //TODO:optimize this & not(?) delete old data?
+                    List<DuoshuoComment> newComments = new ArrayList<DuoshuoComment>();
+                    for (DuoshuoComment duoshuoComment : duoshuoComments) {
+                        if (CloudCommentDataStore.this.duoshuoCommentDao.queryBuilder()
+                                .where(DuoshuoCommentDao.Properties.CommentId.eq(duoshuoComment.getCommentId()))
+                                .buildCount().forCurrentThread().count() == 0) {
+                            newComments.add(duoshuoComment);
+                        }
                     }
-                    CloudCommentDataStore.this.duoshuoCommentDao.insertOrReplaceInTx(duoshuoComments);
+                    CloudCommentDataStore.this.duoshuoCommentDao.insertOrReplaceInTx(newComments);
+                    return newComments;
                 })
                 .doOnNext(duoshuoComments -> {
                     if (duoshuoComments.size() == Constants.PAGE_SIZE) {

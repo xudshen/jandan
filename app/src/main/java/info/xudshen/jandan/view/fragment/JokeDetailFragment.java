@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.common.base.Splitter;
 
@@ -133,6 +134,8 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
                     .cursorLoader(getActivity(), DuoshuoCommentDao.CONTENT_URI, null, DuoshuoCommentDao.Properties.ThreadKey.columnName + " = ?", new String[]{Constants.THREAD_PREFIX + jokeId}, null)
                     .headerViewHolderCreator((inflater, viewType, parent) -> {
                         ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.header_joke_detail, parent, false);
+                        Button refreshButton = (Button) viewDataBinding.getRoot().findViewById(R.id.refresh_comment_button);
+                        refreshButton.setOnClickListener(v -> jokeDetailPresenter.refreshComment(jokeId));
                         return new DDBindableViewHolder(viewDataBinding);
                     })
                     .headerViewDataBindingVariableAction(viewDataBinding -> {
@@ -151,6 +154,8 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
             binding.itemWithCommentList.setAdapter(commentAdapter);
 
             getLoaderManager().initLoader(0, null, commentAdapter);
+
+            this.jokeDetailPresenter.refreshComment(jokeId);
         }
     }
 

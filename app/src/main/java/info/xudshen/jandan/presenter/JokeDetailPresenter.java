@@ -56,8 +56,8 @@ public class JokeDetailPresenter implements Presenter {
         this.dataDetailView = null;
     }
 
-    public void initialize(Long postId) {
-        this.loadJokeDetail(postId);
+    public void initialize(Long jokeId) {
+        this.loadJokeDetail(jokeId);
     }
 
     public void refreshComment(Long jokeId) {
@@ -77,7 +77,8 @@ public class JokeDetailPresenter implements Presenter {
 
                     @Override
                     public void onNext(List<DuoshuoComment> o) {
-
+                        if (o.size() == 0)
+                            JokeDetailPresenter.this.dataDetailView.noMoreComments();
                     }
                 }, Constants.THREAD_PREFIX + jokeId);
     }

@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -140,6 +141,8 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
                                 .sizeDp(20)
                                 .paddingDp(2));
 
+                        Button refreshButton = (Button) viewDataBinding.getRoot().findViewById(R.id.refresh_comment_button);
+                        refreshButton.setOnClickListener(v -> videoDetailPresenter.refreshComment(videoId));
                         return new DDBindableViewHolder(viewDataBinding);
                     })
                     .headerViewDataBindingVariableAction(viewDataBinding -> {
@@ -158,6 +161,8 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
             binding.itemWithCommentList.setAdapter(commentAdapter);
 
             getLoaderManager().initLoader(0, null, commentAdapter);
+
+            this.videoDetailPresenter.refreshComment(videoId);
         }
     }
 

@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.common.base.Splitter;
 
@@ -134,6 +135,8 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
                     .cursorLoader(getActivity(), DuoshuoCommentDao.CONTENT_URI, null, DuoshuoCommentDao.Properties.ThreadKey.columnName + " = ?", new String[]{Constants.THREAD_PREFIX + picId}, null)
                     .headerViewHolderCreator((inflater, viewType, parent) -> {
                         ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, headerPicDetailSelector(urlList.size()), parent, false);
+                        Button refreshButton = (Button) viewDataBinding.getRoot().findViewById(R.id.refresh_comment_button);
+                        refreshButton.setOnClickListener(v -> picDetailPresenter.refreshComment(picId));
                         return new DDBindableViewHolder(viewDataBinding);
                     })
                     .headerViewDataBindingVariableAction(viewDataBinding -> {
@@ -153,6 +156,8 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
             binding.itemWithCommentList.setAdapter(commentAdapter);
 
             getLoaderManager().initLoader(0, null, commentAdapter);
+
+            this.picDetailPresenter.refreshComment(picId);
         }
     }
 

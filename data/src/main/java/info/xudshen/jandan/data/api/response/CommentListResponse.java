@@ -3,7 +3,9 @@ package info.xudshen.jandan.data.api.response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import info.xudshen.jandan.domain.model.DuoshuoComment;
 
@@ -17,6 +19,9 @@ public class CommentListResponse {
     @Expose
     @SerializedName("parentPosts")
     private HashMap<String, DuoshuoCommentWrapper> parentPosts;
+
+    @Expose
+    private List<String> response;
 
     public CommentListResponse() {
     }
@@ -35,6 +40,17 @@ public class CommentListResponse {
 
     public void setParentPosts(HashMap<String, DuoshuoCommentWrapper> parentPosts) {
         this.parentPosts = parentPosts;
+    }
+
+    public List<DuoshuoCommentWrapper> getCommentList() {
+        List<DuoshuoCommentWrapper> duoshuoComments = new ArrayList<>();
+        if (response != null) {
+            for (String key : response) {
+                if (parentPosts.containsKey(key))
+                    duoshuoComments.add(parentPosts.get(key));
+            }
+        }
+        return duoshuoComments;
     }
 
     public class Cursor {

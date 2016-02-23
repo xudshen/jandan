@@ -56,8 +56,8 @@ public class PicDetailPresenter implements Presenter {
         this.dataDetailView = null;
     }
 
-    public void initialize(Long postId) {
-        this.loadPicDetail(postId);
+    public void initialize(Long picId) {
+        this.loadPicDetail(picId);
     }
 
     public void refreshComment(Long picId) {
@@ -77,7 +77,8 @@ public class PicDetailPresenter implements Presenter {
 
                     @Override
                     public void onNext(List<DuoshuoComment> o) {
-
+                        if (o.size() == 0)
+                            PicDetailPresenter.this.dataDetailView.noMoreComments();
                     }
                 }, Constants.THREAD_PREFIX + picId);
     }

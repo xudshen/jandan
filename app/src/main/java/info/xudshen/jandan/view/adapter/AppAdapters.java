@@ -19,6 +19,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
+import com.google.common.base.Strings;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
@@ -40,7 +41,7 @@ public class AppAdapters {
     @BindingAdapter(value = {"thumb", "placeHolder"})
     public static void setImageUrl(ImageView view, String url,
                                    Drawable placeHolder) {
-
+        if (Strings.isNullOrEmpty(url)) url = "http://localhost";
         RequestCreator requestCreator =
                 Picasso.with(view.getContext()).load(url);
         if (placeHolder != null) {
@@ -54,6 +55,7 @@ public class AppAdapters {
     @BindingAdapter(value = {"avatar", "placeHolder"})
     public static void setAvatarUrl(CircleImageView view, String url,
                                     Drawable placeHolder) {
+        if (Strings.isNullOrEmpty(url)) url = "http://localhost";
         RequestCreator requestCreator =
                 Picasso.with(view.getContext()).load(url);
         if (placeHolder != null) {
@@ -67,6 +69,7 @@ public class AppAdapters {
     @BindingAdapter(value = {"picThumb", "placeHolder"})
     public static void setThumbImageUrl(ImageView view, String url,
                                         Drawable placeHolder) {
+        if (Strings.isNullOrEmpty(url)) url = "http://localhost";
         DrawableTypeRequest<String> request = Glide.with(view.getContext())
                 .load(url);
         request.asBitmap();

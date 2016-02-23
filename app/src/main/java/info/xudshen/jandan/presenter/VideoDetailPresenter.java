@@ -56,8 +56,8 @@ public class VideoDetailPresenter implements Presenter {
         this.dataDetailView = null;
     }
 
-    public void initialize(Long postId) {
-        this.loadVideoDetail(postId);
+    public void initialize(Long videoId) {
+        this.loadVideoDetail(videoId);
     }
 
     public void refreshComment(Long videoId) {
@@ -77,7 +77,8 @@ public class VideoDetailPresenter implements Presenter {
 
                     @Override
                     public void onNext(List<DuoshuoComment> o) {
-
+                        if (o.size() == 0)
+                            VideoDetailPresenter.this.dataDetailView.noMoreComments();
                     }
                 }, Constants.THREAD_PREFIX + videoId);
     }
