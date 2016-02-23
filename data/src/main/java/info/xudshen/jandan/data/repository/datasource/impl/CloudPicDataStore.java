@@ -44,7 +44,7 @@ public class CloudPicDataStore implements PicDataStore {
         this.metaDao = metaDao;
 
         this.refreshComment = picItems -> {
-            commentService.getPicCommentCount(Joiner.on(",").join(Lists.transform(picItems,
+            commentService.getDuoshuoCommentList(Joiner.on(",").join(Lists.transform(picItems,
                     picItem -> Constants.THREAD_PREFIX + picItem.getPicId())))
                     .subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
                     .subscribe(commentCountResponse -> {

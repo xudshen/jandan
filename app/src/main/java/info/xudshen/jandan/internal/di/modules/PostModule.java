@@ -43,7 +43,7 @@ public class PostModule {
     @Named("postListAdapter")
     DDBindableCursorLoaderRVHeaderAdapter providePostListAdapter(Activity activity, SimplePostDao simplePostDao) {
         return new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
-                .cursorLoader(activity, SimplePostDao.CONTENT_URI, null, null, null, "date desc")
+                .cursorLoader(activity, SimplePostDao.CONTENT_URI, null, null, null, SimplePostDao.Properties.Date.columnName + " desc")
                 .headerViewHolderCreator((inflater, viewType, parent) -> {
                     return new DDBindableViewHolder(inflater.inflate(
                             com.github.florent37.materialviewpager.R.layout.material_view_pager_placeholder,

@@ -11,10 +11,10 @@ import rx.Observable;
  */
 public interface ICommentService {
     @GET("/api/threads/counts.json")
-    Observable<CommentCountResponse> getPicCommentCount(@Query("threads") String threads);
+    Observable<CommentCountResponse> getDuoshuoCommentList(@Query("threads") String threads);
 
     @GET("/api/threads/listPosts.json")
-    Observable<CommentListResponse> getPicCommentList(@Query("thread_key") String threadKey,
-                                                      @Query("page") Long page,
-                                                      @Query("limit") Long limit);
+    Observable<CommentListResponse> getDuoshuoCommentList(@Query("thread_key") String threadKey,
+                                                          @Query("page") Long page,
+                                                          @Query("limit") Long limit);
 }

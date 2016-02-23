@@ -18,7 +18,7 @@ import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.dao.PicItemDao;
 import info.xudshen.jandan.domain.executor.PostExecutionThread;
 import info.xudshen.jandan.domain.executor.ThreadExecutor;
-import info.xudshen.jandan.domain.interactor.GetPicCommentList;
+import info.xudshen.jandan.domain.interactor.GetDuoshuoCommentList;
 import info.xudshen.jandan.domain.interactor.GetPicDetail;
 import info.xudshen.jandan.domain.interactor.GetPicList;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
@@ -43,7 +43,7 @@ public class PicModule {
     @Named("picListAdapter")
     DDBindableCursorLoaderRVHeaderAdapter providePostListAdapter(Activity activity, PicItemDao picItemDao) {
         return new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
-                .cursorLoader(activity, PicItemDao.CONTENT_URI, null, null, null, "date desc")
+                .cursorLoader(activity, PicItemDao.CONTENT_URI, null, null, null, PicItemDao.Properties.Date.columnName + " desc")
                 .headerViewHolderCreator((inflater, viewType, parent) -> {
                     return new DDBindableViewHolder(inflater.inflate(
                             com.github.florent37.materialviewpager.R.layout.material_view_pager_placeholder,
@@ -79,9 +79,9 @@ public class PicModule {
 
     @Provides
     @PerActivity
-    @Named("picComment")
-    IterableUseCase provideGetPicCommentListUseCase(CommentRepository commentRepository,
-                                                    ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
-        return new GetPicCommentList(commentRepository, threadExecutor, postExecutionThread);
+    @Named("duoshuoCommentList")
+    IterableUseCase provideGetDuoshuoCommentListUseCase(CommentRepository commentRepository,
+                                                        ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+        return new GetDuoshuoCommentList(commentRepository, threadExecutor, postExecutionThread);
     }
 }

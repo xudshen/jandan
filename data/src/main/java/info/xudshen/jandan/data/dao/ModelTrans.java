@@ -12,7 +12,7 @@ import info.xudshen.jandan.domain.model.Author;
 import info.xudshen.jandan.domain.model.Category;
 import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.PicItem;
-import info.xudshen.jandan.domain.model.PicComment;
+import info.xudshen.jandan.domain.model.DuoshuoComment;
 import info.xudshen.jandan.data.model.observable.MetaObservable;
 import info.xudshen.jandan.data.model.observable.PostObservable;
 import info.xudshen.jandan.data.model.observable.SimplePostObservable;
@@ -20,7 +20,7 @@ import info.xudshen.jandan.data.model.observable.AuthorObservable;
 import info.xudshen.jandan.data.model.observable.CategoryObservable;
 import info.xudshen.jandan.data.model.observable.CommentObservable;
 import info.xudshen.jandan.data.model.observable.PicItemObservable;
-import info.xudshen.jandan.data.model.observable.PicCommentObservable;
+import info.xudshen.jandan.data.model.observable.DuoshuoCommentObservable;
 
 public class ModelTrans {
 
@@ -73,11 +73,11 @@ public class ModelTrans {
                     return new PicItemObservable(entity);
                 }
             };
-    private static final IModelTrans<PicComment, PicCommentObservable> PIC_COMMENT_TRANS =
-            new IModelTrans<PicComment, PicCommentObservable>() {
+    private static final IModelTrans<DuoshuoComment, DuoshuoCommentObservable> DUOSHUO_COMMENT_TRANS =
+            new IModelTrans<DuoshuoComment, DuoshuoCommentObservable>() {
                 @Override
-                public PicCommentObservable to(PicComment entity) {
-                    return new PicCommentObservable(entity);
+                public DuoshuoCommentObservable to(DuoshuoComment entity) {
+                    return new DuoshuoCommentObservable(entity);
                 }
             };
 
@@ -280,21 +280,21 @@ public class ModelTrans {
     }
     //</editor-fold>
 
-    //<editor-fold desc="TransPicComment">
-    <TO extends IModelObservable> TO transPicComment(PicComment entity, IModelTrans<PicComment, TO> trans) {
+    //<editor-fold desc="TransDuoshuoComment">
+    <TO extends IModelObservable> TO transDuoshuoComment(DuoshuoComment entity, IModelTrans<DuoshuoComment, TO> trans) {
         TO entityOb = trans.to(entity);
-        this.daoSession.getPicCommentDao().registerExtraOb(entityOb);
+        this.daoSession.getDuoshuoCommentDao().registerExtraOb(entityOb);
         return entityOb;
     }
 
-    PicCommentObservable transPicComment(PicComment entity) {
-        return transPicComment(entity, PIC_COMMENT_TRANS);
+    DuoshuoCommentObservable transDuoshuoComment(DuoshuoComment entity) {
+        return transDuoshuoComment(entity, DUOSHUO_COMMENT_TRANS);
     }
 
-    <TO extends IModelObservable> Iterable<TO> transPicComment(Iterable<PicComment> entities, IModelTrans<PicComment, TO> trans) {
+    <TO extends IModelObservable> Iterable<TO> transDuoshuoComment(Iterable<DuoshuoComment> entities, IModelTrans<DuoshuoComment, TO> trans) {
         List<TO> list = new ArrayList<>();
-        PicCommentDao dao = this.daoSession.getPicCommentDao();
-        for (PicComment entity : entities) {
+        DuoshuoCommentDao dao = this.daoSession.getDuoshuoCommentDao();
+        for (DuoshuoComment entity : entities) {
             TO entityOb = trans.to(entity);
             list.add(entityOb);
             dao.registerExtraOb(entityOb);
@@ -302,8 +302,8 @@ public class ModelTrans {
         return list;
     }
 
-    Iterable<PicCommentObservable> transPicComment(Iterable<PicComment> entities) {
-        return transPicComment(entities, PIC_COMMENT_TRANS);
+    Iterable<DuoshuoCommentObservable> transDuoshuoComment(Iterable<DuoshuoComment> entities) {
+        return transDuoshuoComment(entities, DUOSHUO_COMMENT_TRANS);
     }
     //</editor-fold>
 }

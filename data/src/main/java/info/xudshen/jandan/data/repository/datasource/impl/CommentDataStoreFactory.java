@@ -4,8 +4,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import info.xudshen.jandan.data.api.ApiAdapter;
+import info.xudshen.jandan.data.dao.DuoshuoCommentDao;
 import info.xudshen.jandan.data.dao.MetaDao;
-import info.xudshen.jandan.data.dao.PicCommentDao;
 import info.xudshen.jandan.data.repository.datasource.CommentDataStore;
 
 /**
@@ -13,20 +13,20 @@ import info.xudshen.jandan.data.repository.datasource.CommentDataStore;
  */
 @Singleton
 public class CommentDataStoreFactory {
-    private final PicCommentDao picCommentDao;
+    private final DuoshuoCommentDao duoshuoCommentDao;
     private final MetaDao metaDao;
 
     @Inject
-    public CommentDataStoreFactory(PicCommentDao picCommentDao, MetaDao metaDao) {
-        if (picCommentDao == null || metaDao == null) {
+    public CommentDataStoreFactory(DuoshuoCommentDao duoshuoCommentDao, MetaDao metaDao) {
+        if (duoshuoCommentDao == null || metaDao == null) {
             throw new IllegalArgumentException("Constructor parameters cannot be null!!!");
         }
-        this.picCommentDao = picCommentDao;
+        this.duoshuoCommentDao = duoshuoCommentDao;
         this.metaDao = metaDao;
     }
 
     public CommentDataStore createCloudDataStore() {
         return new CloudCommentDataStore(ApiAdapter.getCommentService(),
-                picCommentDao, metaDao);
+                duoshuoCommentDao, metaDao);
     }
 }

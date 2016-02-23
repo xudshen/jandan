@@ -115,7 +115,7 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
     public void renderItemDetail(Post post) {
         if (binding.postWithCommentList.getAdapter() == null) {
             DDBindableCursorLoaderRVHeaderAdapter postCommentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
-                    .cursorLoader(getActivity(), CommentDao.CONTENT_URI, null, "post_id = ?", new String[]{postId.toString()}, null)
+                    .cursorLoader(getActivity(), CommentDao.CONTENT_URI, null, CommentDao.Properties.PostId.columnName + " = ?", new String[]{postId.toString()}, null)
                     .headerViewHolderCreator((inflater, viewType, parent) -> {
                         ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.header_post_detail, parent, false);
                         return new DDBindableViewHolder(viewDataBinding);

@@ -8,7 +8,7 @@
 
         <variable
             name="comment"
-            type="info.xudshen.jandan.domain.model.PicComment" />
+            type="info.xudshen.jandan.domain.model.DuoshuoComment" />
     </data>
 
     <GridLayout

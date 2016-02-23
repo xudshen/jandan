@@ -10,11 +10,11 @@ import rx.Observable;
 /**
  * Created by xudshen on 16/2/22.
  */
-public class GetPicCommentList extends IterableUseCase {
+public class GetDuoshuoCommentList extends IterableUseCase {
     private final CommentRepository commentRepository;
 
     @Inject
-    public GetPicCommentList(CommentRepository commentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+    public GetDuoshuoCommentList(CommentRepository commentRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
         this.commentRepository = commentRepository;
     }
@@ -27,7 +27,7 @@ public class GetPicCommentList extends IterableUseCase {
     @Override
     protected Observable buildUseCaseObservable(Object... params) {
         String threadKey = (String) params[0];
-        return this.commentRepository.picCommentList(threadKey);
+        return this.commentRepository.commentList(threadKey);
     }
 
     @Override
@@ -38,6 +38,6 @@ public class GetPicCommentList extends IterableUseCase {
     @Override
     protected Observable buildIterableUseCaseObservable(Object... params) {
         String threadKey = (String) params[0];
-        return this.commentRepository.picCommentListNext(threadKey);
+        return this.commentRepository.commentListNext(threadKey);
     }
 }

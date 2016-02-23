@@ -9,11 +9,11 @@ import java.util.List;
 import info.xudshen.jandan.data.api.ICommentService;
 import info.xudshen.jandan.data.api.response.CommentListResponse;
 import info.xudshen.jandan.data.constants.Constants;
+import info.xudshen.jandan.data.dao.DuoshuoCommentDao;
 import info.xudshen.jandan.data.dao.MetaDao;
-import info.xudshen.jandan.data.dao.PicCommentDao;
 import info.xudshen.jandan.data.repository.datasource.CommentDataStore;
+import info.xudshen.jandan.domain.model.DuoshuoComment;
 import info.xudshen.jandan.domain.model.Meta;
-import info.xudshen.jandan.domain.model.PicComment;
 import rx.Observable;
 
 /**
@@ -23,34 +23,34 @@ public class CloudCommentDataStore implements CommentDataStore {
     private static final Logger logger = LoggerFactory.getLogger(CloudCommentDataStore.class);
 
     private final ICommentService commentService;
-    private final PicCommentDao picCommentDao;
+    private final DuoshuoCommentDao duoshuoCommentDao;
     private final MetaDao metaDao;
 
-    public CloudCommentDataStore(ICommentService commentService, PicCommentDao picCommentDao, MetaDao metaDao) {
+    public CloudCommentDataStore(ICommentService commentService, DuoshuoCommentDao duoshuoCommentDao, MetaDao metaDao) {
         this.commentService = commentService;
-        this.picCommentDao = picCommentDao;
+        this.duoshuoCommentDao = duoshuoCommentDao;
         this.metaDao = metaDao;
     }
 
     @Override
-    public Observable<List<PicComment>> picCommentList(String threadKey) {
-        return this.commentService.getPicCommentList(threadKey, 1l, Constants.PAGE_SIZE)
+    public Observable<List<DuoshuoComment>> commentList(String threadKey) {
+        return this.commentService.getDuoshuoCommentList(threadKey, 1l, Constants.PAGE_SIZE)
                 .map(commentListResponse -> {
-                    List<PicComment> picComments = new ArrayList<PicComment>();
+                    List<DuoshuoComment> duoshuoComments = new ArrayList<DuoshuoComment>();
                     for (String key : commentListResponse.getParentPosts().keySet()) {
-                        CommentListResponse.PicCommentWrapper wrapper =
+                        CommentListResponse.DuoshuoCommentWrapper wrapper =
                                 commentListResponse.getParentPosts().get(key);
-                        PicComment picComment = wrapper.getPicComment();
-                        picComment.setPicThreadKey(threadKey);
-                        picComments.add(picComment);
+                        DuoshuoComment duoshuoComment = wrapper.getDuoshuoComment();
+                        duoshuoComment.setThreadKey(threadKey);
+                        duoshuoComments.add(duoshuoComment);
                     }
-                    return picComments;
+                    return duoshuoComments;
                 })
-                .doOnNext(picComments -> {
-                    CloudCommentDataStore.this.picCommentDao.queryBuilder()
-                            .where(PicCommentDao.Properties.PicThreadKey.eq(threadKey))
+                .doOnNext(duoshuoComments -> {
+                    CloudCommentDataStore.this.duoshuoCommentDao.queryBuilder()
+                            .where(DuoshuoCommentDao.Properties.ThreadKey.eq(threadKey))
                             .buildDelete().executeDeleteWithoutDetachingEntities();
-                    CloudCommentDataStore.this.picCommentDao.insertOrReplaceInTx(picComments);
+                    CloudCommentDataStore.this.duoshuoCommentDao.insertOrReplaceInTx(duoshuoComments);
                 })
                 .doOnCompleted(() -> {
                     Meta commentPage = DataStoreHelper.getMeta(this.metaDao, threadKey);
@@ -60,30 +60,30 @@ public class CloudCommentDataStore implements CommentDataStore {
     }
 
     @Override
-    public Observable<List<PicComment>> picCommentListNext(String threadKey) {
+    public Observable<List<DuoshuoComment>> commentListNext(String threadKey) {
         Meta commentPage = DataStoreHelper.getMeta(this.metaDao, threadKey);
-        return this.commentService.getPicCommentList(threadKey, commentPage.getLongValue() + 1, Constants.PAGE_SIZE)
+        return this.commentService.getDuoshuoCommentList(threadKey, commentPage.getLongValue() + 1, Constants.PAGE_SIZE)
                 .map(commentListResponse -> {
-                    List<PicComment> picComments = new ArrayList<PicComment>();
+                    List<DuoshuoComment> duoshuoComments = new ArrayList<DuoshuoComment>();
                     for (String key : commentListResponse.getParentPosts().keySet()) {
-                        CommentListResponse.PicCommentWrapper wrapper =
+                        CommentListResponse.DuoshuoCommentWrapper wrapper =
                                 commentListResponse.getParentPosts().get(key);
-                        PicComment picComment = wrapper.getPicComment();
-                        picComment.setPicThreadKey(threadKey);
-                        picComments.add(picComment);
+                        DuoshuoComment duoshuoComment = wrapper.getDuoshuoComment();
+                        duoshuoComment.setThreadKey(threadKey);
+                        duoshuoComments.add(duoshuoComment);
                     }
-                    return picComments;
+                    return duoshuoComments;
                 })
-                .doOnNext(picComments -> {
+                .doOnNext(duoshuoComments -> {
                     if (commentPage.getLongValue() + 1 == 1) {
-                        CloudCommentDataStore.this.picCommentDao.queryBuilder()
-                                .where(PicCommentDao.Properties.PicThreadKey.eq(threadKey))
+                        CloudCommentDataStore.this.duoshuoCommentDao.queryBuilder()
+                                .where(DuoshuoCommentDao.Properties.ThreadKey.eq(threadKey))
                                 .buildDelete().executeDeleteWithoutDetachingEntities();
                     }
-                    CloudCommentDataStore.this.picCommentDao.insertOrReplaceInTx(picComments);
+                    CloudCommentDataStore.this.duoshuoCommentDao.insertOrReplaceInTx(duoshuoComments);
                 })
-                .doOnNext(picComments -> {
-                    if (picComments.size() == Constants.PAGE_SIZE) {
+                .doOnNext(duoshuoComments -> {
+                    if (duoshuoComments.size() == Constants.PAGE_SIZE) {
                         commentPage.setLongValue(commentPage.getLongValue() + 1);
                         this.metaDao.update(commentPage);
                     }

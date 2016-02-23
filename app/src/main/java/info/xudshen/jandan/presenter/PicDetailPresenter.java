@@ -13,7 +13,7 @@ import javax.inject.Named;
 import info.xudshen.jandan.data.constants.Constants;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
-import info.xudshen.jandan.domain.model.PicComment;
+import info.xudshen.jandan.domain.model.DuoshuoComment;
 import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.view.DataDetailView;
 import rx.Subscriber;
@@ -23,13 +23,13 @@ public class PicDetailPresenter implements Presenter {
     private DataDetailView<PicItem> dataDetailView;
 
     private final UseCase getPicDetailUseCase;
-    private final IterableUseCase getPicCommentUseCase;
+    private final IterableUseCase getDuoshuoCommentListUseCase;
 
     @Inject
     public PicDetailPresenter(@Named("picDetail") UseCase getPicDetailUseCase,
-                              @Named("picComment") IterableUseCase getPicCommentUseCase) {
+                              @Named("duoshuoCommentList") IterableUseCase getDuoshuoCommentListUseCase) {
         this.getPicDetailUseCase = getPicDetailUseCase;
-        this.getPicCommentUseCase = getPicCommentUseCase;
+        this.getDuoshuoCommentListUseCase = getDuoshuoCommentListUseCase;
     }
 
     public void setView(@NonNull DataDetailView<PicItem> dataDetailView) {
@@ -57,8 +57,8 @@ public class PicDetailPresenter implements Presenter {
 
     public void refreshComment(Long picId) {
         this.dataDetailView.showSwipeUpLoading();
-        this.getPicCommentUseCase.executeNext(this.dataDetailView.bindToLifecycle(),
-                new Subscriber<List<PicComment>>() {
+        this.getDuoshuoCommentListUseCase.executeNext(this.dataDetailView.bindToLifecycle(),
+                new Subscriber<List<DuoshuoComment>>() {
                     @Override
                     public void onCompleted() {
                         PicDetailPresenter.this.dataDetailView.hideSwipeUpLoading();
@@ -71,7 +71,7 @@ public class PicDetailPresenter implements Presenter {
                     }
 
                     @Override
-                    public void onNext(List<PicComment> o) {
+                    public void onNext(List<DuoshuoComment> o) {
 
                     }
                 }, Constants.THREAD_PREFIX + picId);

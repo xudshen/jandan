@@ -10,19 +10,19 @@ import android.databinding.Bindable;
 // KEEP INCLUDES - put your custom includes here
 // KEEP INCLUDES END
 /**
- * Entity mapped to table "PIC_COMMENT".
+ * Entity mapped to table "DUOSHUO_COMMENT".
  */
-public class PicComment {
+public class DuoshuoComment {
 
     private Long id;
     @Expose
     @SerializedName("post_id")
-    private String picCommentId;
+    private String commentId;
     @Expose
     @SerializedName("thread_id")
-    private String picThreadId;
+    private String threadId;
     @Expose
-    private String picThreadKey;
+    private String threadKey;
     @Expose
     private String message;
     @Expose
@@ -43,18 +43,18 @@ public class PicComment {
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
 
-    public PicComment() {
+    public DuoshuoComment() {
     }
 
-    public PicComment(Long id) {
+    public DuoshuoComment(Long id) {
         this.id = id;
     }
 
-    public PicComment(Long id, String picCommentId, String picThreadId, String picThreadKey, String message, Timestamp date, String parentCommentId, String authorId, String authorName, String authorAvatar, String authorUrl) {
+    public DuoshuoComment(Long id, String commentId, String threadId, String threadKey, String message, Timestamp date, String parentCommentId, String authorId, String authorName, String authorAvatar, String authorUrl) {
         this.id = id;
-        this.picCommentId = picCommentId;
-        this.picThreadId = picThreadId;
-        this.picThreadKey = picThreadKey;
+        this.commentId = commentId;
+        this.threadId = threadId;
+        this.threadKey = threadKey;
         this.message = message;
         this.date = date;
         this.parentCommentId = parentCommentId;
@@ -72,28 +72,28 @@ public class PicComment {
         this.id = id;
     }
 
-    public String getPicCommentId() {
-        return picCommentId;
+    public String getCommentId() {
+        return commentId;
     }
 
-    public void setPicCommentId(String picCommentId) {
-        this.picCommentId = picCommentId;
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
     }
 
-    public String getPicThreadId() {
-        return picThreadId;
+    public String getThreadId() {
+        return threadId;
     }
 
-    public void setPicThreadId(String picThreadId) {
-        this.picThreadId = picThreadId;
+    public void setThreadId(String threadId) {
+        this.threadId = threadId;
     }
 
-    public String getPicThreadKey() {
-        return picThreadKey;
+    public String getThreadKey() {
+        return threadKey;
     }
 
-    public void setPicThreadKey(String picThreadKey) {
-        this.picThreadKey = picThreadKey;
+    public void setThreadKey(String threadKey) {
+        this.threadKey = threadKey;
     }
 
     public String getMessage() {

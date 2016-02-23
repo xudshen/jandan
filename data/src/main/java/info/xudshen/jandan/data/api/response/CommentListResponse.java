@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
 
-import info.xudshen.jandan.domain.model.PicComment;
+import info.xudshen.jandan.domain.model.DuoshuoComment;
 
 /**
  * Created by xudshen on 16/2/22.
@@ -16,7 +16,7 @@ public class CommentListResponse {
 
     @Expose
     @SerializedName("parentPosts")
-    private HashMap<String, PicCommentWrapper> parentPosts;
+    private HashMap<String, DuoshuoCommentWrapper> parentPosts;
 
     public CommentListResponse() {
     }
@@ -29,11 +29,11 @@ public class CommentListResponse {
         this.cursor = cursor;
     }
 
-    public HashMap<String, PicCommentWrapper> getParentPosts() {
+    public HashMap<String, DuoshuoCommentWrapper> getParentPosts() {
         return parentPosts;
     }
 
-    public void setParentPosts(HashMap<String, PicCommentWrapper> parentPosts) {
+    public void setParentPosts(HashMap<String, DuoshuoCommentWrapper> parentPosts) {
         this.parentPosts = parentPosts;
     }
 
@@ -106,11 +106,11 @@ public class CommentListResponse {
         }
     }
 
-    public class PicCommentWrapper extends PicComment {
+    public class DuoshuoCommentWrapper extends DuoshuoComment {
         @Expose
         private Author author;
 
-        public PicCommentWrapper() {
+        public DuoshuoCommentWrapper() {
         }
 
         public Author getAuthor() {
@@ -121,7 +121,7 @@ public class CommentListResponse {
             this.author = author;
         }
 
-        public PicComment getPicComment() {
+        public DuoshuoComment getDuoshuoComment() {
             if (author != null) {
                 this.setAuthorId(author.getUserId());
                 this.setAuthorName(author.getName());

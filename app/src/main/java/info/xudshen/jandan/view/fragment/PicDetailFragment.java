@@ -24,11 +24,9 @@ import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
 import info.xudshen.jandan.BR;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.constants.Constants;
-import info.xudshen.jandan.data.dao.CommentDao;
-import info.xudshen.jandan.data.dao.PicCommentDao;
+import info.xudshen.jandan.data.dao.DuoshuoCommentDao;
 import info.xudshen.jandan.databinding.FragmentPicDetailBinding;
-import info.xudshen.jandan.domain.model.Comment;
-import info.xudshen.jandan.domain.model.PicComment;
+import info.xudshen.jandan.domain.model.DuoshuoComment;
 import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.presenter.PicDetailPresenter;
@@ -52,7 +50,7 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
     @Inject
     PicDetailPresenter picDetailPresenter;
     @Inject
-    PicCommentDao picCommentDao;
+    DuoshuoCommentDao duoshuoCommentDao;
 
     private boolean isDataLoaded = false;
     private Long picId;
@@ -131,8 +129,8 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
     public void renderItemDetail(PicItem item) {
         if (binding.itemWithCommentList.getAdapter() == null) {
             List<String> urlList = Splitter.on(",").splitToList(item.getPics());
-            DDBindableCursorLoaderRVHeaderAdapter picCommentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
-                    .cursorLoader(getActivity(), PicCommentDao.CONTENT_URI, null, "PIC_THREAD_KEY = ?", new String[]{Constants.THREAD_PREFIX + picId}, null)
+            DDBindableCursorLoaderRVHeaderAdapter commentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
+                    .cursorLoader(getActivity(), DuoshuoCommentDao.CONTENT_URI, null, DuoshuoCommentDao.Properties.ThreadKey.columnName + " = ?", new String[]{Constants.THREAD_PREFIX + picId}, null)
                     .headerViewHolderCreator((inflater, viewType, parent) -> {
                         ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, headerPicDetailSelector(urlList.size()), parent, false);
                         return new DDBindableViewHolder(viewDataBinding);
@@ -147,13 +145,13 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
                     }))
                     .itemLayoutSelector(position -> R.layout.pic_comment_item)
                     .itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {
-                        PicComment picComment = picCommentDao.loadEntity(cursor);
-                        viewDataBinding.setVariable(BR.comment, picComment);
+                        DuoshuoComment duoshuoComment = duoshuoCommentDao.loadEntity(cursor);
+                        viewDataBinding.setVariable(BR.comment, duoshuoComment);
                     })
                     .build();
-            binding.itemWithCommentList.setAdapter(picCommentAdapter);
+            binding.itemWithCommentList.setAdapter(commentAdapter);
 
-            getLoaderManager().initLoader(0, null, picCommentAdapter);
+            getLoaderManager().initLoader(0, null, commentAdapter);
         }
     }
 

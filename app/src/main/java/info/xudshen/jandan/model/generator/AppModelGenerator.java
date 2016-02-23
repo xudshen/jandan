@@ -30,7 +30,7 @@ public class AppModelGenerator extends ModelGenerator {
 
         addReadLaterItem(schema);
         addPic(schema);
-        addPicComment(schema);
+        addDuoshuoComment(schema);
     }
 
     void addMeta(Schema schema) {
@@ -203,13 +203,13 @@ public class AppModelGenerator extends ModelGenerator {
         entity.addImport(GSON_SERIALIZEDNAME);
     }
 
-    void addPicComment(Schema schema) {
-        Entity entity = schema.addEntity("PicComment");
+    void addDuoshuoComment(Schema schema) {
+        Entity entity = schema.addEntity("DuoshuoComment");
 
         entity.addIdProperty();
-        Property picCommentId = addStringProperty(entity, "picCommentId").codeBeforeField("@Expose\n    @SerializedName(\"post_id\")").bindable(true).getProperty();
-        addStringProperty(entity, "picThreadId").codeBeforeField("@Expose\n    @SerializedName(\"thread_id\")").bindable(true);
-        Property picThreadKey = addStringProperty(entity, "picThreadKey").bindable(true).getProperty();
+        Property commentId = addStringProperty(entity, "commentId").codeBeforeField("@Expose\n    @SerializedName(\"post_id\")").bindable(true).getProperty();
+        addStringProperty(entity, "threadId").codeBeforeField("@Expose\n    @SerializedName(\"thread_id\")").bindable(true);
+        Property threadKey = addStringProperty(entity, "threadKey").bindable(true).getProperty();
 
         addStringProperty(entity, "message").bindable(true);
         addTimestampProperty(entity, "date").codeBeforeField("@Expose\n    @SerializedName(\"created_at\")").bindable(true);
@@ -220,7 +220,7 @@ public class AppModelGenerator extends ModelGenerator {
         addStringProperty(entity, "authorAvatar").bindable(true);
         addStringProperty(entity, "authorUrl").bindable(true);
 
-        addUniqueIndex(entity, picCommentId, picThreadKey);
+        addUniqueIndex(entity, commentId, threadKey);
 
         entity.addContentProvider();
         entity.addImport(GSON_EXPOSE);
