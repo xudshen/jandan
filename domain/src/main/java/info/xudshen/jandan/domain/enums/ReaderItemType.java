@@ -6,5 +6,7 @@ package info.xudshen.jandan.domain.enums;
 public enum ReaderItemType {
     SimplePost,
     SimplePic,
+    SimpleJoke,
+    SimpleVideo,
     Multi
 }

@@ -1,0 +1,19 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <info.xudshen.jandan.view.widget.CustomSwipeRefreshLayout
+        android:id="@+id/jokeListLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <info.xudshen.jandan.view.component.LoadMoreRecyclerView
+            android:id="@+id/jokeListView"
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+
+            android:scrollbars="none" />
+    </info.xudshen.jandan.view.widget.CustomSwipeRefreshLayout>
+</layout>

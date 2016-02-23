@@ -14,7 +14,7 @@
 
         <variable
             name="item"
-            type="info.xudshen.jandan.domain.model.PicItem" />
+            type="info.xudshen.jandan.domain.model.JokeItem" />
     </data>
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -32,15 +32,6 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                app:picThumb="@{item.picFirst}"
-                app:placeHolder="@{@drawable/post_placeholder}" />
-
-            <View style="@style/Divider" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -71,20 +62,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
-                <TextView
-                    style="@style/PicHint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="@{item.picCount.toString()}"
-                    android:visibility="@{item.picCount &lt; 2 ? View.GONE : View.VISIBLE}" />
-
-                <TextView
-                    style="@style/PicHint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="8dp"
-                    android:text="GIF"
-                    android:visibility="@{item.hasGif ? View.VISIBLE : View.GONE}" />
             </LinearLayout>
 
             <TextView
@@ -96,8 +73,8 @@
                 android:paddingLeft="@dimen/picItemMarginHorizontal"
                 android:paddingRight="@dimen/picItemMarginHorizontal"
                 android:paddingTop="8dp"
-                android:visibility="@{Strings.isNullOrEmpty(item.textContent) ? View.GONE : View.VISIBLE}"
-                app:richText="@{item.textContent}" />
+                android:text="@{item.textContent}"
+                android:visibility="@{Strings.isNullOrEmpty(item.textContent) ? View.GONE : View.VISIBLE}" />
 
             <View style="@style/Divider" />
 
