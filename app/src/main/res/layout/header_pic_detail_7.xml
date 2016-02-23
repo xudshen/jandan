@@ -6,7 +6,7 @@
 
         <variable
             name="picItem"
-            type="info.xudshen.jandan.domain.model.PicItem" />
+            type="info.xudshen.jandan.data.model.observable.PicItemObservable" />
 
         <import type="java.util.List" />
 

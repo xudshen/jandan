@@ -11,6 +11,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import info.xudshen.jandan.data.constants.Constants;
+import info.xudshen.jandan.data.dao.ModelTrans;
+import info.xudshen.jandan.data.model.observable.VideoItemObservable;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.domain.model.DuoshuoComment;
@@ -20,19 +22,22 @@ import rx.Subscriber;
 
 public class VideoDetailPresenter implements Presenter {
     private static final Logger logger = LoggerFactory.getLogger(VideoDetailPresenter.class);
-    private DataDetailView<VideoItem> dataDetailView;
+    private DataDetailView<VideoItemObservable> dataDetailView;
 
     private final UseCase getVideoDetailUseCase;
     private final IterableUseCase getDuoshuoCommentListUseCase;
+    private final ModelTrans modelTrans;
 
     @Inject
     public VideoDetailPresenter(@Named("videoDetail") UseCase getVideoDetailUseCase,
-                                @Named("duoshuoCommentList") IterableUseCase getDuoshuoCommentListUseCase) {
+                                @Named("duoshuoCommentList") IterableUseCase getDuoshuoCommentListUseCase,
+                                ModelTrans modelTrans) {
         this.getVideoDetailUseCase = getVideoDetailUseCase;
         this.getDuoshuoCommentListUseCase = getDuoshuoCommentListUseCase;
+        this.modelTrans = modelTrans;
     }
 
-    public void setView(@NonNull DataDetailView<VideoItem> dataDetailView) {
+    public void setView(@NonNull DataDetailView<VideoItemObservable> dataDetailView) {
         this.dataDetailView = dataDetailView;
     }
 
@@ -99,7 +104,8 @@ public class VideoDetailPresenter implements Presenter {
 
                     @Override
                     public void onNext(VideoItem videoItem) {
-                        VideoDetailPresenter.this.dataDetailView.renderItemDetail(videoItem);
+                        VideoItemObservable videoItemObservable = modelTrans.transVideoItem(videoItem);
+                        VideoDetailPresenter.this.dataDetailView.renderItemDetail(videoItemObservable);
                     }
                 }, postId);
     }

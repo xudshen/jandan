@@ -25,6 +25,7 @@ import info.xudshen.jandan.BR;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.constants.Constants;
 import info.xudshen.jandan.data.dao.DuoshuoCommentDao;
+import info.xudshen.jandan.data.model.observable.JokeItemObservable;
 import info.xudshen.jandan.databinding.FragmentJokeDetailBinding;
 import info.xudshen.jandan.domain.model.DuoshuoComment;
 import info.xudshen.jandan.domain.model.JokeItem;
@@ -35,7 +36,7 @@ import info.xudshen.jandan.view.DataDetailView;
 /**
  * Created by xudshen on 16/2/21.
  */
-public class JokeDetailFragment extends BaseFragment implements DataDetailView<JokeItem> {
+public class JokeDetailFragment extends BaseFragment implements DataDetailView<JokeItemObservable> {
     private static final Logger logger = LoggerFactory.getLogger(JokeDetailFragment.class);
     public static final String ARG_PIC_ID = "ARG_PIC_ID";
 
@@ -126,7 +127,7 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
 
     //<editor-fold desc="Called by presenter">
     @Override
-    public void renderItemDetail(JokeItem item) {
+    public void renderItemDetail(JokeItemObservable item) {
         if (binding.itemWithCommentList.getAdapter() == null) {
             DDBindableCursorLoaderRVHeaderAdapter commentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
                     .cursorLoader(getActivity(), DuoshuoCommentDao.CONTENT_URI, null, DuoshuoCommentDao.Properties.ThreadKey.columnName + " = ?", new String[]{Constants.THREAD_PREFIX + jokeId}, null)

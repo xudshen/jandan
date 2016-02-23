@@ -7,6 +7,8 @@
 
         <import type="info.xudshen.jandan.utils.RealtimeTimeUtils" />
 
+        <import type="android.view.View" />
+
         <variable
             name="post"
             type="info.xudshen.jandan.data.model.observable.PostObservable" />
@@ -92,11 +94,13 @@
                 android:text="@{@string/meta_format_all_comment_count(post.commentCount)}" />
 
             <Button
+                android:id="@+id/refresh_comment_button"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/comment_click_to_refresh"
-                android:textColor="@color/accent_color" />
+                android:textColor="@color/accent_color"
+                android:visibility="@{post.commentCount == 0 ? View.VISIBLE : View.GONE}" />
         </LinearLayout>
     </LinearLayout>
 </layout>

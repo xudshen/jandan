@@ -25,6 +25,7 @@ import info.xudshen.jandan.BR;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.constants.Constants;
 import info.xudshen.jandan.data.dao.DuoshuoCommentDao;
+import info.xudshen.jandan.data.model.observable.PicItemObservable;
 import info.xudshen.jandan.databinding.FragmentPicDetailBinding;
 import info.xudshen.jandan.domain.model.DuoshuoComment;
 import info.xudshen.jandan.domain.model.PicItem;
@@ -35,7 +36,7 @@ import info.xudshen.jandan.view.DataDetailView;
 /**
  * Created by xudshen on 16/2/21.
  */
-public class PicDetailFragment extends BaseFragment implements DataDetailView<PicItem> {
+public class PicDetailFragment extends BaseFragment implements DataDetailView<PicItemObservable> {
     private static final Logger logger = LoggerFactory.getLogger(PicDetailFragment.class);
     public static final String ARG_PIC_ID = "ARG_PIC_ID";
 
@@ -126,7 +127,7 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
 
     //<editor-fold desc="Called by presenter">
     @Override
-    public void renderItemDetail(PicItem item) {
+    public void renderItemDetail(PicItemObservable item) {
         if (binding.itemWithCommentList.getAdapter() == null) {
             List<String> urlList = Splitter.on(",").splitToList(item.getPics());
             DDBindableCursorLoaderRVHeaderAdapter commentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()

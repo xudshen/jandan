@@ -28,9 +28,9 @@ public class PostDetailPresenter implements Presenter {
     private static final Logger logger = LoggerFactory.getLogger(PostDetailPresenter.class);
     private DataDetailView<PostObservable> dataDetailView;
 
-    private final ModelTrans modelTrans;
     private final UseCase getPostDetailUseCase;
     private final IterableUseCase getPostCommentUseCase;
+    private final ModelTrans modelTrans;
 
     @Inject
     public PostDetailPresenter(@Named("postDetail") UseCase getPostDetailUseCase,

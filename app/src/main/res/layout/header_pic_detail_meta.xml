@@ -16,7 +16,7 @@
 
         <variable
             name="picItem"
-            type="info.xudshen.jandan.domain.model.PicItem" />
+            type="info.xudshen.jandan.data.model.observable.PicItemObservable" />
 
     </data>
 
@@ -84,13 +84,28 @@
 
         <View style="@style/Divider" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/almostWhite"
-            android:paddingBottom="10dp"
-            android:paddingLeft="@dimen/layoutMarginHorizontal"
-            android:paddingTop="12dp"
-            android:text="所有评论" />
+            android:background="@color/almostWhite">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:paddingBottom="10dp"
+                android:paddingLeft="@dimen/layoutMarginHorizontal"
+                android:paddingTop="12dp"
+                android:text="@{@string/meta_format_all_comment_count(picItem.commentCount)}" />
+
+            <Button
+                android:id="@+id/refresh_comment_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/comment_click_to_refresh"
+                android:textColor="@color/accent_color"
+                android:visibility="@{picItem.commentCount == 0 ? View.VISIBLE : View.GONE}" />
+        </LinearLayout>
     </merge>
 </layout>

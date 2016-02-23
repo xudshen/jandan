@@ -25,6 +25,7 @@ import info.xudshen.jandan.BR;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.constants.Constants;
 import info.xudshen.jandan.data.dao.DuoshuoCommentDao;
+import info.xudshen.jandan.data.model.observable.VideoItemObservable;
 import info.xudshen.jandan.databinding.FragmentVideoDetailBinding;
 import info.xudshen.jandan.domain.model.DuoshuoComment;
 import info.xudshen.jandan.domain.model.VideoItem;
@@ -35,7 +36,7 @@ import info.xudshen.jandan.view.DataDetailView;
 /**
  * Created by xudshen on 16/2/21.
  */
-public class VideoDetailFragment extends BaseFragment implements DataDetailView<VideoItem> {
+public class VideoDetailFragment extends BaseFragment implements DataDetailView<VideoItemObservable> {
     private static final Logger logger = LoggerFactory.getLogger(VideoDetailFragment.class);
     public static final String ARG_PIC_ID = "ARG_PIC_ID";
 
@@ -126,7 +127,7 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
 
     //<editor-fold desc="Called by presenter">
     @Override
-    public void renderItemDetail(VideoItem item) {
+    public void renderItemDetail(VideoItemObservable item) {
         if (binding.itemWithCommentList.getAdapter() == null) {
             DDBindableCursorLoaderRVHeaderAdapter commentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
                     .cursorLoader(getActivity(), DuoshuoCommentDao.CONTENT_URI, null, DuoshuoCommentDao.Properties.ThreadKey.columnName + " = ?", new String[]{Constants.THREAD_PREFIX + videoId}, null)

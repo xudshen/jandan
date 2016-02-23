@@ -11,6 +11,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import info.xudshen.jandan.data.constants.Constants;
+import info.xudshen.jandan.data.dao.ModelTrans;
+import info.xudshen.jandan.data.model.observable.JokeItemObservable;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.domain.model.DuoshuoComment;
@@ -20,19 +22,22 @@ import rx.Subscriber;
 
 public class JokeDetailPresenter implements Presenter {
     private static final Logger logger = LoggerFactory.getLogger(JokeDetailPresenter.class);
-    private DataDetailView<JokeItem> dataDetailView;
+    private DataDetailView<JokeItemObservable> dataDetailView;
 
     private final UseCase getJokeDetailUseCase;
     private final IterableUseCase getDuoshuoCommentListUseCase;
+    private final ModelTrans modelTrans;
 
     @Inject
     public JokeDetailPresenter(@Named("jokeDetail") UseCase getJokeDetailUseCase,
-                               @Named("duoshuoCommentList") IterableUseCase getDuoshuoCommentListUseCase) {
+                               @Named("duoshuoCommentList") IterableUseCase getDuoshuoCommentListUseCase,
+                               ModelTrans modelTrans) {
         this.getJokeDetailUseCase = getJokeDetailUseCase;
         this.getDuoshuoCommentListUseCase = getDuoshuoCommentListUseCase;
+        this.modelTrans = modelTrans;
     }
 
-    public void setView(@NonNull DataDetailView<JokeItem> dataDetailView) {
+    public void setView(@NonNull DataDetailView<JokeItemObservable> dataDetailView) {
         this.dataDetailView = dataDetailView;
     }
 
@@ -99,7 +104,8 @@ public class JokeDetailPresenter implements Presenter {
 
                     @Override
                     public void onNext(JokeItem jokeItem) {
-                        JokeDetailPresenter.this.dataDetailView.renderItemDetail(jokeItem);
+                        JokeItemObservable jokeItemObservable = modelTrans.transJokeItem(jokeItem);
+                        JokeDetailPresenter.this.dataDetailView.renderItemDetail(jokeItemObservable);
                     }
                 }, postId);
     }
