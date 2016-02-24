@@ -86,7 +86,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
     @Bind(R.id.comment_area_content_layout)
     TextInputLayout commentAreaContentLayout;
     @Bind(R.id.comment_fab)
-    FloatingActionButton commentFab;
+    com.github.clans.fab.FloatingActionButton commentFab;
     @Bind(R.id.comment_send_fab)
     FloatingActionButton commentSendFab;
 
@@ -187,7 +187,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
         commentFab.setImageDrawable(new IconicsDrawable(this)
                 .icon(GoogleMaterial.Icon.gmd_edit)
                 .color(getResources().getColor(R.color.md_white_1000))
-                .sizeDp(12)
+                .sizeDp(16)
                 .paddingDp(2));
 
         commentSendFab.setImageDrawable(new IconicsDrawable(this)
@@ -432,6 +432,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
 
     //<editor-fold desc="Comment Area Focus">
     private HashMap<String, CommentAction> commentActionHashMap = new HashMap<>();
+    private boolean isSendingComment = false;
 
     private void clearOldCommentInfo() {
         commentAreaContent.setText("");
@@ -547,17 +548,17 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
 
             }
         });
-        commentFab.setOnClickListener(v -> {
-            if (commentArea.getVisibility() == View.INVISIBLE) {
-                showCommentArea(true);
-            }
-        });
+
         commentMask.setOnClickListener(v -> {
             if (commentArea.getVisibility() == View.VISIBLE) {
                 hideCommentArea();
             }
         });
-
+        commentFab.setOnClickListener(v -> {
+            if (!isSendingComment && commentArea.getVisibility() == View.INVISIBLE) {
+                showCommentArea(true);
+            }
+        });
         commentSendFab.setOnClickListener(v -> {
             if (commentArea.getVisibility() == View.VISIBLE && checkAllForm()) {
                 String realComment = commentAreaContent.getText().toString();
@@ -567,17 +568,22 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
                             String.format("@<a href=\"%s\">%s</a>", commentAction.getParentId(), commentAction.getParentName()));
                 }
                 logger.info("send:{}[{},{}]", realComment, currentItemInfo.getAdapterItemId(currentPosition), currentItemInfo.getAdapterItemType(currentPosition));
+                //show loading
+                isSendingComment = true;
+                commentFab.setIndeterminate(true);
                 hideCommentArea();
             }
         });
         commentActionSubjectSubscription = commentActionSubject.subscribe(commentAction -> {
             logger.info("action:{},{} current:{}", commentAction.getParentId(), commentAction.getParentName(), commentAreaContent.getText().toString());
-            if (commentArea.getVisibility() == View.INVISIBLE) {
-                showCommentArea(true);
+            if (!isSendingComment) {
+                if (commentArea.getVisibility() == View.INVISIBLE) {
+                    showCommentArea(true);
+                }
+                commentActionHashMap.put(commentAction.getParentName(), commentAction);
+                commentAreaContent.setText(commentAreaContent.getText().toString() + "@" + commentAction.getParentName() + ":");
+                commentAreaContent.setSelection(commentAreaContent.getText().length());
             }
-            commentActionHashMap.put(commentAction.getParentName(), commentAction);
-            commentAreaContent.setText(commentAreaContent.getText().toString() + "@" + commentAction.getParentName() + ":");
-            commentAreaContent.setSelection(commentAreaContent.getText().length());
         });
     }
 

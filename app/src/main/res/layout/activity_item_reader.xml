@@ -99,12 +99,21 @@
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
-        <android.support.design.widget.FloatingActionButton
+        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/comment_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="12dp"
             android:clickable="true"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_colorPressed="@color/colorAccent"
+            app:fab_colorRipple="#42ffffff"
+            app:fab_shadowColor="#22000000"
+            app:fab_progress_color="@color/md_deep_purple_A100"
+            app:fab_progress_showBackground="false"
+            app:fab_shadowXOffset="0dp"
+            app:fab_shadowYOffset="4dp"
+            app:fab_size="normal"
             app:layout_anchor="@id/item_reader_view_pager"
             app:layout_anchorGravity="bottom|right" />
 
