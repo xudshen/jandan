@@ -17,6 +17,7 @@ import info.xudshen.jandan.data.dao.PicItemDao;
 import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.data.dao.SimplePostDao;
 import info.xudshen.jandan.data.dao.VideoItemDao;
+import info.xudshen.jandan.domain.enums.CommentAction;
 import info.xudshen.jandan.domain.executor.PostExecutionThread;
 import info.xudshen.jandan.domain.executor.ThreadExecutor;
 import info.xudshen.jandan.domain.repository.CommentRepository;
@@ -28,6 +29,7 @@ import info.xudshen.jandan.internal.di.modules.ApplicationModule;
 import info.xudshen.jandan.internal.di.modules.DaoModule;
 import info.xudshen.jandan.navigation.Navigator;
 import info.xudshen.jandan.view.activity.BaseActivity;
+import rx.subjects.PublishSubject;
 
 /**
  * A component whose lifetime is the life of the application.
@@ -45,6 +47,8 @@ public interface ApplicationComponent {
     ThreadExecutor threadExecutor();
 
     PostExecutionThread postExecutionThread();
+
+    PublishSubject<CommentAction> commentActionSubject();
 
     DaoSession daoSession();
 

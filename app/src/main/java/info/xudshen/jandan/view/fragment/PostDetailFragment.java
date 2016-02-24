@@ -20,14 +20,18 @@ import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter
 import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
 import info.xudshen.jandan.BR;
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.data.constants.Constants;
 import info.xudshen.jandan.data.dao.CommentDao;
 import info.xudshen.jandan.data.model.observable.PostObservable;
 import info.xudshen.jandan.databinding.FragmentPostDetailBinding;
+import info.xudshen.jandan.domain.enums.CommentAction;
 import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.Post;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PostDetailPresenter;
 import info.xudshen.jandan.view.DataDetailView;
+import info.xudshen.jandan.view.model.CommentDialogModel;
+import rx.subjects.PublishSubject;
 
 public class PostDetailFragment extends BaseFragment implements DataDetailView<PostObservable> {
     private static final Logger logger = LoggerFactory.getLogger(PostDetailFragment.class);
@@ -45,6 +49,8 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
     PostDetailPresenter postDetailPresenter;
     @Inject
     CommentDao commentDao;
+    @Inject
+    PublishSubject<CommentAction> commentActionPublishSubject;
 
     private boolean isDataLoaded = false;
     private Long postId;
@@ -154,24 +160,40 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
 
             postCommentAdapter.setOnItemClickListener((v, position) -> {
                 Comment comment = commentDao.loadEntity(postCommentAdapter.getItemCursor(position));
-                if (comment != null && comment.getCommentTo() != null) {
-                    Comment commentTo = commentDao.queryBuilder()
-                            .where(CommentDao.Properties.CommentId.eq(comment.getCommentTo()),
-                                    CommentDao.Properties.PostId.eq(postId))
-                            .build().forCurrentThread().unique();
-                    if (commentTo != null) {
-                        Context mContext = PostDetailFragment.this.getContext();
-                        LayoutInflater inflater = (LayoutInflater)
-                                mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                        ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.post_comment_item_popup, null, false);
-                        viewDataBinding.setVariable(BR.comment, commentTo);
-                        viewDataBinding.executePendingBindings();
-
-                        AlertDialog alertDialog = (new AlertDialog.Builder(mContext))
-                                .setView(viewDataBinding.getRoot()).create();
-                        alertDialog.show();
+                if (comment != null) {
+                    CommentDialogModel dialogModel = null;
+                    if (comment.getCommentTo() != null) {
+                        Comment commentTo = commentDao.queryBuilder()
+                                .where(CommentDao.Properties.CommentId.eq(comment.getCommentTo()),
+                                        CommentDao.Properties.PostId.eq(postId))
+                                .build().forCurrentThread().unique();
+                        dialogModel = new CommentDialogModel(commentTo);
+                    } else {
+                        dialogModel = new CommentDialogModel();
                     }
+
+                    Context mContext = PostDetailFragment.this.getContext();
+                    LayoutInflater inflater = (LayoutInflater)
+                            mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                    ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.post_comment_item_popup, null, false);
+                    viewDataBinding.setVariable(BR.comment, dialogModel);
+                    viewDataBinding.executePendingBindings();
+
+                    AlertDialog alertDialog = (new AlertDialog.Builder(mContext))
+                            .setView(viewDataBinding.getRoot())
+                            .create();
+
+                    viewDataBinding.getRoot().findViewById(R.id.comment_copy_btn).setOnClickListener(v1 -> {
+                        alertDialog.hide();
+                    });
+                    viewDataBinding.getRoot().findViewById(R.id.comment_reply_btn).setOnClickListener(v1 -> {
+                        commentActionPublishSubject.onNext(new CommentAction.Builder()
+                                .parentId(Constants.JANDAN_COMMENT_PREFIX + comment.getCommentId())
+                                .parentName(comment.getName()).jandan());
+                        alertDialog.hide();
+                    });
+                    alertDialog.show();
                 }
             });
             binding.postWithCommentList.setAdapter(postCommentAdapter);

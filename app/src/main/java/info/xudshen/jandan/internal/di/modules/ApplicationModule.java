@@ -19,6 +19,7 @@ import info.xudshen.jandan.data.repository.JokeDataRepository;
 import info.xudshen.jandan.data.repository.PicDataRepository;
 import info.xudshen.jandan.data.repository.PostDataRepository;
 import info.xudshen.jandan.data.repository.VideoDataRepository;
+import info.xudshen.jandan.domain.enums.CommentAction;
 import info.xudshen.jandan.domain.executor.PostExecutionThread;
 import info.xudshen.jandan.domain.executor.ThreadExecutor;
 import info.xudshen.jandan.domain.repository.CommentRepository;
@@ -27,6 +28,7 @@ import info.xudshen.jandan.domain.repository.PicRepository;
 import info.xudshen.jandan.domain.repository.PostRepository;
 import info.xudshen.jandan.domain.repository.VideoRepository;
 import info.xudshen.jandan.navigation.Navigator;
+import rx.subjects.PublishSubject;
 
 /**
  * Dagger module that provides objects which will live during the application lifecycle.
@@ -66,6 +68,12 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
+    PublishSubject<CommentAction> provideCommentActionSubject() {
+        return PublishSubject.create();
+    }
+
+    @Provides
+    @Singleton
     DaoSession provideDaoSession() {
         SQLiteOpenHelper openHelper = new DaoMaster.DevOpenHelper(this.application, "default", null);
         SQLiteDatabase db = openHelper.getWritableDatabase();
@@ -75,7 +83,7 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    ModelTrans provideModelTrans(DaoSession daoSession){
+    ModelTrans provideModelTrans(DaoSession daoSession) {
         return new ModelTrans(daoSession);
     }
 

@@ -5,5 +5,6 @@ package info.xudshen.jandan.data.constants;
  */
 public class Constants {
     public static final String THREAD_PREFIX = "comment-";
+    public static final String JANDAN_COMMENT_PREFIX = "#comment-";
     public static final Long PAGE_SIZE = 20l;
 }

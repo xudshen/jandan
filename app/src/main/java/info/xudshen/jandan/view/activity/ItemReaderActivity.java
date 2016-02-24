@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,9 +27,14 @@ import com.mikepenz.iconics.context.IconicsLayoutInflater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.domain.enums.CommentAction;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.internal.di.HasComponents;
 import info.xudshen.jandan.internal.di.components.ActivityComponent;
@@ -48,6 +54,8 @@ import info.xudshen.jandan.view.adapter.PicReaderPagerAdapter;
 import info.xudshen.jandan.view.adapter.PostReaderPagerAdapter;
 import info.xudshen.jandan.view.adapter.VideoReaderPagerAdapter;
 import info.xudshen.jandan.view.transition.StackPageTransformer;
+import rx.Subscription;
+import rx.subjects.PublishSubject;
 
 public class ItemReaderActivity extends BaseActivity implements HasComponents, LoadDataView {
     private static final Logger logger = LoggerFactory.getLogger(ItemReaderActivity.class);
@@ -74,6 +82,13 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
     private JokeComponent jokeComponent;
     private VideoComponent videoComponent;
     private ActivityComponent activityComponent;
+
+    private String commentContent = "";
+    private HashMap<String, CommentAction> commentActionHashMap;
+
+    @Inject
+    PublishSubject<CommentAction> commentActionSubject;
+    Subscription commentActionSubjectSubscription;
 
     @Override
     protected void initializeInjector() {
@@ -154,6 +169,8 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
         viewPager.setPageTransformer(true, new StackPageTransformer());
         int position = getIntent().getExtras().getInt(ARG_POSITION);
         viewPager.setCurrentItem(position);
+
+        registerCommentAction();
 
         commentFab.setImageDrawable(new IconicsDrawable(this)
                 .icon(GoogleMaterial.Icon.gmd_edit)
@@ -250,6 +267,12 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        commentActionSubjectSubscription.unsubscribe();
+    }
+
     //<editor-fold desc="Called by presenter">
     @Override
     public void showLoading() {
@@ -281,6 +304,35 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
         return getApplicationContext();
     }
     //</editor-fold>
+
+    private void registerCommentAction() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        commentActionSubjectSubscription = commentActionSubject.subscribe(commentAction -> {
+            logger.info("action:{},{} current:{}", commentAction.getParentId(), commentAction.getParentName(), commentAreaContent.getText().toString());
+            if (commentArea.getVisibility() == View.INVISIBLE) {
+                showCommentArea(true);
+            }
+            {
+                commentContent = commentContent + String.format("@<a href=\"%s\">%s</a>:", commentAction.getParentId(), commentAction.getParentName());
+                commentAreaContent.setText(Html.fromHtml(commentContent));
+            }
+        });
+    }
 
     //<editor-fold desc="Comment Animation">
     private int commentFabCx, commentFabCy, commentFabRadius;
