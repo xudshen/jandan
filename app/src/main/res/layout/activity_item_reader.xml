@@ -60,6 +60,7 @@
                 android:orientation="horizontal">
 
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/comment_area_name_layout"
                     android:layout_width="160dp"
                     android:layout_height="wrap_content">
 
@@ -71,6 +72,7 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/comment_area_email_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -85,6 +87,7 @@
 
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/comment_area_content_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 

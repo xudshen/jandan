@@ -6,11 +6,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Html;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -73,10 +75,16 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
     View commentArea;
     @Bind(R.id.comment_area_name)
     EditText commentAreaName;
+    @Bind(R.id.comment_area_name_layout)
+    TextInputLayout commentAreaNameLayout;
     @Bind(R.id.comment_area_email)
     EditText commentAreaEmail;
+    @Bind(R.id.comment_area_email_layout)
+    TextInputLayout commentAreaEmailLayout;
     @Bind(R.id.comment_area_content)
     EditText commentAreaContent;
+    @Bind(R.id.comment_area_content_layout)
+    TextInputLayout commentAreaContentLayout;
     @Bind(R.id.comment_fab)
     FloatingActionButton commentFab;
     @Bind(R.id.comment_send_fab)
@@ -187,6 +195,8 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
                 .color(getResources().getColor(R.color.md_white_1000))
                 .sizeDp(16)
                 .paddingDp(2));
+
+        setUpTextInputLayoutError();
 
         //must calculateMetrics after layout rendered
         View rootView = getWindow().getDecorView().getRootView();
@@ -428,6 +438,97 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
         commentActionHashMap.clear();
     }
 
+    private void setUpTextInputLayoutError() {
+        commentAreaName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                checkCommentAreaName(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        commentAreaEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                checkCommentAreaEmail(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        commentAreaContent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                checkCommentAreaContent(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private boolean checkCommentAreaName(String s) {
+        if (TextUtils.isEmpty(s)) {
+            commentAreaNameLayout.setError("不要留空惹");
+            commentAreaNameLayout.setErrorEnabled(true);
+            return false;
+        } else {
+            commentAreaNameLayout.setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    private boolean checkCommentAreaEmail(String s) {
+        if (TextUtils.isEmpty(s)
+                || !android.util.Patterns.EMAIL_ADDRESS.matcher(s).matches()) {
+            commentAreaEmailLayout.setError("格式不对惹");
+            commentAreaEmailLayout.setErrorEnabled(true);
+            return false;
+        } else {
+            commentAreaEmailLayout.setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    private boolean checkCommentAreaContent(String s) {
+        if (TextUtils.isEmpty(s)) {
+            commentAreaContentLayout.setError("不要留空惹");
+            commentAreaContentLayout.setErrorEnabled(true);
+            return false;
+        } else {
+            commentAreaContentLayout.setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    private boolean checkAllForm() {
+        return checkCommentAreaName(commentAreaName.getText().toString()) &&
+                checkCommentAreaEmail(commentAreaEmail.getText().toString()) &&
+                checkCommentAreaContent(commentAreaContent.getText().toString());
+    }
+
     private void registerCommentAction() {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -458,7 +559,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
         });
 
         commentSendFab.setOnClickListener(v -> {
-            if (commentArea.getVisibility() == View.VISIBLE) {
+            if (commentArea.getVisibility() == View.VISIBLE && checkAllForm()) {
                 String realComment = commentAreaContent.getText().toString();
                 for (String key : commentActionHashMap.keySet()) {
                     CommentAction commentAction = commentActionHashMap.get(key);
@@ -466,7 +567,6 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
                             String.format("@<a href=\"%s\">%s</a>", commentAction.getParentId(), commentAction.getParentName()));
                 }
                 logger.info("send:{}[{},{}]", realComment, currentItemInfo.getAdapterItemId(currentPosition), currentItemInfo.getAdapterItemType(currentPosition));
-
                 hideCommentArea();
             }
         });
