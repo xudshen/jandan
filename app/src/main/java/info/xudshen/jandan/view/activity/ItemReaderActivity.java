@@ -64,6 +64,8 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
 
     @Bind(R.id.item_reader_view_pager)
     ViewPager viewPager;
+    @Bind(R.id.comment_mask)
+    View commentMask;
     @Bind(R.id.comment_area)
     View commentArea;
     @Bind(R.id.comment_area_name)
@@ -84,7 +86,6 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
     private ActivityComponent activityComponent;
 
     private String commentContent = "";
-    private HashMap<String, CommentAction> commentActionHashMap;
 
     @Inject
     PublishSubject<CommentAction> commentActionSubject;
@@ -170,8 +171,6 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
         int position = getIntent().getExtras().getInt(ARG_POSITION);
         viewPager.setCurrentItem(position);
 
-        registerCommentAction();
-
         commentFab.setImageDrawable(new IconicsDrawable(this)
                 .icon(GoogleMaterial.Icon.gmd_edit)
                 .color(getResources().getColor(R.color.md_white_1000))
@@ -184,8 +183,10 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
                 .sizeDp(16)
                 .paddingDp(2));
 
+        registerCommentAction();
         registerCommentFocus();
 
+        //must calculateMetrics after layout rendered
         View rootView = getWindow().getDecorView().getRootView();
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -203,11 +204,6 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
                         hideCommentArea();
                     }
                 });
-                onCommentAreaFocusChangeListener = (v, isFocus) -> {
-                    if (!isFocus && commentArea.getVisibility() == View.VISIBLE) {
-                        hideCommentArea();
-                    }
-                };
             }
         });
 
@@ -305,40 +301,12 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
     }
     //</editor-fold>
 
-    private void registerCommentAction() {
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-        commentActionSubjectSubscription = commentActionSubject.subscribe(commentAction -> {
-            logger.info("action:{},{} current:{}", commentAction.getParentId(), commentAction.getParentName(), commentAreaContent.getText().toString());
-            if (commentArea.getVisibility() == View.INVISIBLE) {
-                showCommentArea(true);
-            }
-            {
-                commentContent = commentContent + String.format("@<a href=\"%s\">%s</a>:", commentAction.getParentId(), commentAction.getParentName());
-                commentAreaContent.setText(Html.fromHtml(commentContent));
-            }
-        });
-    }
-
     //<editor-fold desc="Comment Animation">
     private int commentFabCx, commentFabCy, commentFabRadius;
     private int commentSendFabCx, commentSendFabCy, commentSendFabRadius;
     private int[] commentSendFabLocations = new int[2];
     private int commentAreaRadius;
+    private int commentMaskRadius;
 
     private void calculateMetrics() {
         commentFabCx = commentFab.getMeasuredWidth() / 2;
@@ -352,15 +320,18 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
         commentSendFab.getLocationInWindow(commentSendFabLocations);
 
         commentAreaRadius = (int) Math.sqrt((double) (Math.pow(commentSendFabLocations[0] + commentSendFabCx, 2) + Math.pow(commentArea.getHeight(), 2)));
+        commentMaskRadius = (int) Math.sqrt((double) (Math.pow(commentSendFabLocations[0] + commentSendFabCx, 2) + Math.pow(commentMask.getHeight(), 2)));
     }
 
     private void showCommentArea(boolean showKeyboard) {
         Animator hideCommentFabAnim = createHideCircularReveal(commentFab, commentFabCx, commentFabCy, commentFabRadius, 0);
         Animator showCommentSendFabAnim = createShowCircularReveal(commentSendFab, commentSendFabCx, commentSendFabCy, 0, commentSendFabRadius);
         Animator showCommentAreaAnim = createShowCircularReveal(commentArea, commentSendFabLocations[0] + commentSendFabCx, 0, 0, commentAreaRadius);
+        Animator showCommentMaskAnim = createShowCircularReveal(commentMask, commentSendFabLocations[0] + commentSendFabCx, commentSendFabLocations[1] + commentSendFabCx, 0, commentMaskRadius);
 
         AnimatorSet showCommentArea = new AnimatorSet();
-        showCommentArea.play(showCommentSendFabAnim).after(hideCommentFabAnim).with(showCommentAreaAnim);
+        showCommentArea.play(showCommentSendFabAnim).after(hideCommentFabAnim)
+                .with(showCommentAreaAnim).with(showCommentMaskAnim);
         showCommentArea.start();
         showCommentArea.addListener(new Animator.AnimatorListener() {
             @Override
@@ -393,9 +364,10 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
         Animator showCommentFabAnim = createShowCircularReveal(commentFab, commentFabCx, commentFabCy, 0, commentFabRadius);
         Animator hideCommentSendFabAnim = createHideCircularReveal(commentSendFab, commentSendFabCx, commentSendFabCy, commentSendFabRadius, 0);
         Animator hideCommentAreaAnim = createHideCircularReveal(commentArea, commentSendFabLocations[0] + commentSendFabCx, 0, commentAreaRadius, 0);
+        Animator hideCommentMaskAnim = createHideCircularReveal(commentMask, commentSendFabLocations[0] + commentSendFabCx, commentSendFabLocations[1] + commentSendFabCx, commentMaskRadius, 0);
 
         AnimatorSet hideCommentArea = new AnimatorSet();
-        hideCommentArea.play(hideCommentSendFabAnim).before(showCommentFabAnim).with(hideCommentAreaAnim);
+        hideCommentArea.play(hideCommentSendFabAnim).before(showCommentFabAnim).with(hideCommentAreaAnim).with(hideCommentMaskAnim);
         hideCommentArea.start();
     }
 
@@ -455,35 +427,41 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
     //</editor-fold>
 
     //<editor-fold desc="Comment Area Focus">
-    private boolean isCommentAreaNameFocus, isCommentAreaEmailFocus, isCommentAreaContentFocus;
-    private View.OnFocusChangeListener onCommentAreaFocusChangeListener;
+    private void registerCommentAction() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-    private void registerCommentFocus() {
-        commentAreaName.setOnFocusChangeListener((v, hasFocus) -> {
-            isCommentAreaNameFocus = hasFocus;
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
         });
-        commentAreaEmail.setOnFocusChangeListener((v, hasFocus) -> {
-            isCommentAreaEmailFocus = hasFocus;
-        });
-        commentAreaContent.setOnFocusChangeListener((v, hasFocus) -> {
-            isCommentAreaContentFocus = hasFocus;
-        });
-        commentArea.getViewTreeObserver().addOnGlobalFocusChangeListener((oldFocus, newFocus) -> {
-            if (newFocus.getId() != R.id.comment_area
-                    && newFocus.getId() != R.id.comment_area_name
-                    && newFocus.getId() != R.id.comment_area_email
-                    && newFocus.getId() != R.id.comment_area_content) {
-                judgeCommentAreaFocus();
+        commentActionSubjectSubscription = commentActionSubject.subscribe(commentAction -> {
+            logger.info("action:{},{} current:{}", commentAction.getParentId(), commentAction.getParentName(), commentAreaContent.getText().toString());
+            if (commentArea.getVisibility() == View.INVISIBLE) {
+                showCommentArea(true);
+            }
+            {
+                commentContent = commentContent + String.format("@<a href=\"%s\">%s</a>:", commentAction.getParentId(), commentAction.getParentName());
+                commentAreaContent.setText(Html.fromHtml(commentContent));
             }
         });
     }
 
-    private void judgeCommentAreaFocus() {
-        if (!isCommentAreaNameFocus && !isCommentAreaEmailFocus && !isCommentAreaContentFocus) {
-            if (onCommentAreaFocusChangeListener != null) {
-                onCommentAreaFocusChangeListener.onFocusChange(null, false);
+    private void registerCommentFocus() {
+        commentMask.setOnClickListener(v -> {
+            if (commentArea.getVisibility() == View.VISIBLE) {
+                hideCommentArea();
             }
-        }
+        });
     }
 
     private void autoCommentAreaFocus() {
@@ -498,6 +476,8 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
         commentAreaContent.requestFocus();
     }
     //</editor-fold>
+
+    //<editor-fold desc="Keyboard Utils">
 
     /**
      * hide keyboard
@@ -524,4 +504,5 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
+    //</editor-fold>
 }
