@@ -11,7 +11,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import info.xudshen.jandan.data.dao.ModelTrans;
-import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.data.model.observable.PostObservable;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
@@ -65,25 +64,22 @@ public class PostDetailPresenter implements Presenter {
     }
 
     public void refreshComment(Long postId) {
-        this.dataDetailView.showSwipeUpLoading();
+        this.dataDetailView.showLoadingMore();
         this.getPostCommentUseCase.executeNext(this.dataDetailView.bindToLifecycle(),
                 new Subscriber<List<Comment>>() {
                     @Override
                     public void onCompleted() {
-                        PostDetailPresenter.this.dataDetailView.hideSwipeUpLoading();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        PostDetailPresenter.this.dataDetailView.hideSwipeUpLoading();
+                        PostDetailPresenter.this.dataDetailView.hideLoadingMore(-1);
                         PostDetailPresenter.this.dataDetailView.showError("");
                     }
 
                     @Override
                     public void onNext(List<Comment> comments) {
-                        if (comments.size() == 0) {
-                            PostDetailPresenter.this.dataDetailView.noMoreComments();
-                        }
+                        PostDetailPresenter.this.dataDetailView.hideLoadingMore(comments.size());
                     }
                 }, postId);
     }

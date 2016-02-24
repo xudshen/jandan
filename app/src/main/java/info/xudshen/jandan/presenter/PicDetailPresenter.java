@@ -61,24 +61,22 @@ public class PicDetailPresenter implements Presenter {
     }
 
     public void refreshComment(Long picId) {
-        this.dataDetailView.showSwipeUpLoading();
+        this.dataDetailView.showLoadingMore();
         this.getDuoshuoCommentListUseCase.executeNext(this.dataDetailView.bindToLifecycle(),
                 new Subscriber<List<DuoshuoComment>>() {
                     @Override
                     public void onCompleted() {
-                        PicDetailPresenter.this.dataDetailView.hideSwipeUpLoading();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        PicDetailPresenter.this.dataDetailView.hideSwipeUpLoading();
+                        PicDetailPresenter.this.dataDetailView.hideLoadingMore(-1);
                         PicDetailPresenter.this.dataDetailView.showError("");
                     }
 
                     @Override
                     public void onNext(List<DuoshuoComment> o) {
-                        if (o.size() == 0)
-                            PicDetailPresenter.this.dataDetailView.noMoreComments();
+                        PicDetailPresenter.this.dataDetailView.hideLoadingMore(o.size());
                     }
                 }, Constants.THREAD_PREFIX + picId);
     }

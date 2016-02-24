@@ -61,24 +61,22 @@ public class JokeDetailPresenter implements Presenter {
     }
 
     public void refreshComment(Long jokeId) {
-        this.dataDetailView.showSwipeUpLoading();
+        this.dataDetailView.showLoadingMore();
         this.getDuoshuoCommentListUseCase.executeNext(this.dataDetailView.bindToLifecycle(),
                 new Subscriber<List<DuoshuoComment>>() {
                     @Override
                     public void onCompleted() {
-                        JokeDetailPresenter.this.dataDetailView.hideSwipeUpLoading();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        JokeDetailPresenter.this.dataDetailView.hideSwipeUpLoading();
+                        JokeDetailPresenter.this.dataDetailView.hideLoadingMore(-1);
                         JokeDetailPresenter.this.dataDetailView.showError("");
                     }
 
                     @Override
                     public void onNext(List<DuoshuoComment> o) {
-                        if (o.size() == 0)
-                            JokeDetailPresenter.this.dataDetailView.noMoreComments();
+                        JokeDetailPresenter.this.dataDetailView.hideLoadingMore(o.size());
                     }
                 }, Constants.THREAD_PREFIX + jokeId);
     }

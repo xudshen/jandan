@@ -189,18 +189,19 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
     }
 
     @Override
-    public void showSwipeUpLoading() {
+    public void showLoadingMore() {
         binding.itemWithCommentLayout.setRefreshing(true);
     }
 
     @Override
-    public void hideSwipeUpLoading() {
+    public void hideLoadingMore(int count) {
         binding.itemWithCommentLayout.setRefreshing(false);
-    }
-
-    @Override
-    public void noMoreComments() {
-        showSnackbar(binding.itemWithCommentList, getString(R.string.post_detail_no_more_comments));
+        if (count > 0) {
+            showSnackbar(binding.itemWithCommentList,
+                    String.format(getString(R.string.loaded_numbers_comments), count));
+        } else {
+            showSnackbar(binding.itemWithCommentList, getString(R.string.post_detail_no_more_comments));
+        }
     }
 
     @Override

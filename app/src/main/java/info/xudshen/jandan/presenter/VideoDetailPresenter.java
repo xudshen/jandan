@@ -61,24 +61,22 @@ public class VideoDetailPresenter implements Presenter {
     }
 
     public void refreshComment(Long videoId) {
-        this.dataDetailView.showSwipeUpLoading();
+        this.dataDetailView.showLoadingMore();
         this.getDuoshuoCommentListUseCase.executeNext(this.dataDetailView.bindToLifecycle(),
                 new Subscriber<List<DuoshuoComment>>() {
                     @Override
                     public void onCompleted() {
-                        VideoDetailPresenter.this.dataDetailView.hideSwipeUpLoading();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        VideoDetailPresenter.this.dataDetailView.hideSwipeUpLoading();
+                        VideoDetailPresenter.this.dataDetailView.hideLoadingMore(-1);
                         VideoDetailPresenter.this.dataDetailView.showError("");
                     }
 
                     @Override
                     public void onNext(List<DuoshuoComment> o) {
-                        if (o.size() == 0)
-                            VideoDetailPresenter.this.dataDetailView.noMoreComments();
+                        VideoDetailPresenter.this.dataDetailView.hideLoadingMore(o.size());
                     }
                 }, Constants.THREAD_PREFIX + videoId);
     }

@@ -4,11 +4,9 @@ package info.xudshen.jandan.view;
  * Created by xudshen on 16/2/16.
  */
 public interface DataDetailView<T> extends LoadDataView {
-    void showSwipeUpLoading();
+    void showLoadingMore();
 
-    void hideSwipeUpLoading();
-
-    void noMoreComments();
+    void hideLoadingMore(int count);
 
     void renderItemDetail(T item);
 }

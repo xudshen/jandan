@@ -46,6 +46,7 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
     @Inject
     CommentDao commentDao;
 
+    private boolean isDataLoaded = false;
     private Long postId;
     private FragmentPostDetailBinding binding;
 
@@ -86,7 +87,9 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.postDetailPresenter.setView(this);
-        this.postDetailPresenter.initialize(postId);
+        if (!isDataLoaded && getUserVisibleHint()) {
+            this.postDetailPresenter.initialize(postId);
+        }
     }
 
     @Override
@@ -111,6 +114,17 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
     public void onDestroy() {
         super.onDestroy();
         this.postDetailPresenter.destroy();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if (getView() != null && !isDataLoaded) {
+                isDataLoaded = true;
+                this.postDetailPresenter.initialize(postId);
+            }
+        }
     }
 
     @Override
@@ -196,18 +210,19 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
     }
 
     @Override
-    public void showSwipeUpLoading() {
+    public void showLoadingMore() {
         binding.postWithCommentLayout.setRefreshing(true);
     }
 
     @Override
-    public void hideSwipeUpLoading() {
+    public void hideLoadingMore(int count) {
         binding.postWithCommentLayout.setRefreshing(false);
-    }
-
-    @Override
-    public void noMoreComments() {
-        showSnackbar(binding.postWithCommentList, getString(R.string.post_detail_no_more_comments));
+        if (count > 0) {
+            showSnackbar(binding.postWithCommentList,
+                    String.format(getString(R.string.loaded_numbers_comments), count));
+        } else {
+            showSnackbar(binding.postWithCommentList, getString(R.string.post_detail_no_more_comments));
+        }
     }
 
     @Override

@@ -26,4 +26,5 @@
     <string name="post_detail_no_more_comments">没有更多评论了惹</string>
     <string name="meta_format_all_comment_count">所有评论 (%d)</string>
     <string name="comment_click_to_refresh">点击刷新</string>
+    <string name="loaded_numbers_comments">%d 条新评论</string>
 </resources>

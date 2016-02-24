@@ -26,6 +26,7 @@
     <string name="press_again_exit">Press Again To Exit</string>
     <string name="meta_format_comment_count">%d comments</string>
     <string name="post_detail_no_more_comments">No more comments.</string>
+    <string name="loaded_numbers_comments">%d comments loaded.</string>
     <string name="meta_format_all_comment_count">Comments (%d)</string>
     <string name="comment_click_to_refresh">Refresh</string>
 </resources>
