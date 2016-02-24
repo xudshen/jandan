@@ -9,7 +9,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,6 +51,7 @@ import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.internal.di.components.VideoComponent;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
 import info.xudshen.jandan.view.LoadDataView;
+import info.xudshen.jandan.view.adapter.IItemInfo;
 import info.xudshen.jandan.view.adapter.JokeReaderPagerAdapter;
 import info.xudshen.jandan.view.adapter.PicReaderPagerAdapter;
 import info.xudshen.jandan.view.adapter.PostReaderPagerAdapter;
@@ -85,7 +88,8 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
     private VideoComponent videoComponent;
     private ActivityComponent activityComponent;
 
-    private String commentContent = "";
+    private IItemInfo currentItemInfo;
+    private int currentPosition;
 
     @Inject
     PublishSubject<CommentAction> commentActionSubject;
@@ -139,6 +143,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
                 postComponent.inject(postReaderPagerAdapter);
                 postReaderPagerAdapter.initialize();
                 viewPager.setAdapter(postReaderPagerAdapter);
+                currentItemInfo = postReaderPagerAdapter;
                 break;
             }
             case SimplePic: {
@@ -183,9 +188,6 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
                 .sizeDp(16)
                 .paddingDp(2));
 
-        registerCommentAction();
-        registerCommentFocus();
-
         //must calculateMetrics after layout rendered
         View rootView = getWindow().getDecorView().getRootView();
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -194,16 +196,8 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
                 rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                 calculateMetrics();
-                commentFab.setOnClickListener(v -> {
-                    if (commentArea.getVisibility() == View.INVISIBLE) {
-                        showCommentArea(true);
-                    }
-                });
-                commentSendFab.setOnClickListener(v -> {
-                    if (commentArea.getVisibility() == View.VISIBLE) {
-                        hideCommentArea();
-                    }
-                });
+
+                registerCommentAction();
             }
         });
 
@@ -427,6 +421,13 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
     //</editor-fold>
 
     //<editor-fold desc="Comment Area Focus">
+    private HashMap<String, CommentAction> commentActionHashMap = new HashMap<>();
+
+    private void clearOldCommentInfo() {
+        commentAreaContent.setText("");
+        commentActionHashMap.clear();
+    }
+
     private void registerCommentAction() {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -436,7 +437,8 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
 
             @Override
             public void onPageSelected(int position) {
-
+                currentPosition = position;
+                clearOldCommentInfo();
             }
 
             @Override
@@ -444,23 +446,38 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
 
             }
         });
+        commentFab.setOnClickListener(v -> {
+            if (commentArea.getVisibility() == View.INVISIBLE) {
+                showCommentArea(true);
+            }
+        });
+        commentMask.setOnClickListener(v -> {
+            if (commentArea.getVisibility() == View.VISIBLE) {
+                hideCommentArea();
+            }
+        });
+
+        commentSendFab.setOnClickListener(v -> {
+            if (commentArea.getVisibility() == View.VISIBLE) {
+                String realComment = commentAreaContent.getText().toString();
+                for (String key : commentActionHashMap.keySet()) {
+                    CommentAction commentAction = commentActionHashMap.get(key);
+                    realComment = realComment.replace("@" + commentAction.getParentName(),
+                            String.format("@<a href=\"%s\">%s</a>", commentAction.getParentId(), commentAction.getParentName()));
+                }
+                logger.info("send:{}[{},{}]", realComment, currentItemInfo.getAdapterItemId(currentPosition), currentItemInfo.getAdapterItemType(currentPosition));
+
+                hideCommentArea();
+            }
+        });
         commentActionSubjectSubscription = commentActionSubject.subscribe(commentAction -> {
             logger.info("action:{},{} current:{}", commentAction.getParentId(), commentAction.getParentName(), commentAreaContent.getText().toString());
             if (commentArea.getVisibility() == View.INVISIBLE) {
                 showCommentArea(true);
             }
-            {
-                commentContent = commentContent + String.format("@<a href=\"%s\">%s</a>:", commentAction.getParentId(), commentAction.getParentName());
-                commentAreaContent.setText(Html.fromHtml(commentContent));
-            }
-        });
-    }
-
-    private void registerCommentFocus() {
-        commentMask.setOnClickListener(v -> {
-            if (commentArea.getVisibility() == View.VISIBLE) {
-                hideCommentArea();
-            }
+            commentActionHashMap.put(commentAction.getParentName(), commentAction);
+            commentAreaContent.setText(commentAreaContent.getText().toString() + "@" + commentAction.getParentName() + ":");
+            commentAreaContent.setSelection(commentAreaContent.getText().length());
         });
     }
 

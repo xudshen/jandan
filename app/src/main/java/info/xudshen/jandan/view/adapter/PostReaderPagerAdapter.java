@@ -12,6 +12,7 @@ import javax.inject.Named;
 
 import de.greenrobot.dao.query.LazyList;
 import info.xudshen.jandan.data.dao.SimplePostDao;
+import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.model.SimplePost;
 import info.xudshen.jandan.view.LoadDataView;
@@ -24,7 +25,7 @@ import rx.android.schedulers.AndroidSchedulers;
  * Created by xudshen on 16/1/28.
  * for post list
  */
-public class PostReaderPagerAdapter extends FragmentStatePagerAdapter {
+public class PostReaderPagerAdapter extends FragmentStatePagerAdapter implements IItemInfo {
     private static final Logger logger = LoggerFactory.getLogger(PostReaderPagerAdapter.class);
     private LoadDataView loadDataView;
     @Inject
@@ -77,5 +78,16 @@ public class PostReaderPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return this.simplePosts.size();
+    }
+
+    @Override
+    public String getAdapterItemId(int position) {
+        SimplePost post = this.simplePosts.get(position);
+        return post != null ? post.getPostId() + "" : null;
+    }
+
+    @Override
+    public ReaderItemType getAdapterItemType(int position) {
+        return ReaderItemType.SimplePost;
     }
 }
