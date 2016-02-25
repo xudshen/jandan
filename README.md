@@ -30,8 +30,8 @@ ContentProvider <- ModelDao._allChanges
   -> insert
   -> update
   -> delete
-  
-  -> query -> ModelDao.query -> Cursor => Model
+    ->notify Cursor,notifyChange(@NonNull Uri uri, @Nullable ContentObserver observer)
+  -> query -> ModelDao.query -> Cursor,setNotificationUri(ContentResolver cr, Uri uri) => Model
 ```
 
 ## RecyclerAdapter
