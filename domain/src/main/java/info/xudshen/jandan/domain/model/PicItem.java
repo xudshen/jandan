@@ -35,7 +35,7 @@ public class PicItem {
     @Expose
     private Long voteNegative;
     @Expose
-    private Long commentCount = 0l;
+    private Long commentCount;
     @Expose
     private String threadId;
     @Expose

@@ -28,7 +28,7 @@ public class AppModelGenerator extends ModelGenerator {
         addCategory(schema);
         addComment(schema);
 
-        addReadLaterItem(schema);
+        addFavoItem(schema);
         addPic(schema);
         addJoke(schema);
         addVideo(schema);
@@ -289,17 +289,50 @@ public class AppModelGenerator extends ModelGenerator {
         entity.addImport(GSON_SERIALIZEDNAME);
     }
 
-    void addReadLaterItem(Schema schema) {
-        Entity entity = schema.addEntity("ReadLaterItem");
+    void addFavoItem(Schema schema) {
+        Entity entity = schema.addEntity("FavoItem");
 
         entity.addIdProperty();
-        Property readLaterItemId = addLongProperty(entity, "readLaterItemId").bindable(true).getProperty();
-        addEnumProperty(entity, "type", "info.xudshen.jandan.domain.enums.ReaderItemType");
-        addLongProperty(entity, "actualId").bindable(true);
-
+        Property type = addEnumProperty(entity, "type", "info.xudshen.jandan.domain.enums.ReaderItemType").getProperty();
+        Property actualId = addStringProperty(entity, "actualId").bindable(true).getProperty();
         addTimestampProperty(entity, "addDate").bindable(true);
 
-        addUniqueIndex(entity, readLaterItemId);
+        //simple post
+        addStringProperty(entity, "url").bindable(true);
+        addStringProperty(entity, "title").bindable(true);
+        addStringProperty(entity, "excerpt").bindable(true);
+        addStringProperty(entity, "thumbC").bindable(true);
+
+        //pic,joke,video
+        addLongProperty(entity, "otherId").bindable(true);
+        addStringProperty(entity, "author").bindable(true);
+        addStringProperty(entity, "authorEmail").bindable(true);
+        addStringProperty(entity, "authorUrl").bindable(true);
+        addTimestampProperty(entity, "date").bindable(true);
+
+        addLongProperty(entity, "votePositive").bindable(true);
+        addLongProperty(entity, "voteNegative").bindable(true);
+
+        addLongProperty(entity, "commentCount").bindable(true);
+        addStringProperty(entity, "threadId").bindable(true);
+
+        addStringProperty(entity, "content").bindable(true);
+        addStringProperty(entity, "textContent").bindable(true);
+        //pic part
+        addStringProperty(entity, "pics").bindable(true);
+        addStringProperty(entity, "picFirst").bindable(true);
+        addLongProperty(entity, "picCount").bindable(true);
+        addBooleanProperty(entity, "hasGif").bindable(true);
+        //video part
+        addStringProperty(entity, "videoThumbnail").bindable(true);
+        addStringProperty(entity, "videoTitle").bindable(true);
+        addStringProperty(entity, "videoDescription").bindable(true);
+        addFloatPropertyy(entity, "videoDuration").bindable(true);
+        addStringProperty(entity, "videoLink").bindable(true);
+        addStringProperty(entity, "videoPlayer").bindable(true);
+        addStringProperty(entity, "videoSource").bindable(true);
+
+        addUniqueIndex(entity, type, actualId);
 
         entity.addImport(GSON_EXPOSE);
     }

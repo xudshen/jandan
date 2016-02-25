@@ -1,7 +1,7 @@
 package info.xudshen.jandan.domain.model;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import info.xudshen.jandan.domain.enums.ReaderItemType;
 import java.sql.Timestamp;
 import android.databinding.Bindable;
 
@@ -10,25 +10,34 @@ import android.databinding.Bindable;
 // KEEP INCLUDES - put your custom includes here
 // KEEP INCLUDES END
 /**
- * Entity mapped to table "VIDEO_ITEM".
+ * Entity mapped to table "FAVO_ITEM".
  */
-public class VideoItem {
+public class FavoItem {
 
     private Long id;
     @Expose
-    @SerializedName("comment_ID")
-    private Long videoId;
+    private ReaderItemType type;
     @Expose
-    @SerializedName("comment_author")
+    private String actualId;
+    @Expose
+    private Timestamp addDate;
+    @Expose
+    private String url;
+    @Expose
+    private String title;
+    @Expose
+    private String excerpt;
+    @Expose
+    private String thumbC;
+    @Expose
+    private Long otherId;
+    @Expose
     private String author;
     @Expose
-    @SerializedName("comment_author_email")
     private String authorEmail;
     @Expose
-    @SerializedName("comment_author_url")
     private String authorUrl;
     @Expose
-    @SerializedName("comment_date")
     private Timestamp date;
     @Expose
     private Long votePositive;
@@ -39,11 +48,17 @@ public class VideoItem {
     @Expose
     private String threadId;
     @Expose
-    @SerializedName("comment_content")
     private String content;
     @Expose
-    @SerializedName("text_content")
     private String textContent;
+    @Expose
+    private String pics;
+    @Expose
+    private String picFirst;
+    @Expose
+    private Long picCount;
+    @Expose
+    private Boolean hasGif;
     @Expose
     private String videoThumbnail;
     @Expose
@@ -62,16 +77,23 @@ public class VideoItem {
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
 
-    public VideoItem() {
+    public FavoItem() {
     }
 
-    public VideoItem(Long id) {
+    public FavoItem(Long id) {
         this.id = id;
     }
 
-    public VideoItem(Long id, Long videoId, String author, String authorEmail, String authorUrl, Timestamp date, Long votePositive, Long voteNegative, Long commentCount, String threadId, String content, String textContent, String videoThumbnail, String videoTitle, String videoDescription, Float videoDuration, String videoLink, String videoPlayer, String videoSource) {
+    public FavoItem(Long id, ReaderItemType type, String actualId, Timestamp addDate, String url, String title, String excerpt, String thumbC, Long otherId, String author, String authorEmail, String authorUrl, Timestamp date, Long votePositive, Long voteNegative, Long commentCount, String threadId, String content, String textContent, String pics, String picFirst, Long picCount, Boolean hasGif, String videoThumbnail, String videoTitle, String videoDescription, Float videoDuration, String videoLink, String videoPlayer, String videoSource) {
         this.id = id;
-        this.videoId = videoId;
+        this.type = type;
+        this.actualId = actualId;
+        this.addDate = addDate;
+        this.url = url;
+        this.title = title;
+        this.excerpt = excerpt;
+        this.thumbC = thumbC;
+        this.otherId = otherId;
         this.author = author;
         this.authorEmail = authorEmail;
         this.authorUrl = authorUrl;
@@ -82,6 +104,10 @@ public class VideoItem {
         this.threadId = threadId;
         this.content = content;
         this.textContent = textContent;
+        this.pics = pics;
+        this.picFirst = picFirst;
+        this.picCount = picCount;
+        this.hasGif = hasGif;
         this.videoThumbnail = videoThumbnail;
         this.videoTitle = videoTitle;
         this.videoDescription = videoDescription;
@@ -99,12 +125,68 @@ public class VideoItem {
         this.id = id;
     }
 
-    public Long getVideoId() {
-        return videoId;
+    public ReaderItemType getType() {
+        return type;
     }
 
-    public void setVideoId(Long videoId) {
-        this.videoId = videoId;
+    public void setType(ReaderItemType type) {
+        this.type = type;
+    }
+
+    public String getActualId() {
+        return actualId;
+    }
+
+    public void setActualId(String actualId) {
+        this.actualId = actualId;
+    }
+
+    public Timestamp getAddDate() {
+        return addDate;
+    }
+
+    public void setAddDate(Timestamp addDate) {
+        this.addDate = addDate;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getExcerpt() {
+        return excerpt;
+    }
+
+    public void setExcerpt(String excerpt) {
+        this.excerpt = excerpt;
+    }
+
+    public String getThumbC() {
+        return thumbC;
+    }
+
+    public void setThumbC(String thumbC) {
+        this.thumbC = thumbC;
+    }
+
+    public Long getOtherId() {
+        return otherId;
+    }
+
+    public void setOtherId(Long otherId) {
+        this.otherId = otherId;
     }
 
     public String getAuthor() {
@@ -185,6 +267,38 @@ public class VideoItem {
 
     public void setTextContent(String textContent) {
         this.textContent = textContent;
+    }
+
+    public String getPics() {
+        return pics;
+    }
+
+    public void setPics(String pics) {
+        this.pics = pics;
+    }
+
+    public String getPicFirst() {
+        return picFirst;
+    }
+
+    public void setPicFirst(String picFirst) {
+        this.picFirst = picFirst;
+    }
+
+    public Long getPicCount() {
+        return picCount;
+    }
+
+    public void setPicCount(Long picCount) {
+        this.picCount = picCount;
+    }
+
+    public Boolean getHasGif() {
+        return hasGif;
+    }
+
+    public void setHasGif(Boolean hasGif) {
+        this.hasGif = hasGif;
     }
 
     public String getVideoThumbnail() {

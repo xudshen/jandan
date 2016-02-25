@@ -14,7 +14,7 @@ import info.xudshen.jandan.data.dao.SimplePostDao;
 import info.xudshen.jandan.data.dao.AuthorDao;
 import info.xudshen.jandan.data.dao.CategoryDao;
 import info.xudshen.jandan.data.dao.CommentDao;
-import info.xudshen.jandan.data.dao.ReadLaterItemDao;
+import info.xudshen.jandan.data.dao.FavoItemDao;
 import info.xudshen.jandan.data.dao.PicItemDao;
 import info.xudshen.jandan.data.dao.JokeItemDao;
 import info.xudshen.jandan.data.dao.VideoItemDao;
@@ -35,7 +35,7 @@ public class DaoMaster extends AbstractDaoMaster {
         AuthorDao.createTable(db, ifNotExists);
         CategoryDao.createTable(db, ifNotExists);
         CommentDao.createTable(db, ifNotExists);
-        ReadLaterItemDao.createTable(db, ifNotExists);
+        FavoItemDao.createTable(db, ifNotExists);
         PicItemDao.createTable(db, ifNotExists);
         JokeItemDao.createTable(db, ifNotExists);
         VideoItemDao.createTable(db, ifNotExists);
@@ -50,7 +50,7 @@ public class DaoMaster extends AbstractDaoMaster {
         AuthorDao.dropTable(db, ifExists);
         CategoryDao.dropTable(db, ifExists);
         CommentDao.dropTable(db, ifExists);
-        ReadLaterItemDao.dropTable(db, ifExists);
+        FavoItemDao.dropTable(db, ifExists);
         PicItemDao.dropTable(db, ifExists);
         JokeItemDao.dropTable(db, ifExists);
         VideoItemDao.dropTable(db, ifExists);
@@ -92,7 +92,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(AuthorDao.class);
         registerDaoClass(CategoryDao.class);
         registerDaoClass(CommentDao.class);
-        registerDaoClass(ReadLaterItemDao.class);
+        registerDaoClass(FavoItemDao.class);
         registerDaoClass(PicItemDao.class);
         registerDaoClass(JokeItemDao.class);
         registerDaoClass(VideoItemDao.class);

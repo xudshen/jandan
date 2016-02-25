@@ -16,7 +16,7 @@ import info.xudshen.jandan.domain.model.SimplePost;
 import info.xudshen.jandan.domain.model.Author;
 import info.xudshen.jandan.domain.model.Category;
 import info.xudshen.jandan.domain.model.Comment;
-import info.xudshen.jandan.domain.model.ReadLaterItem;
+import info.xudshen.jandan.domain.model.FavoItem;
 import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.domain.model.JokeItem;
 import info.xudshen.jandan.domain.model.VideoItem;
@@ -28,7 +28,7 @@ import info.xudshen.jandan.data.dao.SimplePostDao;
 import info.xudshen.jandan.data.dao.AuthorDao;
 import info.xudshen.jandan.data.dao.CategoryDao;
 import info.xudshen.jandan.data.dao.CommentDao;
-import info.xudshen.jandan.data.dao.ReadLaterItemDao;
+import info.xudshen.jandan.data.dao.FavoItemDao;
 import info.xudshen.jandan.data.dao.PicItemDao;
 import info.xudshen.jandan.data.dao.JokeItemDao;
 import info.xudshen.jandan.data.dao.VideoItemDao;
@@ -50,7 +50,7 @@ public class DaoSession extends AbstractDaoSession {
         authorDao.setContext(context);
         categoryDao.setContext(context);
         commentDao.setContext(context);
-        readLaterItemDao.setContext(context);
+        favoItemDao.setContext(context);
         picItemDao.setContext(context);
         jokeItemDao.setContext(context);
         videoItemDao.setContext(context);
@@ -64,7 +64,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig authorDaoConfig;
     private final DaoConfig categoryDaoConfig;
     private final DaoConfig commentDaoConfig;
-    private final DaoConfig readLaterItemDaoConfig;
+    private final DaoConfig favoItemDaoConfig;
     private final DaoConfig picItemDaoConfig;
     private final DaoConfig jokeItemDaoConfig;
     private final DaoConfig videoItemDaoConfig;
@@ -76,7 +76,7 @@ public class DaoSession extends AbstractDaoSession {
     private final AuthorDao authorDao;
     private final CategoryDao categoryDao;
     private final CommentDao commentDao;
-    private final ReadLaterItemDao readLaterItemDao;
+    private final FavoItemDao favoItemDao;
     private final PicItemDao picItemDao;
     private final JokeItemDao jokeItemDao;
     private final VideoItemDao videoItemDao;
@@ -104,8 +104,8 @@ public class DaoSession extends AbstractDaoSession {
         commentDaoConfig = daoConfigMap.get(CommentDao.class).clone();
         commentDaoConfig.initIdentityScope(type);
 
-        readLaterItemDaoConfig = daoConfigMap.get(ReadLaterItemDao.class).clone();
-        readLaterItemDaoConfig.initIdentityScope(type);
+        favoItemDaoConfig = daoConfigMap.get(FavoItemDao.class).clone();
+        favoItemDaoConfig.initIdentityScope(type);
 
         picItemDaoConfig = daoConfigMap.get(PicItemDao.class).clone();
         picItemDaoConfig.initIdentityScope(type);
@@ -125,7 +125,7 @@ public class DaoSession extends AbstractDaoSession {
         authorDao = new AuthorDao(authorDaoConfig, this);
         categoryDao = new CategoryDao(categoryDaoConfig, this);
         commentDao = new CommentDao(commentDaoConfig, this);
-        readLaterItemDao = new ReadLaterItemDao(readLaterItemDaoConfig, this);
+        favoItemDao = new FavoItemDao(favoItemDaoConfig, this);
         picItemDao = new PicItemDao(picItemDaoConfig, this);
         jokeItemDao = new JokeItemDao(jokeItemDaoConfig, this);
         videoItemDao = new VideoItemDao(videoItemDaoConfig, this);
@@ -137,7 +137,7 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(Author.class, authorDao);
         registerDao(Category.class, categoryDao);
         registerDao(Comment.class, commentDao);
-        registerDao(ReadLaterItem.class, readLaterItemDao);
+        registerDao(FavoItem.class, favoItemDao);
         registerDao(PicItem.class, picItemDao);
         registerDao(JokeItem.class, jokeItemDao);
         registerDao(VideoItem.class, videoItemDao);
@@ -151,7 +151,7 @@ public class DaoSession extends AbstractDaoSession {
         authorDaoConfig.getIdentityScope().clear();
         categoryDaoConfig.getIdentityScope().clear();
         commentDaoConfig.getIdentityScope().clear();
-        readLaterItemDaoConfig.getIdentityScope().clear();
+        favoItemDaoConfig.getIdentityScope().clear();
         picItemDaoConfig.getIdentityScope().clear();
         jokeItemDaoConfig.getIdentityScope().clear();
         videoItemDaoConfig.getIdentityScope().clear();
@@ -182,8 +182,8 @@ public class DaoSession extends AbstractDaoSession {
         return commentDao;
     }
 
-    public ReadLaterItemDao getReadLaterItemDao() {
-        return readLaterItemDao;
+    public FavoItemDao getFavoItemDao() {
+        return favoItemDao;
     }
 
     public PicItemDao getPicItemDao() {
