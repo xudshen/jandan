@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import info.xudshen.jandan.data.api.IPostService;
+import info.xudshen.jandan.data.api.response.CommonResponse;
 import info.xudshen.jandan.data.api.response.PostListResponse;
 import info.xudshen.jandan.data.dao.CommentDao;
 import info.xudshen.jandan.data.dao.MetaDao;
@@ -152,5 +153,11 @@ public class CloudPostDataStore implements PostDataStore {
                     }
                     commentDao.insertOrReplaceInTx(comments);
                 });
+    }
+
+    @Override
+    public Observable<Boolean> doPostComment(Long postId, String name, String email, String content) {
+        return this.postService.postCommentAsync(postId, name, email, content)
+                .map(CommonResponse::isOk);
     }
 }

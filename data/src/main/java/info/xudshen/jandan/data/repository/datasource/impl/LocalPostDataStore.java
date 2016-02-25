@@ -62,4 +62,9 @@ public class LocalPostDataStore implements PostDataStore {
     public Observable<List<Comment>> postCommentListNext(Long postId) {
         throw new NotImplementedException("");
     }
+
+    @Override
+    public Observable<Boolean> doPostComment(Long postId, String name, String email, String content) {
+        throw new NotImplementedException("");
+    }
 }

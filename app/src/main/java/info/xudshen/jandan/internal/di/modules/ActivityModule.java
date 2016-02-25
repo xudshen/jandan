@@ -17,9 +17,18 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Named;
+
 import dagger.Module;
 import dagger.Provides;
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.domain.executor.PostExecutionThread;
+import info.xudshen.jandan.domain.executor.ThreadExecutor;
+import info.xudshen.jandan.domain.interactor.DoPostComment;
+import info.xudshen.jandan.domain.interactor.GetPostComment;
+import info.xudshen.jandan.domain.interactor.IterableUseCase;
+import info.xudshen.jandan.domain.interactor.UseCase;
+import info.xudshen.jandan.domain.repository.PostRepository;
 import info.xudshen.jandan.internal.di.PerActivity;
 
 @Module
@@ -77,5 +86,13 @@ public class ActivityModule {
                                 .withIdentifier(R.id.drawer_about).withIcon(GoogleMaterial.Icon.gmd_info)
                 )
                 .build();
+    }
+
+    @Provides
+    @PerActivity
+    @Named("doPostComment")
+    UseCase provideDoPostCommentUseCase(PostRepository postRepository,
+                                        ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+        return new DoPostComment(postRepository, threadExecutor, postExecutionThread);
     }
 }

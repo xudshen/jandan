@@ -50,4 +50,10 @@ public class PostDataRepository implements PostRepository {
     public Observable<List<Comment>> postCommentListNext(Long postId) {
         return this.postDataStoreFactory.createCloudDataStore().postCommentListNext(postId);
     }
+
+    @Override
+    public Observable<Boolean> doPostComment(Long postId, String name, String email, String content) {
+        return this.postDataStoreFactory.createCloudDataStore().doPostComment(
+                postId, name, email, content);
+    }
 }

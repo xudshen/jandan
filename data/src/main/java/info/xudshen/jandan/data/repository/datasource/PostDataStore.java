@@ -21,4 +21,6 @@ public interface PostDataStore {
     Observable<List<Comment>> postCommentList(Long postId);
 
     Observable<List<Comment>> postCommentListNext(Long postId);
+
+    Observable<Boolean> doPostComment(Long postId, String name, String email, String content);
 }

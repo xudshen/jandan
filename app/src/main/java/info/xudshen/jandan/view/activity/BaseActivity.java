@@ -1,6 +1,7 @@
 package info.xudshen.jandan.view.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.Toast;
@@ -137,5 +138,10 @@ public abstract class BaseActivity extends RxAppCompatActivity implements Transi
 
     public void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+
+    public void showSnackbar(View view, String message) {
+        Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
     }
 }

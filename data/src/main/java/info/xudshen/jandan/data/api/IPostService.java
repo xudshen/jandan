@@ -1,8 +1,10 @@
 package info.xudshen.jandan.data.api;
 
+import info.xudshen.jandan.data.api.response.CommonResponse;
 import info.xudshen.jandan.data.api.response.PostListResponse;
 import info.xudshen.jandan.data.api.response.PostResponse;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -18,4 +20,10 @@ public interface IPostService {
 
     @GET("/?oxwlxojflwblxbsapi=get_post&include=comments")
     Observable<PostResponse> getCommentListAsync(@Query("id") Long postId);
+
+    @POST("/?oxwlxojflwblxbsapi=respond.submit_comment")
+    Observable<CommonResponse> postCommentAsync(@Query("post_id") Long postId,
+                                                @Query("name") String name,
+                                                @Query("email") String email,
+                                                @Query("content") String content);
 }

@@ -11,7 +11,6 @@ import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -32,14 +31,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.domain.enums.CommentAction;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
+import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.internal.di.HasComponents;
 import info.xudshen.jandan.internal.di.components.ActivityComponent;
 import info.xudshen.jandan.internal.di.components.DaggerActivityComponent;
@@ -52,6 +54,8 @@ import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.internal.di.components.VideoComponent;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
+import info.xudshen.jandan.presenter.DoCommentPresenter;
+import info.xudshen.jandan.view.ActionView;
 import info.xudshen.jandan.view.LoadDataView;
 import info.xudshen.jandan.view.adapter.IItemInfo;
 import info.xudshen.jandan.view.adapter.JokeReaderPagerAdapter;
@@ -59,10 +63,12 @@ import info.xudshen.jandan.view.adapter.PicReaderPagerAdapter;
 import info.xudshen.jandan.view.adapter.PostReaderPagerAdapter;
 import info.xudshen.jandan.view.adapter.VideoReaderPagerAdapter;
 import info.xudshen.jandan.view.transition.StackPageTransformer;
+import rx.Observable;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.subjects.PublishSubject;
 
-public class ItemReaderActivity extends BaseActivity implements HasComponents, LoadDataView {
+public class ItemReaderActivity extends BaseActivity implements HasComponents, ActionView {
     private static final Logger logger = LoggerFactory.getLogger(ItemReaderActivity.class);
     public static final String ARG_POSITION = "ARG_POSITION";
     public static final String ARG_READER_TYPE = "ARG_READER_TYPE";
@@ -102,6 +108,8 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
     @Inject
     PublishSubject<CommentAction> commentActionSubject;
     Subscription commentActionSubjectSubscription;
+    @Inject
+    DoCommentPresenter doCommentPresenter;
 
     @Override
     protected void initializeInjector() {
@@ -131,6 +139,8 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
                 .applicationComponent(getApplicationComponent())
                 .activityModule(activityModule)
                 .build();
+
+        doCommentPresenter.setView(this);
     }
 
     @Override
@@ -276,12 +286,14 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
     //<editor-fold desc="Called by presenter">
     @Override
     public void showLoading() {
-
+        isSendingComment = true;
+        commentFab.setIndeterminate(true);
     }
 
     @Override
     public void hideLoading() {
-
+        isSendingComment = false;
+        commentFab.setIndeterminate(false);
     }
 
     @Override
@@ -296,7 +308,12 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
 
     @Override
     public void showError(String message) {
+        showSnackbar(commentFab, message);
+    }
 
+    @Override
+    public void showSuccess() {
+        showSnackbar(commentFab, "success");
     }
 
     @Override
@@ -336,7 +353,6 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
         AnimatorSet showCommentArea = new AnimatorSet();
         showCommentArea.play(showCommentSendFabAnim).after(hideCommentFabAnim)
                 .with(showCommentAreaAnim).with(showCommentMaskAnim);
-        showCommentArea.start();
         showCommentArea.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -361,6 +377,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
 
             }
         });
+        showCommentArea.start();
     }
 
     private void hideCommentArea() {
@@ -568,9 +585,11 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, L
                             String.format("@<a href=\"%s\">%s</a>", commentAction.getParentId(), commentAction.getParentName()));
                 }
                 logger.info("send:{}[{},{}]", realComment, currentItemInfo.getAdapterItemId(currentPosition), currentItemInfo.getAdapterItemType(currentPosition));
-                //show loading
-                isSendingComment = true;
-                commentFab.setIndeterminate(true);
+                ItemReaderActivity.this.doCommentPresenter.doPostComment(
+                        Long.valueOf(currentItemInfo.getAdapterItemId(currentPosition)),
+                        commentAreaName.getText().toString(),
+                        commentAreaEmail.getText().toString(),
+                        realComment);
                 hideCommentArea();
             }
         });
