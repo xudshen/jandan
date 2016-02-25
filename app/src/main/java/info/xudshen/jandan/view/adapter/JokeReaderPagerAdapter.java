@@ -82,6 +82,11 @@ public class JokeReaderPagerAdapter extends FragmentStatePagerAdapter implements
     }
 
     @Override
+    public <T> T getAdapterItem(int position) {
+        return (T) this.jokeItems.get(position);
+    }
+
+    @Override
     public String getAdapterItemId(int position) {
         JokeItem jokeItem = this.jokeItems.get(position);
         return jokeItem != null ? jokeItem.getJokeId() + "" : null;

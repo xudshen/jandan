@@ -15,6 +15,7 @@ import info.xudshen.jandan.data.dao.DaoSession;
 import info.xudshen.jandan.data.dao.ModelTrans;
 import info.xudshen.jandan.data.executor.JobExecutor;
 import info.xudshen.jandan.data.repository.CommentDataRepository;
+import info.xudshen.jandan.data.repository.FavoDataRepository;
 import info.xudshen.jandan.data.repository.JokeDataRepository;
 import info.xudshen.jandan.data.repository.PicDataRepository;
 import info.xudshen.jandan.data.repository.PostDataRepository;
@@ -23,6 +24,7 @@ import info.xudshen.jandan.domain.enums.CommentAction;
 import info.xudshen.jandan.domain.executor.PostExecutionThread;
 import info.xudshen.jandan.domain.executor.ThreadExecutor;
 import info.xudshen.jandan.domain.repository.CommentRepository;
+import info.xudshen.jandan.domain.repository.FavoRepository;
 import info.xudshen.jandan.domain.repository.JokeRepository;
 import info.xudshen.jandan.domain.repository.PicRepository;
 import info.xudshen.jandan.domain.repository.PostRepository;
@@ -115,5 +117,11 @@ public class ApplicationModule {
     @Singleton
     CommentRepository provideCommentRepository(CommentDataRepository commentDataRepository) {
         return commentDataRepository;
+    }
+
+    @Provides
+    @Singleton
+    FavoRepository provideFavoRepository(FavoDataRepository favoDataRepository) {
+        return favoDataRepository;
     }
 }

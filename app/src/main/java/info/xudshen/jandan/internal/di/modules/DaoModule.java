@@ -9,6 +9,7 @@ import info.xudshen.jandan.data.dao.CategoryDao;
 import info.xudshen.jandan.data.dao.CommentDao;
 import info.xudshen.jandan.data.dao.DaoSession;
 import info.xudshen.jandan.data.dao.DuoshuoCommentDao;
+import info.xudshen.jandan.data.dao.FavoItemDao;
 import info.xudshen.jandan.data.dao.JokeItemDao;
 import info.xudshen.jandan.data.dao.MetaDao;
 import info.xudshen.jandan.data.dao.PicItemDao;
@@ -80,5 +81,11 @@ public class DaoModule {
     @Singleton
     DuoshuoCommentDao provideDuoshuoCommentDao(DaoSession daoSession) {
         return daoSession.getDuoshuoCommentDao();
+    }
+
+    @Provides
+    @Singleton
+    FavoItemDao provideFavoItemDao(DaoSession daoSession) {
+        return daoSession.getFavoItemDao();
     }
 }

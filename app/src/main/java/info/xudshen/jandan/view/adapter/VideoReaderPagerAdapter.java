@@ -81,6 +81,11 @@ public class VideoReaderPagerAdapter extends FragmentStatePagerAdapter implement
     }
 
     @Override
+    public <T> T getAdapterItem(int position) {
+        return (T) this.videoItems.get(position);
+    }
+
+    @Override
     public String getAdapterItemId(int position) {
         VideoItem videoItem = this.videoItems.get(position);
         return videoItem != null ? videoItem.getVideoId() + "" : null;

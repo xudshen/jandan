@@ -81,6 +81,11 @@ public class PostReaderPagerAdapter extends FragmentStatePagerAdapter implements
     }
 
     @Override
+    public <T> T getAdapterItem(int position) {
+        return (T) this.simplePosts.get(position);
+    }
+
+    @Override
     public String getAdapterItemId(int position) {
         SimplePost post = this.simplePosts.get(position);
         return post != null ? post.getPostId() + "" : null;

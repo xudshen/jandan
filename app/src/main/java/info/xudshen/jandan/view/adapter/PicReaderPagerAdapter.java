@@ -81,6 +81,11 @@ public class PicReaderPagerAdapter extends FragmentStatePagerAdapter implements 
     }
 
     @Override
+    public <T> T getAdapterItem(int position) {
+        return (T) this.picItems.get(position);
+    }
+
+    @Override
     public String getAdapterItemId(int position) {
         PicItem picItem = this.picItems.get(position);
         return picItem != null ? picItem.getPicId() + "" : null;

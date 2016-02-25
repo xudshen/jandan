@@ -41,6 +41,9 @@ import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.constants.Constants;
 import info.xudshen.jandan.domain.enums.CommentAction;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
+import info.xudshen.jandan.domain.model.FavoItem;
+import info.xudshen.jandan.domain.model.FavoItemTrans;
+import info.xudshen.jandan.domain.model.JokeItem;
 import info.xudshen.jandan.internal.di.HasComponents;
 import info.xudshen.jandan.internal.di.components.ActivityComponent;
 import info.xudshen.jandan.internal.di.components.DaggerActivityComponent;
@@ -266,6 +269,10 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
+        } else if (item.getItemId() == R.id.item_reader_menu_favo) {
+            JokeItem jokeItem = currentItemInfo.getAdapterItem(currentPosition);
+            FavoItem favoItem = FavoItemTrans.fromJokeItem(jokeItem);
+            //save
         }
         return super.onOptionsItemSelected(item);
     }
