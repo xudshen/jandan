@@ -32,10 +32,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -43,7 +41,6 @@ import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.constants.Constants;
 import info.xudshen.jandan.domain.enums.CommentAction;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
-import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.internal.di.HasComponents;
 import info.xudshen.jandan.internal.di.components.ActivityComponent;
 import info.xudshen.jandan.internal.di.components.DaggerActivityComponent;
@@ -57,17 +54,15 @@ import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.internal.di.components.VideoComponent;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
 import info.xudshen.jandan.presenter.DoCommentPresenter;
+import info.xudshen.jandan.utils.HtmlHelper;
 import info.xudshen.jandan.view.ActionView;
-import info.xudshen.jandan.view.LoadDataView;
 import info.xudshen.jandan.view.adapter.IItemInfo;
 import info.xudshen.jandan.view.adapter.JokeReaderPagerAdapter;
 import info.xudshen.jandan.view.adapter.PicReaderPagerAdapter;
 import info.xudshen.jandan.view.adapter.PostReaderPagerAdapter;
 import info.xudshen.jandan.view.adapter.VideoReaderPagerAdapter;
 import info.xudshen.jandan.view.transition.StackPageTransformer;
-import rx.Observable;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.subjects.PublishSubject;
 
 public class ItemReaderActivity extends BaseActivity implements HasComponents, ActionView {
@@ -548,6 +543,11 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
         }
     }
 
+    private void checkCommentAreaContentWithAt() {
+        commentAreaContentLayout.setError("不要只@不说话惹");
+        commentAreaContentLayout.setErrorEnabled(true);
+    }
+
     private boolean checkAllForm() {
         return checkCommentAreaName(commentAreaName.getText().toString()) &&
                 checkCommentAreaEmail(commentAreaEmail.getText().toString()) &&
@@ -595,6 +595,15 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
                     } else if (commentAction.getType() == CommentAction.ActionType.Duoshuo) {
                         if (realComment.contains("@" + commentAction.getParentName())) {
                             duoshuoParentId = commentAction.getParentId();
+                            realComment = realComment.replace("@" + commentAction.getParentName() + ":", "");
+                            realComment = realComment.replace("@" + commentAction.getParentName(), "");
+
+                            if (HtmlHelper.isBlank(realComment)) {
+                                checkCommentAreaContentWithAt();
+                                return;
+                            } else {
+                                break;
+                            }
                         }
                     }
                 }

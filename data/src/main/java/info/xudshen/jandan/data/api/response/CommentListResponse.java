@@ -46,8 +46,20 @@ public class CommentListResponse {
         List<DuoshuoCommentWrapper> duoshuoComments = new ArrayList<>();
         if (response != null) {
             for (String key : response) {
-                if (parentPosts.containsKey(key))
-                    duoshuoComments.add(parentPosts.get(key));
+                if (parentPosts.containsKey(key)) {
+                    DuoshuoCommentWrapper wrapper = parentPosts.get(key);
+                    //try add @parent
+                    if (wrapper.getParentCommentId() != null &&
+                            parentPosts.containsKey(wrapper.getParentCommentId())) {
+                        DuoshuoCommentWrapper parentWrapper = parentPosts.get(wrapper.getParentCommentId());
+                        if (parentWrapper.getAuthor() != null) {
+                            wrapper.setMessage(String.format("@%s:%s",
+                                    parentWrapper.getAuthor().getName(),
+                                    wrapper.getMessage()));
+                        }
+                    }
+                    duoshuoComments.add(wrapper);
+                }
             }
         }
         return duoshuoComments;
