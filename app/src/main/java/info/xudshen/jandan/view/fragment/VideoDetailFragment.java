@@ -6,6 +6,7 @@ import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,11 +29,14 @@ import info.xudshen.jandan.data.constants.Constants;
 import info.xudshen.jandan.data.dao.DuoshuoCommentDao;
 import info.xudshen.jandan.data.model.observable.VideoItemObservable;
 import info.xudshen.jandan.databinding.FragmentVideoDetailBinding;
+import info.xudshen.jandan.domain.enums.CommentAction;
 import info.xudshen.jandan.domain.model.DuoshuoComment;
 import info.xudshen.jandan.domain.model.VideoItem;
 import info.xudshen.jandan.internal.di.components.VideoComponent;
 import info.xudshen.jandan.presenter.VideoDetailPresenter;
 import info.xudshen.jandan.view.DataDetailView;
+import info.xudshen.jandan.view.model.DuoshuoCommentDialogModel;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by xudshen on 16/2/21.
@@ -53,6 +57,8 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
     VideoDetailPresenter videoDetailPresenter;
     @Inject
     DuoshuoCommentDao duoshuoCommentDao;
+    @Inject
+    PublishSubject<CommentAction> commentActionPublishSubject;
 
     private boolean isDataLoaded = false;
     private Long videoId;
@@ -158,6 +164,48 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
                         viewDataBinding.setVariable(BR.comment, duoshuoComment);
                     })
                     .build();
+
+
+            commentAdapter.setOnItemClickListener((v, position) -> {
+                DuoshuoComment duoshuoComment = duoshuoCommentDao.loadEntity(commentAdapter.getItemCursor(position));
+                if (duoshuoComment != null) {
+                    DuoshuoCommentDialogModel dialogModel = null;
+                    if (duoshuoComment.getParentCommentId() != null) {
+                        DuoshuoComment commentTo = duoshuoCommentDao.queryBuilder()
+                                .where(DuoshuoCommentDao.Properties.CommentId.eq(duoshuoComment.getParentCommentId()),
+                                        DuoshuoCommentDao.Properties.ThreadKey.eq(Constants.THREAD_PREFIX + videoId))
+                                .build().forCurrentThread().unique();
+
+                        dialogModel = new DuoshuoCommentDialogModel(commentTo);
+                    } else {
+                        dialogModel = new DuoshuoCommentDialogModel();
+                    }
+
+                    Context mContext = VideoDetailFragment.this.getContext();
+                    LayoutInflater inflater = (LayoutInflater)
+                            mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                    ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.pic_comment_item_popup, null, false);
+                    viewDataBinding.setVariable(BR.comment, dialogModel);
+                    viewDataBinding.executePendingBindings();
+
+                    AlertDialog alertDialog = (new AlertDialog.Builder(mContext))
+                            .setView(viewDataBinding.getRoot())
+                            .create();
+
+                    viewDataBinding.getRoot().findViewById(R.id.comment_copy_btn).setOnClickListener(v1 -> {
+                        alertDialog.hide();
+                    });
+                    viewDataBinding.getRoot().findViewById(R.id.comment_reply_btn).setOnClickListener(v1 -> {
+                        commentActionPublishSubject.onNext(new CommentAction.Builder()
+                                .parentId(duoshuoComment.getCommentId())
+                                .parentName(duoshuoComment.getAuthorName()).duoshuo());
+                        alertDialog.hide();
+                    });
+                    alertDialog.show();
+                }
+            });
+
             binding.itemWithCommentList.setAdapter(commentAdapter);
 
             getLoaderManager().initLoader(0, null, commentAdapter);

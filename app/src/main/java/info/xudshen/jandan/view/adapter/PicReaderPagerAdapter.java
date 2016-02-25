@@ -12,11 +12,11 @@ import javax.inject.Named;
 
 import de.greenrobot.dao.query.LazyList;
 import info.xudshen.jandan.data.dao.PicItemDao;
+import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.view.LoadDataView;
 import info.xudshen.jandan.view.fragment.PicDetailFragment;
-import info.xudshen.jandan.view.fragment.PostDetailFragment;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -25,7 +25,7 @@ import rx.android.schedulers.AndroidSchedulers;
  * Created by xudshen on 16/2/21.
  * for pic list
  */
-public class PicReaderPagerAdapter extends FragmentStatePagerAdapter {
+public class PicReaderPagerAdapter extends FragmentStatePagerAdapter implements IItemInfo {
     private static final Logger logger = LoggerFactory.getLogger(PicReaderPagerAdapter.class);
     private LoadDataView loadDataView;
     @Inject
@@ -78,5 +78,16 @@ public class PicReaderPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return this.picItems.size();
+    }
+
+    @Override
+    public String getAdapterItemId(int position) {
+        PicItem picItem = this.picItems.get(position);
+        return picItem != null ? picItem.getPicId() + "" : null;
+    }
+
+    @Override
+    public ReaderItemType getAdapterItemType(int position) {
+        return ReaderItemType.SimplePic;
     }
 }

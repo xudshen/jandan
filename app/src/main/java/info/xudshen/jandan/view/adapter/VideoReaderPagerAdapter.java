@@ -12,6 +12,7 @@ import javax.inject.Named;
 
 import de.greenrobot.dao.query.LazyList;
 import info.xudshen.jandan.data.dao.VideoItemDao;
+import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.model.VideoItem;
 import info.xudshen.jandan.view.LoadDataView;
@@ -24,7 +25,7 @@ import rx.android.schedulers.AndroidSchedulers;
  * Created by xudshen on 16/2/21.
  * for video list
  */
-public class VideoReaderPagerAdapter extends FragmentStatePagerAdapter {
+public class VideoReaderPagerAdapter extends FragmentStatePagerAdapter implements IItemInfo {
     private static final Logger logger = LoggerFactory.getLogger(VideoReaderPagerAdapter.class);
     private LoadDataView loadDataView;
     @Inject
@@ -77,5 +78,16 @@ public class VideoReaderPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return this.videoItems.size();
+    }
+
+    @Override
+    public String getAdapterItemId(int position) {
+        VideoItem videoItem = this.videoItems.get(position);
+        return videoItem != null ? videoItem.getVideoId() + "" : null;
+    }
+
+    @Override
+    public ReaderItemType getAdapterItemType(int position) {
+        return ReaderItemType.SimpleVideo;
     }
 }

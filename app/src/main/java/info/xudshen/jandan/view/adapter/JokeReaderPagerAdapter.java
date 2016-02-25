@@ -12,8 +12,10 @@ import javax.inject.Named;
 
 import de.greenrobot.dao.query.LazyList;
 import info.xudshen.jandan.data.dao.JokeItemDao;
+import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.model.JokeItem;
+import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.view.LoadDataView;
 import info.xudshen.jandan.view.fragment.JokeDetailFragment;
 import rx.Observable;
@@ -24,7 +26,7 @@ import rx.android.schedulers.AndroidSchedulers;
  * Created by xudshen on 16/2/21.
  * for joke list
  */
-public class JokeReaderPagerAdapter extends FragmentStatePagerAdapter {
+public class JokeReaderPagerAdapter extends FragmentStatePagerAdapter implements IItemInfo {
     private static final Logger logger = LoggerFactory.getLogger(JokeReaderPagerAdapter.class);
     private LoadDataView loadDataView;
     @Inject
@@ -77,5 +79,16 @@ public class JokeReaderPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return this.jokeItems.size();
+    }
+
+    @Override
+    public String getAdapterItemId(int position) {
+        JokeItem jokeItem = this.jokeItems.get(position);
+        return jokeItem != null ? jokeItem.getJokeId() + "" : null;
+    }
+
+    @Override
+    public ReaderItemType getAdapterItemType(int position) {
+        return ReaderItemType.SimpleJoke;
     }
 }

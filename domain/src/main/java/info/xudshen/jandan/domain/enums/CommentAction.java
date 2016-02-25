@@ -1,7 +1,5 @@
 package info.xudshen.jandan.domain.enums;
 
-import info.xudshen.jandan.domain.model.Comment;
-
 /**
  * Created by xudshen on 16/2/24.
  */

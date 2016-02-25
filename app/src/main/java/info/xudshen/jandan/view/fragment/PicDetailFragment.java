@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,14 +26,20 @@ import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
 import info.xudshen.jandan.BR;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.constants.Constants;
+import info.xudshen.jandan.data.dao.CommentDao;
 import info.xudshen.jandan.data.dao.DuoshuoCommentDao;
 import info.xudshen.jandan.data.model.observable.PicItemObservable;
 import info.xudshen.jandan.databinding.FragmentPicDetailBinding;
+import info.xudshen.jandan.domain.enums.CommentAction;
+import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.DuoshuoComment;
 import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.presenter.PicDetailPresenter;
 import info.xudshen.jandan.view.DataDetailView;
+import info.xudshen.jandan.view.model.CommentDialogModel;
+import info.xudshen.jandan.view.model.DuoshuoCommentDialogModel;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by xudshen on 16/2/21.
@@ -53,6 +60,8 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
     PicDetailPresenter picDetailPresenter;
     @Inject
     DuoshuoCommentDao duoshuoCommentDao;
+    @Inject
+    PublishSubject<CommentAction> commentActionPublishSubject;
 
     private boolean isDataLoaded = false;
     private Long picId;
@@ -153,6 +162,47 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
                         viewDataBinding.setVariable(BR.comment, duoshuoComment);
                     })
                     .build();
+
+            commentAdapter.setOnItemClickListener((v, position) -> {
+                DuoshuoComment duoshuoComment = duoshuoCommentDao.loadEntity(commentAdapter.getItemCursor(position));
+                if (duoshuoComment != null) {
+                    DuoshuoCommentDialogModel dialogModel = null;
+                    if (duoshuoComment.getParentCommentId() != null) {
+                        DuoshuoComment commentTo = duoshuoCommentDao.queryBuilder()
+                                .where(DuoshuoCommentDao.Properties.CommentId.eq(duoshuoComment.getParentCommentId()),
+                                        DuoshuoCommentDao.Properties.ThreadKey.eq(Constants.THREAD_PREFIX + picId))
+                                .build().forCurrentThread().unique();
+
+                        dialogModel = new DuoshuoCommentDialogModel(commentTo);
+                    } else {
+                        dialogModel = new DuoshuoCommentDialogModel();
+                    }
+
+                    Context mContext = PicDetailFragment.this.getContext();
+                    LayoutInflater inflater = (LayoutInflater)
+                            mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                    ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.pic_comment_item_popup, null, false);
+                    viewDataBinding.setVariable(BR.comment, dialogModel);
+                    viewDataBinding.executePendingBindings();
+
+                    AlertDialog alertDialog = (new AlertDialog.Builder(mContext))
+                            .setView(viewDataBinding.getRoot())
+                            .create();
+
+                    viewDataBinding.getRoot().findViewById(R.id.comment_copy_btn).setOnClickListener(v1 -> {
+                        alertDialog.hide();
+                    });
+                    viewDataBinding.getRoot().findViewById(R.id.comment_reply_btn).setOnClickListener(v1 -> {
+                        commentActionPublishSubject.onNext(new CommentAction.Builder()
+                                .parentId(duoshuoComment.getCommentId())
+                                .parentName(duoshuoComment.getAuthorName()).duoshuo());
+                        alertDialog.hide();
+                    });
+                    alertDialog.show();
+                }
+            });
+
             binding.itemWithCommentList.setAdapter(commentAdapter);
 
             getLoaderManager().initLoader(0, null, commentAdapter);

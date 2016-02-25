@@ -173,6 +173,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
                 picComponent.inject(picReaderPagerAdapter);
                 picReaderPagerAdapter.initialize();
                 viewPager.setAdapter(picReaderPagerAdapter);
+                currentItemInfo = picReaderPagerAdapter;
                 break;
             }
             case SimpleJoke: {
@@ -181,6 +182,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
                 jokeComponent.inject(jokeReaderPagerAdapter);
                 jokeReaderPagerAdapter.initialize();
                 viewPager.setAdapter(jokeReaderPagerAdapter);
+                currentItemInfo = jokeReaderPagerAdapter;
                 break;
             }
             case SimpleVideo: {
@@ -189,6 +191,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
                 videoComponent.inject(videoReaderPagerAdapter);
                 videoReaderPagerAdapter.initialize();
                 viewPager.setAdapter(videoReaderPagerAdapter);
+                currentItemInfo = videoReaderPagerAdapter;
                 break;
             }
         }
@@ -582,17 +585,36 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
         commentSendFab.setOnClickListener(v -> {
             if (commentArea.getVisibility() == View.VISIBLE && checkAllForm()) {
                 String realComment = commentAreaContent.getText().toString();
+                String duoshuoParentId = "";
                 for (String key : commentActionHashMap.keySet()) {
                     CommentAction commentAction = commentActionHashMap.get(key);
-                    realComment = realComment.replace("@" + commentAction.getParentName(),
-                            String.format("@<a href=\"%s\">%s</a>", commentAction.getParentId(), commentAction.getParentName()));
+                    if (commentAction.getType() == CommentAction.ActionType.Jandan) {
+                        realComment = realComment.replace("@" + commentAction.getParentName(),
+                                String.format("@<a href=\"%s\">%s</a>", commentAction.getParentId(), commentAction.getParentName()));
+                    } else if (commentAction.getType() == CommentAction.ActionType.Duoshuo) {
+                        duoshuoParentId = commentAction.getParentId();
+                    }
                 }
-                logger.info("send:{}[{},{}]", realComment, currentItemInfo.getAdapterItemId(currentPosition), currentItemInfo.getAdapterItemType(currentPosition));
-                ItemReaderActivity.this.doCommentPresenter.doPostComment(
-                        Long.valueOf(currentItemInfo.getAdapterItemId(currentPosition)),
-                        commentAreaName.getText().toString(),
-                        commentAreaEmail.getText().toString(),
-                        realComment);
+                logger.info("send:{}[{},{}] to:{}", realComment,
+                        currentItemInfo.getAdapterItemId(currentPosition),
+                        currentItemInfo.getAdapterItemType(currentPosition),
+                        duoshuoParentId);
+                switch (currentItemInfo.getAdapterItemType(currentPosition)) {
+                    case SimplePost: {
+                        ItemReaderActivity.this.doCommentPresenter.doPostComment(
+                                Long.valueOf(currentItemInfo.getAdapterItemId(currentPosition)),
+                                commentAreaName.getText().toString(),
+                                commentAreaEmail.getText().toString(),
+                                realComment);
+                        break;
+                    }
+                    case SimplePic:
+                    case SimpleJoke:
+                    case SimpleVideo: {
+                        //call other
+                        break;
+                    }
+                }
                 hideCommentArea();
             }
         });

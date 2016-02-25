@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="info.xudshen.jandan.utils.RealtimeTimeUtils" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="comment"
+            type="info.xudshen.jandan.view.model.DuoshuoCommentDialogModel" />
+    </data>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:columnCount="4"
+        android:rowCount="5">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="4"
+            android:paddingBottom="10dp"
+            android:paddingLeft="16dp"
+            android:paddingTop="12dp"
+            android:text="上一条消息"
+            android:visibility="@{comment.hasPreviousComment ? View.VISIBLE : View.GONE}" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="16dp"
+            android:layout_rowSpan="2"
+            android:visibility="@{comment.hasPreviousComment ? View.VISIBLE : View.GONE}"
+            app:avatar="@{comment.authorAvatar}"
+            app:civ_border_color="@color/almostWhite"
+            app:civ_border_width="1dp"
+            app:placeHolder="@{@drawable/post_placeholder}" />
+
+        <TextView
+            style="@style/PostDetailMetaHighlight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:text="@{comment.authorName}"
+            android:visibility="@{comment.hasPreviousComment ? View.VISIBLE : View.GONE}" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
+            android:layout_columnWeight="1"
+            android:layout_marginLeft="12dp"
+            android:text="@{RealtimeTimeUtils.realtime(comment.date)}"
+            android:visibility="@{comment.hasPreviousComment ? View.VISIBLE : View.GONE}" />
+
+        <TextView
+            style="@style/PostDetailComment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="3"
+            android:layout_columnWeight="1"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:visibility="@{comment.hasPreviousComment ? View.VISIBLE : View.GONE}"
+            app:richText="@{comment.message}" />
+
+        <View
+            style="@style/Divider"
+            android:layout_columnSpan="4"
+            android:visibility="@{comment.hasPreviousComment ? View.VISIBLE : View.GONE}" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="4"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/comment_copy_btn"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="复制" />
+
+            <Button
+                android:id="@+id/comment_reply_btn"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="回复@" />
+        </LinearLayout>
+    </GridLayout>
+</layout>
