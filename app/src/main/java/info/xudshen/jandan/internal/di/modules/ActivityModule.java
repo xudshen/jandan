@@ -27,7 +27,9 @@ import info.xudshen.jandan.domain.executor.ThreadExecutor;
 import info.xudshen.jandan.domain.interactor.DoPostComment;
 import info.xudshen.jandan.domain.interactor.GetPostComment;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
+import info.xudshen.jandan.domain.interactor.PostDuoshuoComment;
 import info.xudshen.jandan.domain.interactor.UseCase;
+import info.xudshen.jandan.domain.repository.CommentRepository;
 import info.xudshen.jandan.domain.repository.PostRepository;
 import info.xudshen.jandan.internal.di.PerActivity;
 
@@ -94,5 +96,13 @@ public class ActivityModule {
     UseCase provideDoPostCommentUseCase(PostRepository postRepository,
                                         ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         return new DoPostComment(postRepository, threadExecutor, postExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("postDuoshuoComment")
+    UseCase providePostDuoshuoCommentUseCase(CommentRepository commentRepository,
+                                             ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+        return new PostDuoshuoComment(commentRepository, threadExecutor, postExecutionThread);
     }
 }

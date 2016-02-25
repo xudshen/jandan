@@ -51,6 +51,8 @@ public class PicListResponse {
             this.setPicCount(Long.valueOf(urlList.size()));
             this.setPicFirst(HtmlUtils.thumb(urlList.get(0)));
 
+            this.setCommentCount(0l);
+
             this.setHasGif(false);
             for (String url : urlList) {
                 if (url.endsWith(".gif")) {

@@ -8,6 +8,8 @@ import com.google.gson.annotations.Expose;
 public class CommonResponse {
     @Expose
     private String status;
+    @Expose
+    private Integer code;
 
     public CommonResponse() {
     }
@@ -22,5 +24,9 @@ public class CommonResponse {
 
     public boolean isOk() {
         return status != null && status.equals("ok");
+    }
+
+    public boolean isCode0() {
+        return code == 0;
     }
 }

@@ -131,6 +131,8 @@ public class VideoListResponse {
         }
 
         public VideoItem getVideoItem() {
+            setCommentCount(0l);
+
             if (videos != null && videos.size() > 0) {
                 setVideoThumbnail(videos.get(0).thumbnail);
                 setVideoTitle(videos.get(0).title);

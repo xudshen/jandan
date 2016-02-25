@@ -40,6 +40,7 @@ import javax.inject.Named;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.data.constants.Constants;
 import info.xudshen.jandan.domain.enums.CommentAction;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.domain.interactor.UseCase;
@@ -592,7 +593,9 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
                         realComment = realComment.replace("@" + commentAction.getParentName(),
                                 String.format("@<a href=\"%s\">%s</a>", commentAction.getParentId(), commentAction.getParentName()));
                     } else if (commentAction.getType() == CommentAction.ActionType.Duoshuo) {
-                        duoshuoParentId = commentAction.getParentId();
+                        if (realComment.contains("@" + commentAction.getParentName())) {
+                            duoshuoParentId = commentAction.getParentId();
+                        }
                     }
                 }
                 logger.info("send:{}[{},{}] to:{}", realComment,
@@ -612,6 +615,12 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
                     case SimpleJoke:
                     case SimpleVideo: {
                         //call other
+                        ItemReaderActivity.this.doCommentPresenter.postDuoshuoComment(
+                                Constants.THREAD_PREFIX + currentItemInfo.getAdapterItemId(currentPosition),
+                                commentAreaName.getText().toString(),
+                                commentAreaEmail.getText().toString(),
+                                realComment,
+                                duoshuoParentId);
                         break;
                     }
                 }

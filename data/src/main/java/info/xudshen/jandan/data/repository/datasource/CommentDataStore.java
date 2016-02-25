@@ -12,4 +12,10 @@ public interface CommentDataStore {
     Observable<List<DuoshuoComment>> commentList(String threadKey);
 
     Observable<List<DuoshuoComment>> commentListNext(String threadKey);
+
+    Observable<Boolean> postDuoshuoComment(String threadKey,
+                                           String authorName,
+                                           String authorEmail,
+                                           String message,
+                                           String parentId);
 }

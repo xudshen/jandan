@@ -31,4 +31,11 @@ public class CommentDataRepository implements CommentRepository {
     public Observable<List<DuoshuoComment>> commentListNext(String threadKey) {
         return this.commentDataStoreFactory.createCloudDataStore().commentListNext(threadKey);
     }
+
+    @Override
+    public Observable<Boolean> postDuoshuoComment(String threadKey, String authorName, String authorEmail, String message, String parentId) {
+        return this.commentDataStoreFactory.createCloudDataStore().postDuoshuoComment(
+                threadKey, authorName, authorEmail, message, parentId
+        );
+    }
 }

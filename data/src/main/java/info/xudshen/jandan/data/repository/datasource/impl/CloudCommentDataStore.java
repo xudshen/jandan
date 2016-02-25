@@ -8,6 +8,7 @@ import java.util.List;
 
 import info.xudshen.jandan.data.api.ICommentService;
 import info.xudshen.jandan.data.api.response.CommentListResponse;
+import info.xudshen.jandan.data.api.response.CommonResponse;
 import info.xudshen.jandan.data.constants.Constants;
 import info.xudshen.jandan.data.dao.DuoshuoCommentDao;
 import info.xudshen.jandan.data.dao.MetaDao;
@@ -89,5 +90,11 @@ public class CloudCommentDataStore implements CommentDataStore {
                         this.metaDao.update(commentPage);
                     }
                 });
+    }
+
+    @Override
+    public Observable<Boolean> postDuoshuoComment(String threadKey, String authorName, String authorEmail, String message, String parentId) {
+        return this.commentService.postDuoshuoComment(threadKey, authorName, authorEmail,
+                message, parentId).map(CommonResponse::isCode0);
     }
 }

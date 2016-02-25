@@ -41,6 +41,7 @@ public class JokeListResponse {
         }
 
         public JokeItem getJokeItem() {
+            this.setCommentCount(0l);
             return this;
         }
     }
