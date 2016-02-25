@@ -20,6 +20,7 @@ import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.google.common.base.Strings;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
@@ -92,9 +93,11 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
     @Bind(R.id.comment_area_content_layout)
     TextInputLayout commentAreaContentLayout;
     @Bind(R.id.comment_fab)
-    com.github.clans.fab.FloatingActionButton commentFab;
+    FloatingActionButton commentFab;
     @Bind(R.id.comment_send_fab)
     FloatingActionButton commentSendFab;
+    @Bind(R.id.comment_send_progress)
+    ProgressBar commentSendProgress;
 
     private PostComponent postComponent;
     private PicComponent picComponent;
@@ -197,7 +200,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
         commentFab.setImageDrawable(new IconicsDrawable(this)
                 .icon(GoogleMaterial.Icon.gmd_edit)
                 .color(getResources().getColor(R.color.md_white_1000))
-                .sizeDp(16)
+                .sizeDp(12)
                 .paddingDp(2));
 
         commentSendFab.setImageDrawable(new IconicsDrawable(this)
@@ -287,13 +290,13 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
     @Override
     public void showLoading() {
         isSendingComment = true;
-        commentFab.setIndeterminate(true);
+        commentSendProgress.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
         isSendingComment = false;
-        commentFab.setIndeterminate(false);
+        commentSendProgress.setVisibility(View.GONE);
     }
 
     @Override
