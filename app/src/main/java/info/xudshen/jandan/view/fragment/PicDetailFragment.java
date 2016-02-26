@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ import info.xudshen.jandan.domain.model.FavoItem;
 import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.presenter.PicDetailPresenter;
+import info.xudshen.jandan.utils.ClipboardHelper;
 import info.xudshen.jandan.view.DataDetailView;
 import info.xudshen.jandan.view.model.CommentDialogModel;
 import info.xudshen.jandan.view.model.DuoshuoCommentDialogModel;
@@ -214,6 +216,7 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
                             .create();
 
                     viewDataBinding.getRoot().findViewById(R.id.comment_copy_btn).setOnClickListener(v1 -> {
+                        ClipboardHelper.copy(getContext(), duoshuoComment.getMessage());
                         alertDialog.hide();
                     });
                     viewDataBinding.getRoot().findViewById(R.id.comment_reply_btn).setOnClickListener(v1 -> {

@@ -6,6 +6,7 @@ import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.Post;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PostDetailPresenter;
+import info.xudshen.jandan.utils.ClipboardHelper;
 import info.xudshen.jandan.view.DataDetailView;
 import info.xudshen.jandan.view.model.CommentDialogModel;
 import rx.subjects.PublishSubject;
@@ -185,6 +187,7 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
                             .create();
 
                     viewDataBinding.getRoot().findViewById(R.id.comment_copy_btn).setOnClickListener(v1 -> {
+                        ClipboardHelper.copy(getContext(), Html.fromHtml(comment.getContent()).toString());
                         alertDialog.hide();
                     });
                     viewDataBinding.getRoot().findViewById(R.id.comment_reply_btn).setOnClickListener(v1 -> {

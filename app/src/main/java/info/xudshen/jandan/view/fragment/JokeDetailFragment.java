@@ -35,6 +35,7 @@ import info.xudshen.jandan.domain.model.FavoItem;
 import info.xudshen.jandan.domain.model.JokeItem;
 import info.xudshen.jandan.internal.di.components.JokeComponent;
 import info.xudshen.jandan.presenter.JokeDetailPresenter;
+import info.xudshen.jandan.utils.ClipboardHelper;
 import info.xudshen.jandan.view.DataDetailView;
 import info.xudshen.jandan.view.model.DuoshuoCommentDialogModel;
 import rx.subjects.PublishSubject;
@@ -209,6 +210,7 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
                             .create();
 
                     viewDataBinding.getRoot().findViewById(R.id.comment_copy_btn).setOnClickListener(v1 -> {
+                        ClipboardHelper.copy(getContext(), duoshuoComment.getMessage());
                         alertDialog.hide();
                     });
                     viewDataBinding.getRoot().findViewById(R.id.comment_reply_btn).setOnClickListener(v1 -> {
