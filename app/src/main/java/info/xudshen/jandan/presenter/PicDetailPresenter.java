@@ -12,10 +12,13 @@ import javax.inject.Named;
 
 import info.xudshen.jandan.data.constants.Constants;
 import info.xudshen.jandan.data.dao.ModelTrans;
+import info.xudshen.jandan.data.model.observable.JokeItemObservable;
 import info.xudshen.jandan.data.model.observable.PicItemObservable;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.domain.model.DuoshuoComment;
+import info.xudshen.jandan.domain.model.FavoItem;
+import info.xudshen.jandan.domain.model.FavoItemTrans;
 import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.view.DataDetailView;
 import rx.Subscriber;
@@ -107,5 +110,11 @@ public class PicDetailPresenter implements Presenter {
                         PicDetailPresenter.this.dataDetailView.renderItemDetail(picItemObservable);
                     }
                 }, postId);
+    }
+
+    public void initialize(FavoItem favoItem) {
+        PicItemObservable picItemObservable = modelTrans.transPicItem(FavoItemTrans.toPicItem(favoItem));
+        this.dataDetailView.renderItemDetail(picItemObservable);
+        PicDetailPresenter.this.dataDetailView.hideLoading();
     }
 }

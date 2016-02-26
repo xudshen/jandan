@@ -16,6 +16,8 @@ import info.xudshen.jandan.data.model.observable.JokeItemObservable;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.domain.model.DuoshuoComment;
+import info.xudshen.jandan.domain.model.FavoItem;
+import info.xudshen.jandan.domain.model.FavoItemTrans;
 import info.xudshen.jandan.domain.model.JokeItem;
 import info.xudshen.jandan.view.DataDetailView;
 import rx.Subscriber;
@@ -107,5 +109,11 @@ public class JokeDetailPresenter implements Presenter {
                         JokeDetailPresenter.this.dataDetailView.renderItemDetail(jokeItemObservable);
                     }
                 }, postId);
+    }
+
+    public void initialize(FavoItem favoItem) {
+        JokeItemObservable jokeItemObservable = modelTrans.transJokeItem(FavoItemTrans.toJokeItem(favoItem));
+        this.dataDetailView.renderItemDetail(jokeItemObservable);
+        JokeDetailPresenter.this.dataDetailView.hideLoading();
     }
 }

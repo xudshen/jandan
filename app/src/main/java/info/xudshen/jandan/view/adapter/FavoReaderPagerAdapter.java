@@ -21,7 +21,9 @@ import info.xudshen.jandan.domain.model.SimplePost;
 import info.xudshen.jandan.view.LoadDataView;
 import info.xudshen.jandan.view.fragment.BlankFragment;
 import info.xudshen.jandan.view.fragment.JokeDetailFragment;
+import info.xudshen.jandan.view.fragment.PicDetailFragment;
 import info.xudshen.jandan.view.fragment.PostDetailFragment;
+import info.xudshen.jandan.view.fragment.VideoDetailFragment;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -53,13 +55,13 @@ public class FavoReaderPagerAdapter extends FragmentStatePagerAdapter implements
                 return PostDetailFragment.newInstance(FavoItemTrans.toSimplePost(favoItem).getPostId());
             }
             case SimpleJoke: {
-                return JokeDetailFragment.newInstance(FavoItemTrans.toJokeItem(favoItem).getJokeId());
+                return JokeDetailFragment.newInstance(FavoItemTrans.toJokeItem(favoItem).getJokeId(), favoItem);
             }
             case SimplePic: {
-                return JokeDetailFragment.newInstance(FavoItemTrans.toJokeItem(favoItem).getJokeId());
+                return PicDetailFragment.newInstance(FavoItemTrans.toJokeItem(favoItem).getJokeId(), favoItem);
             }
             case SimpleVideo: {
-                return JokeDetailFragment.newInstance(FavoItemTrans.toJokeItem(favoItem).getJokeId());
+                return VideoDetailFragment.newInstance(FavoItemTrans.toJokeItem(favoItem).getJokeId(), favoItem);
             }
         }
         return BlankFragment.newInstance(position);

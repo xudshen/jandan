@@ -33,6 +33,7 @@ import info.xudshen.jandan.databinding.FragmentPicDetailBinding;
 import info.xudshen.jandan.domain.enums.CommentAction;
 import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.DuoshuoComment;
+import info.xudshen.jandan.domain.model.FavoItem;
 import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.presenter.PicDetailPresenter;
@@ -47,10 +48,20 @@ import rx.subjects.PublishSubject;
 public class PicDetailFragment extends BaseFragment implements DataDetailView<PicItemObservable> {
     private static final Logger logger = LoggerFactory.getLogger(PicDetailFragment.class);
     public static final String ARG_PIC_ID = "ARG_PIC_ID";
+    public static final String ARG_FAVO_ITEM = "ARG_FAVO_ITEM";
 
     public static PicDetailFragment newInstance(Long picId) {
         Bundle args = new Bundle();
         args.putLong(ARG_PIC_ID, picId);
+        PicDetailFragment fragment = new PicDetailFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static PicDetailFragment newInstance(Long picId, FavoItem favoItem) {
+        Bundle args = new Bundle();
+        args.putLong(ARG_PIC_ID, picId);
+        args.putSerializable(ARG_FAVO_ITEM, favoItem);
         PicDetailFragment fragment = new PicDetailFragment();
         fragment.setArguments(args);
         return fragment;
@@ -65,12 +76,16 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
 
     private boolean isDataLoaded = false;
     private Long picId;
+    private FavoItem favoItem;
     private FragmentPicDetailBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         picId = getArguments().getLong(ARG_PIC_ID);
+        if (getArguments().containsKey(ARG_FAVO_ITEM)) {
+            favoItem = (FavoItem) getArguments().getSerializable(ARG_FAVO_ITEM);
+        }
     }
 
     @Override
@@ -102,7 +117,11 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
         super.onViewCreated(view, savedInstanceState);
         this.picDetailPresenter.setView(this);
         if (!isDataLoaded && getUserVisibleHint()) {
-            this.picDetailPresenter.initialize(picId);
+            if (favoItem == null) {
+                this.picDetailPresenter.initialize(picId);
+            } else {
+                this.picDetailPresenter.initialize(favoItem);
+            }
         }
     }
 
@@ -130,7 +149,11 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
         if (isVisibleToUser) {
             if (getView() != null && !isDataLoaded) {
                 isDataLoaded = true;
-                this.picDetailPresenter.initialize(picId);
+                if (favoItem == null) {
+                    this.picDetailPresenter.initialize(picId);
+                } else {
+                    this.picDetailPresenter.initialize(favoItem);
+                }
             }
         }
     }

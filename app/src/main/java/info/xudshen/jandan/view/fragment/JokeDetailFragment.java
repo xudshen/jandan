@@ -31,6 +31,7 @@ import info.xudshen.jandan.data.model.observable.JokeItemObservable;
 import info.xudshen.jandan.databinding.FragmentJokeDetailBinding;
 import info.xudshen.jandan.domain.enums.CommentAction;
 import info.xudshen.jandan.domain.model.DuoshuoComment;
+import info.xudshen.jandan.domain.model.FavoItem;
 import info.xudshen.jandan.domain.model.JokeItem;
 import info.xudshen.jandan.internal.di.components.JokeComponent;
 import info.xudshen.jandan.presenter.JokeDetailPresenter;
@@ -44,10 +45,20 @@ import rx.subjects.PublishSubject;
 public class JokeDetailFragment extends BaseFragment implements DataDetailView<JokeItemObservable> {
     private static final Logger logger = LoggerFactory.getLogger(JokeDetailFragment.class);
     public static final String ARG_PIC_ID = "ARG_PIC_ID";
+    public static final String ARG_FAVO_ITEM = "ARG_FAVO_ITEM";
 
     public static JokeDetailFragment newInstance(Long jokeId) {
         Bundle args = new Bundle();
         args.putLong(ARG_PIC_ID, jokeId);
+        JokeDetailFragment fragment = new JokeDetailFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static JokeDetailFragment newInstance(Long jokeId, FavoItem favoItem) {
+        Bundle args = new Bundle();
+        args.putLong(ARG_PIC_ID, jokeId);
+        args.putSerializable(ARG_FAVO_ITEM, favoItem);
         JokeDetailFragment fragment = new JokeDetailFragment();
         fragment.setArguments(args);
         return fragment;
@@ -62,12 +73,16 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
 
     private boolean isDataLoaded = false;
     private Long jokeId;
+    private FavoItem favoItem;
     private FragmentJokeDetailBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         jokeId = getArguments().getLong(ARG_PIC_ID);
+        if (getArguments().containsKey(ARG_FAVO_ITEM)) {
+            favoItem = (FavoItem) getArguments().getSerializable(ARG_FAVO_ITEM);
+        }
     }
 
     @Override
@@ -99,7 +114,11 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
         super.onViewCreated(view, savedInstanceState);
         this.jokeDetailPresenter.setView(this);
         if (!isDataLoaded && getUserVisibleHint()) {
-            this.jokeDetailPresenter.initialize(jokeId);
+            if (favoItem == null) {
+                this.jokeDetailPresenter.initialize(jokeId);
+            } else {
+                this.jokeDetailPresenter.initialize(favoItem);
+            }
         }
     }
 
@@ -127,7 +146,11 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
         if (isVisibleToUser) {
             if (getView() != null && !isDataLoaded) {
                 isDataLoaded = true;
-                this.jokeDetailPresenter.initialize(jokeId);
+                if (favoItem == null) {
+                    this.jokeDetailPresenter.initialize(jokeId);
+                } else {
+                    this.jokeDetailPresenter.initialize(favoItem);
+                }
             }
         }
     }

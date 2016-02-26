@@ -31,6 +31,7 @@ import info.xudshen.jandan.data.model.observable.VideoItemObservable;
 import info.xudshen.jandan.databinding.FragmentVideoDetailBinding;
 import info.xudshen.jandan.domain.enums.CommentAction;
 import info.xudshen.jandan.domain.model.DuoshuoComment;
+import info.xudshen.jandan.domain.model.FavoItem;
 import info.xudshen.jandan.domain.model.VideoItem;
 import info.xudshen.jandan.internal.di.components.VideoComponent;
 import info.xudshen.jandan.presenter.VideoDetailPresenter;
@@ -44,10 +45,20 @@ import rx.subjects.PublishSubject;
 public class VideoDetailFragment extends BaseFragment implements DataDetailView<VideoItemObservable> {
     private static final Logger logger = LoggerFactory.getLogger(VideoDetailFragment.class);
     public static final String ARG_PIC_ID = "ARG_PIC_ID";
+    public static final String ARG_FAVO_ITEM = "ARG_FAVO_ITEM";
 
     public static VideoDetailFragment newInstance(Long videoId) {
         Bundle args = new Bundle();
         args.putLong(ARG_PIC_ID, videoId);
+        VideoDetailFragment fragment = new VideoDetailFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static VideoDetailFragment newInstance(Long videoId, FavoItem favoItem) {
+        Bundle args = new Bundle();
+        args.putLong(ARG_PIC_ID, videoId);
+        args.putSerializable(ARG_FAVO_ITEM, favoItem);
         VideoDetailFragment fragment = new VideoDetailFragment();
         fragment.setArguments(args);
         return fragment;
@@ -62,12 +73,16 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
 
     private boolean isDataLoaded = false;
     private Long videoId;
+    private FavoItem favoItem;
     private FragmentVideoDetailBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         videoId = getArguments().getLong(ARG_PIC_ID);
+        if (getArguments().containsKey(ARG_FAVO_ITEM)) {
+            favoItem = (FavoItem) getArguments().getSerializable(ARG_FAVO_ITEM);
+        }
     }
 
     @Override
@@ -99,7 +114,11 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
         super.onViewCreated(view, savedInstanceState);
         this.videoDetailPresenter.setView(this);
         if (!isDataLoaded && getUserVisibleHint()) {
-            this.videoDetailPresenter.initialize(videoId);
+            if (favoItem == null) {
+                this.videoDetailPresenter.initialize(videoId);
+            } else {
+                this.videoDetailPresenter.initialize(favoItem);
+            }
         }
     }
 
@@ -127,7 +146,11 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
         if (isVisibleToUser) {
             if (getView() != null && !isDataLoaded) {
                 isDataLoaded = true;
-                this.videoDetailPresenter.initialize(videoId);
+                if (favoItem == null) {
+                    this.videoDetailPresenter.initialize(videoId);
+                } else {
+                    this.videoDetailPresenter.initialize(favoItem);
+                }
             }
         }
     }
