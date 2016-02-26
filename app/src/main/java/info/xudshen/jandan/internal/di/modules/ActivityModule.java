@@ -77,11 +77,9 @@ public class ActivityModule {
                 .withAccountHeader(headerResult)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(R.string.drawer_home)
-                                .withIdentifier(R.id.drawer_home).withIcon(FontAwesome.Icon.faw_newspaper_o),
-                        new PrimaryDrawerItem().withName(R.string.drawer_read_later)
-                                .withIdentifier(R.id.drawer_read_later).withIcon(GoogleMaterial.Icon.gmd_photo),
+                                .withIdentifier(R.id.drawer_home).withIcon(FontAwesome.Icon.faw_home),
                         new PrimaryDrawerItem().withName(R.string.drawer_favorites)
-                                .withIdentifier(R.id.drawer_favorites).withIcon(GoogleMaterial.Icon.gmd_face),
+                                .withIdentifier(R.id.drawer_favorites).withIcon(GoogleMaterial.Icon.gmd_favorite),
                         new DividerDrawerItem(),
                         new PrimaryDrawerItem().withName(R.string.drawer_preference)
                                 .withIdentifier(R.id.drawer_preference).withIcon(GoogleMaterial.Icon.gmd_settings),

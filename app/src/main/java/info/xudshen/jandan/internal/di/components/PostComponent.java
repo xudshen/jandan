@@ -5,10 +5,10 @@ import info.xudshen.jandan.internal.di.PerActivity;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
 import info.xudshen.jandan.internal.di.modules.PostModule;
 import info.xudshen.jandan.view.adapter.PostReaderPagerAdapter;
+import info.xudshen.jandan.view.fragment.FavoFragment;
 import info.xudshen.jandan.view.fragment.HomeFragment;
 import info.xudshen.jandan.view.fragment.PostDetailFragment;
 import info.xudshen.jandan.view.fragment.PostListFragment;
-import info.xudshen.jandan.view.fragment.ReadLaterFragment;
 
 /**
  * Created by xudshen on 16/1/7.
@@ -23,6 +23,4 @@ public interface PostComponent {
     void inject(PostDetailFragment postDetailFragment);
 
     void inject(PostReaderPagerAdapter postReaderPagerAdapter);
-
-    void inject(ReadLaterFragment readLaterFragment);
 }

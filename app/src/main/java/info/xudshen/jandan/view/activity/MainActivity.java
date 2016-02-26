@@ -16,17 +16,19 @@ import info.xudshen.jandan.R;
 import info.xudshen.jandan.internal.di.HasComponents;
 import info.xudshen.jandan.internal.di.components.ActivityComponent;
 import info.xudshen.jandan.internal.di.components.DaggerActivityComponent;
+import info.xudshen.jandan.internal.di.components.DaggerFavoComponent;
 import info.xudshen.jandan.internal.di.components.DaggerJokeComponent;
 import info.xudshen.jandan.internal.di.components.DaggerPicComponent;
 import info.xudshen.jandan.internal.di.components.DaggerPostComponent;
 import info.xudshen.jandan.internal.di.components.DaggerVideoComponent;
+import info.xudshen.jandan.internal.di.components.FavoComponent;
 import info.xudshen.jandan.internal.di.components.JokeComponent;
 import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.internal.di.components.VideoComponent;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
 import info.xudshen.jandan.view.fragment.HomeFragment;
-import info.xudshen.jandan.view.fragment.ReadLaterFragment;
+import info.xudshen.jandan.view.fragment.FavoFragment;
 
 public class MainActivity extends BaseActivity implements HasComponents, HasDrawer {
     private static final Logger logger = LoggerFactory.getLogger(MainActivity.class);
@@ -37,6 +39,7 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
     private PicComponent picComponent;
     private JokeComponent jokeComponent;
     private VideoComponent videoComponent;
+    private FavoComponent favoComponent;
     private ActivityComponent activityComponent;
 
     @Override
@@ -67,6 +70,11 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
                 .applicationComponent(getApplicationComponent())
                 .activityModule(activityModule)
                 .build();
+
+        favoComponent = DaggerFavoComponent.builder()
+                .applicationComponent(getApplicationComponent())
+                .activityModule(activityModule)
+                .build();
     }
 
     @Override
@@ -85,12 +93,9 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
                     setTitle(R.string.drawer_home);
                     break;
                 }
-                case R.id.drawer_read_later: {
-                    this.replaceFragment(R.id.activity_main_content, ReadLaterFragment.newInstance(90));
-                    setTitle(R.string.drawer_read_later);
-                    break;
-                }
                 case R.id.drawer_favorites: {
+                    this.replaceFragment(R.id.activity_main_content, FavoFragment.newInstance());
+                    setTitle(R.string.drawer_favorites);
                     break;
                 }
                 case R.id.drawer_preference: {
@@ -169,6 +174,9 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
         }
         if (componentType.isInstance(this.videoComponent)) {
             return (C) this.videoComponent;
+        }
+        if (componentType.isInstance(this.favoComponent)) {
+            return (C) this.favoComponent;
         }
         throw new IllegalStateException("componentType=" + componentType.getSimpleName() + " not found");
     }
