@@ -11,13 +11,13 @@ import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
-import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
+import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVAdapter;
 import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
 import info.xudshen.jandan.BR;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.dao.FavoItemDao;
-import info.xudshen.jandan.data.dao.PicItemDao;
-import info.xudshen.jandan.domain.model.PicItem;
+import info.xudshen.jandan.domain.model.FavoItem;
+import info.xudshen.jandan.domain.model.FavoItemTrans;
 import info.xudshen.jandan.internal.di.PerActivity;
 
 /**
@@ -33,17 +33,56 @@ public class FavoModule {
     @Provides
     @PerActivity
     @Named("favoListAdapter")
-    DDBindableCursorLoaderRVHeaderAdapter providePostListAdapter(Activity activity, PicItemDao picItemDao) {
-        return new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
+    DDBindableCursorLoaderRVAdapter providePostListAdapter(Activity activity, FavoItemDao favoItemDao) {
+        return new DDBindableCursorLoaderRVAdapter.Builder<DDBindableViewHolder>()
                 .cursorLoader(activity, FavoItemDao.CONTENT_URI, null, null, null, FavoItemDao.Properties.AddDate.columnName + " desc")
                 .itemViewHolderCreator(((inflater1, viewType1, parent1) -> {
                     ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
                     return new DDBindableViewHolder(viewDataBinding);
                 }))
-                .itemLayoutSelector((position, cursor) -> R.layout.pic_card_view)
+                .itemLayoutSelector((position, cursor) -> {
+                    FavoItem favoItem = favoItemDao.loadEntity(cursor);
+                    switch (favoItem.getType()) {
+                        case SimplePost: {
+                            return R.layout.post_card_view;
+                        }
+                        case SimpleJoke: {
+                            return R.layout.joke_card_view;
+                        }
+                        case SimpleVideo: {
+                            return R.layout.video_card_view;
+                        }
+                        case SimplePic: {
+                            return R.layout.pic_card_view;
+                        }
+                        default: {
+                            return R.layout.fragment_blank;
+                        }
+                    }
+                })
                 .itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {
-                    PicItem picItem = picItemDao.loadEntity(cursor);
-                    viewDataBinding.setVariable(BR.item, picItem);
+                    FavoItem favoItem = favoItemDao.loadEntity(cursor);
+                    switch (favoItem.getType()) {
+                        case SimplePost: {
+                            viewDataBinding.setVariable(BR.item, FavoItemTrans.toSimplePost(favoItem));
+                            break;
+                        }
+                        case SimpleJoke: {
+                            viewDataBinding.setVariable(BR.item, FavoItemTrans.toJokeItem(favoItem));
+                            break;
+                        }
+                        case SimpleVideo: {
+                            viewDataBinding.setVariable(BR.item, FavoItemTrans.toVideoItem(favoItem));
+                            break;
+                        }
+                        case SimplePic: {
+                            viewDataBinding.setVariable(BR.item, FavoItemTrans.toPicItem(favoItem));
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                    }
                 })
                 .build();
     }

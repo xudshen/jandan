@@ -68,6 +68,7 @@ import info.xudshen.jandan.view.adapter.PicReaderPagerAdapter;
 import info.xudshen.jandan.view.adapter.PostReaderPagerAdapter;
 import info.xudshen.jandan.view.adapter.VideoReaderPagerAdapter;
 import info.xudshen.jandan.view.transition.StackPageTransformer;
+import rx.Observable;
 import rx.Subscription;
 import rx.subjects.PublishSubject;
 
@@ -309,6 +310,11 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
                         item.setEnabled(true);
                         isCurrentFavo = !success;
                         refreshIcon();
+                    }
+
+                    @Override
+                    public <T> Observable.Transformer<T, T> bindToLifecycle() {
+                        return null;
                     }
                 });
                 this.doCommentPresenter.deleteFavoItem(currentItemInfo.getAdapterItemType(currentPosition),
