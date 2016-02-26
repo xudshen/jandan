@@ -43,6 +43,7 @@ public class JokeListFragment extends BaseFragment implements DataListView {
     @Named("jokeListAdapter")
     DDBindableCursorLoaderRVHeaderAdapter jokeListAdapter;
 
+    private boolean isDataLoaded = false;
     private FragmentJokeListBinding binding;
 
     public JokeListFragment() {
@@ -91,7 +92,9 @@ public class JokeListFragment extends BaseFragment implements DataListView {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.jokeListPresenter.setView(this);
-        this.jokeListPresenter.initialize();
+        if (!isDataLoaded && getUserVisibleHint()) {
+            this.jokeListPresenter.initialize();
+        }
     }
 
     @Override
@@ -115,6 +118,17 @@ public class JokeListFragment extends BaseFragment implements DataListView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if (getView() != null && !isDataLoaded) {
+                isDataLoaded = true;
+                this.jokeListPresenter.initialize();
+            }
+        }
     }
 
     //<editor-fold desc="Called by Presenter">

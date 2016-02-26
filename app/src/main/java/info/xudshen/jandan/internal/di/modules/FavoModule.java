@@ -3,6 +3,11 @@ package info.xudshen.jandan.internal.di.modules;
 import android.app.Activity;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.support.design.widget.FloatingActionButton;
+import android.view.View;
+
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +43,31 @@ public class FavoModule {
                 .cursorLoader(activity, FavoItemDao.CONTENT_URI, null, null, null, FavoItemDao.Properties.AddDate.columnName + " desc")
                 .itemViewHolderCreator(((inflater1, viewType1, parent1) -> {
                     ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
+                    switch (viewType1) {
+                        case R.layout.post_card_view: {
+                            viewDataBinding.getRoot().findViewById(R.id.post_card_more_btn).setVisibility(View.GONE);
+                            break;
+                        }
+                        case R.layout.pic_card_view: {
+                            viewDataBinding.getRoot().findViewById(R.id.pic_card_more_btn).setVisibility(View.GONE);
+                            break;
+                        }
+                        case R.layout.joke_card_view: {
+                            viewDataBinding.getRoot().findViewById(R.id.pic_card_more_btn).setVisibility(View.GONE);
+                            break;
+                        }
+                        case R.layout.video_card_view: {
+                            viewDataBinding.getRoot().findViewById(R.id.pic_card_more_btn).setVisibility(View.GONE);
+                            FloatingActionButton button = (FloatingActionButton) viewDataBinding.getRoot().findViewById(R.id.play_buttom);
+                            button.setImageDrawable(new IconicsDrawable(activity)
+                                    .icon(GoogleMaterial.Icon.gmd_play_circle_filled)
+                                    .color(activity.getResources().getColor(R.color.md_white_1000))
+                                    .sizeDp(20)
+                                    .paddingDp(2));
+                            break;
+                        }
+                    }
+
                     return new DDBindableViewHolder(viewDataBinding);
                 }))
                 .itemLayoutSelector((position, cursor) -> {

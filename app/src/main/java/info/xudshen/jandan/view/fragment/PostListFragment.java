@@ -40,6 +40,7 @@ public class PostListFragment extends BaseFragment implements DataListView {
     @Named("postListAdapter")
     DDBindableCursorLoaderRVHeaderAdapter postListAdapter;
 
+    private boolean isDataLoaded = false;
     private FragmentPostListBinding binding;
 
     public PostListFragment() {
@@ -92,7 +93,9 @@ public class PostListFragment extends BaseFragment implements DataListView {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.postListPresenter.setView(this);
-        this.postListPresenter.initialize();
+        if (!isDataLoaded && getUserVisibleHint()) {
+            this.postListPresenter.initialize();
+        }
     }
 
     @Override
@@ -128,6 +131,17 @@ public class PostListFragment extends BaseFragment implements DataListView {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if (getView() != null && !isDataLoaded) {
+                isDataLoaded = true;
+                this.postListPresenter.initialize();
+            }
+        }
     }
 
     //<editor-fold desc="Called by Presenter"

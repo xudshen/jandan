@@ -43,6 +43,7 @@ public class VideoListFragment extends BaseFragment implements DataListView {
     @Named("videoListAdapter")
     DDBindableCursorLoaderRVHeaderAdapter videoListAdapter;
 
+    private boolean isDataLoaded = false;
     private FragmentVideoListBinding binding;
 
     public VideoListFragment() {
@@ -91,7 +92,9 @@ public class VideoListFragment extends BaseFragment implements DataListView {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.videoListPresenter.setView(this);
-        this.videoListPresenter.initialize();
+        if (!isDataLoaded && getUserVisibleHint()) {
+            this.videoListPresenter.initialize();
+        }
     }
 
     @Override
@@ -115,6 +118,17 @@ public class VideoListFragment extends BaseFragment implements DataListView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if (getView() != null && !isDataLoaded) {
+                isDataLoaded = true;
+                this.videoListPresenter.initialize();
+            }
+        }
     }
 
     //<editor-fold desc="Called by Presenter">

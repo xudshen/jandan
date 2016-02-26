@@ -45,6 +45,7 @@ public class PicListFragment extends BaseFragment implements DataListView {
     @Named("picListAdapter")
     DDBindableCursorLoaderRVHeaderAdapter picListAdapter;
 
+    private boolean isDataLoaded = false;
     private FragmentPicListBinding binding;
 
     public PicListFragment() {
@@ -93,7 +94,9 @@ public class PicListFragment extends BaseFragment implements DataListView {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.picListPresenter.setView(this);
-        this.picListPresenter.initialize();
+        if (!isDataLoaded && getUserVisibleHint()) {
+            this.picListPresenter.initialize();
+        }
     }
 
     @Override
@@ -117,6 +120,17 @@ public class PicListFragment extends BaseFragment implements DataListView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if (getView() != null && !isDataLoaded) {
+                isDataLoaded = true;
+                this.picListPresenter.initialize();
+            }
+        }
     }
 
     //<editor-fold desc="Called by Presenter">
