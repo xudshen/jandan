@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -642,38 +643,9 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
                 checkCommentAreaContent(commentAreaContent.getText().toString());
     }
 
-    private void registerCommentAction() {
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                currentPosition = position;
-                clearOldCommentInfo();
-                clearOldFavoInfo();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
-        commentMask.setOnClickListener(v -> {
-            if (commentArea.getVisibility() == View.VISIBLE) {
-                hideCommentArea();
-            }
-        });
-        commentFab.setOnClickListener(v -> {
-            if (!isSendingComment && commentArea.getVisibility() == View.INVISIBLE) {
-                showCommentArea(true);
-            }
-        });
-        commentSendFab.setOnClickListener(v -> {
-            if (commentArea.getVisibility() == View.VISIBLE && checkAllForm()) {
+    private void startSendComment() {
+        if (commentArea.getVisibility() == View.VISIBLE) {
+            if (checkAllForm()) {
                 String realComment = commentAreaContent.getText().toString();
                 String duoshuoParentId = "";
                 for (String key : commentActionHashMap.keySet()) {
@@ -723,7 +695,52 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
                     }
                 }
                 hideCommentArea();
+            } else {
+                autoCommentAreaFocus();
             }
+        }
+    }
+
+    private void registerCommentAction() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                currentPosition = position;
+                clearOldCommentInfo();
+                clearOldFavoInfo();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        commentMask.setOnClickListener(v -> {
+            if (commentArea.getVisibility() == View.VISIBLE) {
+                hideCommentArea();
+            }
+        });
+        commentFab.setOnClickListener(v -> {
+            if (!isSendingComment && commentArea.getVisibility() == View.INVISIBLE) {
+                showCommentArea(true);
+            }
+        });
+        commentSendFab.setOnClickListener(v -> {
+            startSendComment();
+        });
+        commentAreaContent.setOnEditorActionListener((v, actionId, event) -> {
+            //will never be called?
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                startSendComment();
+                return true;
+            }
+            return false;
         });
         commentActionSubjectSubscription = commentActionSubject.subscribe(commentAction -> {
             logger.info("action:{},{} current:{}", commentAction.getParentId(), commentAction.getParentName(), commentAreaContent.getText().toString());
