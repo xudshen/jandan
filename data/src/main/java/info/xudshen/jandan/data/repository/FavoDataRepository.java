@@ -38,4 +38,9 @@ public class FavoDataRepository implements FavoRepository {
     public Observable<Boolean> saveFavoItem(FavoItem favoItem) {
         return this.favoDataStoreFactory.createLocalCloudDataStore().saveFavoItem(favoItem);
     }
+
+    @Override
+    public Observable<Boolean> deleteFavoItem(ReaderItemType type, String actualId) {
+        return this.favoDataStoreFactory.createLocalCloudDataStore().deleteFavoItem(type, actualId);
+    }
 }

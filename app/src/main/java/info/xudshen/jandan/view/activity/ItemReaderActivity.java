@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
@@ -59,6 +60,7 @@ import info.xudshen.jandan.internal.di.modules.ActivityModule;
 import info.xudshen.jandan.presenter.DoCommentPresenter;
 import info.xudshen.jandan.utils.HtmlHelper;
 import info.xudshen.jandan.view.ActionView;
+import info.xudshen.jandan.view.DeleteDataView;
 import info.xudshen.jandan.view.SaveDataView;
 import info.xudshen.jandan.view.adapter.IItemInfo;
 import info.xudshen.jandan.view.adapter.JokeReaderPagerAdapter;
@@ -107,6 +109,8 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
 
     private IItemInfo currentItemInfo;
     private int currentPosition;
+    private boolean isCurrentFavo = false;
+    private Drawable favoIcon, favoIconFalse;
 
     @Inject
     PublishSubject<CommentAction> commentActionSubject;
@@ -155,6 +159,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
 
         //do other
         ButterKnife.bind(this);
+        initializeIcon();
 
         ReaderItemType type = (ReaderItemType) getIntent().getExtras().getSerializable(ARG_READER_TYPE);
         switch (type) {
@@ -252,17 +257,21 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
         throw new IllegalStateException("componentType=" + componentType.getSimpleName() + " not found");
     }
 
+    private void initializeIcon() {
+        favoIcon = new IconicsDrawable(this)
+                .icon(FontAwesome.Icon.faw_heart)
+                .color(getResources().getColor(R.color.md_pink_500))
+                .sizeDp(24).paddingDp(2);
+        favoIconFalse = new IconicsDrawable(getApplicationContext())
+                .icon(FontAwesome.Icon.faw_heart)
+                .color(getResources().getColor(R.color.md_white_1000))
+                .sizeDp(24).paddingDp(2);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.item_reader_menu, menu);
-        menu.findItem(R.id.item_reader_menu_favo).setIcon(new IconicsDrawable(this)
-                .icon(FontAwesome.Icon.faw_heart)
-                .color(getResources().getColor(R.color.md_white_1000))
-                .sizeDp(24).paddingDp(2));
-        menu.findItem(R.id.item_reader_menu_later).setIcon(new IconicsDrawable(this)
-                .icon(FontAwesome.Icon.faw_get_pocket)
-                .color(getResources().getColor(R.color.md_white_1000))
-                .sizeDp(24).paddingDp(2));
+        menu.findItem(R.id.item_reader_menu_favo).setIcon(favoIconFalse);
         return true;
     }
 
@@ -271,20 +280,44 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else if (item.getItemId() == R.id.item_reader_menu_favo) {
-            this.doCommentPresenter.setSaveDataView(new SaveDataView() {
-                @Override
-                public void savingData() {
-                    logger.info("saving");
-                }
+            if (isCurrentFavo) {
+                this.doCommentPresenter.setDeleteDataView(new DeleteDataView() {
+                    @Override
+                    public void deletingData() {
+                        logger.info("deleting");
+                        item.setEnabled(false);
+                    }
 
-                @Override
-                public void result(boolean success) {
-                    logger.info("saving:{}", success);
-                }
-            });
-            JokeItem jokeItem = currentItemInfo.getAdapterItem(currentPosition);
-            FavoItem favoItem = FavoItemTrans.fromJokeItem(jokeItem);
-            this.doCommentPresenter.saveFavoItem(favoItem);
+                    @Override
+                    public void result(boolean success) {
+                        logger.info("deleting:{}", success);
+                        item.setEnabled(true);
+                        isCurrentFavo = !success;
+                        item.setIcon(isCurrentFavo ? favoIcon : favoIconFalse);
+                    }
+                });
+                this.doCommentPresenter.deleteFavoItem(currentItemInfo.getAdapterItemType(currentPosition),
+                        currentItemInfo.getAdapterItemId(currentPosition));
+            } else {
+                this.doCommentPresenter.setSaveDataView(new SaveDataView() {
+                    @Override
+                    public void savingData() {
+                        logger.info("saving");
+                        item.setEnabled(false);
+                    }
+
+                    @Override
+                    public void result(boolean success) {
+                        logger.info("saving:{}", success);
+                        item.setEnabled(true);
+                        isCurrentFavo = success;
+                        item.setIcon(isCurrentFavo ? favoIcon : favoIconFalse);
+                    }
+                });
+                JokeItem jokeItem = currentItemInfo.getAdapterItem(currentPosition);
+                FavoItem favoItem = FavoItemTrans.fromJokeItem(jokeItem);
+                this.doCommentPresenter.saveFavoItem(favoItem);
+            }
         }
         return super.onOptionsItemSelected(item);
     }

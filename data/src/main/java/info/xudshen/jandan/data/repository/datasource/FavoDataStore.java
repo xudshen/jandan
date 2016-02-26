@@ -15,4 +15,6 @@ public interface FavoDataStore {
     Observable<FavoItem> favoItem(ReaderItemType type, Long actualId);
 
     Observable<Boolean> saveFavoItem(FavoItem favoItem);
+
+    Observable<Boolean> deleteFavoItem(ReaderItemType type, String actualId);
 }

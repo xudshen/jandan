@@ -24,6 +24,7 @@ import dagger.Provides;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.domain.executor.PostExecutionThread;
 import info.xudshen.jandan.domain.executor.ThreadExecutor;
+import info.xudshen.jandan.domain.interactor.DeleteFavoItem;
 import info.xudshen.jandan.domain.interactor.DoPostComment;
 import info.xudshen.jandan.domain.interactor.PostDuoshuoComment;
 import info.xudshen.jandan.domain.interactor.SaveFavoItem;
@@ -112,5 +113,13 @@ public class ActivityModule {
     UseCase provideSaveFavoItemUseCase(FavoRepository favoRepository,
                                        ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         return new SaveFavoItem(favoRepository, threadExecutor, postExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("deleteFavoItem")
+    UseCase provideDeleteFavoItemUseCase(FavoRepository favoRepository,
+                                         ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+        return new DeleteFavoItem(favoRepository, threadExecutor, postExecutionThread);
     }
 }

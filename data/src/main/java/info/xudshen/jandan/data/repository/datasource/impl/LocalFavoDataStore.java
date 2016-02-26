@@ -65,4 +65,34 @@ public class LocalFavoDataStore implements FavoDataStore {
             }
         });
     }
+
+    @Override
+    public Observable<Boolean> deleteFavoItem(ReaderItemType type, String actualId) {
+        return Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                if (!subscriber.isUnsubscribed()) {
+                    if (LocalFavoDataStore.this.favoItemDao.queryBuilder()
+                            .where(FavoItemDao.Properties.Type.eq(type),
+                                    FavoItemDao.Properties.ActualId.eq(actualId))
+                            .buildCount().forCurrentThread().count() > 0) {
+                        try {
+                            FavoItem favoItem = LocalFavoDataStore.this.favoItemDao.queryBuilder()
+                                    .where(FavoItemDao.Properties.Type.eq(type),
+                                            FavoItemDao.Properties.ActualId.eq(actualId))
+                                    .build().forCurrentThread().unique();
+                            LocalFavoDataStore.this.favoItemDao.delete(favoItem);
+                            subscriber.onNext(true);
+                            subscriber.onCompleted();
+                        } catch (Exception e) {
+                            subscriber.onError(e);
+                        }
+                    } else {
+                        subscriber.onNext(true);
+                        subscriber.onCompleted();
+                    }
+                }
+            }
+        });
+    }
 }
