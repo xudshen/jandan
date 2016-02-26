@@ -8,25 +8,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import de.greenrobot.dao.query.LazyList;
 import info.xudshen.jandan.data.dao.FavoItemDao;
-import info.xudshen.jandan.data.dao.SimplePostDao;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
-import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.model.FavoItem;
 import info.xudshen.jandan.domain.model.FavoItemTrans;
-import info.xudshen.jandan.domain.model.SimplePost;
-import info.xudshen.jandan.view.LoadDataView;
 import info.xudshen.jandan.view.fragment.BlankFragment;
 import info.xudshen.jandan.view.fragment.JokeDetailFragment;
 import info.xudshen.jandan.view.fragment.PicDetailFragment;
 import info.xudshen.jandan.view.fragment.PostDetailFragment;
 import info.xudshen.jandan.view.fragment.VideoDetailFragment;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by xudshen on 16/1/28.

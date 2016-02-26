@@ -12,7 +12,6 @@ import javax.inject.Named;
 
 import info.xudshen.jandan.data.constants.Constants;
 import info.xudshen.jandan.data.dao.ModelTrans;
-import info.xudshen.jandan.data.model.observable.JokeItemObservable;
 import info.xudshen.jandan.data.model.observable.PicItemObservable;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;

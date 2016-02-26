@@ -2,7 +2,6 @@ package info.xudshen.jandan.view.model;
 
 import java.sql.Timestamp;
 
-import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.DuoshuoComment;
 
 /**

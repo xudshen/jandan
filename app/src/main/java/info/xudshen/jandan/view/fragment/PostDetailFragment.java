@@ -27,7 +27,6 @@ import info.xudshen.jandan.data.model.observable.PostObservable;
 import info.xudshen.jandan.databinding.FragmentPostDetailBinding;
 import info.xudshen.jandan.domain.enums.CommentAction;
 import info.xudshen.jandan.domain.model.Comment;
-import info.xudshen.jandan.domain.model.Post;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PostDetailPresenter;
 import info.xudshen.jandan.utils.ClipboardHelper;

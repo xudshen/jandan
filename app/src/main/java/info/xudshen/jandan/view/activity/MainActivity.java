@@ -27,8 +27,8 @@ import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.internal.di.components.VideoComponent;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
-import info.xudshen.jandan.view.fragment.HomeFragment;
 import info.xudshen.jandan.view.fragment.FavoFragment;
+import info.xudshen.jandan.view.fragment.HomeFragment;
 
 public class MainActivity extends BaseActivity implements HasComponents, HasDrawer {
     private static final Logger logger = LoggerFactory.getLogger(MainActivity.class);

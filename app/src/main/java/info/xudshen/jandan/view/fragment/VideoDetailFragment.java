@@ -32,7 +32,6 @@ import info.xudshen.jandan.databinding.FragmentVideoDetailBinding;
 import info.xudshen.jandan.domain.enums.CommentAction;
 import info.xudshen.jandan.domain.model.DuoshuoComment;
 import info.xudshen.jandan.domain.model.FavoItem;
-import info.xudshen.jandan.domain.model.VideoItem;
 import info.xudshen.jandan.internal.di.components.VideoComponent;
 import info.xudshen.jandan.presenter.VideoDetailPresenter;
 import info.xudshen.jandan.utils.ClipboardHelper;

@@ -12,12 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.google.common.base.Splitter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -32,7 +28,6 @@ import info.xudshen.jandan.databinding.FragmentJokeDetailBinding;
 import info.xudshen.jandan.domain.enums.CommentAction;
 import info.xudshen.jandan.domain.model.DuoshuoComment;
 import info.xudshen.jandan.domain.model.FavoItem;
-import info.xudshen.jandan.domain.model.JokeItem;
 import info.xudshen.jandan.internal.di.components.JokeComponent;
 import info.xudshen.jandan.presenter.JokeDetailPresenter;
 import info.xudshen.jandan.utils.ClipboardHelper;
