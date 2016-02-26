@@ -151,7 +151,7 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
                         ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
                         return new DDBindableViewHolder(viewDataBinding);
                     }))
-                    .itemLayoutSelector(position -> R.layout.post_comment_item)
+                    .itemLayoutSelector((position, cursor) -> R.layout.post_comment_item)
                     .itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {
                         Comment comment = commentDao.loadEntity(cursor);
                         viewDataBinding.setVariable(BR.comment, comment);

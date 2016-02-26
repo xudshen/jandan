@@ -158,7 +158,7 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
                         ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
                         return new DDBindableViewHolder(viewDataBinding);
                     }))
-                    .itemLayoutSelector(position -> R.layout.pic_comment_item)
+                    .itemLayoutSelector((position, cursor) -> R.layout.pic_comment_item)
                     .itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {
                         DuoshuoComment duoshuoComment = duoshuoCommentDao.loadEntity(cursor);
                         viewDataBinding.setVariable(BR.comment, duoshuoComment);

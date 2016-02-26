@@ -40,7 +40,7 @@ public class FavoModule {
                     ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
                     return new DDBindableViewHolder(viewDataBinding);
                 }))
-                .itemLayoutSelector(position -> R.layout.pic_card_view)
+                .itemLayoutSelector((position, cursor) -> R.layout.pic_card_view)
                 .itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {
                     PicItem picItem = picItemDao.loadEntity(cursor);
                     viewDataBinding.setVariable(BR.item, picItem);

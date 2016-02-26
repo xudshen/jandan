@@ -53,7 +53,7 @@ public class PostModule {
                     ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
                     return new DDBindableViewHolder(viewDataBinding);
                 }))
-                .itemLayoutSelector(position -> R.layout.post_card_view)
+                .itemLayoutSelector((position, cursor) -> R.layout.post_card_view)
                 .itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {
                     SimplePost simplePost = simplePostDao.loadEntity(cursor);
                     viewDataBinding.setVariable(BR.item, simplePost);

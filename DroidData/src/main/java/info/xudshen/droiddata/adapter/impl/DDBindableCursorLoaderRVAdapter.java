@@ -70,7 +70,13 @@ public class DDBindableCursorLoaderRVAdapter<VH extends RecyclerView.ViewHolder>
         if (itemLayoutSelector == null) {
             throw new IllegalArgumentException("itemLayoutSelector should not be null");
         }
-        return itemLayoutSelector.getItemLayoutRes(position);
+        if (!mDataValid) {
+            throw new IllegalStateException("this should only be called when the cursor is valid");
+        }
+        if (!mCursor.moveToPosition(position)) {
+            throw new IllegalStateException("couldn't move cursor to position " + position);
+        }
+        return itemLayoutSelector.getItemLayoutRes(position, mCursor);
     }
 
     //<editor-fold desc="Getter & Setter">
@@ -104,7 +110,7 @@ public class DDBindableCursorLoaderRVAdapter<VH extends RecyclerView.ViewHolder>
     }
 
     public interface ItemLayoutSelector {
-        int getItemLayoutRes(int position);
+        int getItemLayoutRes(int position, Cursor cursor);
     }
 
     public interface ItemViewDataBindingVariableAction {

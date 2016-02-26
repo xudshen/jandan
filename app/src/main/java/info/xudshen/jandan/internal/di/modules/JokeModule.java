@@ -53,7 +53,7 @@ public class JokeModule {
                     ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
                     return new DDBindableViewHolder(viewDataBinding);
                 }))
-                .itemLayoutSelector(position -> R.layout.joke_card_view)
+                .itemLayoutSelector((position, cursor) -> R.layout.joke_card_view)
                 .itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {
                     JokeItem jokeItem = jokeItemDao.loadEntity(cursor);
                     viewDataBinding.setVariable(BR.item, jokeItem);

@@ -63,7 +63,7 @@ public class VideoModule {
                             .paddingDp(2));
                     return new DDBindableViewHolder(viewDataBinding);
                 }))
-                .itemLayoutSelector(position -> R.layout.video_card_view)
+                .itemLayoutSelector((position, cursor) -> R.layout.video_card_view)
                 .itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {
                     VideoItem videoItem = videoItemDao.loadEntity(cursor);
                     viewDataBinding.setVariable(BR.item, videoItem);
