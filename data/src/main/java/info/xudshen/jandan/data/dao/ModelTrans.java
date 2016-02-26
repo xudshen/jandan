@@ -11,6 +11,7 @@ import info.xudshen.jandan.domain.model.SimplePost;
 import info.xudshen.jandan.domain.model.Author;
 import info.xudshen.jandan.domain.model.Category;
 import info.xudshen.jandan.domain.model.Comment;
+import info.xudshen.jandan.domain.model.FavoItem;
 import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.domain.model.JokeItem;
 import info.xudshen.jandan.domain.model.VideoItem;
@@ -21,6 +22,7 @@ import info.xudshen.jandan.data.model.observable.SimplePostObservable;
 import info.xudshen.jandan.data.model.observable.AuthorObservable;
 import info.xudshen.jandan.data.model.observable.CategoryObservable;
 import info.xudshen.jandan.data.model.observable.CommentObservable;
+import info.xudshen.jandan.data.model.observable.FavoItemObservable;
 import info.xudshen.jandan.data.model.observable.PicItemObservable;
 import info.xudshen.jandan.data.model.observable.JokeItemObservable;
 import info.xudshen.jandan.data.model.observable.VideoItemObservable;
@@ -68,6 +70,13 @@ public class ModelTrans {
                 @Override
                 public CommentObservable to(Comment entity) {
                     return new CommentObservable(entity);
+                }
+            };
+    private static final IModelTrans<FavoItem, FavoItemObservable> FAVO_ITEM_TRANS =
+            new IModelTrans<FavoItem, FavoItemObservable>() {
+                @Override
+                public FavoItemObservable to(FavoItem entity) {
+                    return new FavoItemObservable(entity);
                 }
             };
     private static final IModelTrans<PicItem, PicItemObservable> PIC_ITEM_TRANS =
@@ -268,6 +277,33 @@ public class ModelTrans {
 
     public Iterable<CommentObservable> transComment(Iterable<Comment> entities) {
         return transComment(entities, COMMENT_TRANS);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="TransFavoItem">
+    public <TO extends IModelObservable> TO transFavoItem(FavoItem entity, IModelTrans<FavoItem, TO> trans) {
+        TO entityOb = trans.to(entity);
+        this.daoSession.getFavoItemDao().registerExtraOb(entityOb);
+        return entityOb;
+    }
+
+    public FavoItemObservable transFavoItem(FavoItem entity) {
+        return transFavoItem(entity, FAVO_ITEM_TRANS);
+    }
+
+    public <TO extends IModelObservable> Iterable<TO> transFavoItem(Iterable<FavoItem> entities, IModelTrans<FavoItem, TO> trans) {
+        List<TO> list = new ArrayList<>();
+        FavoItemDao dao = this.daoSession.getFavoItemDao();
+        for (FavoItem entity : entities) {
+            TO entityOb = trans.to(entity);
+            list.add(entityOb);
+            dao.registerExtraOb(entityOb);
+        }
+        return list;
+    }
+
+    public Iterable<FavoItemObservable> transFavoItem(Iterable<FavoItem> entities) {
+        return transFavoItem(entities, FAVO_ITEM_TRANS);
     }
     //</editor-fold>
 

@@ -59,6 +59,7 @@ import info.xudshen.jandan.internal.di.modules.ActivityModule;
 import info.xudshen.jandan.presenter.DoCommentPresenter;
 import info.xudshen.jandan.utils.HtmlHelper;
 import info.xudshen.jandan.view.ActionView;
+import info.xudshen.jandan.view.SaveDataView;
 import info.xudshen.jandan.view.adapter.IItemInfo;
 import info.xudshen.jandan.view.adapter.JokeReaderPagerAdapter;
 import info.xudshen.jandan.view.adapter.PicReaderPagerAdapter;
@@ -270,9 +271,20 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else if (item.getItemId() == R.id.item_reader_menu_favo) {
+            this.doCommentPresenter.setSaveDataView(new SaveDataView() {
+                @Override
+                public void savingData() {
+                    logger.info("saving");
+                }
+
+                @Override
+                public void result(boolean success) {
+                    logger.info("saving:{}", success);
+                }
+            });
             JokeItem jokeItem = currentItemInfo.getAdapterItem(currentPosition);
             FavoItem favoItem = FavoItemTrans.fromJokeItem(jokeItem);
-            //save
+            this.doCommentPresenter.saveFavoItem(favoItem);
         }
         return super.onOptionsItemSelected(item);
     }

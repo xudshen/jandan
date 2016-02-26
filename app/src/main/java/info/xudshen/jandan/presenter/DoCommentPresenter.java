@@ -11,7 +11,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import info.xudshen.jandan.domain.interactor.UseCase;
+import info.xudshen.jandan.domain.model.FavoItem;
 import info.xudshen.jandan.view.ActionView;
+import info.xudshen.jandan.view.SaveDataView;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -23,17 +25,26 @@ public class DoCommentPresenter implements Presenter {
     private static final Logger logger = LoggerFactory.getLogger(DoCommentPresenter.class);
     private final UseCase doPostCommentUseCase;
     private final UseCase postDuoshuoCommentUseCase;
+    private final UseCase saveFavoItemUseCase;
     private ActionView dataDetailView;
+    private SaveDataView saveDataView;
 
     @Inject
     public DoCommentPresenter(@Named("doPostComment") UseCase doPostCommentUseCase,
-                              @Named("postDuoshuoComment") UseCase postDuoshuoCommentUseCase) {
+                              @Named("postDuoshuoComment") UseCase postDuoshuoCommentUseCase,
+                              @Named("saveFavoItem") UseCase saveFavoItemUseCase) {
         this.doPostCommentUseCase = doPostCommentUseCase;
         this.postDuoshuoCommentUseCase = postDuoshuoCommentUseCase;
+        this.saveFavoItemUseCase = saveFavoItemUseCase;
     }
 
     public void setView(@NonNull ActionView dataDetailView) {
         this.dataDetailView = dataDetailView;
+    }
+
+    public void setSaveDataView(@NonNull SaveDataView saveDataView) {
+        if (this.saveDataView == null)
+            this.saveDataView = saveDataView;
     }
 
     @Override
@@ -49,6 +60,7 @@ public class DoCommentPresenter implements Presenter {
     @Override
     public void destroy() {
         this.dataDetailView = null;
+        this.saveDataView = null;
     }
 
     public void doPostComment(Long postId, String name, String email, String content) {
@@ -108,5 +120,26 @@ public class DoCommentPresenter implements Presenter {
                         }
                     }
                 }, threadKey, authorName, authorEmail, message, parentId);
+    }
+
+    public void saveFavoItem(FavoItem favoItem) {
+        this.saveDataView.savingData();
+        this.saveFavoItemUseCase.execute(this.dataDetailView.bindToLifecycle(),
+                new Subscriber<Boolean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        DoCommentPresenter.this.saveDataView.result(false);
+                    }
+
+                    @Override
+                    public void onNext(Boolean o) {
+                        DoCommentPresenter.this.saveDataView.result(o);
+                    }
+                }, favoItem);
     }
 }

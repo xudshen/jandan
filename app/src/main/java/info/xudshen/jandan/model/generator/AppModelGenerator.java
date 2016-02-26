@@ -334,6 +334,7 @@ public class AppModelGenerator extends ModelGenerator {
 
         addUniqueIndex(entity, type, actualId);
 
+        entity.addContentProvider();
         entity.addImport(GSON_EXPOSE);
     }
 

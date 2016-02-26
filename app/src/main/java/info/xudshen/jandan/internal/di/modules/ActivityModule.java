@@ -25,11 +25,11 @@ import info.xudshen.jandan.R;
 import info.xudshen.jandan.domain.executor.PostExecutionThread;
 import info.xudshen.jandan.domain.executor.ThreadExecutor;
 import info.xudshen.jandan.domain.interactor.DoPostComment;
-import info.xudshen.jandan.domain.interactor.GetPostComment;
-import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.PostDuoshuoComment;
+import info.xudshen.jandan.domain.interactor.SaveFavoItem;
 import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.domain.repository.CommentRepository;
+import info.xudshen.jandan.domain.repository.FavoRepository;
 import info.xudshen.jandan.domain.repository.PostRepository;
 import info.xudshen.jandan.internal.di.PerActivity;
 
@@ -104,5 +104,13 @@ public class ActivityModule {
     UseCase providePostDuoshuoCommentUseCase(CommentRepository commentRepository,
                                              ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         return new PostDuoshuoComment(commentRepository, threadExecutor, postExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("saveFavoItem")
+    UseCase provideSaveFavoItemUseCase(FavoRepository favoRepository,
+                                       ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+        return new SaveFavoItem(favoRepository, threadExecutor, postExecutionThread);
     }
 }

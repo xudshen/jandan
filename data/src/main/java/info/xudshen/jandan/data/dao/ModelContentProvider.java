@@ -47,6 +47,10 @@ public class ModelContentProvider extends ContentProvider {
             + "/" + CommentDao.TABLENAME;
     public static final String COMMENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
             + "/" + CommentDao.TABLENAME;
+    public static final String FAVO_ITEM_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
+            + "/" + FavoItemDao.TABLENAME;
+    public static final String FAVO_ITEM_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
+            + "/" + FavoItemDao.TABLENAME;
     public static final String PIC_ITEM_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
             + "/" + PicItemDao.TABLENAME;
     public static final String PIC_ITEM_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
@@ -76,14 +80,16 @@ public class ModelContentProvider extends ContentProvider {
     private static final int CATEGORY_ID = 0x1004;
     private static final int COMMENT_DIR = 0x0005;
     private static final int COMMENT_ID = 0x1005;
-    private static final int PIC_ITEM_DIR = 0x0006;
-    private static final int PIC_ITEM_ID = 0x1006;
-    private static final int JOKE_ITEM_DIR = 0x0007;
-    private static final int JOKE_ITEM_ID = 0x1007;
-    private static final int VIDEO_ITEM_DIR = 0x0008;
-    private static final int VIDEO_ITEM_ID = 0x1008;
-    private static final int DUOSHUO_COMMENT_DIR = 0x0009;
-    private static final int DUOSHUO_COMMENT_ID = 0x1009;
+    private static final int FAVO_ITEM_DIR = 0x0006;
+    private static final int FAVO_ITEM_ID = 0x1006;
+    private static final int PIC_ITEM_DIR = 0x0007;
+    private static final int PIC_ITEM_ID = 0x1007;
+    private static final int JOKE_ITEM_DIR = 0x0008;
+    private static final int JOKE_ITEM_ID = 0x1008;
+    private static final int VIDEO_ITEM_DIR = 0x0009;
+    private static final int VIDEO_ITEM_ID = 0x1009;
+    private static final int DUOSHUO_COMMENT_DIR = 0x00010;
+    private static final int DUOSHUO_COMMENT_ID = 0x10010;
 
     private static final UriMatcher sURIMatcher;
 
@@ -101,6 +107,8 @@ public class ModelContentProvider extends ContentProvider {
         sURIMatcher.addURI(AUTHORITY, CategoryDao.TABLENAME + "/#", CATEGORY_ID);
         sURIMatcher.addURI(AUTHORITY, CommentDao.TABLENAME, COMMENT_DIR);
         sURIMatcher.addURI(AUTHORITY, CommentDao.TABLENAME + "/#", COMMENT_ID);
+        sURIMatcher.addURI(AUTHORITY, FavoItemDao.TABLENAME, FAVO_ITEM_DIR);
+        sURIMatcher.addURI(AUTHORITY, FavoItemDao.TABLENAME + "/#", FAVO_ITEM_ID);
         sURIMatcher.addURI(AUTHORITY, PicItemDao.TABLENAME, PIC_ITEM_DIR);
         sURIMatcher.addURI(AUTHORITY, PicItemDao.TABLENAME + "/#", PIC_ITEM_ID);
         sURIMatcher.addURI(AUTHORITY, JokeItemDao.TABLENAME, JOKE_ITEM_DIR);
@@ -146,6 +154,7 @@ public class ModelContentProvider extends ContentProvider {
             case AUTHOR_ID:
             case CATEGORY_ID:
             case COMMENT_ID:
+            case FAVO_ITEM_ID:
             case PIC_ITEM_ID:
             case JOKE_ITEM_ID:
             case VIDEO_ITEM_ID:
@@ -179,6 +188,7 @@ public class ModelContentProvider extends ContentProvider {
             case AUTHOR_ID:
             case CATEGORY_ID:
             case COMMENT_ID:
+            case FAVO_ITEM_ID:
             case PIC_ITEM_ID:
             case JOKE_ITEM_ID:
             case VIDEO_ITEM_ID:
@@ -244,6 +254,14 @@ public class ModelContentProvider extends ContentProvider {
             case COMMENT_ID:
                 queryBuilder.setTables(CommentDao.TABLENAME);
                 queryBuilder.appendWhere(CommentDao.Properties.Id.columnName + "="
+                        + uri.getLastPathSegment());
+                break;
+            case FAVO_ITEM_DIR:
+                queryBuilder.setTables(FavoItemDao.TABLENAME);
+                break;
+            case FAVO_ITEM_ID:
+                queryBuilder.setTables(FavoItemDao.TABLENAME);
+                queryBuilder.appendWhere(FavoItemDao.Properties.Id.columnName + "="
                         + uri.getLastPathSegment());
                 break;
             case PIC_ITEM_DIR:
@@ -317,6 +335,10 @@ public class ModelContentProvider extends ContentProvider {
                 return COMMENT_TYPE;
             case COMMENT_ID:
                 return COMMENT_ITEM_TYPE;
+            case FAVO_ITEM_DIR:
+                return FAVO_ITEM_TYPE;
+            case FAVO_ITEM_ID:
+                return FAVO_ITEM_ITEM_TYPE;
             case PIC_ITEM_DIR:
                 return PIC_ITEM_TYPE;
             case PIC_ITEM_ID:
