@@ -95,6 +95,10 @@ public class DDBindableCursorLoaderRVAdapter<VH extends RecyclerView.ViewHolder>
     public void setOnItemClickListener(UserActionRegistry.OnClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
+
+    public void addOnItemSubviewClickListener(int viewId, UserActionRegistry.OnClickListener onClickListener) {
+        this.userActionRegistries.add(new UserActionRegistry(viewId, onClickListener));
+    }
     //</editor-fold>
 
     //<editor-fold desc="interface">
