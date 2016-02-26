@@ -2,6 +2,8 @@ package info.xudshen.jandan.domain.model;
 
 import com.google.gson.annotations.Expose;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
+
+import java.io.Serializable;
 import java.sql.Timestamp;
 import android.databinding.Bindable;
 
@@ -12,7 +14,7 @@ import android.databinding.Bindable;
 /**
  * Entity mapped to table "FAVO_ITEM".
  */
-public class FavoItem {
+public class FavoItem implements Serializable{
 
     private Long id;
     @Expose

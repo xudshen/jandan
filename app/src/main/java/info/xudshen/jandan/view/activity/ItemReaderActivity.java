@@ -48,10 +48,12 @@ import info.xudshen.jandan.domain.model.JokeItem;
 import info.xudshen.jandan.internal.di.HasComponents;
 import info.xudshen.jandan.internal.di.components.ActivityComponent;
 import info.xudshen.jandan.internal.di.components.DaggerActivityComponent;
+import info.xudshen.jandan.internal.di.components.DaggerFavoComponent;
 import info.xudshen.jandan.internal.di.components.DaggerJokeComponent;
 import info.xudshen.jandan.internal.di.components.DaggerPicComponent;
 import info.xudshen.jandan.internal.di.components.DaggerPostComponent;
 import info.xudshen.jandan.internal.di.components.DaggerVideoComponent;
+import info.xudshen.jandan.internal.di.components.FavoComponent;
 import info.xudshen.jandan.internal.di.components.JokeComponent;
 import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.internal.di.components.PostComponent;
@@ -62,6 +64,7 @@ import info.xudshen.jandan.utils.HtmlHelper;
 import info.xudshen.jandan.view.ActionView;
 import info.xudshen.jandan.view.DeleteDataView;
 import info.xudshen.jandan.view.SaveDataView;
+import info.xudshen.jandan.view.adapter.FavoReaderPagerAdapter;
 import info.xudshen.jandan.view.adapter.IItemInfo;
 import info.xudshen.jandan.view.adapter.JokeReaderPagerAdapter;
 import info.xudshen.jandan.view.adapter.PicReaderPagerAdapter;
@@ -106,6 +109,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
     private PicComponent picComponent;
     private JokeComponent jokeComponent;
     private VideoComponent videoComponent;
+    private FavoComponent favoComponent;
     private ActivityComponent activityComponent;
 
     private IItemInfo currentItemInfo;
@@ -145,6 +149,11 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
                 .build();
 
         videoComponent = DaggerVideoComponent.builder()
+                .applicationComponent(getApplicationComponent())
+                .activityModule(activityModule)
+                .build();
+
+        favoComponent = DaggerFavoComponent.builder()
                 .applicationComponent(getApplicationComponent())
                 .activityModule(activityModule)
                 .build();
@@ -199,6 +208,15 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
                 videoReaderPagerAdapter.initialize();
                 viewPager.setAdapter(videoReaderPagerAdapter);
                 currentItemInfo = videoReaderPagerAdapter;
+                break;
+            }
+            case Multi: {
+                FavoReaderPagerAdapter favoReaderPagerAdapter = new FavoReaderPagerAdapter(
+                        getSupportFragmentManager());
+                favoComponent.inject(favoReaderPagerAdapter);
+                favoReaderPagerAdapter.initialize();
+                viewPager.setAdapter(favoReaderPagerAdapter);
+                currentItemInfo = favoReaderPagerAdapter;
                 break;
             }
         }

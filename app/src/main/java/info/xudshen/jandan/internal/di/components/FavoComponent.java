@@ -4,6 +4,7 @@ import dagger.Component;
 import info.xudshen.jandan.internal.di.PerActivity;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
 import info.xudshen.jandan.internal.di.modules.FavoModule;
+import info.xudshen.jandan.view.adapter.FavoReaderPagerAdapter;
 import info.xudshen.jandan.view.fragment.FavoFragment;
 
 /**
@@ -13,4 +14,6 @@ import info.xudshen.jandan.view.fragment.FavoFragment;
 @Component(dependencies = ApplicationComponent.class, modules = {ActivityModule.class, FavoModule.class})
 public interface FavoComponent {
     void inject(FavoFragment favoFragment);
+
+    void inject(FavoReaderPagerAdapter favoReaderPagerAdapter);
 }

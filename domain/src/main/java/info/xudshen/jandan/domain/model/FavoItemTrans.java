@@ -191,4 +191,22 @@ public class FavoItemTrans {
         }
         return null;
     }
+
+    public static <T> T to(FavoItem item) {
+        switch (item.getType()) {
+            case SimplePost: {
+                return (T) toSimplePost(item);
+            }
+            case SimpleJoke: {
+                return (T) toJokeItem(item);
+            }
+            case SimplePic: {
+                return (T) toPicItem(item);
+            }
+            case SimpleVideo: {
+                return (T) toVideoItem(item);
+            }
+        }
+        return null;
+    }
 }

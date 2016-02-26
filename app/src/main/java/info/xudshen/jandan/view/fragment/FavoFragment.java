@@ -24,6 +24,7 @@ import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.dao.FavoItemDao;
 import info.xudshen.jandan.databinding.FragmentFavoBinding;
+import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.domain.model.FavoItem;
 import info.xudshen.jandan.internal.di.components.FavoComponent;
 import info.xudshen.jandan.internal.di.components.PostComponent;
@@ -69,6 +70,11 @@ public class FavoFragment extends BaseFragment implements DeleteDataView {
         inject();
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favo, container, false);
+
+        favoListAdapter.setOnItemClickListener((v, position) -> {
+            getNavigator().launchItemReader((BaseActivity) getActivity(),
+                    v, position, ReaderItemType.Multi);
+        });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         binding.favoList.setLayoutManager(linearLayoutManager);
