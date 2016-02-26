@@ -12,7 +12,6 @@ import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +22,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-import com.google.common.base.Strings;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -44,7 +42,6 @@ import info.xudshen.jandan.domain.enums.CommentAction;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.domain.model.FavoItem;
 import info.xudshen.jandan.domain.model.FavoItemTrans;
-import info.xudshen.jandan.domain.model.JokeItem;
 import info.xudshen.jandan.internal.di.HasComponents;
 import info.xudshen.jandan.internal.di.components.ActivityComponent;
 import info.xudshen.jandan.internal.di.components.DaggerActivityComponent;
@@ -601,7 +598,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
     }
 
     private boolean checkCommentAreaName(String s) {
-        if (TextUtils.isEmpty(s)) {
+        if (HtmlHelper.isWholeBlank(s)) {
             commentAreaNameLayout.setError("不要留空惹");
             commentAreaNameLayout.setErrorEnabled(true);
             return false;
@@ -612,7 +609,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
     }
 
     private boolean checkCommentAreaEmail(String s) {
-        if (TextUtils.isEmpty(s)
+        if (HtmlHelper.isWholeBlank(s)
                 || !android.util.Patterns.EMAIL_ADDRESS.matcher(s).matches()) {
             commentAreaEmailLayout.setError("格式不对惹");
             commentAreaEmailLayout.setErrorEnabled(true);
@@ -624,7 +621,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
     }
 
     private boolean checkCommentAreaContent(String s) {
-        if (TextUtils.isEmpty(s)) {
+        if (HtmlHelper.isWholeBlank(s)) {
             commentAreaContentLayout.setError("不要留空惹");
             commentAreaContentLayout.setErrorEnabled(true);
             return false;
@@ -690,7 +687,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
                             realComment = realComment.replace("@" + commentAction.getParentName() + ":", "");
                             realComment = realComment.replace("@" + commentAction.getParentName(), "");
 
-                            if (HtmlHelper.isBlank(realComment)) {
+                            if (HtmlHelper.isWholeBlank(realComment)) {
                                 checkCommentAreaContentWithAt();
                                 return;
                             } else {
@@ -742,11 +739,11 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
     }
 
     private void autoCommentAreaFocus() {
-        if (Strings.isNullOrEmpty(commentAreaName.getText().toString())) {
+        if (HtmlHelper.isWholeBlank(commentAreaName.getText().toString())) {
             commentAreaName.requestFocus();
             return;
         }
-        if (Strings.isNullOrEmpty(commentAreaEmail.getText().toString())) {
+        if (HtmlHelper.isWholeBlank(commentAreaEmail.getText().toString())) {
             commentAreaEmail.requestFocus();
             return;
         }

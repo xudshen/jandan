@@ -3,11 +3,15 @@ package info.xudshen.jandan.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jregex.Matcher;
+import jregex.Pattern;
+
 /**
  * Created by xudshen on 16/1/30.
  */
 public class HtmlHelper {
     private static final Logger logger = LoggerFactory.getLogger(HtmlHelper.class);
+    private static final Pattern NOT_EMPTY = new Pattern("(\\S+)");
 
     public static String formBody(String body) {
         body = body.replace("\\n", "");
@@ -55,5 +59,10 @@ public class HtmlHelper {
             }
         }
         return true;
+    }
+
+    public static boolean isWholeBlank(final CharSequence cs) {
+        Matcher matcher = NOT_EMPTY.matcher(cs.toString());
+        return !matcher.find();
     }
 }
