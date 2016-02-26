@@ -11,4 +11,6 @@ public interface IItemInfo {
     String getAdapterItemId(int position);
 
     ReaderItemType getAdapterItemType(int position);
+
+    Boolean isInFavoItem(int position);
 }

@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import de.greenrobot.dao.query.LazyList;
+import info.xudshen.jandan.data.dao.FavoItemDao;
 import info.xudshen.jandan.data.dao.PicItemDao;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
@@ -30,6 +31,8 @@ public class PicReaderPagerAdapter extends FragmentStatePagerAdapter implements 
     private LoadDataView loadDataView;
     @Inject
     PicItemDao picItemDao;
+    @Inject
+    FavoItemDao favoItemDao;
     @Named("picList")
     @Inject
     IterableUseCase getPicListUseCase;
@@ -94,5 +97,13 @@ public class PicReaderPagerAdapter extends FragmentStatePagerAdapter implements 
     @Override
     public ReaderItemType getAdapterItemType(int position) {
         return ReaderItemType.SimplePic;
+    }
+
+    @Override
+    public Boolean isInFavoItem(int position) {
+        return this.favoItemDao.queryBuilder().where(
+                FavoItemDao.Properties.ActualId.eq(getAdapterItemId(position)),
+                FavoItemDao.Properties.Type.eq(getAdapterItemType(position))
+        ).buildCount().forCurrentThread().count() > 0;
     }
 }

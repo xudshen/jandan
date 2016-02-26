@@ -11,9 +11,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import de.greenrobot.dao.query.LazyList;
+import info.xudshen.jandan.data.dao.FavoItemDao;
 import info.xudshen.jandan.data.dao.JokeItemDao;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
+import info.xudshen.jandan.domain.model.FavoItem;
 import info.xudshen.jandan.domain.model.JokeItem;
 import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.view.LoadDataView;
@@ -31,6 +33,8 @@ public class JokeReaderPagerAdapter extends FragmentStatePagerAdapter implements
     private LoadDataView loadDataView;
     @Inject
     JokeItemDao jokeItemDao;
+    @Inject
+    FavoItemDao favoItemDao;
     @Named("jokeList")
     @Inject
     IterableUseCase getJokeListUseCase;
@@ -95,5 +99,13 @@ public class JokeReaderPagerAdapter extends FragmentStatePagerAdapter implements
     @Override
     public ReaderItemType getAdapterItemType(int position) {
         return ReaderItemType.SimpleJoke;
+    }
+
+    @Override
+    public Boolean isInFavoItem(int position) {
+        return this.favoItemDao.queryBuilder().where(
+                FavoItemDao.Properties.ActualId.eq(getAdapterItemId(position)),
+                FavoItemDao.Properties.Type.eq(getAdapterItemType(position))
+        ).buildCount().forCurrentThread().count() > 0;
     }
 }

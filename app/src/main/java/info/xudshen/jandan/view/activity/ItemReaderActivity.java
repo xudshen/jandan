@@ -110,6 +110,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
     private IItemInfo currentItemInfo;
     private int currentPosition;
     private boolean isCurrentFavo = false;
+    private MenuItem favoMenu;
     private Drawable favoIcon, favoIconFalse;
 
     @Inject
@@ -202,8 +203,8 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
         }
 
         viewPager.setPageTransformer(true, new StackPageTransformer());
-        int position = getIntent().getExtras().getInt(ARG_POSITION);
-        viewPager.setCurrentItem(position);
+        currentPosition = getIntent().getExtras().getInt(ARG_POSITION);
+        viewPager.setCurrentItem(currentPosition);
 
         commentFab.setImageDrawable(new IconicsDrawable(this)
                 .icon(GoogleMaterial.Icon.gmd_edit)
@@ -218,6 +219,8 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
                 .paddingDp(2));
 
         setUpTextInputLayoutError();
+
+        clearOldFavoInfo();
 
         //must calculateMetrics after layout rendered
         View rootView = getWindow().getDecorView().getRootView();
@@ -268,10 +271,22 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
                 .sizeDp(24).paddingDp(2);
     }
 
+    //<editor-fold desc="Favo Memu">
+    private void clearOldFavoInfo() {
+        isCurrentFavo = currentItemInfo.isInFavoItem(currentPosition);
+        refreshIcon();
+    }
+
+    private void refreshIcon() {
+        if (favoMenu != null)
+            favoMenu.setIcon(isCurrentFavo ? favoIcon : favoIconFalse);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.item_reader_menu, menu);
-        menu.findItem(R.id.item_reader_menu_favo).setIcon(favoIconFalse);
+        favoMenu = menu.findItem(R.id.item_reader_menu_favo);
+        refreshIcon();
         return true;
     }
 
@@ -293,7 +308,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
                         logger.info("deleting:{}", success);
                         item.setEnabled(true);
                         isCurrentFavo = !success;
-                        item.setIcon(isCurrentFavo ? favoIcon : favoIconFalse);
+                        refreshIcon();
                     }
                 });
                 this.doCommentPresenter.deleteFavoItem(currentItemInfo.getAdapterItemType(currentPosition),
@@ -311,16 +326,16 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
                         logger.info("saving:{}", success);
                         item.setEnabled(true);
                         isCurrentFavo = success;
-                        item.setIcon(isCurrentFavo ? favoIcon : favoIconFalse);
+                        refreshIcon();
                     }
                 });
-                JokeItem jokeItem = currentItemInfo.getAdapterItem(currentPosition);
-                FavoItem favoItem = FavoItemTrans.fromJokeItem(jokeItem);
+                FavoItem favoItem = FavoItemTrans.from(currentItemInfo.getAdapterItem(currentPosition));
                 this.doCommentPresenter.saveFavoItem(favoItem);
             }
         }
         return super.onOptionsItemSelected(item);
     }
+    //</editor-fold>
 
     @Override
     public void onBackPressed() {
@@ -617,6 +632,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
             public void onPageSelected(int position) {
                 currentPosition = position;
                 clearOldCommentInfo();
+                clearOldFavoInfo();
             }
 
             @Override
