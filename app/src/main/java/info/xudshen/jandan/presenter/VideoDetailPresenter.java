@@ -13,12 +13,15 @@ import javax.inject.Named;
 import info.xudshen.jandan.data.constants.Constants;
 import info.xudshen.jandan.data.dao.ModelTrans;
 import info.xudshen.jandan.data.model.observable.VideoItemObservable;
+import info.xudshen.jandan.domain.enums.VoteResult;
+import info.xudshen.jandan.domain.enums.VoteType;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.domain.model.DuoshuoComment;
 import info.xudshen.jandan.domain.model.FavoItem;
 import info.xudshen.jandan.domain.model.FavoItemTrans;
 import info.xudshen.jandan.domain.model.VideoItem;
+import info.xudshen.jandan.view.ActionView;
 import info.xudshen.jandan.view.DataDetailView;
 import rx.Subscriber;
 
@@ -30,17 +33,26 @@ public class VideoDetailPresenter implements Presenter {
     private final IterableUseCase getDuoshuoCommentListUseCase;
     private final ModelTrans modelTrans;
 
+    private ActionView voteCommentView;
+    private final UseCase voteCommentUseCase;
+
     @Inject
     public VideoDetailPresenter(@Named("videoDetail") UseCase getVideoDetailUseCase,
                                 @Named("duoshuoCommentList") IterableUseCase getDuoshuoCommentListUseCase,
+                                @Named("voteVideo") UseCase voteCommentUseCase,
                                 ModelTrans modelTrans) {
         this.getVideoDetailUseCase = getVideoDetailUseCase;
         this.getDuoshuoCommentListUseCase = getDuoshuoCommentListUseCase;
+        this.voteCommentUseCase = voteCommentUseCase;
         this.modelTrans = modelTrans;
     }
 
     public void setView(@NonNull DataDetailView<VideoItemObservable> dataDetailView) {
         this.dataDetailView = dataDetailView;
+    }
+
+    public void setVoteCommentView(@NonNull ActionView voteCommentView) {
+        this.voteCommentView = voteCommentView;
     }
 
     @Override
@@ -56,6 +68,7 @@ public class VideoDetailPresenter implements Presenter {
     @Override
     public void destroy() {
         this.dataDetailView = null;
+        this.voteCommentView = null;
     }
 
     public void initialize(Long videoId) {
@@ -115,5 +128,33 @@ public class VideoDetailPresenter implements Presenter {
         VideoItemObservable videoItemObservable = modelTrans.transVideoItem(FavoItemTrans.toVideoItem(favoItem));
         this.dataDetailView.renderItemDetail(videoItemObservable);
         VideoDetailPresenter.this.dataDetailView.hideLoading();
+    }
+
+    public void voteComment(Long commentId, VoteType voteType) {
+        this.voteCommentView.showLoading();
+        this.voteCommentUseCase.execute(this.dataDetailView.bindToLifecycle(),
+                new Subscriber<VoteResult>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        logger.error("{}", e);
+                        voteCommentView.hideLoading();
+                        voteCommentView.showError("");
+                    }
+
+                    @Override
+                    public void onNext(VoteResult voteResult) {
+                        if (voteResult == VoteResult.Thanks) {
+                            voteCommentView.hideLoading();
+                            voteCommentView.showSuccess();
+                        } else {
+                            voteCommentView.showError("已经发表过意见噜");
+                        }
+                    }
+                }, commentId, voteType);
     }
 }

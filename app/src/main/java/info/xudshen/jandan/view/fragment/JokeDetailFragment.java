@@ -26,13 +26,16 @@ import info.xudshen.jandan.data.dao.DuoshuoCommentDao;
 import info.xudshen.jandan.data.model.observable.JokeItemObservable;
 import info.xudshen.jandan.databinding.FragmentJokeDetailBinding;
 import info.xudshen.jandan.domain.enums.CommentAction;
+import info.xudshen.jandan.domain.enums.VoteType;
 import info.xudshen.jandan.domain.model.DuoshuoComment;
 import info.xudshen.jandan.domain.model.FavoItem;
 import info.xudshen.jandan.internal.di.components.JokeComponent;
 import info.xudshen.jandan.presenter.JokeDetailPresenter;
 import info.xudshen.jandan.utils.ClipboardHelper;
+import info.xudshen.jandan.view.ActionView;
 import info.xudshen.jandan.view.DataDetailView;
 import info.xudshen.jandan.view.model.DuoshuoCommentDialogModel;
+import rx.Observable;
 import rx.subjects.PublishSubject;
 
 /**
@@ -109,6 +112,47 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.jokeDetailPresenter.setView(this);
+        this.jokeDetailPresenter.setVoteCommentView(new ActionView() {
+            @Override
+            public void showSuccess() {
+                showSnackbar(binding.itemWithCommentList, "谢谢");
+            }
+
+            @Override
+            public void showLoading() {
+
+            }
+
+            @Override
+            public void hideLoading() {
+
+            }
+
+            @Override
+            public void showRetry() {
+
+            }
+
+            @Override
+            public void hideRetry() {
+
+            }
+
+            @Override
+            public void showError(String message) {
+                showSnackbar(binding.itemWithCommentList, message);
+            }
+
+            @Override
+            public Context context() {
+                return null;
+            }
+
+            @Override
+            public <T> Observable.Transformer<T, T> bindToLifecycle() {
+                return null;
+            }
+        });
         if (!isDataLoaded && getUserVisibleHint()) {
             if (favoItem == null) {
                 this.jokeDetailPresenter.initialize(jokeId);
@@ -161,6 +205,14 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
                         ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.header_joke_detail, parent, false);
                         Button refreshButton = (Button) viewDataBinding.getRoot().findViewById(R.id.refresh_comment_button);
                         refreshButton.setOnClickListener(v -> jokeDetailPresenter.refreshComment(jokeId));
+                        //set for vote
+                        viewDataBinding.getRoot().findViewById(R.id.comment_vote_oo).setOnClickListener(v -> {
+                            JokeDetailFragment.this.jokeDetailPresenter.voteComment(item.getJokeId(), VoteType.OO);
+                        });
+                        viewDataBinding.getRoot().findViewById(R.id.comment_vote_xx).setOnClickListener(v -> {
+                            JokeDetailFragment.this.jokeDetailPresenter.voteComment(item.getJokeId(), VoteType.XX);
+                        });
+
                         return new DDBindableViewHolder(viewDataBinding);
                     })
                     .headerViewDataBindingVariableAction(viewDataBinding -> {

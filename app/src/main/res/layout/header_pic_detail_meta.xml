@@ -50,6 +50,7 @@
                 android:layout_weight="1" />
 
             <Button
+                android:id="@+id/comment_vote_oo"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,6 +60,7 @@
                 android:textColorHighlight="@color/colorAccent" />
 
             <Button
+                android:id="@+id/comment_vote_xx"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
