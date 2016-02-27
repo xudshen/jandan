@@ -6,6 +6,7 @@ import android.os.Looper;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.GlideBuilder;
+import com.bumptech.glide.MemoryCategory;
 import com.bumptech.glide.integration.okhttp.OkHttpUrlLoader;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.module.GlideModule;
@@ -41,6 +42,7 @@ public class OkHttpProgressGlideModule implements GlideModule {
         OkHttpClient client = new OkHttpClient();
         client.networkInterceptors().add(createInterceptor(new DispatchingProgressListener()));
         glide.register(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory(client));
+        glide.setMemoryCategory(MemoryCategory.LOW);
     }
 
     private static Interceptor createInterceptor(final ResponseProgressListener listener) {
