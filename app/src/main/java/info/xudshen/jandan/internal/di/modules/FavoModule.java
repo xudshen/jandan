@@ -44,20 +44,7 @@ public class FavoModule {
                 .itemViewHolderCreator(((inflater1, viewType1, parent1) -> {
                     ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
                     switch (viewType1) {
-                        case R.layout.post_card_view: {
-                            viewDataBinding.getRoot().findViewById(R.id.post_card_more_btn).setVisibility(View.GONE);
-                            break;
-                        }
-                        case R.layout.pic_card_view: {
-                            viewDataBinding.getRoot().findViewById(R.id.pic_card_more_btn).setVisibility(View.GONE);
-                            break;
-                        }
-                        case R.layout.joke_card_view: {
-                            viewDataBinding.getRoot().findViewById(R.id.pic_card_more_btn).setVisibility(View.GONE);
-                            break;
-                        }
                         case R.layout.video_card_view: {
-                            viewDataBinding.getRoot().findViewById(R.id.pic_card_more_btn).setVisibility(View.GONE);
                             FloatingActionButton button = (FloatingActionButton) viewDataBinding.getRoot().findViewById(R.id.play_buttom);
                             button.setImageDrawable(new IconicsDrawable(activity)
                                     .icon(GoogleMaterial.Icon.gmd_play_circle_filled)

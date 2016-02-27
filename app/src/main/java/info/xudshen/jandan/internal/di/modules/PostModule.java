@@ -59,24 +59,6 @@ public class PostModule {
                     SimplePost simplePost = simplePostDao.loadEntity(cursor);
                     viewDataBinding.setVariable(BR.item, simplePost);
                 })
-                .onItemSubViewClickListener(R.id.post_card_more_btn, ((v, position) -> {
-                    logger.info("{} more clicked", position);
-                    PopupMenu popupMenu = new PopupMenu(activity, v);
-                    popupMenu.setOnMenuItemClickListener(item -> {
-                        switch (item.getItemId()) {
-                            case R.id.post_card_more_menu_favo:
-                                logger.info("Favo Clicked");
-                                return true;
-                            case R.id.post_card_more_menu_later:
-                                logger.info("Later Clicked");
-                                return true;
-                            default:
-                                return false;
-                        }
-                    });
-                    popupMenu.inflate(R.menu.post_card_more_menu);
-                    popupMenu.show();
-                }))
                 .build();
     }
 

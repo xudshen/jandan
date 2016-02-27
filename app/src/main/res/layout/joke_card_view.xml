@@ -115,17 +115,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
-                <ImageView
-                    android:id="@+id/pic_card_more_btn"
-                    style="@style/SmallIconButton"
-                    android:layout_gravity="right|bottom|end"
-                    android:layout_marginBottom="6dp"
-                    android:layout_marginRight="2dp"
-                    android:layout_marginTop="6dp"
-
-                    app:ico_color="@color/md_black_1000"
-                    app:ico_icon="gmd_more_vert"
-                    app:ico_padding="10dp" />
             </LinearLayout>
 
         </LinearLayout>

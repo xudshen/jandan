@@ -35,8 +35,8 @@
                 android:layout_row="0"
                 android:layout_rowSpan="2"
                 android:scaleType="centerCrop"
-                app:thumb="@{item.thumbC}"
-                app:placeHolder="@{@drawable/post_placeholder}" />
+                app:placeHolder="@{@drawable/post_placeholder}"
+                app:thumb="@{item.thumbC}" />
 
             <LinearLayout
                 android:layout_width="96dp"
@@ -69,7 +69,7 @@
                 style="@style/PostCardTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_columnSpan="5"
+                android:layout_columnSpan="6"
                 android:layout_columnWeight="1"
                 android:layout_gravity="top"
 
@@ -79,16 +79,6 @@
                 android:text="@{item.title}"
 
                 android:translationZ="4dp" />
-
-            <ImageView
-                android:id="@+id/post_card_more_btn"
-                style="@style/SmallIconButton"
-                android:layout_marginRight="2dp"
-                android:layout_marginTop="6dp"
-
-                app:ico_color="@color/md_black_1000"
-                app:ico_icon="gmd_more_vert"
-                app:ico_padding="10dp" />
 
             <TextView
                 android:id="@+id/post_card_author"
