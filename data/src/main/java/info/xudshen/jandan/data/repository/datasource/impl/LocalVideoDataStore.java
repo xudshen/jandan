@@ -7,6 +7,8 @@ import java.util.List;
 import info.xudshen.jandan.data.dao.VideoItemDao;
 import info.xudshen.jandan.data.exception.VideoNotFoundException;
 import info.xudshen.jandan.data.repository.datasource.VideoDataStore;
+import info.xudshen.jandan.domain.enums.VoteResult;
+import info.xudshen.jandan.domain.enums.VoteType;
 import info.xudshen.jandan.domain.model.VideoItem;
 import rx.Observable;
 import rx.Subscriber;
@@ -48,6 +50,11 @@ public class LocalVideoDataStore implements VideoDataStore {
 
     @Override
     public Observable<List<VideoItem>> videoListNext() {
+        throw new NotImplementedException("");
+    }
+
+    @Override
+    public Observable<VoteResult> voteCommonItem(Long commentId, VoteType voteType) {
         throw new NotImplementedException("");
     }
 }

@@ -7,6 +7,8 @@ import java.util.List;
 import info.xudshen.jandan.data.dao.PicItemDao;
 import info.xudshen.jandan.data.exception.PicNotFoundException;
 import info.xudshen.jandan.data.repository.datasource.PicDataStore;
+import info.xudshen.jandan.domain.enums.VoteResult;
+import info.xudshen.jandan.domain.enums.VoteType;
 import info.xudshen.jandan.domain.model.PicItem;
 import rx.Observable;
 import rx.Subscriber;
@@ -48,6 +50,11 @@ public class LocalPicDataStore implements PicDataStore {
 
     @Override
     public Observable<List<PicItem>> picListNext() {
+        throw new NotImplementedException("");
+    }
+
+    @Override
+    public Observable<VoteResult> voteCommonItem(Long commentId, VoteType voteType) {
         throw new NotImplementedException("");
     }
 }

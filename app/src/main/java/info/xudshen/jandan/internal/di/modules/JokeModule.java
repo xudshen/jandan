@@ -23,9 +23,12 @@ import info.xudshen.jandan.domain.interactor.GetJokeDetail;
 import info.xudshen.jandan.domain.interactor.GetJokeList;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
+import info.xudshen.jandan.domain.interactor.VoteComment;
+import info.xudshen.jandan.domain.interactor.VoteJoke;
 import info.xudshen.jandan.domain.model.JokeItem;
 import info.xudshen.jandan.domain.repository.CommentRepository;
 import info.xudshen.jandan.domain.repository.JokeRepository;
+import info.xudshen.jandan.domain.repository.PostRepository;
 import info.xudshen.jandan.internal.di.PerActivity;
 
 /**
@@ -83,5 +86,13 @@ public class JokeModule {
     IterableUseCase provideGetDuoshuoCommentListUseCase(CommentRepository commentRepository,
                                                         ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         return new GetDuoshuoCommentList(commentRepository, threadExecutor, postExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("voteJoke")
+    UseCase provideVoteJokeUseCase(JokeRepository jokeRepository,
+                                   ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+        return new VoteJoke(jokeRepository, threadExecutor, postExecutionThread);
     }
 }

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +16,13 @@ import info.xudshen.jandan.data.api.ICommonItemService;
 import info.xudshen.jandan.data.api.response.CommentCountResponse;
 import info.xudshen.jandan.data.api.response.JokeListResponse;
 import info.xudshen.jandan.data.constants.Constants;
+import info.xudshen.jandan.data.dao.CommentDao;
 import info.xudshen.jandan.data.dao.JokeItemDao;
 import info.xudshen.jandan.data.dao.MetaDao;
 import info.xudshen.jandan.data.repository.datasource.JokeDataStore;
+import info.xudshen.jandan.domain.enums.VoteResult;
+import info.xudshen.jandan.domain.enums.VoteType;
+import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.JokeItem;
 import info.xudshen.jandan.domain.model.Meta;
 import rx.Observable;
@@ -117,6 +122,33 @@ public class CloudJokeDataStore implements JokeDataStore {
                 .doOnCompleted(() -> {
                     jokePage.setLongValue(jokePage.getLongValue() + 1);
                     this.metaDao.update(jokePage);
+                });
+    }
+
+    @Override
+    public Observable<VoteResult> voteCommonItem(Long commentId, VoteType voteType) {
+        return this.commonItemService.voteCommonItem(voteType == VoteType.OO ? 1 : 0, commentId)
+                .map(responseBody -> {
+                    try {
+                        return VoteResult.fromString(responseBody.string(), voteType);
+                    } catch (IOException e) {
+                        return VoteResult.Voted;
+                    }
+                }).doOnNext(voteResult -> {
+                    if (voteResult == VoteResult.Thanks) {
+                        JokeItem jokeItem = CloudJokeDataStore.this.jokeItemDao.queryBuilder()
+                                .where(JokeItemDao.Properties.JokeId.eq(commentId))
+                                .build().forCurrentThread().unique();
+                        if (jokeItem != null) {
+                            if (voteType == VoteType.OO) {
+                                jokeItem.setVotePositive(jokeItem.getVotePositive() + 1);
+                                CloudJokeDataStore.this.jokeItemDao.update(jokeItem);
+                            } else if (voteType == VoteType.XX) {
+                                jokeItem.setVoteNegative(jokeItem.getVoteNegative() + 1);
+                                CloudJokeDataStore.this.jokeItemDao.update(jokeItem);
+                            }
+                        }
+                    }
                 });
     }
 }

@@ -169,47 +169,26 @@ public class CloudPostDataStore implements PostDataStore {
 
     @Override
     public Observable<VoteResult> voteComment(Long commentId, VoteType voteType) {
-        return Observable.create(new Observable.OnSubscribe<VoteResult>() {
-            @Override
-            public void call(Subscriber<? super VoteResult> subscriber) {
-                if (!subscriber.isUnsubscribed()) {
+        return this.postService.voteComment(voteType == VoteType.OO ? 1 : 0, commentId)
+                .map(responseBody -> {
                     try {
-                        String s = CloudPostDataStore.this.postService.voteComment(voteType == VoteType.OO ? 1 : 0, commentId).execute().body().string();
-                        if (s.lastIndexOf("|") != -1 && s.lastIndexOf("|") != s.length() - 1) {
-                            String result = s.substring(s.lastIndexOf("|") + 1, s.length());
-                            switch (voteType) {
-                                case OO: {
-                                    subscriber.onNext(Integer.valueOf(result) == 1 ? VoteResult.Thanks : VoteResult.Voted);
-                                }
-                                case XX: {
-                                    subscriber.onNext(Integer.valueOf(result) == -1 ? VoteResult.Thanks : VoteResult.Voted);
-                                }
-                                default: {
-                                    subscriber.onNext(VoteResult.Voted);
-                                }
-                            }
-                        } else {
-                            subscriber.onNext(VoteResult.Voted);
-                        }
-                        subscriber.onCompleted();
+                        return VoteResult.fromString(responseBody.string(), voteType);
                     } catch (IOException e) {
-                        subscriber.onError(e);
+                        return VoteResult.Voted;
                     }
-                }
-            }
-        }).doOnNext(voteResult -> {
-            if (voteResult == VoteResult.Thanks) {
-                Comment comment = CloudPostDataStore.this.commentDao.queryBuilder()
-                        .where(CommentDao.Properties.CommentId.eq(commentId))
-                        .build().forCurrentThread().unique();
-                if (voteType == VoteType.OO) {
-                    comment.setVotePositive(comment.getVotePositive() + 1);
-                    CloudPostDataStore.this.commentDao.update(comment);
-                } else if (voteType == VoteType.XX) {
-                    comment.setVoteNegative(comment.getVoteNegative() + 1);
-                    CloudPostDataStore.this.commentDao.update(comment);
-                }
-            }
-        });
+                }).doOnNext(voteResult -> {
+                    if (voteResult == VoteResult.Thanks) {
+                        Comment comment = CloudPostDataStore.this.commentDao.queryBuilder()
+                                .where(CommentDao.Properties.CommentId.eq(commentId))
+                                .build().forCurrentThread().unique();
+                        if (voteType == VoteType.OO) {
+                            comment.setVotePositive(comment.getVotePositive() + 1);
+                            CloudPostDataStore.this.commentDao.update(comment);
+                        } else if (voteType == VoteType.XX) {
+                            comment.setVoteNegative(comment.getVoteNegative() + 1);
+                            CloudPostDataStore.this.commentDao.update(comment);
+                        }
+                    }
+                });
     }
 }

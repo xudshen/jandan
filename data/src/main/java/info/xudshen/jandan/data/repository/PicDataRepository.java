@@ -6,6 +6,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import info.xudshen.jandan.data.repository.datasource.impl.PicDataStoreFactory;
+import info.xudshen.jandan.domain.enums.VoteResult;
+import info.xudshen.jandan.domain.enums.VoteType;
 import info.xudshen.jandan.domain.repository.PicRepository;
 import info.xudshen.jandan.domain.model.PicItem;
 import rx.Observable;
@@ -35,5 +37,10 @@ public class PicDataRepository implements PicRepository {
     @Override
     public Observable<List<PicItem>> picListNextPage() {
         return this.picDataStoreFactory.createCloudDataStore().picListNext();
+    }
+
+    @Override
+    public Observable<VoteResult> voteCommonItem(Long commentId, VoteType voteType) {
+        return this.picDataStoreFactory.createCloudDataStore().voteCommonItem(commentId, voteType);
     }
 }

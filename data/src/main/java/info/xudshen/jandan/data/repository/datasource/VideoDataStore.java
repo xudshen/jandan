@@ -2,6 +2,8 @@ package info.xudshen.jandan.data.repository.datasource;
 
 import java.util.List;
 
+import info.xudshen.jandan.domain.enums.VoteResult;
+import info.xudshen.jandan.domain.enums.VoteType;
 import info.xudshen.jandan.domain.model.VideoItem;
 import rx.Observable;
 
@@ -14,4 +16,6 @@ public interface VideoDataStore {
     Observable<List<VideoItem>> videoList();
 
     Observable<List<VideoItem>> videoListNext();
+
+    Observable<VoteResult> voteCommonItem(Long commentId, VoteType voteType);
 }

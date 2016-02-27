@@ -27,8 +27,11 @@ import info.xudshen.jandan.domain.interactor.GetVideoDetail;
 import info.xudshen.jandan.domain.interactor.GetVideoList;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
+import info.xudshen.jandan.domain.interactor.VoteComment;
+import info.xudshen.jandan.domain.interactor.VoteVideo;
 import info.xudshen.jandan.domain.model.VideoItem;
 import info.xudshen.jandan.domain.repository.CommentRepository;
+import info.xudshen.jandan.domain.repository.PostRepository;
 import info.xudshen.jandan.domain.repository.VideoRepository;
 import info.xudshen.jandan.internal.di.PerActivity;
 
@@ -93,5 +96,13 @@ public class VideoModule {
     IterableUseCase provideGetDuoshuoCommentListUseCase(CommentRepository commentRepository,
                                                         ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         return new GetDuoshuoCommentList(commentRepository, threadExecutor, postExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("voteVideo")
+    UseCase provideVoteVideoUseCase(VideoRepository videoRepository,
+                                    ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+        return new VoteVideo(videoRepository, threadExecutor, postExecutionThread);
     }
 }

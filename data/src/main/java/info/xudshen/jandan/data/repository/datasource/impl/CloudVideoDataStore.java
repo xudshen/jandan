@@ -7,6 +7,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +16,13 @@ import info.xudshen.jandan.data.api.ICommonItemService;
 import info.xudshen.jandan.data.api.response.CommentCountResponse;
 import info.xudshen.jandan.data.api.response.VideoListResponse;
 import info.xudshen.jandan.data.constants.Constants;
+import info.xudshen.jandan.data.dao.JokeItemDao;
 import info.xudshen.jandan.data.dao.MetaDao;
 import info.xudshen.jandan.data.dao.VideoItemDao;
 import info.xudshen.jandan.data.repository.datasource.VideoDataStore;
+import info.xudshen.jandan.domain.enums.VoteResult;
+import info.xudshen.jandan.domain.enums.VoteType;
+import info.xudshen.jandan.domain.model.JokeItem;
 import info.xudshen.jandan.domain.model.Meta;
 import info.xudshen.jandan.domain.model.VideoItem;
 import rx.Observable;
@@ -117,6 +122,33 @@ public class CloudVideoDataStore implements VideoDataStore {
                 .doOnCompleted(() -> {
                     videoPage.setLongValue(videoPage.getLongValue() + 1);
                     this.metaDao.update(videoPage);
+                });
+    }
+
+    @Override
+    public Observable<VoteResult> voteCommonItem(Long commentId, VoteType voteType) {
+        return this.videoService.voteCommonItem(voteType == VoteType.OO ? 1 : 0, commentId)
+                .map(responseBody -> {
+                    try {
+                        return VoteResult.fromString(responseBody.string(), voteType);
+                    } catch (IOException e) {
+                        return VoteResult.Voted;
+                    }
+                }).doOnNext(voteResult -> {
+                    if (voteResult == VoteResult.Thanks) {
+                        VideoItem videoItem = CloudVideoDataStore.this.videoItemDao.queryBuilder()
+                                .where(VideoItemDao.Properties.VideoId.eq(commentId))
+                                .build().forCurrentThread().unique();
+                        if (videoItem != null) {
+                            if (voteType == VoteType.OO) {
+                                videoItem.setVotePositive(videoItem.getVotePositive() + 1);
+                                CloudVideoDataStore.this.videoItemDao.update(videoItem);
+                            } else if (voteType == VoteType.XX) {
+                                videoItem.setVoteNegative(videoItem.getVoteNegative() + 1);
+                                CloudVideoDataStore.this.videoItemDao.update(videoItem);
+                            }
+                        }
+                    }
                 });
     }
 }

@@ -6,6 +6,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import info.xudshen.jandan.data.repository.datasource.impl.VideoDataStoreFactory;
+import info.xudshen.jandan.domain.enums.VoteResult;
+import info.xudshen.jandan.domain.enums.VoteType;
 import info.xudshen.jandan.domain.model.VideoItem;
 import info.xudshen.jandan.domain.repository.VideoRepository;
 import rx.Observable;
@@ -35,5 +37,10 @@ public class VideoDataRepository implements VideoRepository {
     @Override
     public Observable<List<VideoItem>> videoListNextPage() {
         return this.videoDataStoreFactory.createCloudDataStore().videoListNext();
+    }
+
+    @Override
+    public Observable<VoteResult> voteCommonItem(Long commentId, VoteType voteType) {
+        return this.videoDataStoreFactory.createCloudDataStore().voteCommonItem(commentId, voteType);
     }
 }

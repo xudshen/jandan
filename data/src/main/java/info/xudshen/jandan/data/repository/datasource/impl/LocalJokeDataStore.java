@@ -7,6 +7,8 @@ import java.util.List;
 import info.xudshen.jandan.data.dao.JokeItemDao;
 import info.xudshen.jandan.data.exception.JokeNotFoundException;
 import info.xudshen.jandan.data.repository.datasource.JokeDataStore;
+import info.xudshen.jandan.domain.enums.VoteResult;
+import info.xudshen.jandan.domain.enums.VoteType;
 import info.xudshen.jandan.domain.model.JokeItem;
 import rx.Observable;
 import rx.Subscriber;
@@ -48,6 +50,11 @@ public class LocalJokeDataStore implements JokeDataStore {
 
     @Override
     public Observable<List<JokeItem>> jokeListNext() {
+        throw new NotImplementedException("");
+    }
+
+    @Override
+    public Observable<VoteResult> voteCommonItem(Long commentId, VoteType voteType) {
         throw new NotImplementedException("");
     }
 }

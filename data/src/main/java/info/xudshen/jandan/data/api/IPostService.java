@@ -33,5 +33,5 @@ public interface IPostService {
 
     @POST("/index.php?acv_ajax=true")
     @FormUrlEncoded
-    Call<ResponseBody> voteComment(@Query("option") int option, @Field("ID") Long commentId);
+    Observable<ResponseBody> voteComment(@Query("option") int option, @Field("ID") Long commentId);
 }

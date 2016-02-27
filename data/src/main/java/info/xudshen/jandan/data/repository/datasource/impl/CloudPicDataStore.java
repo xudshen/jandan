@@ -7,6 +7,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +16,13 @@ import info.xudshen.jandan.data.api.ICommonItemService;
 import info.xudshen.jandan.data.api.response.CommentCountResponse;
 import info.xudshen.jandan.data.api.response.PicListResponse;
 import info.xudshen.jandan.data.constants.Constants;
+import info.xudshen.jandan.data.dao.JokeItemDao;
 import info.xudshen.jandan.data.dao.MetaDao;
 import info.xudshen.jandan.data.dao.PicItemDao;
 import info.xudshen.jandan.data.repository.datasource.PicDataStore;
+import info.xudshen.jandan.domain.enums.VoteResult;
+import info.xudshen.jandan.domain.enums.VoteType;
+import info.xudshen.jandan.domain.model.JokeItem;
 import info.xudshen.jandan.domain.model.Meta;
 import info.xudshen.jandan.domain.model.PicItem;
 import rx.Observable;
@@ -117,6 +122,34 @@ public class CloudPicDataStore implements PicDataStore {
                 .doOnCompleted(() -> {
                     picPage.setLongValue(picPage.getLongValue() + 1);
                     this.metaDao.update(picPage);
+                });
+    }
+
+
+    @Override
+    public Observable<VoteResult> voteCommonItem(Long commentId, VoteType voteType) {
+        return this.picService.voteCommonItem(voteType == VoteType.OO ? 1 : 0, commentId)
+                .map(responseBody -> {
+                    try {
+                        return VoteResult.fromString(responseBody.string(), voteType);
+                    } catch (IOException e) {
+                        return VoteResult.Voted;
+                    }
+                }).doOnNext(voteResult -> {
+                    if (voteResult == VoteResult.Thanks) {
+                        PicItem picItem = CloudPicDataStore.this.picItemDao.queryBuilder()
+                                .where(PicItemDao.Properties.PicId.eq(commentId))
+                                .build().forCurrentThread().unique();
+                        if (picItem != null) {
+                            if (voteType == VoteType.OO) {
+                                picItem.setVotePositive(picItem.getVotePositive() + 1);
+                                CloudPicDataStore.this.picItemDao.update(picItem);
+                            } else if (voteType == VoteType.XX) {
+                                picItem.setVoteNegative(picItem.getVoteNegative() + 1);
+                                CloudPicDataStore.this.picItemDao.update(picItem);
+                            }
+                        }
+                    }
                 });
     }
 }

@@ -23,6 +23,7 @@ import info.xudshen.jandan.domain.interactor.GetPicDetail;
 import info.xudshen.jandan.domain.interactor.GetPicList;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
+import info.xudshen.jandan.domain.interactor.VotePic;
 import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.domain.repository.CommentRepository;
 import info.xudshen.jandan.domain.repository.PicRepository;
@@ -83,5 +84,13 @@ public class PicModule {
     IterableUseCase provideGetDuoshuoCommentListUseCase(CommentRepository commentRepository,
                                                         ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         return new GetDuoshuoCommentList(commentRepository, threadExecutor, postExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("votePic")
+    UseCase provideVotePicUseCase(PicRepository jokeRepository,
+                                  ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+        return new VotePic(jokeRepository, threadExecutor, postExecutionThread);
     }
 }

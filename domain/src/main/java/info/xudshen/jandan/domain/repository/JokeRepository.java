@@ -2,6 +2,8 @@ package info.xudshen.jandan.domain.repository;
 
 import java.util.List;
 
+import info.xudshen.jandan.domain.enums.VoteResult;
+import info.xudshen.jandan.domain.enums.VoteType;
 import info.xudshen.jandan.domain.model.JokeItem;
 import rx.Observable;
 
@@ -14,4 +16,6 @@ public interface JokeRepository {
     Observable<List<JokeItem>> jokeList();
 
     Observable<List<JokeItem>> jokeListNextPage();
+
+    Observable<VoteResult> voteCommonItem(Long commentId, VoteType voteType);
 }
