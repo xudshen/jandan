@@ -26,12 +26,15 @@ import info.xudshen.jandan.data.dao.CommentDao;
 import info.xudshen.jandan.data.model.observable.PostObservable;
 import info.xudshen.jandan.databinding.FragmentPostDetailBinding;
 import info.xudshen.jandan.domain.enums.CommentAction;
+import info.xudshen.jandan.domain.enums.VoteType;
 import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PostDetailPresenter;
 import info.xudshen.jandan.utils.ClipboardHelper;
+import info.xudshen.jandan.view.ActionView;
 import info.xudshen.jandan.view.DataDetailView;
 import info.xudshen.jandan.view.model.CommentDialogModel;
+import rx.Observable;
 import rx.subjects.PublishSubject;
 
 public class PostDetailFragment extends BaseFragment implements DataDetailView<PostObservable> {
@@ -94,6 +97,47 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.postDetailPresenter.setView(this);
+        this.postDetailPresenter.setVoteCommentView(new ActionView() {
+            @Override
+            public void showSuccess() {
+                showSnackbar(binding.postWithCommentList, "谢谢");
+            }
+
+            @Override
+            public void showLoading() {
+
+            }
+
+            @Override
+            public void hideLoading() {
+
+            }
+
+            @Override
+            public void showRetry() {
+
+            }
+
+            @Override
+            public void hideRetry() {
+
+            }
+
+            @Override
+            public void showError(String message) {
+                showSnackbar(binding.postWithCommentList, message);
+            }
+
+            @Override
+            public Context context() {
+                return null;
+            }
+
+            @Override
+            public <T> Observable.Transformer<T, T> bindToLifecycle() {
+                return null;
+            }
+        });
         if (!isDataLoaded && getUserVisibleHint()) {
             this.postDetailPresenter.initialize(postId);
         }
@@ -158,6 +202,17 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
                         viewDataBinding.setVariable(BR.comment, comment);
                     })
                     .build();
+
+            postCommentAdapter.addOnItemSubviewClickListener(R.id.comment_vote_oo, (v, position) -> {
+                Comment comment = commentDao.loadEntity(postCommentAdapter.getItemCursor(position));
+                PostDetailFragment.this.postDetailPresenter.voteComment(comment.getCommentId(), VoteType.OO);
+                logger.info("{}", v);
+            });
+            postCommentAdapter.addOnItemSubviewClickListener(R.id.comment_vote_xx, (v, position) -> {
+                Comment comment = commentDao.loadEntity(postCommentAdapter.getItemCursor(position));
+                PostDetailFragment.this.postDetailPresenter.voteComment(comment.getCommentId(), VoteType.XX);
+                logger.info("{}", v);
+            });
 
             postCommentAdapter.setOnItemClickListener((v, position) -> {
                 Comment comment = commentDao.loadEntity(postCommentAdapter.getItemCursor(position));

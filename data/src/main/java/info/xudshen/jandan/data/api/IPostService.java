@@ -3,6 +3,10 @@ package info.xudshen.jandan.data.api;
 import info.xudshen.jandan.data.api.response.CommonResponse;
 import info.xudshen.jandan.data.api.response.PostListResponse;
 import info.xudshen.jandan.data.api.response.PostResponse;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -26,4 +30,8 @@ public interface IPostService {
                                                 @Query("name") String name,
                                                 @Query("email") String email,
                                                 @Query("content") String content);
+
+    @POST("/index.php?acv_ajax=true")
+    @FormUrlEncoded
+    Call<ResponseBody> voteComment(@Query("option") int option, @Field("ID") Long commentId);
 }

@@ -12,11 +12,15 @@ import javax.inject.Named;
 
 import info.xudshen.jandan.data.dao.ModelTrans;
 import info.xudshen.jandan.data.model.observable.PostObservable;
+import info.xudshen.jandan.domain.enums.VoteResult;
+import info.xudshen.jandan.domain.enums.VoteType;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.Post;
+import info.xudshen.jandan.view.ActionView;
 import info.xudshen.jandan.view.DataDetailView;
+import info.xudshen.jandan.view.fragment.PostDetailFragment;
 import rx.Subscriber;
 
 /**
@@ -26,22 +30,30 @@ import rx.Subscriber;
 public class PostDetailPresenter implements Presenter {
     private static final Logger logger = LoggerFactory.getLogger(PostDetailPresenter.class);
     private DataDetailView<PostObservable> dataDetailView;
+    private ActionView voteCommentView;
 
     private final UseCase getPostDetailUseCase;
     private final IterableUseCase getPostCommentUseCase;
+    private final UseCase voteCommentUseCase;
     private final ModelTrans modelTrans;
 
     @Inject
     public PostDetailPresenter(@Named("postDetail") UseCase getPostDetailUseCase,
                                @Named("postComment") IterableUseCase getPostCommentUseCase,
+                               @Named("voteComment") UseCase voteCommentUseCase,
                                ModelTrans modelTrans) {
         this.getPostDetailUseCase = getPostDetailUseCase;
         this.getPostCommentUseCase = getPostCommentUseCase;
+        this.voteCommentUseCase = voteCommentUseCase;
         this.modelTrans = modelTrans;
     }
 
     public void setView(@NonNull DataDetailView<PostObservable> dataDetailView) {
         this.dataDetailView = dataDetailView;
+    }
+
+    public void setVoteCommentView(@NonNull ActionView voteCommentView) {
+        this.voteCommentView = voteCommentView;
     }
 
     @Override
@@ -57,6 +69,7 @@ public class PostDetailPresenter implements Presenter {
     @Override
     public void destroy() {
         this.dataDetailView = null;
+        this.voteCommentView = null;
     }
 
     public void initialize(Long postId) {
@@ -110,5 +123,33 @@ public class PostDetailPresenter implements Presenter {
                         PostDetailPresenter.this.dataDetailView.renderItemDetail(postObservable);
                     }
                 }, postId);
+    }
+
+    public void voteComment(Long commentId, VoteType voteType) {
+        this.voteCommentView.showLoading();
+        this.voteCommentUseCase.execute(this.dataDetailView.bindToLifecycle(),
+                new Subscriber<VoteResult>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        logger.error("{}", e);
+                        PostDetailPresenter.this.voteCommentView.hideLoading();
+                        PostDetailPresenter.this.voteCommentView.showError("");
+                    }
+
+                    @Override
+                    public void onNext(VoteResult voteResult) {
+                        if (voteResult == VoteResult.Thanks) {
+                            PostDetailPresenter.this.voteCommentView.hideLoading();
+                            PostDetailPresenter.this.voteCommentView.showSuccess();
+                        } else {
+                            PostDetailPresenter.this.voteCommentView.showError("已经发表过意见噜");
+                        }
+                    }
+                }, commentId, voteType);
     }
 }

@@ -2,6 +2,8 @@ package info.xudshen.jandan.data.repository.datasource;
 
 import java.util.List;
 
+import info.xudshen.jandan.domain.enums.VoteResult;
+import info.xudshen.jandan.domain.enums.VoteType;
 import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.SimplePost;
 import rx.Observable;
@@ -23,4 +25,6 @@ public interface PostDataStore {
     Observable<List<Comment>> postCommentListNext(Long postId);
 
     Observable<Boolean> doPostComment(Long postId, String name, String email, String content);
+
+    Observable<VoteResult> voteComment(Long commentId, VoteType voteType);
 }

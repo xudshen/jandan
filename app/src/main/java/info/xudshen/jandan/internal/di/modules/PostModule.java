@@ -24,6 +24,7 @@ import info.xudshen.jandan.domain.interactor.GetPostDetail;
 import info.xudshen.jandan.domain.interactor.GetPostList;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
+import info.xudshen.jandan.domain.interactor.VoteComment;
 import info.xudshen.jandan.domain.model.SimplePost;
 import info.xudshen.jandan.domain.repository.PostRepository;
 import info.xudshen.jandan.internal.di.PerActivity;
@@ -102,5 +103,13 @@ public class PostModule {
     IterableUseCase provideGetPostCommentUseCase(PostRepository postRepository,
                                                  ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         return new GetPostComment(postRepository, threadExecutor, postExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("voteComment")
+    UseCase provideVoteCommentUseCase(PostRepository postRepository,
+                                      ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+        return new VoteComment(postRepository, threadExecutor, postExecutionThread);
     }
 }

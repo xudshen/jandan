@@ -7,6 +7,8 @@ import java.util.List;
 import info.xudshen.jandan.data.dao.PostDao;
 import info.xudshen.jandan.data.exception.PostNotFoundException;
 import info.xudshen.jandan.data.repository.datasource.PostDataStore;
+import info.xudshen.jandan.domain.enums.VoteResult;
+import info.xudshen.jandan.domain.enums.VoteType;
 import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.Post;
 import info.xudshen.jandan.domain.model.SimplePost;
@@ -65,6 +67,11 @@ public class LocalPostDataStore implements PostDataStore {
 
     @Override
     public Observable<Boolean> doPostComment(Long postId, String name, String email, String content) {
+        throw new NotImplementedException("");
+    }
+
+    @Override
+    public Observable<VoteResult> voteComment(Long commentId, VoteType voteType) {
         throw new NotImplementedException("");
     }
 }
