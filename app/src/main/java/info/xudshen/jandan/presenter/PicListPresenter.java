@@ -77,7 +77,7 @@ public class PicListPresenter implements Presenter {
 
                     @Override
                     public void onNext(Object o) {
-                        PicListPresenter.this.dataListView.renderList();
+                        PicListPresenter.this.dataListView.renderDataList();
                     }
                 });
     }
@@ -93,12 +93,12 @@ public class PicListPresenter implements Presenter {
      * load history data
      */
     public void swipeUpStart() {
-        this.dataListView.showSwipeUpLoading();
+        this.dataListView.showLoadingMore();
         this.getPicListUseCase.executeNext(this.dataListView.bindToLifecycle(),
                 new Subscriber() {
                     @Override
                     public void onCompleted() {
-                        PicListPresenter.this.dataListView.hideSwipeUpLoading();
+                        PicListPresenter.this.dataListView.hideLoadingMore();
                     }
 
                     @Override
@@ -108,7 +108,7 @@ public class PicListPresenter implements Presenter {
 
                     @Override
                     public void onNext(Object o) {
-                        PicListPresenter.this.dataListView.renderList();
+                        PicListPresenter.this.dataListView.renderDataList();
                     }
                 });
     }

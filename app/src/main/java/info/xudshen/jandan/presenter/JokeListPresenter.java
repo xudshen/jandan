@@ -77,7 +77,7 @@ public class JokeListPresenter implements Presenter {
 
                     @Override
                     public void onNext(Object o) {
-                        JokeListPresenter.this.dataListView.renderList();
+                        JokeListPresenter.this.dataListView.renderDataList();
                     }
                 });
     }
@@ -93,12 +93,12 @@ public class JokeListPresenter implements Presenter {
      * load history data
      */
     public void swipeUpStart() {
-        this.dataListView.showSwipeUpLoading();
+        this.dataListView.showLoadingMore();
         this.getJokeListUseCase.executeNext(this.dataListView.bindToLifecycle(),
                 new Subscriber() {
                     @Override
                     public void onCompleted() {
-                        JokeListPresenter.this.dataListView.hideSwipeUpLoading();
+                        JokeListPresenter.this.dataListView.hideLoadingMore();
                     }
 
                     @Override
@@ -108,7 +108,7 @@ public class JokeListPresenter implements Presenter {
 
                     @Override
                     public void onNext(Object o) {
-                        JokeListPresenter.this.dataListView.renderList();
+                        JokeListPresenter.this.dataListView.renderDataList();
                     }
                 });
     }

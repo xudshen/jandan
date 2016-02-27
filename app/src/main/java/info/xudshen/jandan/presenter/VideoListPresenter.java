@@ -77,7 +77,7 @@ public class VideoListPresenter implements Presenter {
 
                     @Override
                     public void onNext(Object o) {
-                        VideoListPresenter.this.dataListView.renderList();
+                        VideoListPresenter.this.dataListView.renderDataList();
                     }
                 });
     }
@@ -93,12 +93,12 @@ public class VideoListPresenter implements Presenter {
      * load history data
      */
     public void swipeUpStart() {
-        this.dataListView.showSwipeUpLoading();
+        this.dataListView.showLoadingMore();
         this.getVideoListUseCase.executeNext(this.dataListView.bindToLifecycle(),
                 new Subscriber() {
                     @Override
                     public void onCompleted() {
-                        VideoListPresenter.this.dataListView.hideSwipeUpLoading();
+                        VideoListPresenter.this.dataListView.hideLoadingMore();
                     }
 
                     @Override
@@ -108,7 +108,7 @@ public class VideoListPresenter implements Presenter {
 
                     @Override
                     public void onNext(Object o) {
-                        VideoListPresenter.this.dataListView.renderList();
+                        VideoListPresenter.this.dataListView.renderDataList();
                     }
                 });
     }

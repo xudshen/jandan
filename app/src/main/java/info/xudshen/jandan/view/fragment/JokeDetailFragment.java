@@ -197,7 +197,7 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
 
     //<editor-fold desc="Called by presenter">
     @Override
-    public void renderItemDetail(JokeItemObservable item) {
+    public void renderDataDetail(JokeItemObservable item) {
         if (binding.itemWithCommentList.getAdapter() == null) {
             DDBindableCursorLoaderRVHeaderAdapter commentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
                     .cursorLoader(getActivity(), DuoshuoCommentDao.CONTENT_URI, null, DuoshuoCommentDao.Properties.ThreadKey.columnName + " = ?", new String[]{Constants.THREAD_PREFIX + jokeId}, null)

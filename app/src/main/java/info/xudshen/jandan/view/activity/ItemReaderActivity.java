@@ -330,7 +330,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
 
                     @Override
                     public <T> Observable.Transformer<T, T> bindToLifecycle() {
-                        return null;
+                        return ItemReaderActivity.this.bindToLifecycle();
                     }
                 });
                 this.doCommentPresenter.deleteFavoItem(currentItemInfo.getAdapterItemType(currentPosition),
@@ -349,6 +349,11 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
                         item.setEnabled(true);
                         isCurrentFavo = success;
                         refreshIcon();
+                    }
+
+                    @Override
+                    public <T> Observable.Transformer<T, T> bindToLifecycle() {
+                        return ItemReaderActivity.this.bindToLifecycle();
                     }
                 });
                 FavoItem favoItem = FavoItemTrans.from(currentItemInfo.getAdapterItem(currentPosition));

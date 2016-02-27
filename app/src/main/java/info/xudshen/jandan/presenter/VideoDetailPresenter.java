@@ -119,14 +119,14 @@ public class VideoDetailPresenter implements Presenter {
                     @Override
                     public void onNext(VideoItem videoItem) {
                         VideoItemObservable videoItemObservable = modelTrans.transVideoItem(videoItem);
-                        VideoDetailPresenter.this.dataDetailView.renderItemDetail(videoItemObservable);
+                        VideoDetailPresenter.this.dataDetailView.renderDataDetail(videoItemObservable);
                     }
                 }, postId);
     }
 
     public void initialize(FavoItem favoItem) {
         VideoItemObservable videoItemObservable = modelTrans.transVideoItem(FavoItemTrans.toVideoItem(favoItem));
-        this.dataDetailView.renderItemDetail(videoItemObservable);
+        this.dataDetailView.renderDataDetail(videoItemObservable);
         VideoDetailPresenter.this.dataDetailView.hideLoading();
     }
 

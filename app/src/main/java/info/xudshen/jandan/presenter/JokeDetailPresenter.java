@@ -119,14 +119,14 @@ public class JokeDetailPresenter implements Presenter {
                     @Override
                     public void onNext(JokeItem jokeItem) {
                         JokeItemObservable jokeItemObservable = modelTrans.transJokeItem(jokeItem);
-                        JokeDetailPresenter.this.dataDetailView.renderItemDetail(jokeItemObservable);
+                        JokeDetailPresenter.this.dataDetailView.renderDataDetail(jokeItemObservable);
                     }
                 }, postId);
     }
 
     public void initialize(FavoItem favoItem) {
         JokeItemObservable jokeItemObservable = modelTrans.transJokeItem(FavoItemTrans.toJokeItem(favoItem));
-        this.dataDetailView.renderItemDetail(jokeItemObservable);
+        this.dataDetailView.renderDataDetail(jokeItemObservable);
         JokeDetailPresenter.this.dataDetailView.hideLoading();
     }
 

@@ -119,14 +119,14 @@ public class PicDetailPresenter implements Presenter {
                     @Override
                     public void onNext(PicItem picItem) {
                         PicItemObservable picItemObservable = modelTrans.transPicItem(picItem);
-                        PicDetailPresenter.this.dataDetailView.renderItemDetail(picItemObservable);
+                        PicDetailPresenter.this.dataDetailView.renderDataDetail(picItemObservable);
                     }
                 }, postId);
     }
 
     public void initialize(FavoItem favoItem) {
         PicItemObservable picItemObservable = modelTrans.transPicItem(FavoItemTrans.toPicItem(favoItem));
-        this.dataDetailView.renderItemDetail(picItemObservable);
+        this.dataDetailView.renderDataDetail(picItemObservable);
         PicDetailPresenter.this.dataDetailView.hideLoading();
     }
 

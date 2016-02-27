@@ -20,7 +20,6 @@ import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.Post;
 import info.xudshen.jandan.view.ActionView;
 import info.xudshen.jandan.view.DataDetailView;
-import info.xudshen.jandan.view.fragment.PostDetailFragment;
 import rx.Subscriber;
 
 /**
@@ -120,7 +119,7 @@ public class PostDetailPresenter implements Presenter {
                     @Override
                     public void onNext(Post post) {
                         PostObservable postObservable = PostDetailPresenter.this.modelTrans.transPost(post);
-                        PostDetailPresenter.this.dataDetailView.renderItemDetail(postObservable);
+                        PostDetailPresenter.this.dataDetailView.renderDataDetail(postObservable);
                     }
                 }, postId);
     }

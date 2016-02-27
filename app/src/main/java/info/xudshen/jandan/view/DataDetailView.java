@@ -6,7 +6,10 @@ package info.xudshen.jandan.view;
 public interface DataDetailView<T> extends LoadDataView {
     void showLoadingMore();
 
+    /**
+     * @param count show newly loaded item count
+     */
     void hideLoadingMore(int count);
 
-    void renderItemDetail(T item);
+    void renderDataDetail(T item);
 }

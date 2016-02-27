@@ -201,7 +201,7 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
 
     //<editor-fold desc="Called by presenter">
     @Override
-    public void renderItemDetail(VideoItemObservable item) {
+    public void renderDataDetail(VideoItemObservable item) {
         if (binding.itemWithCommentList.getAdapter() == null) {
             DDBindableCursorLoaderRVHeaderAdapter commentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
                     .cursorLoader(getActivity(), DuoshuoCommentDao.CONTENT_URI, null, DuoshuoCommentDao.Properties.ThreadKey.columnName + " = ?", new String[]{Constants.THREAD_PREFIX + videoId}, null)

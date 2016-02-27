@@ -5,9 +5,9 @@ package info.xudshen.jandan.view;
  * In this case is used as a view representing a user profile.
  */
 public interface DataListView extends LoadDataView {
-    void showSwipeUpLoading();
+    void showLoadingMore();
 
-    void hideSwipeUpLoading();
+    void hideLoadingMore();
 
-    void renderList();
+    void renderDataList();
 }

@@ -179,7 +179,7 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
     }
 
     @Override
-    public void renderItemDetail(PostObservable postObservable) {
+    public void renderDataDetail(PostObservable postObservable) {
         if (binding.postWithCommentList.getAdapter() == null) {
             DDBindableCursorLoaderRVHeaderAdapter postCommentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
                     .cursorLoader(getActivity(), CommentDao.CONTENT_URI, null, CommentDao.Properties.PostId.columnName + " = ?", new String[]{postId.toString()}, null)

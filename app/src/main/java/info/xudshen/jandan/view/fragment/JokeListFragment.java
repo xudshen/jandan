@@ -22,7 +22,6 @@ import info.xudshen.jandan.data.dao.JokeItemDao;
 import info.xudshen.jandan.databinding.FragmentJokeListBinding;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.domain.enums.VoteType;
-import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.JokeItem;
 import info.xudshen.jandan.internal.di.components.JokeComponent;
 import info.xudshen.jandan.presenter.JokeListPresenter;
@@ -218,19 +217,19 @@ public class JokeListFragment extends BaseFragment implements DataListView {
     }
 
     @Override
-    public void showSwipeUpLoading() {
+    public void showLoadingMore() {
         binding.jokeListLayout.setRefreshing(true, RefreshDirection.BOTTOM);
         binding.jokeListView.setLoading(true);
     }
 
     @Override
-    public void hideSwipeUpLoading() {
+    public void hideLoadingMore() {
         binding.jokeListLayout.setRefreshing(false, RefreshDirection.BOTTOM);
         binding.jokeListView.setLoading(false);
     }
 
     @Override
-    public void renderList() {
+    public void renderDataList() {
 
     }
 

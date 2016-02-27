@@ -29,7 +29,7 @@ public class DoCommentPresenter implements Presenter {
     private final UseCase postDuoshuoCommentUseCase;
     private final UseCase saveFavoItemUseCase;
     private final UseCase deleteFavoItemUseCase;
-    private ActionView dataDetailView;
+    private ActionView doPostCommentView;
     private SaveDataView saveDataView;
     private DeleteDataView deleteDataView;
 
@@ -44,8 +44,8 @@ public class DoCommentPresenter implements Presenter {
         this.deleteFavoItemUseCase = deleteFavoItemUseCase;
     }
 
-    public void setView(@NonNull ActionView dataDetailView) {
-        this.dataDetailView = dataDetailView;
+    public void setView(@NonNull ActionView doPostCommentView) {
+        this.doPostCommentView = doPostCommentView;
     }
 
     public void setSaveDataView(@NonNull SaveDataView saveDataView) {
@@ -70,13 +70,14 @@ public class DoCommentPresenter implements Presenter {
 
     @Override
     public void destroy() {
-        this.dataDetailView = null;
+        this.doPostCommentView = null;
         this.saveDataView = null;
+        this.deleteDataView = null;
     }
 
     public void doPostComment(Long postId, String name, String email, String content) {
-        DoCommentPresenter.this.dataDetailView.showLoading();
-        this.doPostCommentUseCase.execute(this.dataDetailView.bindToLifecycle(),
+        DoCommentPresenter.this.doPostCommentView.showLoading();
+        this.doPostCommentUseCase.execute(this.doPostCommentView.bindToLifecycle(),
                 new Subscriber<Boolean>() {
                     @Override
                     public void onCompleted() {
@@ -86,18 +87,18 @@ public class DoCommentPresenter implements Presenter {
                     @Override
                     public void onError(Throwable e) {
                         Observable.timer(1, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(aLong -> DoCommentPresenter.this.dataDetailView.hideLoading());
-                        DoCommentPresenter.this.dataDetailView.showError("error");
+                                .subscribe(aLong -> DoCommentPresenter.this.doPostCommentView.hideLoading());
+                        DoCommentPresenter.this.doPostCommentView.showError("error");
                     }
 
                     @Override
                     public void onNext(Boolean success) {
                         Observable.timer(1, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(aLong -> DoCommentPresenter.this.dataDetailView.hideLoading());
+                                .subscribe(aLong -> DoCommentPresenter.this.doPostCommentView.hideLoading());
                         if (success) {
-                            DoCommentPresenter.this.dataDetailView.showSuccess();
+                            DoCommentPresenter.this.doPostCommentView.showSuccess();
                         } else {
-                            DoCommentPresenter.this.dataDetailView.showError("error");
+                            DoCommentPresenter.this.doPostCommentView.showError("error");
                         }
                     }
                 }, postId, name, email, content);
@@ -105,8 +106,8 @@ public class DoCommentPresenter implements Presenter {
 
     public void postDuoshuoComment(String threadKey, String authorName, String authorEmail,
                                    String message, String parentId) {
-        DoCommentPresenter.this.dataDetailView.showLoading();
-        this.postDuoshuoCommentUseCase.execute(this.dataDetailView.bindToLifecycle(),
+        DoCommentPresenter.this.doPostCommentView.showLoading();
+        this.postDuoshuoCommentUseCase.execute(this.doPostCommentView.bindToLifecycle(),
                 new Subscriber<Boolean>() {
                     @Override
                     public void onCompleted() {
@@ -116,18 +117,18 @@ public class DoCommentPresenter implements Presenter {
                     @Override
                     public void onError(Throwable e) {
                         Observable.timer(1, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(aLong -> DoCommentPresenter.this.dataDetailView.hideLoading());
-                        DoCommentPresenter.this.dataDetailView.showError("error");
+                                .subscribe(aLong -> DoCommentPresenter.this.doPostCommentView.hideLoading());
+                        DoCommentPresenter.this.doPostCommentView.showError("error");
                     }
 
                     @Override
                     public void onNext(Boolean success) {
                         Observable.timer(1, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(aLong -> DoCommentPresenter.this.dataDetailView.hideLoading());
+                                .subscribe(aLong -> DoCommentPresenter.this.doPostCommentView.hideLoading());
                         if (success) {
-                            DoCommentPresenter.this.dataDetailView.showSuccess();
+                            DoCommentPresenter.this.doPostCommentView.showSuccess();
                         } else {
-                            DoCommentPresenter.this.dataDetailView.showError("error");
+                            DoCommentPresenter.this.doPostCommentView.showError("error");
                         }
                     }
                 }, threadKey, authorName, authorEmail, message, parentId);
@@ -135,7 +136,7 @@ public class DoCommentPresenter implements Presenter {
 
     public void saveFavoItem(FavoItem favoItem) {
         this.saveDataView.savingData();
-        this.saveFavoItemUseCase.execute(this.dataDetailView.bindToLifecycle(),
+        this.saveFavoItemUseCase.execute(this.saveDataView.bindToLifecycle(),
                 new Subscriber<Boolean>() {
                     @Override
                     public void onCompleted() {
@@ -156,7 +157,7 @@ public class DoCommentPresenter implements Presenter {
 
     public void deleteFavoItem(ReaderItemType type, String actualId) {
         this.deleteDataView.deletingData();
-        this.deleteFavoItemUseCase.execute(this.dataDetailView.bindToLifecycle(),
+        this.deleteFavoItemUseCase.execute(this.deleteDataView.bindToLifecycle(),
                 new Subscriber<Boolean>() {
                     @Override
                     public void onCompleted() {

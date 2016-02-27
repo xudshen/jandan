@@ -171,19 +171,19 @@ public class PostListFragment extends BaseFragment implements DataListView {
     }
 
     @Override
-    public void showSwipeUpLoading() {
+    public void showLoadingMore() {
         binding.swipeRefreshLayout.setRefreshing(true, RefreshDirection.BOTTOM);
         binding.myRecyclerView.setLoading(true);
     }
 
     @Override
-    public void hideSwipeUpLoading() {
+    public void hideLoadingMore() {
         binding.swipeRefreshLayout.setRefreshing(false, RefreshDirection.BOTTOM);
         binding.myRecyclerView.setLoading(false);
     }
 
     @Override
-    public void renderList() {
+    public void renderDataList() {
 
     }
 

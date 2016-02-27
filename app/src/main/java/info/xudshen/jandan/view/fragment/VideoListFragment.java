@@ -22,7 +22,6 @@ import info.xudshen.jandan.data.dao.VideoItemDao;
 import info.xudshen.jandan.databinding.FragmentVideoListBinding;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.domain.enums.VoteType;
-import info.xudshen.jandan.domain.model.JokeItem;
 import info.xudshen.jandan.domain.model.VideoItem;
 import info.xudshen.jandan.internal.di.components.VideoComponent;
 import info.xudshen.jandan.presenter.VideoListPresenter;
@@ -218,19 +217,19 @@ public class VideoListFragment extends BaseFragment implements DataListView {
     }
 
     @Override
-    public void showSwipeUpLoading() {
+    public void showLoadingMore() {
         binding.videoListLayout.setRefreshing(true, RefreshDirection.BOTTOM);
         binding.videoListView.setLoading(true);
     }
 
     @Override
-    public void hideSwipeUpLoading() {
+    public void hideLoadingMore() {
         binding.videoListLayout.setRefreshing(false, RefreshDirection.BOTTOM);
         binding.videoListView.setLoading(false);
     }
 
     @Override
-    public void renderList() {
+    public void renderDataList() {
 
     }
 

@@ -22,7 +22,6 @@ import info.xudshen.jandan.data.dao.PicItemDao;
 import info.xudshen.jandan.databinding.FragmentPicListBinding;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.domain.enums.VoteType;
-import info.xudshen.jandan.domain.model.JokeItem;
 import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.presenter.PicListPresenter;
@@ -218,19 +217,19 @@ public class PicListFragment extends BaseFragment implements DataListView {
     }
 
     @Override
-    public void showSwipeUpLoading() {
+    public void showLoadingMore() {
         binding.picListLayout.setRefreshing(true, RefreshDirection.BOTTOM);
         binding.picListView.setLoading(true);
     }
 
     @Override
-    public void hideSwipeUpLoading() {
+    public void hideLoadingMore() {
         binding.picListLayout.setRefreshing(false, RefreshDirection.BOTTOM);
         binding.picListView.setLoading(false);
     }
 
     @Override
-    public void renderList() {
+    public void renderDataList() {
 
     }
 

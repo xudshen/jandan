@@ -201,7 +201,7 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
 
     //<editor-fold desc="Called by presenter">
     @Override
-    public void renderItemDetail(PicItemObservable item) {
+    public void renderDataDetail(PicItemObservable item) {
         if (binding.itemWithCommentList.getAdapter() == null) {
             List<String> urlList = Splitter.on(",").splitToList(item.getPics());
             DDBindableCursorLoaderRVHeaderAdapter commentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()

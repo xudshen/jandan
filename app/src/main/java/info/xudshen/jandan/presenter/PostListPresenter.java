@@ -64,7 +64,7 @@ public class PostListPresenter implements Presenter {
 
                     @Override
                     public void onNext(Object o) {
-                        PostListPresenter.this.dataListView.renderList();
+                        PostListPresenter.this.dataListView.renderDataList();
                     }
                 });
     }
@@ -80,12 +80,12 @@ public class PostListPresenter implements Presenter {
      * load history data
      */
     public void swipeUpStart() {
-        this.dataListView.showSwipeUpLoading();
+        this.dataListView.showLoadingMore();
         this.getPostListUseCase.executeNext(this.dataListView.bindToLifecycle(),
                 new Subscriber() {
                     @Override
                     public void onCompleted() {
-                        PostListPresenter.this.dataListView.hideSwipeUpLoading();
+                        PostListPresenter.this.dataListView.hideLoadingMore();
                     }
 
                     @Override
@@ -95,7 +95,7 @@ public class PostListPresenter implements Presenter {
 
                     @Override
                     public void onNext(Object o) {
-                        PostListPresenter.this.dataListView.renderList();
+                        PostListPresenter.this.dataListView.renderDataList();
                     }
                 });
     }
