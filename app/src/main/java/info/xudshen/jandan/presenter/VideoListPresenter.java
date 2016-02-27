@@ -8,8 +8,12 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import info.xudshen.jandan.domain.enums.VoteResult;
+import info.xudshen.jandan.domain.enums.VoteType;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
+import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.internal.di.PerActivity;
+import info.xudshen.jandan.view.ActionView;
 import info.xudshen.jandan.view.DataListView;
 import rx.Subscriber;
 
@@ -23,13 +27,22 @@ public class VideoListPresenter implements Presenter {
     private DataListView dataListView;
     private IterableUseCase getVideoListUseCase;
 
+    private ActionView voteCommentView;
+    private final UseCase voteCommentUseCase;
+
     @Inject
-    public VideoListPresenter(@Named("videoList") IterableUseCase getVideoListUseCase) {
+    public VideoListPresenter(@Named("videoList") IterableUseCase getVideoListUseCase,
+                              @Named("voteVideo") UseCase voteCommentUseCase) {
         this.getVideoListUseCase = getVideoListUseCase;
+        this.voteCommentUseCase = voteCommentUseCase;
     }
 
     public void setView(@NonNull DataListView dataListView) {
         this.dataListView = dataListView;
+    }
+
+    public void setVoteCommentView(@NonNull ActionView voteCommentView) {
+        this.voteCommentView = voteCommentView;
     }
 
     @Override
@@ -45,6 +58,7 @@ public class VideoListPresenter implements Presenter {
     @Override
     public void destroy() {
         this.dataListView = null;
+        this.voteCommentView = null;
     }
 
     public void initialize() {
@@ -97,5 +111,33 @@ public class VideoListPresenter implements Presenter {
                         VideoListPresenter.this.dataListView.renderList();
                     }
                 });
+    }
+
+    public void voteComment(Long commentId, VoteType voteType) {
+        this.voteCommentView.showLoading();
+        this.voteCommentUseCase.execute(this.dataListView.bindToLifecycle(),
+                new Subscriber<VoteResult>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        logger.error("{}", e);
+                        voteCommentView.hideLoading();
+                        voteCommentView.showError("");
+                    }
+
+                    @Override
+                    public void onNext(VoteResult voteResult) {
+                        if (voteResult == VoteResult.Thanks) {
+                            voteCommentView.hideLoading();
+                            voteCommentView.showSuccess();
+                        } else {
+                            voteCommentView.showError("已经发表过意见噜");
+                        }
+                    }
+                }, commentId, voteType);
     }
 }

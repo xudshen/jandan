@@ -18,13 +18,19 @@ import javax.inject.Named;
 
 import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.data.dao.JokeItemDao;
 import info.xudshen.jandan.databinding.FragmentJokeListBinding;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
+import info.xudshen.jandan.domain.enums.VoteType;
+import info.xudshen.jandan.domain.model.Comment;
+import info.xudshen.jandan.domain.model.JokeItem;
 import info.xudshen.jandan.internal.di.components.JokeComponent;
 import info.xudshen.jandan.presenter.JokeListPresenter;
+import info.xudshen.jandan.view.ActionView;
 import info.xudshen.jandan.view.DataListView;
 import info.xudshen.jandan.view.activity.BaseActivity;
 import info.xudshen.jandan.view.widget.RefreshDirection;
+import rx.Observable;
 
 public class JokeListFragment extends BaseFragment implements DataListView {
     private static final Logger logger = LoggerFactory.getLogger(JokeListFragment.class);
@@ -39,6 +45,8 @@ public class JokeListFragment extends BaseFragment implements DataListView {
 
     @Inject
     JokeListPresenter jokeListPresenter;
+    @Inject
+    JokeItemDao jokeItemDao;
     @Inject
     @Named("jokeListAdapter")
     DDBindableCursorLoaderRVHeaderAdapter jokeListAdapter;
@@ -67,6 +75,17 @@ public class JokeListFragment extends BaseFragment implements DataListView {
                     itemView, position, ReaderItemType.SimpleJoke);
         });
 
+        jokeListAdapter.addOnItemSubviewClickListener(R.id.comment_vote_oo, (v, position) -> {
+            JokeItem comment = jokeItemDao.loadEntity(jokeListAdapter.getItemCursor(position));
+            JokeListFragment.this.jokeListPresenter.voteComment(comment.getJokeId(), VoteType.OO);
+            logger.info("{}", v);
+        });
+        jokeListAdapter.addOnItemSubviewClickListener(R.id.comment_vote_xx, (v, position) -> {
+            JokeItem comment = jokeItemDao.loadEntity(jokeListAdapter.getItemCursor(position));
+            JokeListFragment.this.jokeListPresenter.voteComment(comment.getJokeId(), VoteType.XX);
+            logger.info("{}", v);
+        });
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         binding.jokeListView.setLayoutManager(linearLayoutManager);
         binding.jokeListView.setAdapter(jokeListAdapter);
@@ -92,6 +111,47 @@ public class JokeListFragment extends BaseFragment implements DataListView {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.jokeListPresenter.setView(this);
+        this.jokeListPresenter.setVoteCommentView(new ActionView() {
+            @Override
+            public void showSuccess() {
+                showSnackbar(binding.jokeListView, "谢谢");
+            }
+
+            @Override
+            public void showLoading() {
+
+            }
+
+            @Override
+            public void hideLoading() {
+
+            }
+
+            @Override
+            public void showRetry() {
+
+            }
+
+            @Override
+            public void hideRetry() {
+
+            }
+
+            @Override
+            public void showError(String message) {
+                showSnackbar(binding.jokeListView, message);
+            }
+
+            @Override
+            public Context context() {
+                return null;
+            }
+
+            @Override
+            public <T> Observable.Transformer<T, T> bindToLifecycle() {
+                return null;
+            }
+        });
         if (!isDataLoaded && getUserVisibleHint()) {
             this.jokeListPresenter.initialize();
         }

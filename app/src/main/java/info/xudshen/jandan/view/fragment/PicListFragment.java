@@ -18,13 +18,19 @@ import javax.inject.Named;
 
 import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.data.dao.PicItemDao;
 import info.xudshen.jandan.databinding.FragmentPicListBinding;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
+import info.xudshen.jandan.domain.enums.VoteType;
+import info.xudshen.jandan.domain.model.JokeItem;
+import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.presenter.PicListPresenter;
+import info.xudshen.jandan.view.ActionView;
 import info.xudshen.jandan.view.DataListView;
 import info.xudshen.jandan.view.activity.BaseActivity;
 import info.xudshen.jandan.view.widget.RefreshDirection;
+import rx.Observable;
 
 public class PicListFragment extends BaseFragment implements DataListView {
     private static final Logger logger = LoggerFactory.getLogger(PicListFragment.class);
@@ -39,6 +45,8 @@ public class PicListFragment extends BaseFragment implements DataListView {
 
     @Inject
     PicListPresenter picListPresenter;
+    @Inject
+    PicItemDao picItemDao;
     @Inject
     @Named("picListAdapter")
     DDBindableCursorLoaderRVHeaderAdapter picListAdapter;
@@ -67,6 +75,17 @@ public class PicListFragment extends BaseFragment implements DataListView {
                     itemView, position, ReaderItemType.SimplePic);
         });
 
+        picListAdapter.addOnItemSubviewClickListener(R.id.comment_vote_oo, (v, position) -> {
+            PicItem comment = picItemDao.loadEntity(picListAdapter.getItemCursor(position));
+            PicListFragment.this.picListPresenter.voteComment(comment.getPicId(), VoteType.OO);
+            logger.info("{}", v);
+        });
+        picListAdapter.addOnItemSubviewClickListener(R.id.comment_vote_xx, (v, position) -> {
+            PicItem comment = picItemDao.loadEntity(picListAdapter.getItemCursor(position));
+            PicListFragment.this.picListPresenter.voteComment(comment.getPicId(), VoteType.XX);
+            logger.info("{}", v);
+        });
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         binding.picListView.setLayoutManager(linearLayoutManager);
         binding.picListView.setAdapter(picListAdapter);
@@ -92,6 +111,47 @@ public class PicListFragment extends BaseFragment implements DataListView {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.picListPresenter.setView(this);
+        this.picListPresenter.setVoteCommentView(new ActionView() {
+            @Override
+            public void showSuccess() {
+                showSnackbar(binding.picListView, "谢谢");
+            }
+
+            @Override
+            public void showLoading() {
+
+            }
+
+            @Override
+            public void hideLoading() {
+
+            }
+
+            @Override
+            public void showRetry() {
+
+            }
+
+            @Override
+            public void hideRetry() {
+
+            }
+
+            @Override
+            public void showError(String message) {
+                showSnackbar(binding.picListView, message);
+            }
+
+            @Override
+            public Context context() {
+                return null;
+            }
+
+            @Override
+            public <T> Observable.Transformer<T, T> bindToLifecycle() {
+                return null;
+            }
+        });
         if (!isDataLoaded && getUserVisibleHint()) {
             this.picListPresenter.initialize();
         }

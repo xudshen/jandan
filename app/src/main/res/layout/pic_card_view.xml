@@ -105,6 +105,7 @@
                 android:orientation="horizontal">
 
                 <Button
+                    android:id="@+id/comment_vote_oo"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -114,6 +115,7 @@
                     android:textColorHighlight="@color/colorAccent" />
 
                 <Button
+                    android:id="@+id/comment_vote_xx"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -127,6 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
+                    android:clickable="false"
                     android:text="@{HtmlHelper.commentCount(item.commentCount)}"
                     android:textColor="@color/secondary_text"
                     android:textColorHighlight="@color/colorAccent" />

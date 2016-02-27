@@ -18,13 +18,19 @@ import javax.inject.Named;
 
 import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.data.dao.VideoItemDao;
 import info.xudshen.jandan.databinding.FragmentVideoListBinding;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
+import info.xudshen.jandan.domain.enums.VoteType;
+import info.xudshen.jandan.domain.model.JokeItem;
+import info.xudshen.jandan.domain.model.VideoItem;
 import info.xudshen.jandan.internal.di.components.VideoComponent;
 import info.xudshen.jandan.presenter.VideoListPresenter;
+import info.xudshen.jandan.view.ActionView;
 import info.xudshen.jandan.view.DataListView;
 import info.xudshen.jandan.view.activity.BaseActivity;
 import info.xudshen.jandan.view.widget.RefreshDirection;
+import rx.Observable;
 
 public class VideoListFragment extends BaseFragment implements DataListView {
     private static final Logger logger = LoggerFactory.getLogger(VideoListFragment.class);
@@ -39,6 +45,8 @@ public class VideoListFragment extends BaseFragment implements DataListView {
 
     @Inject
     VideoListPresenter videoListPresenter;
+    @Inject
+    VideoItemDao videoItemDao;
     @Inject
     @Named("videoListAdapter")
     DDBindableCursorLoaderRVHeaderAdapter videoListAdapter;
@@ -67,6 +75,17 @@ public class VideoListFragment extends BaseFragment implements DataListView {
                     itemView, position, ReaderItemType.SimpleVideo);
         });
 
+        videoListAdapter.addOnItemSubviewClickListener(R.id.comment_vote_oo, (v, position) -> {
+            VideoItem comment = videoItemDao.loadEntity(videoListAdapter.getItemCursor(position));
+            VideoListFragment.this.videoListPresenter.voteComment(comment.getVideoId(), VoteType.OO);
+            logger.info("{}", v);
+        });
+        videoListAdapter.addOnItemSubviewClickListener(R.id.comment_vote_xx, (v, position) -> {
+            VideoItem comment = videoItemDao.loadEntity(videoListAdapter.getItemCursor(position));
+            VideoListFragment.this.videoListPresenter.voteComment(comment.getVideoId(), VoteType.XX);
+            logger.info("{}", v);
+        });
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         binding.videoListView.setLayoutManager(linearLayoutManager);
         binding.videoListView.setAdapter(videoListAdapter);
@@ -92,6 +111,47 @@ public class VideoListFragment extends BaseFragment implements DataListView {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.videoListPresenter.setView(this);
+        this.videoListPresenter.setVoteCommentView(new ActionView() {
+            @Override
+            public void showSuccess() {
+                showSnackbar(binding.videoListView, "谢谢");
+            }
+
+            @Override
+            public void showLoading() {
+
+            }
+
+            @Override
+            public void hideLoading() {
+
+            }
+
+            @Override
+            public void showRetry() {
+
+            }
+
+            @Override
+            public void hideRetry() {
+
+            }
+
+            @Override
+            public void showError(String message) {
+                showSnackbar(binding.videoListView, message);
+            }
+
+            @Override
+            public Context context() {
+                return null;
+            }
+
+            @Override
+            public <T> Observable.Transformer<T, T> bindToLifecycle() {
+                return null;
+            }
+        });
         if (!isDataLoaded && getUserVisibleHint()) {
             this.videoListPresenter.initialize();
         }
