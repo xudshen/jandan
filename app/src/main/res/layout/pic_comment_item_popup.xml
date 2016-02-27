@@ -40,7 +40,7 @@
             app:avatar="@{comment.authorAvatar}"
             app:civ_border_color="@color/almostWhite"
             app:civ_border_width="1dp"
-            app:placeHolder="@{@drawable/post_placeholder}" />
+            app:placeHolder="@{@drawable/placeholder}" />
 
         <TextView
             style="@style/PostDetailMetaHighlight"

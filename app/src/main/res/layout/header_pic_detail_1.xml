@@ -23,7 +23,7 @@
         <info.xudshen.jandan.view.component.ProgressImageView
             style="@style/ProgressImageViewStyle"
             app:picFull="@{urls[0]}"
-            app:placeHolder="@{@drawable/post_placeholder}" />
+            app:placeHolder="@{@drawable/placeholder}" />
 
         <View style="@style/Divider" />
 

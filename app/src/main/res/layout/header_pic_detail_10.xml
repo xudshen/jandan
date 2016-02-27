@@ -23,70 +23,70 @@
         <info.xudshen.jandan.view.component.ProgressImageView
             style="@style/ProgressImageViewStyle"
             app:picFull="@{urls[0]}"
-            app:placeHolder="@{@drawable/post_placeholder}" />
+            app:placeHolder="@{@drawable/placeholder}" />
 
         <View style="@style/Divider" />
 
         <info.xudshen.jandan.view.component.ProgressImageView
             style="@style/ProgressImageViewStyle"
             app:picFull="@{urls[1]}"
-            app:placeHolder="@{@drawable/post_placeholder}" />
+            app:placeHolder="@{@drawable/placeholder}" />
 
         <View style="@style/Divider" />
 
         <info.xudshen.jandan.view.component.ProgressImageView
             style="@style/ProgressImageViewStyle"
             app:picFull="@{urls[2]}"
-            app:placeHolder="@{@drawable/post_placeholder}" />
+            app:placeHolder="@{@drawable/placeholder}" />
 
         <View style="@style/Divider" />
 
         <info.xudshen.jandan.view.component.ProgressImageView
             style="@style/ProgressImageViewStyle"
             app:picFull="@{urls[3]}"
-            app:placeHolder="@{@drawable/post_placeholder}" />
+            app:placeHolder="@{@drawable/placeholder}" />
 
         <View style="@style/Divider" />
 
         <info.xudshen.jandan.view.component.ProgressImageView
             style="@style/ProgressImageViewStyle"
             app:picFull="@{urls[4]}"
-            app:placeHolder="@{@drawable/post_placeholder}" />
+            app:placeHolder="@{@drawable/placeholder}" />
 
         <View style="@style/Divider" />
 
         <info.xudshen.jandan.view.component.ProgressImageView
             style="@style/ProgressImageViewStyle"
             app:picFull="@{urls[5]}"
-            app:placeHolder="@{@drawable/post_placeholder}" />
+            app:placeHolder="@{@drawable/placeholder}" />
 
         <View style="@style/Divider" />
 
         <info.xudshen.jandan.view.component.ProgressImageView
             style="@style/ProgressImageViewStyle"
             app:picFull="@{urls[6]}"
-            app:placeHolder="@{@drawable/post_placeholder}" />
+            app:placeHolder="@{@drawable/placeholder}" />
 
         <View style="@style/Divider" />
 
         <info.xudshen.jandan.view.component.ProgressImageView
             style="@style/ProgressImageViewStyle"
             app:picFull="@{urls[7]}"
-            app:placeHolder="@{@drawable/post_placeholder}" />
+            app:placeHolder="@{@drawable/placeholder}" />
 
         <View style="@style/Divider" />
 
         <info.xudshen.jandan.view.component.ProgressImageView
             style="@style/ProgressImageViewStyle"
             app:picFull="@{urls[8]}"
-            app:placeHolder="@{@drawable/post_placeholder}" />
+            app:placeHolder="@{@drawable/placeholder}" />
 
         <View style="@style/Divider" />
 
         <info.xudshen.jandan.view.component.ProgressImageView
             style="@style/ProgressImageViewStyle"
             app:picFull="@{urls[9]}"
-            app:placeHolder="@{@drawable/post_placeholder}" />
+            app:placeHolder="@{@drawable/placeholder}" />
 
         <View style="@style/Divider" />
 

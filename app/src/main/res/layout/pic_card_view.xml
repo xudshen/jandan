@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 app:picThumb="@{item.picFirst}"
-                app:placeHolder="@{@drawable/post_placeholder}" />
+                app:placeHolder="@{@drawable/placeholder}" />
 
             <View style="@style/Divider" />
 
