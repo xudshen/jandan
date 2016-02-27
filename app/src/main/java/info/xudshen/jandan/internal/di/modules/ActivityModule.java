@@ -53,21 +53,9 @@ public class ActivityModule {
     @PerActivity
     Drawer provideDrawer() {
         logger.info("provideDrawer");
-        //TODO: read profile from local db
-        IProfile profile = new ProfileDrawerItem()
-                .withName("Java-Help")
-                .withEmail("java-help@mail.ru")
-                .withIcon(R.color.md_green_500);
-
-        ProfileSettingDrawerItem profileSettingDrawerItem = new ProfileSettingDrawerItem()
-                .withName(this.activity.getString(R.string.drawer_profile_add))
-                .withIcon(GoogleMaterial.Icon.gmd_add)
-                .withIdentifier(-1);
-
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this.activity)
                 .withHeaderBackground(R.color.colorPrimaryDark)
-                .addProfiles(profile, profileSettingDrawerItem)
                 .build();
 
         return new DrawerBuilder().withActivity(this.activity)

@@ -39,10 +39,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.constants.Constants;
+import info.xudshen.jandan.data.dao.MetaDao;
+import info.xudshen.jandan.data.repository.datasource.impl.DataStoreHelper;
 import info.xudshen.jandan.domain.enums.CommentAction;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.domain.model.FavoItem;
 import info.xudshen.jandan.domain.model.FavoItemTrans;
+import info.xudshen.jandan.domain.model.Meta;
 import info.xudshen.jandan.internal.di.HasComponents;
 import info.xudshen.jandan.internal.di.components.ActivityComponent;
 import info.xudshen.jandan.internal.di.components.DaggerActivityComponent;
@@ -77,6 +80,8 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
     private static final Logger logger = LoggerFactory.getLogger(ItemReaderActivity.class);
     public static final String ARG_POSITION = "ARG_POSITION";
     public static final String ARG_READER_TYPE = "ARG_READER_TYPE";
+    public static final String KEY_USER_NAME = "KEY_USER_NAME";
+    public static final String KEY_USER_EMAIL = "KEY_USER_EMAIL";
 
     @Bind(R.id.item_reader_view_pager)
     ViewPager viewPager;
@@ -121,6 +126,8 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
     Subscription commentActionSubjectSubscription;
     @Inject
     DoCommentPresenter doCommentPresenter;
+    @Inject
+    MetaDao metaDao;
 
     @Override
     protected void initializeInjector() {
@@ -377,6 +384,29 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
     protected void onDestroy() {
         super.onDestroy();
         commentActionSubjectSubscription.unsubscribe();
+        this.doCommentPresenter.destroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.doCommentPresenter.resume();
+        Meta userName = DataStoreHelper.getMeta(metaDao, KEY_USER_NAME);
+        Meta userEmail = DataStoreHelper.getMeta(metaDao, KEY_USER_EMAIL);
+        this.commentAreaName.setText(userName.getValue());
+        this.commentAreaEmail.setText(userEmail.getValue());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.doCommentPresenter.pause();
+        Meta userName = DataStoreHelper.getMeta(metaDao, KEY_USER_NAME);
+        Meta userEmail = DataStoreHelper.getMeta(metaDao, KEY_USER_EMAIL);
+        userName.setValue(this.commentAreaName.getText().toString());
+        userEmail.setValue(this.commentAreaEmail.getText().toString());
+        metaDao.update(userName);
+        metaDao.update(userEmail);
     }
 
     //<editor-fold desc="Called by presenter">
