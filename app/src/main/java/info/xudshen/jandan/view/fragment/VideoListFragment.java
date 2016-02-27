@@ -25,6 +25,7 @@ import info.xudshen.jandan.domain.enums.VoteType;
 import info.xudshen.jandan.domain.model.VideoItem;
 import info.xudshen.jandan.internal.di.components.VideoComponent;
 import info.xudshen.jandan.presenter.VideoListPresenter;
+import info.xudshen.jandan.utils.HtmlHelper;
 import info.xudshen.jandan.view.ActionView;
 import info.xudshen.jandan.view.DataListView;
 import info.xudshen.jandan.view.activity.BaseActivity;
@@ -83,6 +84,10 @@ public class VideoListFragment extends BaseFragment implements DataListView {
             VideoItem comment = videoItemDao.loadEntity(videoListAdapter.getItemCursor(position));
             VideoListFragment.this.videoListPresenter.voteComment(comment.getVideoId(), VoteType.XX);
             logger.info("{}", v);
+        });
+        videoListAdapter.addOnItemSubviewClickListener(R.id.play_buttom, (v, position) -> {
+            VideoItem comment = videoItemDao.loadEntity(videoListAdapter.getItemCursor(position));
+            HtmlHelper.openInBrowser(getActivity(), comment.getVideoLink());
         });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());

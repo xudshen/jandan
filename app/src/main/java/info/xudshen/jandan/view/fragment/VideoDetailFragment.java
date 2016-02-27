@@ -36,6 +36,7 @@ import info.xudshen.jandan.domain.model.FavoItem;
 import info.xudshen.jandan.internal.di.components.VideoComponent;
 import info.xudshen.jandan.presenter.VideoDetailPresenter;
 import info.xudshen.jandan.utils.ClipboardHelper;
+import info.xudshen.jandan.utils.HtmlHelper;
 import info.xudshen.jandan.view.ActionView;
 import info.xudshen.jandan.view.DataDetailView;
 import info.xudshen.jandan.view.model.DuoshuoCommentDialogModel;
@@ -213,6 +214,7 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
                                 .color(getResources().getColor(R.color.md_white_1000))
                                 .sizeDp(20)
                                 .paddingDp(2));
+                        button.setOnClickListener(v -> HtmlHelper.openInBrowser(getActivity(), item.getVideoLink()));
 
                         Button refreshButton = (Button) viewDataBinding.getRoot().findViewById(R.id.refresh_comment_button);
                         refreshButton.setOnClickListener(v -> videoDetailPresenter.refreshComment(videoId));

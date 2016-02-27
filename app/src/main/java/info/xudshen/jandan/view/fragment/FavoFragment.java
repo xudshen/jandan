@@ -22,8 +22,10 @@ import info.xudshen.jandan.data.dao.FavoItemDao;
 import info.xudshen.jandan.databinding.FragmentFavoBinding;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.domain.model.FavoItem;
+import info.xudshen.jandan.domain.model.VideoItem;
 import info.xudshen.jandan.internal.di.components.FavoComponent;
 import info.xudshen.jandan.presenter.FavoListPresenter;
+import info.xudshen.jandan.utils.HtmlHelper;
 import info.xudshen.jandan.view.DeleteDataView;
 import info.xudshen.jandan.view.activity.BaseActivity;
 
@@ -69,6 +71,11 @@ public class FavoFragment extends BaseFragment implements DeleteDataView {
         favoListAdapter.setOnItemClickListener((v, position) -> {
             getNavigator().launchItemReader((BaseActivity) getActivity(),
                     v, position, ReaderItemType.Multi);
+        });
+
+        favoListAdapter.addOnItemSubviewClickListener(R.id.play_buttom, (v, position) -> {
+            FavoItem comment = favoItemDao.loadEntity(favoListAdapter.getItemCursor(position));
+            HtmlHelper.openInBrowser(getActivity(), comment.getVideoLink());
         });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());

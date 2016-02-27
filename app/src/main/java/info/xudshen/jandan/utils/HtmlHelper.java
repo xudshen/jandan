@@ -1,5 +1,11 @@
 package info.xudshen.jandan.utils;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.text.TextUtils;
+import android.util.Patterns;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,5 +70,12 @@ public class HtmlHelper {
     public static boolean isWholeBlank(final CharSequence cs) {
         Matcher matcher = NOT_EMPTY.matcher(cs.toString());
         return !matcher.find();
+    }
+
+    public static void openInBrowser(Activity activity, String uri) {
+        if (Patterns.WEB_URL.matcher(uri).matches()) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            activity.startActivity(browserIntent);
+        }
     }
 }
