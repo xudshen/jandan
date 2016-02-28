@@ -27,8 +27,8 @@
             android:key="filterXXgt"
             android:summary="需重启APP生效"
             android:title="@string/preference_filter_xx_gt"
-            app:msbp_interval="10"
-            app:msbp_maxValue="500"
+            app:msbp_interval="2"
+            app:msbp_maxValue="200"
             app:msbp_measurementUnit="XX"
             app:msbp_minValue="0" />
     </PreferenceCategory>
@@ -54,7 +54,6 @@
             android:title="@string/preference_clear_cache" />
     </PreferenceCategory>
 
-
     <PreferenceCategory android:title="@string/preference_about">
         <Preference android:title="@string/preference_feedback" />
         <Preference
@@ -68,5 +67,13 @@
         <Preference
             android:summary="Powered by DroidData"
             android:title="@string/preference_version" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/preference_thanks">
+        <Preference android:title="@string/preference_drawer_image_by_lackar">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="http://jandan.net/2010/07/03/marschook-vuvuzela.html" />
+        </Preference>
     </PreferenceCategory>
 </PreferenceScreen>

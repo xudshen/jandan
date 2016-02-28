@@ -60,4 +60,6 @@
     <string name="preference_feedback">我要反馈</string>
     <string name="preference_about">关于</string>
     <string name="preference_about_author">关于作者</string>
+    <string name="preference_drawer_image_by_lackar">超载鸡之呜呜祖拉@Lackar</string>
+    <string name="preference_thanks">感谢</string>
 </resources>

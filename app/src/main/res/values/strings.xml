@@ -61,4 +61,6 @@
     <string name="preference_feedback">Feedback</string>
     <string name="preference_about_author">About author</string>
     <string name="preference_version">Version 0.9.0</string>
+    <string name="preference_drawer_image_by_lackar">Vuvuzela Image by Lackar</string>
+    <string name="preference_thanks">Thanks</string>
 </resources>

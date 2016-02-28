@@ -1,6 +1,7 @@
 package info.xudshen.jandan.internal.di.modules;
 
 import android.app.Activity;
+import android.widget.ImageView;
 
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -10,9 +11,6 @@ import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +53,8 @@ public class ActivityModule {
         logger.info("provideDrawer");
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this.activity)
-                .withHeaderBackground(R.color.colorPrimaryDark)
+                .withHeaderBackgroundScaleType(ImageView.ScaleType.CENTER_CROP)
+                .withHeaderBackground(this.activity.getResources().getDrawable(R.drawable.drawerheader))
                 .build();
 
         return new DrawerBuilder().withActivity(this.activity)
