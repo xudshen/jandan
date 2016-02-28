@@ -13,6 +13,7 @@ import javax.inject.Named;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.domain.model.FavoItem;
+import info.xudshen.jandan.utils.RetrofitErrorHelper;
 import info.xudshen.jandan.view.ActionView;
 import info.xudshen.jandan.view.DeleteDataView;
 import info.xudshen.jandan.view.SaveDataView;
@@ -88,7 +89,8 @@ public class DoCommentPresenter implements Presenter {
                     public void onError(Throwable e) {
                         Observable.timer(1, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(aLong -> DoCommentPresenter.this.doPostCommentView.hideLoading());
-                        DoCommentPresenter.this.doPostCommentView.showError("error");
+                        DoCommentPresenter.this.doPostCommentView.showError(RetrofitErrorHelper.transException(
+                                DoCommentPresenter.this.doPostCommentView.context(), e));
                     }
 
                     @Override
@@ -98,7 +100,9 @@ public class DoCommentPresenter implements Presenter {
                         if (success) {
                             DoCommentPresenter.this.doPostCommentView.showSuccess();
                         } else {
-                            DoCommentPresenter.this.doPostCommentView.showError("error");
+                            DoCommentPresenter.this.doPostCommentView.showError(
+                                    DoCommentPresenter.this.doPostCommentView.context()
+                                            .getString(info.xudshen.jandan.R.string.comment_failed));
                         }
                     }
                 }, postId, name, email, content);
@@ -118,7 +122,8 @@ public class DoCommentPresenter implements Presenter {
                     public void onError(Throwable e) {
                         Observable.timer(1, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(aLong -> DoCommentPresenter.this.doPostCommentView.hideLoading());
-                        DoCommentPresenter.this.doPostCommentView.showError("error");
+                        DoCommentPresenter.this.doPostCommentView.showError(RetrofitErrorHelper.transException(
+                                DoCommentPresenter.this.doPostCommentView.context(), e));
                     }
 
                     @Override
@@ -128,7 +133,9 @@ public class DoCommentPresenter implements Presenter {
                         if (success) {
                             DoCommentPresenter.this.doPostCommentView.showSuccess();
                         } else {
-                            DoCommentPresenter.this.doPostCommentView.showError("error");
+                            DoCommentPresenter.this.doPostCommentView.showError(
+                                    DoCommentPresenter.this.doPostCommentView.context()
+                                            .getString(info.xudshen.jandan.R.string.comment_failed));
                         }
                     }
                 }, threadKey, authorName, authorEmail, message, parentId);

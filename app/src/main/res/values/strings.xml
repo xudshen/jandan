@@ -29,4 +29,15 @@
     <string name="loaded_numbers_comments">%d comments loaded.</string>
     <string name="meta_format_all_comment_count">Comments (%d)</string>
     <string name="comment_click_to_refresh">Refresh</string>
+    <string name="comment_no_blank">Blank Content</string>
+    <string name="comment_email_format_error">Format Error</string>
+    <string name="comment_say_after_at_somebody">Blank Comment</string>
+    <string name="comment_success">Sent!</string>
+    <string name="comment_failed">Failed.</string>
+    <string name="retrofit_no_internet">No Internet.</string>
+    <string name="retrofit_socket_timeout">Internet Timeout.</string>
+    <string name="retrofit_unknown">Unknown Error.</string>
+    <string name="vote_success">Voted.</string>
+    <string name="vote_already">Already voted.</string>
+    <string name="favo_deleted">Deleted.</string>
 </resources>

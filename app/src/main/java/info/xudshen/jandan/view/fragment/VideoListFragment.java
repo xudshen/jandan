@@ -118,7 +118,7 @@ public class VideoListFragment extends BaseFragment implements DataListView {
         this.videoListPresenter.setVoteCommentView(new ActionView() {
             @Override
             public void showSuccess() {
-                showSnackbar(binding.videoListView, "谢谢");
+                showSnackbar(binding.videoListView, getString(R.string.vote_success));
             }
 
             @Override
@@ -148,12 +148,12 @@ public class VideoListFragment extends BaseFragment implements DataListView {
 
             @Override
             public Context context() {
-                return null;
+                return getActivity().getApplicationContext();
             }
 
             @Override
             public <T> Observable.Transformer<T, T> bindToLifecycle() {
-                return null;
+                return VideoListFragment.this.bindToLifecycle();
             }
         });
         if (!isDataLoaded && getUserVisibleHint()) {
@@ -218,7 +218,7 @@ public class VideoListFragment extends BaseFragment implements DataListView {
 
     @Override
     public void showError(String message) {
-
+        showSnackbar(binding.videoListView, message);
     }
 
     @Override

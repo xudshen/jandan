@@ -8,11 +8,13 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import info.xudshen.jandan.R;
 import info.xudshen.jandan.domain.enums.VoteResult;
 import info.xudshen.jandan.domain.enums.VoteType;
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.internal.di.PerActivity;
+import info.xudshen.jandan.utils.RetrofitErrorHelper;
 import info.xudshen.jandan.view.ActionView;
 import info.xudshen.jandan.view.DataListView;
 import rx.Subscriber;
@@ -72,7 +74,10 @@ public class JokeListPresenter implements Presenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        logger.error("", e);
+                        JokeListPresenter.this.dataListView.hideLoading();
+                        JokeListPresenter.this.dataListView.showError(
+                                RetrofitErrorHelper.transException(
+                                        JokeListPresenter.this.dataListView.context(), e));
                     }
 
                     @Override
@@ -103,7 +108,10 @@ public class JokeListPresenter implements Presenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        logger.error("", e);
+                        JokeListPresenter.this.dataListView.hideLoadingMore();
+                        JokeListPresenter.this.dataListView.showError(
+                                RetrofitErrorHelper.transException(
+                                        JokeListPresenter.this.dataListView.context(), e));
                     }
 
                     @Override
@@ -115,27 +123,27 @@ public class JokeListPresenter implements Presenter {
 
     public void voteComment(Long commentId, VoteType voteType) {
         this.voteCommentView.showLoading();
-        this.voteCommentUseCase.execute(this.dataListView.bindToLifecycle(),
+        this.voteCommentUseCase.execute(this.voteCommentView.bindToLifecycle(),
                 new Subscriber<VoteResult>() {
                     @Override
                     public void onCompleted() {
-
+                        JokeListPresenter.this.voteCommentView.hideLoading();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        logger.error("{}", e);
-                        voteCommentView.hideLoading();
-                        voteCommentView.showError("");
+                        JokeListPresenter.this.voteCommentView.hideLoading();
+                        JokeListPresenter.this.voteCommentView.showError(
+                                RetrofitErrorHelper.transException(
+                                        JokeListPresenter.this.voteCommentView.context(), e));
                     }
 
                     @Override
                     public void onNext(VoteResult voteResult) {
                         if (voteResult == VoteResult.Thanks) {
-                            voteCommentView.hideLoading();
                             voteCommentView.showSuccess();
                         } else {
-                            voteCommentView.showError("已经发表过意见噜");
+                            voteCommentView.showError(voteCommentView.context().getString(R.string.vote_already));
                         }
                     }
                 }, commentId, voteType);

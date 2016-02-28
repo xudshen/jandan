@@ -123,7 +123,7 @@ public class FavoFragment extends BaseFragment implements DeleteDataView {
     @Override
     public void result(boolean success) {
         if (success) {
-            showSnackbar(binding.favoList, "该收藏已删除");
+            showSnackbar(binding.favoList, getString(R.string.favo_deleted));
         }
     }
 }

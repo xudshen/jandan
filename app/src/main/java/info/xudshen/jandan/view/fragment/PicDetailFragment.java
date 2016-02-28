@@ -119,7 +119,7 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
         this.picDetailPresenter.setVoteCommentView(new ActionView() {
             @Override
             public void showSuccess() {
-                showSnackbar(binding.itemWithCommentList, "谢谢");
+                showSnackbar(binding.itemWithCommentList, getString(R.string.vote_success));
             }
 
             @Override
@@ -149,12 +149,12 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
 
             @Override
             public Context context() {
-                return null;
+                return getActivity().getApplicationContext();
             }
 
             @Override
             public <T> Observable.Transformer<T, T> bindToLifecycle() {
-                return null;
+                return PicDetailFragment.this.bindToLifecycle();
             }
         });
         if (!isDataLoaded && getUserVisibleHint()) {
@@ -322,7 +322,7 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
         if (count > 0) {
             showSnackbar(binding.itemWithCommentList,
                     String.format(getString(R.string.loaded_numbers_comments), count));
-        } else {
+        } else if (count == 0) {
             showSnackbar(binding.itemWithCommentList, getString(R.string.post_detail_no_more_comments));
         }
     }

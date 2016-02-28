@@ -115,7 +115,7 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
         this.jokeDetailPresenter.setVoteCommentView(new ActionView() {
             @Override
             public void showSuccess() {
-                showSnackbar(binding.itemWithCommentList, "谢谢");
+                showSnackbar(binding.itemWithCommentList, getString(R.string.vote_success));
             }
 
             @Override
@@ -145,12 +145,12 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
 
             @Override
             public Context context() {
-                return null;
+                return getActivity().getApplicationContext();
             }
 
             @Override
             public <T> Observable.Transformer<T, T> bindToLifecycle() {
-                return null;
+                return JokeDetailFragment.this.bindToLifecycle();
             }
         });
         if (!isDataLoaded && getUserVisibleHint()) {
@@ -316,7 +316,7 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
         if (count > 0) {
             showSnackbar(binding.itemWithCommentList,
                     String.format(getString(R.string.loaded_numbers_comments), count));
-        } else {
+        } else if (count == 0) {
             showSnackbar(binding.itemWithCommentList, getString(R.string.post_detail_no_more_comments));
         }
     }

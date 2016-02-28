@@ -113,7 +113,7 @@ public class PicListFragment extends BaseFragment implements DataListView {
         this.picListPresenter.setVoteCommentView(new ActionView() {
             @Override
             public void showSuccess() {
-                showSnackbar(binding.picListView, "谢谢");
+                showSnackbar(binding.picListView, getString(R.string.vote_success));
             }
 
             @Override
@@ -143,12 +143,12 @@ public class PicListFragment extends BaseFragment implements DataListView {
 
             @Override
             public Context context() {
-                return null;
+                return getActivity().getApplicationContext();
             }
 
             @Override
             public <T> Observable.Transformer<T, T> bindToLifecycle() {
-                return null;
+                return PicListFragment.this.bindToLifecycle();
             }
         });
         if (!isDataLoaded && getUserVisibleHint()) {
@@ -213,7 +213,7 @@ public class PicListFragment extends BaseFragment implements DataListView {
 
     @Override
     public void showError(String message) {
-
+        showSnackbar(binding.picListView, message);
     }
 
     @Override

@@ -439,7 +439,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
 
     @Override
     public void showSuccess() {
-        showSnackbar(commentFab, "success");
+        showSnackbar(commentFab, getString(R.string.comment_success));
     }
 
     @Override
@@ -635,7 +635,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
 
     private boolean checkCommentAreaName(String s) {
         if (HtmlHelper.isWholeBlank(s)) {
-            commentAreaNameLayout.setError("不要留空惹");
+            commentAreaNameLayout.setError(getString(R.string.comment_no_blank));
             commentAreaNameLayout.setErrorEnabled(true);
             return false;
         } else {
@@ -647,7 +647,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
     private boolean checkCommentAreaEmail(String s) {
         if (HtmlHelper.isWholeBlank(s)
                 || !android.util.Patterns.EMAIL_ADDRESS.matcher(s).matches()) {
-            commentAreaEmailLayout.setError("格式不对惹");
+            commentAreaEmailLayout.setError(getString(R.string.comment_email_format_error));
             commentAreaEmailLayout.setErrorEnabled(true);
             return false;
         } else {
@@ -658,7 +658,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
 
     private boolean checkCommentAreaContent(String s) {
         if (HtmlHelper.isWholeBlank(s)) {
-            commentAreaContentLayout.setError("不要留空惹");
+            commentAreaContentLayout.setError(getString(R.string.comment_no_blank));
             commentAreaContentLayout.setErrorEnabled(true);
             return false;
         } else {
@@ -668,7 +668,7 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
     }
 
     private void checkCommentAreaContentWithAt() {
-        commentAreaContentLayout.setError("不要只@不说话惹");
+        commentAreaContentLayout.setError(getString(R.string.comment_say_after_at_somebody));
         commentAreaContentLayout.setErrorEnabled(true);
     }
 

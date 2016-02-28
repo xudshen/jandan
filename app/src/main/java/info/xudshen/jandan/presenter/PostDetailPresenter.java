@@ -18,6 +18,7 @@ import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.domain.interactor.UseCase;
 import info.xudshen.jandan.domain.model.Comment;
 import info.xudshen.jandan.domain.model.Post;
+import info.xudshen.jandan.utils.RetrofitErrorHelper;
 import info.xudshen.jandan.view.ActionView;
 import info.xudshen.jandan.view.DataDetailView;
 import rx.Subscriber;
@@ -86,7 +87,8 @@ public class PostDetailPresenter implements Presenter {
                     @Override
                     public void onError(Throwable e) {
                         PostDetailPresenter.this.dataDetailView.hideLoadingMore(-1);
-                        PostDetailPresenter.this.dataDetailView.showError("");
+                        PostDetailPresenter.this.dataDetailView.showError(RetrofitErrorHelper.transException(
+                                PostDetailPresenter.this.dataDetailView.context(), e));
                     }
 
                     @Override
@@ -130,23 +132,22 @@ public class PostDetailPresenter implements Presenter {
                 new Subscriber<VoteResult>() {
                     @Override
                     public void onCompleted() {
-
+                        voteCommentView.hideLoading();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        logger.error("{}", e);
-                        PostDetailPresenter.this.voteCommentView.hideLoading();
-                        PostDetailPresenter.this.voteCommentView.showError("");
+                        voteCommentView.hideLoading();
+                        PostDetailPresenter.this.voteCommentView.showError(RetrofitErrorHelper.transException(
+                                PostDetailPresenter.this.voteCommentView.context(), e));
                     }
 
                     @Override
                     public void onNext(VoteResult voteResult) {
                         if (voteResult == VoteResult.Thanks) {
-                            PostDetailPresenter.this.voteCommentView.hideLoading();
-                            PostDetailPresenter.this.voteCommentView.showSuccess();
+                            voteCommentView.showSuccess();
                         } else {
-                            PostDetailPresenter.this.voteCommentView.showError("已经发表过意见噜");
+                            voteCommentView.showError(voteCommentView.context().getString(info.xudshen.jandan.R.string.vote_already));
                         }
                     }
                 }, commentId, voteType);

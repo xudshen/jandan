@@ -100,7 +100,7 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
         this.postDetailPresenter.setVoteCommentView(new ActionView() {
             @Override
             public void showSuccess() {
-                showSnackbar(binding.postWithCommentList, "谢谢");
+                showSnackbar(binding.postWithCommentList, getString(R.string.vote_success));
             }
 
             @Override
@@ -130,12 +130,12 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
 
             @Override
             public Context context() {
-                return null;
+                return getActivity().getApplicationContext();
             }
 
             @Override
             public <T> Observable.Transformer<T, T> bindToLifecycle() {
-                return null;
+                return PostDetailFragment.this.bindToLifecycle();
             }
         });
         if (!isDataLoaded && getUserVisibleHint()) {
@@ -299,7 +299,7 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
         if (count > 0) {
             showSnackbar(binding.postWithCommentList,
                     String.format(getString(R.string.loaded_numbers_comments), count));
-        } else {
+        } else if (count == 0) {
             showSnackbar(binding.postWithCommentList, getString(R.string.post_detail_no_more_comments));
         }
     }

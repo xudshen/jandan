@@ -23,9 +23,20 @@
     <string name="post_card_more_menu_later">稍后阅读</string>
     <string name="press_again_exit">再按退出</string>
     <string name="meta_format_comment_count">%d 评论</string>
-    <string name="post_detail_no_more_comments">没有更多评论了惹</string>
+    <string name="post_detail_no_more_comments">没有更多评论了惹.</string>
     <string name="meta_format_all_comment_count">所有评论 (%d)</string>
     <string name="comment_click_to_refresh">点击刷新</string>
     <string name="loaded_numbers_comments">%d 条新评论</string>
     <string name="launch_item_reader_transition">打开阅读器变换</string>
+    <string name="comment_no_blank">不要留空惹</string>
+    <string name="comment_email_format_error">格式不对惹</string>
+    <string name="comment_say_after_at_somebody">不要只@不说话惹</string>
+    <string name="comment_success">评论成功!</string>
+    <string name="comment_failed">评论失败.</string>
+    <string name="retrofit_no_internet">网络断开.</string>
+    <string name="retrofit_socket_timeout">网络超时.</string>
+    <string name="retrofit_unknown">火星错误.</string>
+    <string name="vote_already">已经投过票了噜.</string>
+    <string name="vote_success">谢谢投票.</string>
+    <string name="favo_deleted">已删除.</string>
 </resources>

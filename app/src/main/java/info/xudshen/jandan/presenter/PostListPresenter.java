@@ -10,6 +10,7 @@ import javax.inject.Named;
 
 import info.xudshen.jandan.domain.interactor.IterableUseCase;
 import info.xudshen.jandan.internal.di.PerActivity;
+import info.xudshen.jandan.utils.RetrofitErrorHelper;
 import info.xudshen.jandan.view.DataListView;
 import rx.Subscriber;
 
@@ -59,7 +60,10 @@ public class PostListPresenter implements Presenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        logger.error("", e);
+                        PostListPresenter.this.dataListView.hideLoading();
+                        PostListPresenter.this.dataListView.showError(
+                                RetrofitErrorHelper.transException(
+                                        PostListPresenter.this.dataListView.context(), e));
                     }
 
                     @Override
@@ -90,7 +94,10 @@ public class PostListPresenter implements Presenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        logger.error("", e);
+                        PostListPresenter.this.dataListView.hideLoadingMore();
+                        PostListPresenter.this.dataListView.showError(
+                                RetrofitErrorHelper.transException(
+                                        PostListPresenter.this.dataListView.context(), e));
                     }
 
                     @Override

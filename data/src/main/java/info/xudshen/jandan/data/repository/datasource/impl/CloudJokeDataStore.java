@@ -68,6 +68,7 @@ public class CloudJokeDataStore implements JokeDataStore {
                         }
                         if (jokeItemList.size() > 0)
                             CloudJokeDataStore.this.jokeItemDao.updateInTx(jokeItemList);
+                    }, throwable -> {
                     });
         };
     }

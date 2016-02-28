@@ -68,6 +68,7 @@ public class CloudVideoDataStore implements VideoDataStore {
                         }
                         if (videoItemList.size() > 0)
                             CloudVideoDataStore.this.videoItemDao.updateInTx(videoItemList);
+                    }, throwable -> {
                     });
         };
     }

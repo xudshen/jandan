@@ -167,7 +167,7 @@ public class PostListFragment extends BaseFragment implements DataListView {
 
     @Override
     public void showError(String message) {
-
+        showSnackbar(binding.myRecyclerView, message);
     }
 
     @Override

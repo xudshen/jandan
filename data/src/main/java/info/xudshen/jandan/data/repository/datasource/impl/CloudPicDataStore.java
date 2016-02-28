@@ -68,6 +68,7 @@ public class CloudPicDataStore implements PicDataStore {
                         }
                         if (picItemList.size() > 0)
                             CloudPicDataStore.this.picItemDao.updateInTx(picItemList);
+                    }, throwable -> {
                     });
         };
     }
