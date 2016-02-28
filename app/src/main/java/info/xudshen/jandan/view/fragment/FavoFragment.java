@@ -116,6 +116,15 @@ public class FavoFragment extends BaseFragment implements DeleteDataView {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (favoItemDao.queryBuilder().buildCount().count() == 0) {
+            binding.favoList.setVisibility(View.GONE);
+            binding.blankPlaceholder.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
     public void deletingData() {
 
     }
@@ -124,6 +133,10 @@ public class FavoFragment extends BaseFragment implements DeleteDataView {
     public void result(boolean success) {
         if (success) {
             showSnackbar(binding.favoList, getString(R.string.favo_deleted));
+        }
+        if (favoItemDao.queryBuilder().buildCount().count() == 0) {
+            binding.favoList.setVisibility(View.GONE);
+            binding.blankPlaceholder.setVisibility(View.VISIBLE);
         }
     }
 }
