@@ -2,9 +2,11 @@ package info.xudshen.jandan.view.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
@@ -520,7 +522,9 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
 
     private Animator createHideCircularReveal(View view,
                                               int centerX, int centerY, float startRadius, float endRadius) {
-        Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, centerY, startRadius, endRadius);
+        Animator animator = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
+                ViewAnimationUtils.createCircularReveal(view, centerX, centerY, startRadius, endRadius) :
+                ObjectAnimator.ofFloat(view, View.SCALE_Y, 1f, 0f).setDuration(200);
         animator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -547,7 +551,9 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
 
     private Animator createShowCircularReveal(View view,
                                               int centerX, int centerY, float startRadius, float endRadius) {
-        Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, centerY, startRadius, endRadius);
+        Animator animator = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
+                ViewAnimationUtils.createCircularReveal(view, centerX, centerY, startRadius, endRadius) :
+                ObjectAnimator.ofFloat(view, View.SCALE_Y, 0f, 1f).setDuration(200);
         animator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
