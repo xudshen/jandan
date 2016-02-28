@@ -6,9 +6,12 @@ import android.support.v4.view.LayoutInflaterCompat;
 
 import com.mikepenz.iconics.context.IconicsLayoutInflater;
 import com.mikepenz.materialdrawer.Drawer;
+import com.squareup.haha.perflib.Main;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -29,6 +32,9 @@ import info.xudshen.jandan.internal.di.components.VideoComponent;
 import info.xudshen.jandan.internal.di.modules.ActivityModule;
 import info.xudshen.jandan.view.fragment.FavoFragment;
 import info.xudshen.jandan.view.fragment.HomeFragment;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity implements HasComponents, HasDrawer {
     private static final Logger logger = LoggerFactory.getLogger(MainActivity.class);
@@ -41,6 +47,8 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
     private VideoComponent videoComponent;
     private FavoComponent favoComponent;
     private ActivityComponent activityComponent;
+
+    private long previousSelection = -999;
 
     @Override
     protected void initializeInjector() {
@@ -87,26 +95,32 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
         //set drawer click listener
         drawer.setOnDrawerItemClickListener((view, position, drawerItem) -> {
             logger.info("onClick, {}", drawerItem.getIdentifier());
-            switch ((int) drawerItem.getIdentifier()) {
-                case R.id.drawer_home: {
-                    this.replaceFragment(R.id.activity_main_content, HomeFragment.newInstance());
-                    setTitle(R.string.drawer_home);
-                    break;
-                }
-                case R.id.drawer_favorites: {
-                    this.replaceFragment(R.id.activity_main_content, FavoFragment.newInstance());
-                    setTitle(R.string.drawer_favorites);
-                    break;
-                }
-                case R.id.drawer_preference: {
-                    break;
-                }
-                case R.id.drawer_about: {
-                    break;
-                }
-                default: {
-                    return false;
-                }
+            if (previousSelection != drawerItem.getIdentifier()) {
+                previousSelection = drawerItem.getIdentifier();
+                Observable.timer(300, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.computation())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(along -> {
+                            switch ((int) previousSelection) {
+                                case R.id.drawer_home: {
+                                    MainActivity.this.replaceFragment(R.id.activity_main_content, HomeFragment.newInstance());
+                                    setTitle(R.string.drawer_home);
+                                    break;
+                                }
+                                case R.id.drawer_favorites: {
+                                    MainActivity.this.replaceFragment(R.id.activity_main_content, FavoFragment.newInstance());
+                                    setTitle(R.string.drawer_favorites);
+                                    break;
+                                }
+                                case R.id.drawer_preference: {
+                                    break;
+                                }
+                                case R.id.drawer_about: {
+                                    break;
+                                }
+                                default: {
+                                }
+                            }
+                        });
             }
             drawer.closeDrawer();
             return true;

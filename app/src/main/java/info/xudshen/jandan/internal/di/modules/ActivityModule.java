@@ -74,6 +74,8 @@ public class ActivityModule {
                         new PrimaryDrawerItem().withName(R.string.drawer_about)
                                 .withIdentifier(R.id.drawer_about).withIcon(GoogleMaterial.Icon.gmd_info)
                 )
+//                .withDelayDrawerClickEvent(300)
+//                .withDelayOnDrawerClose(0)
                 .build();
     }
 
