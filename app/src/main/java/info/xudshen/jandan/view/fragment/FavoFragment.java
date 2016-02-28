@@ -73,7 +73,7 @@ public class FavoFragment extends BaseFragment implements DeleteDataView {
                     v, position, ReaderItemType.Multi);
         });
 
-        favoListAdapter.addOnItemSubviewClickListener(R.id.play_buttom, (v, position) -> {
+        favoListAdapter.addOnItemSubviewClickListener(R.id.play_buttom, (vh, v, position) -> {
             FavoItem comment = favoItemDao.loadEntity(favoListAdapter.getItemCursor(position));
             HtmlHelper.openInBrowser(getActivity(), comment.getVideoLink());
         });

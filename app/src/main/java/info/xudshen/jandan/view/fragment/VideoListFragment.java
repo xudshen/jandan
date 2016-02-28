@@ -75,17 +75,17 @@ public class VideoListFragment extends BaseFragment implements DataListView {
                     itemView, position, ReaderItemType.SimpleVideo);
         });
 
-        videoListAdapter.addOnItemSubviewClickListener(R.id.comment_vote_oo, (v, position) -> {
+        videoListAdapter.addOnItemSubviewClickListener(R.id.comment_vote_oo, (vh, v, position) -> {
             VideoItem comment = videoItemDao.loadEntity(videoListAdapter.getItemCursor(position));
             VideoListFragment.this.videoListPresenter.voteComment(comment.getVideoId(), VoteType.OO);
             logger.info("{}", v);
         });
-        videoListAdapter.addOnItemSubviewClickListener(R.id.comment_vote_xx, (v, position) -> {
+        videoListAdapter.addOnItemSubviewClickListener(R.id.comment_vote_xx, (vh, v, position) -> {
             VideoItem comment = videoItemDao.loadEntity(videoListAdapter.getItemCursor(position));
             VideoListFragment.this.videoListPresenter.voteComment(comment.getVideoId(), VoteType.XX);
             logger.info("{}", v);
         });
-        videoListAdapter.addOnItemSubviewClickListener(R.id.play_buttom, (v, position) -> {
+        videoListAdapter.addOnItemSubviewClickListener(R.id.play_buttom, (vh, v, position) -> {
             VideoItem comment = videoItemDao.loadEntity(videoListAdapter.getItemCursor(position));
             HtmlHelper.openInBrowser(getActivity(), comment.getVideoLink());
         });

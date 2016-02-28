@@ -203,12 +203,12 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
                     })
                     .build();
 
-            postCommentAdapter.addOnItemSubviewClickListener(R.id.comment_vote_oo, (v, position) -> {
+            postCommentAdapter.addOnItemSubviewClickListener(R.id.comment_vote_oo, (vh, v, position) -> {
                 Comment comment = commentDao.loadEntity(postCommentAdapter.getItemCursor(position));
                 PostDetailFragment.this.postDetailPresenter.voteComment(comment.getCommentId(), VoteType.OO);
                 logger.info("{}", v);
             });
-            postCommentAdapter.addOnItemSubviewClickListener(R.id.comment_vote_xx, (v, position) -> {
+            postCommentAdapter.addOnItemSubviewClickListener(R.id.comment_vote_xx, (vh, v, position) -> {
                 Comment comment = commentDao.loadEntity(postCommentAdapter.getItemCursor(position));
                 PostDetailFragment.this.postDetailPresenter.voteComment(comment.getCommentId(), VoteType.XX);
                 logger.info("{}", v);

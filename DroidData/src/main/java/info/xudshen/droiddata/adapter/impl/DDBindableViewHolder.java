@@ -56,9 +56,9 @@ public class DDBindableViewHolder extends RecyclerView.ViewHolder implements IBi
                         view.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (userActionRegistry.getOnClickListener() != null) {
-                                    userActionRegistry.getOnClickListener()
-                                            .onClick(v, getLayoutPosition() - mPlaceholderSize);
+                                if (userActionRegistry.getOnSubviewClickListener() != null) {
+                                    userActionRegistry.getOnSubviewClickListener()
+                                            .onClick(DDBindableViewHolder.this, v, getLayoutPosition() - mPlaceholderSize);
                                 }
                             }
                         });

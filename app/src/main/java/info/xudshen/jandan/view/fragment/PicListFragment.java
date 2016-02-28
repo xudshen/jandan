@@ -74,12 +74,12 @@ public class PicListFragment extends BaseFragment implements DataListView {
                     itemView, position, ReaderItemType.SimplePic);
         });
 
-        picListAdapter.addOnItemSubviewClickListener(R.id.comment_vote_oo, (v, position) -> {
+        picListAdapter.addOnItemSubviewClickListener(R.id.comment_vote_oo, (vh, v, position) -> {
             PicItem comment = picItemDao.loadEntity(picListAdapter.getItemCursor(position));
             PicListFragment.this.picListPresenter.voteComment(comment.getPicId(), VoteType.OO);
             logger.info("{}", v);
         });
-        picListAdapter.addOnItemSubviewClickListener(R.id.comment_vote_xx, (v, position) -> {
+        picListAdapter.addOnItemSubviewClickListener(R.id.comment_vote_xx, (vh, v, position) -> {
             PicItem comment = picItemDao.loadEntity(picListAdapter.getItemCursor(position));
             PicListFragment.this.picListPresenter.voteComment(comment.getPicId(), VoteType.XX);
             logger.info("{}", v);

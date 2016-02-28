@@ -110,7 +110,7 @@ public class DDBindableCursorLoaderRVHeaderAdapter<VH extends RecyclerView.ViewH
         /**
          * create view holder, bind view listener
          * if you create lots of listener,
-         * try {@link info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter.Builder#onItemSubViewClickListener(int, UserActionRegistry.OnClickListener)}
+         * try {@link info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter.Builder#onItemSubViewClickListener(int, info.xudshen.droiddata.adapter.UserActionRegistry.OnSubviewClickListener)}
          *
          * @param viewType always {@link #TYPE_PLACEHOLDER}
          */
@@ -166,8 +166,8 @@ public class DDBindableCursorLoaderRVHeaderAdapter<VH extends RecyclerView.ViewH
             return this;
         }
 
-        public Builder onItemSubViewClickListener(int viewId, UserActionRegistry.OnClickListener onClickListener) {
-            this.obj.userActionRegistries.add(new UserActionRegistry(viewId, onClickListener));
+        public Builder onItemSubViewClickListener(int viewId, UserActionRegistry.OnSubviewClickListener onSubviewClickListener) {
+            this.obj.userActionRegistries.add(new UserActionRegistry(viewId, onSubviewClickListener));
             return this;
         }
 

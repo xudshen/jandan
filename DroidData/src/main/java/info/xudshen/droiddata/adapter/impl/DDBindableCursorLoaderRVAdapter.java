@@ -96,8 +96,8 @@ public class DDBindableCursorLoaderRVAdapter<VH extends RecyclerView.ViewHolder>
         this.onItemClickListener = onItemClickListener;
     }
 
-    public void addOnItemSubviewClickListener(int viewId, UserActionRegistry.OnClickListener onClickListener) {
-        this.userActionRegistries.add(new UserActionRegistry(viewId, onClickListener));
+    public void addOnItemSubviewClickListener(int viewId, UserActionRegistry.OnSubviewClickListener onSubviewClickListener) {
+        this.userActionRegistries.add(new UserActionRegistry(viewId, onSubviewClickListener));
     }
     //</editor-fold>
 
@@ -106,7 +106,7 @@ public class DDBindableCursorLoaderRVAdapter<VH extends RecyclerView.ViewHolder>
         /**
          * create view holder, bind view listener
          * if you create lots of listener,
-         * try {@link info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVAdapter.Builder#onItemSubViewClickListener(int, UserActionRegistry.OnClickListener)}
+         * try {@link info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVAdapter.Builder#onItemSubViewClickListener(int, info.xudshen.droiddata.adapter.UserActionRegistry.OnSubviewClickListener)}
          *
          * @param viewType value from {@link #itemLayoutSelector}
          */
@@ -156,8 +156,8 @@ public class DDBindableCursorLoaderRVAdapter<VH extends RecyclerView.ViewHolder>
             return this;
         }
 
-        public Builder onItemSubViewClickListener(int viewId, UserActionRegistry.OnClickListener onClickListener) {
-            this.obj.userActionRegistries.add(new UserActionRegistry(viewId, onClickListener));
+        public Builder onItemSubViewClickListener(int viewId, UserActionRegistry.OnSubviewClickListener onSubviewClickListener) {
+            this.obj.userActionRegistries.add(new UserActionRegistry(viewId, onSubviewClickListener));
             return this;
         }
 

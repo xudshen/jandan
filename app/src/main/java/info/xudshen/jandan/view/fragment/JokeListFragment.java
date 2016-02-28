@@ -74,12 +74,12 @@ public class JokeListFragment extends BaseFragment implements DataListView {
                     itemView, position, ReaderItemType.SimpleJoke);
         });
 
-        jokeListAdapter.addOnItemSubviewClickListener(R.id.comment_vote_oo, (v, position) -> {
+        jokeListAdapter.addOnItemSubviewClickListener(R.id.comment_vote_oo, (vh, v, position) -> {
             JokeItem comment = jokeItemDao.loadEntity(jokeListAdapter.getItemCursor(position));
             JokeListFragment.this.jokeListPresenter.voteComment(comment.getJokeId(), VoteType.OO);
             logger.info("{}", v);
         });
-        jokeListAdapter.addOnItemSubviewClickListener(R.id.comment_vote_xx, (v, position) -> {
+        jokeListAdapter.addOnItemSubviewClickListener(R.id.comment_vote_xx, (vh, v, position) -> {
             JokeItem comment = jokeItemDao.loadEntity(jokeListAdapter.getItemCursor(position));
             JokeListFragment.this.jokeListPresenter.voteComment(comment.getJokeId(), VoteType.XX);
             logger.info("{}", v);
