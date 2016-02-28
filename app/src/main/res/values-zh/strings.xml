@@ -39,4 +39,25 @@
     <string name="vote_already">已经投过票了噜.</string>
     <string name="vote_success">谢谢投票.</string>
     <string name="favo_deleted">已删除.</string>
+    <string name="activity_reader">煎蛋阅读器</string>
+    <string name="activity_setting">设置</string>
+    <string name="preference_user_summary">评论时的默认值</string>
+    <string name="preference_username">昵称</string>
+    <string name="preference_general">通用</string>
+    <string name="preference_email">邮箱</string>
+    <string name="preference_pics">无聊图</string>
+    <string name="preference_gif_quality">GIF 质量</string>
+    <string name="preference_image_quality">图片质量</string>
+    <string name="array_image_medium">中等</string>
+    <string name="array_image_high">高清</string>
+    <string name="array_image_low">一般</string>
+    <string name="preference_other">其他</string>
+    <string name="preference_clear_cache">清空缓存</string>
+    <string name="preference_filter">过滤器</string>
+    <string name="preference_filter_xx_gt">过滤XX大于设置的投稿</string>
+    <string name="preference_filter_xx_gt_oo">过滤XX大于OO的投稿</string>
+    <string name="preference_version">版本 0.9.0</string>
+    <string name="preference_feedback">我要反馈</string>
+    <string name="preference_about">关于</string>
+    <string name="preference_about_author">关于作者</string>
 </resources>

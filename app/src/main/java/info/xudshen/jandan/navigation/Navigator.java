@@ -1,5 +1,6 @@
 package info.xudshen.jandan.navigation;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -14,6 +15,7 @@ import info.xudshen.jandan.R;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.view.activity.BaseActivity;
 import info.xudshen.jandan.view.activity.ItemReaderActivity;
+import info.xudshen.jandan.view.activity.JandanSettingActivity;
 import info.xudshen.jandan.view.activity.TransitionHelper;
 
 /**
@@ -40,5 +42,10 @@ public class Navigator {
         ActivityCompat.startActivity(fromActivity, intent, options.toBundle());
 
 //        fromActivity.overridePendingTransition(R.anim.slide_up, R.anim.scale_down);
+    }
+
+    public void launchSetting(BaseActivity fromActivity) {
+        Intent intent = new Intent(fromActivity, JandanSettingActivity.class);
+        ActivityCompat.startActivity(fromActivity, intent, null);
     }
 }

@@ -70,12 +70,10 @@ public class ActivityModule {
                                 .withIdentifier(R.id.drawer_favorites).withIcon(GoogleMaterial.Icon.gmd_favorite),
                         new DividerDrawerItem(),
                         new PrimaryDrawerItem().withName(R.string.drawer_preference)
-                                .withIdentifier(R.id.drawer_preference).withIcon(GoogleMaterial.Icon.gmd_settings),
-                        new PrimaryDrawerItem().withName(R.string.drawer_about)
-                                .withIdentifier(R.id.drawer_about).withIcon(GoogleMaterial.Icon.gmd_info)
+                                .withIdentifier(R.id.drawer_preference).withIcon(GoogleMaterial.Icon.gmd_settings).withSelectable(false)
                 )
-//                .withDelayDrawerClickEvent(300)
-//                .withDelayOnDrawerClose(0)
+                .withDelayDrawerClickEvent(300)
+                .withDelayOnDrawerClose(0)
                 .build();
     }
 

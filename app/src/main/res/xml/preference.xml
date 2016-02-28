@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory android:title="@string/preference_general">
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="userName"
+            android:summary="@string/preference_user_summary"
+            android:title="@string/preference_username" />
+
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="userEmail"
+            android:summary="@string/preference_user_summary"
+            android:title="@string/preference_email" />
+    </PreferenceCategory>
+
+
+    <PreferenceCategory android:title="过滤器">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="filterXXgtOO"
+            android:title="@string/preference_filter_xx_gt_oo" />
+        <com.pavelsikun.seekbarpreference.SeekBarPreference
+            android:defaultValue="0"
+            android:enabled="true"
+            android:key="filterXXgt"
+            android:summary="需重启APP生效"
+            android:title="@string/preference_filter_xx_gt"
+            app:msbp_interval="10"
+            app:msbp_maxValue="500"
+            app:msbp_measurementUnit="XX"
+            app:msbp_minValue="0" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/preference_pics">
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/listArray"
+            android:entryValues="@array/listValues"
+            android:key="imageQuality"
+            android:title="@string/preference_image_quality" />
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/listArray"
+            android:entryValues="@array/listValues"
+            android:key="gifQuality"
+            android:title="@string/preference_gif_quality" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/preference_other">
+        <Preference
+            android:key="clearCache"
+            android:title="@string/preference_clear_cache" />
+    </PreferenceCategory>
+
+
+    <PreferenceCategory android:title="@string/preference_about">
+        <Preference android:title="@string/preference_feedback" />
+        <Preference
+            android:key="aboutAuthor"
+            android:title="@string/preference_about_author" />
+        <Preference android:title="View on Github">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://github.com/xudshen/jandan" />
+        </Preference>
+        <Preference
+            android:summary="Powered by DroidData"
+            android:title="@string/preference_version" />
+    </PreferenceCategory>
+</PreferenceScreen>

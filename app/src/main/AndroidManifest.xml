@@ -37,7 +37,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.ItemReaderActivity"></activity>
+        <activity
+            android:name=".view.activity.ItemReaderActivity"
+            android:label="@string/activity_reader" />
+        <activity
+            android:name=".view.activity.JandanSettingActivity"
+            android:label="@string/activity_setting" />
     </application>
 
 </manifest>

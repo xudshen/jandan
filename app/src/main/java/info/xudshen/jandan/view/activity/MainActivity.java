@@ -6,7 +6,6 @@ import android.support.v4.view.LayoutInflaterCompat;
 
 import com.mikepenz.iconics.context.IconicsLayoutInflater;
 import com.mikepenz.materialdrawer.Drawer;
-import com.squareup.haha.perflib.Main;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,32 +94,33 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
         //set drawer click listener
         drawer.setOnDrawerItemClickListener((view, position, drawerItem) -> {
             logger.info("onClick, {}", drawerItem.getIdentifier());
-            if (previousSelection != drawerItem.getIdentifier()) {
-                previousSelection = drawerItem.getIdentifier();
-                Observable.timer(300, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.computation())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(along -> {
-                            switch ((int) previousSelection) {
-                                case R.id.drawer_home: {
-                                    MainActivity.this.replaceFragment(R.id.activity_main_content, HomeFragment.newInstance());
-                                    setTitle(R.string.drawer_home);
-                                    break;
-                                }
-                                case R.id.drawer_favorites: {
-                                    MainActivity.this.replaceFragment(R.id.activity_main_content, FavoFragment.newInstance());
-                                    setTitle(R.string.drawer_favorites);
-                                    break;
-                                }
-                                case R.id.drawer_preference: {
-                                    break;
-                                }
-                                case R.id.drawer_about: {
-                                    break;
-                                }
-                                default: {
-                                }
-                            }
-                        });
+            switch ((int) drawerItem.getIdentifier()) {
+                case R.id.drawer_home: {
+                    if (previousSelection != drawerItem.getIdentifier()) {
+                        previousSelection = drawerItem.getIdentifier();
+                        MainActivity.this.replaceFragment(R.id.activity_main_content, HomeFragment.newInstance());
+                        setTitle(R.string.drawer_home);
+                    }
+                    break;
+                }
+                case R.id.drawer_favorites: {
+                    if (previousSelection != drawerItem.getIdentifier()) {
+                        previousSelection = drawerItem.getIdentifier();
+                        MainActivity.this.replaceFragment(R.id.activity_main_content, FavoFragment.newInstance());
+                        setTitle(R.string.drawer_favorites);
+                    }
+                    break;
+                }
+                case R.id.drawer_preference: {
+                    MainActivity.this.getNavigator().launchSetting(MainActivity.this);
+                    break;
+                }
+                case R.id.drawer_about: {
+                    break;
+                }
+                default: {
+                    break;
+                }
             }
             drawer.closeDrawer();
             return true;
