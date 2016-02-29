@@ -2,11 +2,13 @@ package info.xudshen.jandan.view.fragment;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
 
@@ -14,9 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
+import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
+import info.xudshen.jandan.BR;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.dao.PicItemDao;
 import info.xudshen.jandan.databinding.FragmentPicListBinding;
@@ -25,9 +28,11 @@ import info.xudshen.jandan.domain.enums.VoteType;
 import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.presenter.PicListPresenter;
+import info.xudshen.jandan.utils.LayoutHelper;
 import info.xudshen.jandan.view.ActionView;
 import info.xudshen.jandan.view.DataListView;
 import info.xudshen.jandan.view.activity.BaseActivity;
+import info.xudshen.jandan.view.activity.JandanSettingActivity;
 import info.xudshen.jandan.view.widget.RefreshDirection;
 import rx.Observable;
 
@@ -46,8 +51,6 @@ public class PicListFragment extends BaseFragment implements DataListView {
     PicListPresenter picListPresenter;
     @Inject
     PicItemDao picItemDao;
-    @Inject
-    @Named("picListAdapter")
     DDBindableCursorLoaderRVHeaderAdapter picListAdapter;
 
     private boolean isDataLoaded = false;
@@ -61,12 +64,40 @@ public class PicListFragment extends BaseFragment implements DataListView {
         this.getComponent(PicComponent.class).inject(this);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        this.inject();
-        // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pic_list, container, false);
+    private void initAdapter() {
+        boolean filterXXgtOO = JandanSettingActivity.getSettingFilterXXgtOO(getActivity());
+        final int filterXXgt = JandanSettingActivity.getSettingFilterXXgt(getActivity());
+
+        picListAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
+                .cursorLoader(getActivity(), PicItemDao.CONTENT_URI, null, null, null, PicItemDao.Properties.Date.columnName + " desc")
+                .headerViewHolderCreator((inflater, viewType, parent) -> {
+                    return new DDBindableViewHolder(inflater.inflate(
+                            com.github.florent37.materialviewpager.R.layout.material_view_pager_placeholder,
+                            parent, false));
+                })
+                .itemViewHolderCreator(((inflater1, viewType1, parent1) -> {
+                    ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
+                    return new DDBindableViewHolder(viewDataBinding);
+                }))
+                .itemLayoutSelector((position, cursor) -> R.layout.pic_card_view)
+                .itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {
+                    PicItem picItem = picItemDao.loadEntity(cursor);
+                    boolean hideItem = (filterXXgtOO && picItem.getVoteNegative() > picItem.getVotePositive()) || picItem.getVoteNegative() > filterXXgt;
+                    viewDataBinding.setVariable(BR.item, picItem);
+                    viewDataBinding.setVariable(BR.hideItem, hideItem);
+                })
+                .build();
+
+        picListAdapter.addOnItemSubviewClickListener(R.id.toggle_item_detail, (vh, v, position) -> {
+            View itemDetail = vh.itemView.findViewById(R.id.item_detail);
+            if (itemDetail.getVisibility() == View.VISIBLE) {
+                ((Button) v).setText("再手贱一回");
+                LayoutHelper.collapse(itemDetail);
+            } else {
+                ((Button) v).setText("真不该手贱");
+                LayoutHelper.expand(itemDetail);
+            }
+        });
 
         picListAdapter.setOnItemClickListener((itemView, position) -> {
             logger.info("position={}", position);
@@ -84,6 +115,15 @@ public class PicListFragment extends BaseFragment implements DataListView {
             PicListFragment.this.picListPresenter.voteComment(comment.getPicId(), VoteType.XX);
             logger.info("{}", v);
         });
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        this.inject();
+        initAdapter();
+        // Inflate the layout for this fragment
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pic_list, container, false);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         binding.picListView.setLayoutManager(linearLayoutManager);

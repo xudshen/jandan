@@ -46,6 +46,6 @@ public class Navigator {
 
     public void launchSetting(BaseActivity fromActivity) {
         Intent intent = new Intent(fromActivity, JandanSettingActivity.class);
-        ActivityCompat.startActivity(fromActivity, intent, null);
+        ActivityCompat.startActivityForResult(fromActivity, intent, JandanSettingActivity.REQUEST_CODE, null);
     }
 }

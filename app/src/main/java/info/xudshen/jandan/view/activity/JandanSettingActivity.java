@@ -1,6 +1,7 @@
 package info.xudshen.jandan.view.activity;
 
-import android.content.DialogInterface;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -10,9 +11,9 @@ import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceGroup;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -25,7 +26,26 @@ import info.xudshen.jandan.utils.HtmlHelper;
  * Created by xudshen on 16/2/28.
  */
 public class JandanSettingActivity extends AppCompatActivity {
+    public static final int REQUEST_CODE = 1;
+    public static final int RESULT_FILTER_CHANGED = 0x01;
+    public static final int RESULT_FILTER_NOT_CHANGED = 0x02;
 
+    public static final String FILTER_XX_GT = "filterXXgt";
+    public static final String FILTER_XX_GT_OO = "filterXXgtOO";
+
+    public static boolean getSettingFilterXXgtOO(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getBoolean(JandanSettingActivity.FILTER_XX_GT_OO, false);
+    }
+
+    public static int getSettingFilterXXgt(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        int filterXXgt = preferences.getInt(JandanSettingActivity.FILTER_XX_GT, 0);
+        return filterXXgt == 0 ? Integer.MAX_VALUE : filterXXgt;
+    }
+
+    private boolean previousFilterXXgtOO;
+    private int previousFilterXXgt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +60,37 @@ public class JandanSettingActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        previousFilterXXgt = getSettingFilterXXgt(getApplicationContext());
+        previousFilterXXgtOO = getSettingFilterXXgtOO(getApplicationContext());
+    }
+
+    private void setFilterResult() {
+        boolean isChanged = false;
+        if (previousFilterXXgt != getSettingFilterXXgt(getApplicationContext())) {
+            isChanged = true;
+        }
+        if (previousFilterXXgtOO != getSettingFilterXXgtOO(getApplicationContext())) {
+            isChanged = true;
+        }
+        Intent returnIntent = new Intent();
+        setResult(isChanged ? RESULT_FILTER_CHANGED : RESULT_FILTER_NOT_CHANGED, returnIntent);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            setFilterResult();
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        setFilterResult();
+        super.onBackPressed();
     }
 
     public static class JandanSettingFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {

@@ -1,5 +1,6 @@
 package info.xudshen.jandan.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.view.LayoutInflaterCompat;
@@ -48,6 +49,7 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
     private ActivityComponent activityComponent;
 
     private long previousSelection = -999;
+    private boolean needRefreshAfterSetting = false;
 
     @Override
     protected void initializeInjector() {
@@ -135,6 +137,14 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
     protected void onResume() {
         super.onResume();
         //[foreground lifetime]visible & taking user focus
+        if (needRefreshAfterSetting) {
+            needRefreshAfterSetting = false;
+            if (previousSelection == R.id.drawer_home) {
+                MainActivity.this.replaceFragment(R.id.activity_main_content, HomeFragment.newInstance());
+            } else if (previousSelection == R.id.drawer_favorites) {
+                MainActivity.this.replaceFragment(R.id.activity_main_content, FavoFragment.newInstance());
+            }
+        }
     }
 
     @Override
@@ -150,6 +160,16 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
         super.onSaveInstanceState(outState, outPersistentState);
         //TODO: the transient state of the activity (the state of the UI)
         //just test it with rotate the device
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == JandanSettingActivity.REQUEST_CODE) {
+            if (resultCode == JandanSettingActivity.RESULT_FILTER_CHANGED) {
+                logger.info("refresh from result");
+                needRefreshAfterSetting = true;
+            }
+        }
     }
 
     //<editor-fold desc="Other Action">

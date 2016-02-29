@@ -25,7 +25,7 @@
             android:defaultValue="0"
             android:enabled="true"
             android:key="filterXXgt"
-            android:summary="需重启APP生效"
+            android:summary="0为不过滤"
             android:title="@string/preference_filter_xx_gt"
             app:msbp_interval="2"
             app:msbp_maxValue="200"

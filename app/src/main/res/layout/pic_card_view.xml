@@ -13,6 +13,10 @@
         <variable
             name="item"
             type="info.xudshen.jandan.domain.model.PicItem" />
+
+        <variable
+            name="hideItem"
+            type="boolean" />
     </data>
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -31,71 +35,106 @@
             android:background="?attr/selectableItemBackground"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                app:picThumb="@{item.picFirst}"
-                app:placeHolder="@{@drawable/placeholder}" />
-
-            <View style="@style/Divider" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/picItemMarginHorizontal"
                 android:paddingRight="@dimen/picItemMargin"
-                android:paddingTop="@dimen/picItemMargin"
-                app:paddingBottom="@{HtmlHelper.isWholeBlank(item.textContent) ? @dimen/picItemMargin : @dimen/picItemNoMargin}">
+                android:visibility="@{hideItem ? View.VISIBLE : View.GONE}">
 
                 <TextView
-                    style="@style/PostDetailMetaHighlight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="已被超载鸡自动隐藏"
+                    android:textSize="14sp" />
 
-                    android:text="@{item.author}" />
+                <Button
+                    android:id="@+id/toggle_item_detail"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="手贱一回"
+                    android:textColor="@color/colorAccent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/item_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:orientation="vertical"
+                android:visibility="@{hideItem ? View.GONE : View.VISIBLE}">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    app:picThumb="@{item.picFirst}"
+                    app:placeHolder="@{@drawable/placeholder}" />
+
+                <View style="@style/Divider" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/picItemMarginHorizontal"
+                    android:paddingRight="@dimen/picItemMargin"
+                    android:paddingTop="@dimen/picItemMargin"
+                    app:paddingBottom="@{HtmlHelper.isWholeBlank(item.textContent) ? @dimen/picItemMargin : @dimen/picItemNoMargin}">
+
+                    <TextView
+                        style="@style/PostDetailMetaHighlight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+
+                        android:text="@{item.author}" />
+
+                    <TextView
+                        style="@style/PostDetailMeta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+
+                        android:layout_marginLeft="16dp"
+                        android:text="@{RealtimeTimeUtils.realtime(item.date)}" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        style="@style/PicHint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@{item.picCount.toString()}"
+                        android:visibility="@{item.picCount &lt; 2 ? View.GONE : View.VISIBLE}" />
+
+                    <TextView
+                        style="@style/PicHint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="8dp"
+                        android:text="GIF"
+                        android:visibility="@{item.hasGif ? View.VISIBLE : View.GONE}" />
+                </LinearLayout>
 
                 <TextView
                     style="@style/PostDetailMeta"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
 
-                    android:layout_marginLeft="16dp"
-                    android:text="@{RealtimeTimeUtils.realtime(item.date)}" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-
-                <TextView
-                    style="@style/PicHint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="@{item.picCount.toString()}"
-                    android:visibility="@{item.picCount &lt; 2 ? View.GONE : View.VISIBLE}" />
-
-                <TextView
-                    style="@style/PicHint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="8dp"
-                    android:text="GIF"
-                    android:visibility="@{item.hasGif ? View.VISIBLE : View.GONE}" />
+                    android:paddingBottom="@dimen/picItemMargin"
+                    android:paddingLeft="@dimen/picItemMarginHorizontal"
+                    android:paddingRight="@dimen/picItemMarginHorizontal"
+                    android:paddingTop="8dp"
+                    android:visibility="@{HtmlHelper.isWholeBlank(item.textContent) ? View.GONE : View.VISIBLE}"
+                    app:richText="@{item.textContent}" />
             </LinearLayout>
-
-            <TextView
-                style="@style/PostDetailMeta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:paddingBottom="@dimen/picItemMargin"
-                android:paddingLeft="@dimen/picItemMarginHorizontal"
-                android:paddingRight="@dimen/picItemMarginHorizontal"
-                android:paddingTop="8dp"
-                android:visibility="@{HtmlHelper.isWholeBlank(item.textContent) ? View.GONE : View.VISIBLE}"
-                app:richText="@{item.textContent}" />
 
             <View style="@style/Divider" />
 
