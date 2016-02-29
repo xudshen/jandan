@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -11,12 +12,15 @@ import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceGroup;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import java.lang.reflect.Method;
 
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.domain.enums.ImageQuality;
@@ -173,6 +177,13 @@ public class JandanSettingActivity extends AppCompatActivity {
                         .setPositiveButton("Github", (dialog, which) -> {
                             HtmlHelper.openInBrowser(getActivity(), "https://github.com/xudshen");
                         }).show();
+                return true;
+            });
+            findPreference("clearCache").setOnPreferenceClickListener(preference -> {
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.fromParts("package", getActivity().getPackageName(), null));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 return true;
             });
         }

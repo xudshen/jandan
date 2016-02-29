@@ -47,7 +47,8 @@
     <PreferenceCategory android:title="@string/preference_other">
         <Preference
             android:key="clearCache"
-            android:title="@string/preference_clear_cache" />
+            android:title="@string/preference_clear_cache">
+        </Preference>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/preference_about">
