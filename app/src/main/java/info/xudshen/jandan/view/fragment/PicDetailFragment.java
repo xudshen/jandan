@@ -36,8 +36,10 @@ import info.xudshen.jandan.domain.model.FavoItem;
 import info.xudshen.jandan.internal.di.components.PicComponent;
 import info.xudshen.jandan.presenter.PicDetailPresenter;
 import info.xudshen.jandan.utils.ClipboardHelper;
+import info.xudshen.jandan.utils.LayoutHelper;
 import info.xudshen.jandan.view.ActionView;
 import info.xudshen.jandan.view.DataDetailView;
+import info.xudshen.jandan.view.activity.JandanSettingActivity;
 import info.xudshen.jandan.view.model.DuoshuoCommentDialogModel;
 import rx.Observable;
 import rx.subjects.PublishSubject;
@@ -203,6 +205,9 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
     @Override
     public void renderDataDetail(PicItemObservable item) {
         if (binding.itemWithCommentList.getAdapter() == null) {
+            boolean filterXXgtOO = JandanSettingActivity.getSettingFilterXXgtOO(getActivity());
+            final int filterXXgt = JandanSettingActivity.getSettingFilterXXgt(getActivity());
+
             List<String> urlList = Splitter.on(",").splitToList(item.getPics());
             DDBindableCursorLoaderRVHeaderAdapter commentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
                     .cursorLoader(getActivity(), DuoshuoCommentDao.CONTENT_URI, null, DuoshuoCommentDao.Properties.ThreadKey.columnName + " = ?", new String[]{Constants.THREAD_PREFIX + picId}, null)
@@ -217,12 +222,24 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
                         viewDataBinding.getRoot().findViewById(R.id.comment_vote_xx).setOnClickListener(v -> {
                             PicDetailFragment.this.picDetailPresenter.voteComment(item.getPicId(), VoteType.XX);
                         });
+                        viewDataBinding.getRoot().findViewById(R.id.toggle_item_detail).setOnClickListener(v -> {
+                            View itemDetail = viewDataBinding.getRoot().findViewById(R.id.item_detail);
+                            if (itemDetail.getVisibility() == View.VISIBLE) {
+                                ((Button) v).setText("再手贱一回");
+                                LayoutHelper.collapse(itemDetail);
+                            } else {
+                                ((Button) v).setText("真不该手贱");
+                                LayoutHelper.expand(itemDetail);
+                            }
+                        });
 
                         return new DDBindableViewHolder(viewDataBinding);
                     })
                     .headerViewDataBindingVariableAction(viewDataBinding -> {
                         viewDataBinding.setVariable(BR.urls, urlList);
                         viewDataBinding.setVariable(BR.picItem, item);
+                        boolean hideItem = (filterXXgtOO && item.getVoteNegative() > item.getVotePositive()) || item.getVoteNegative() > filterXXgt;
+                        viewDataBinding.setVariable(BR.hideItem, hideItem);
                     })
                     .itemViewHolderCreator(((inflater1, viewType1, parent1) -> {
                         ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);

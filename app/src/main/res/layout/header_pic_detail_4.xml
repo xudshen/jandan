@@ -10,9 +10,15 @@
 
         <import type="java.util.List" />
 
+        <import type="android.view.View" />
+
         <variable
             name="urls"
             type="List&lt;String>" />
+
+        <variable
+            name="hideItem"
+            type="boolean" />
     </data>
 
     <LinearLayout
@@ -20,31 +26,72 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <info.xudshen.jandan.view.component.ProgressImageView
-            style="@style/ProgressImageViewStyle"
-            app:picFull="@{urls[0]}"
-            app:placeHolder="@{@drawable/placeholder}" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:orientation="vertical">
 
-        <View style="@style/Divider" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/picItemMargin"
+                android:paddingRight="@dimen/picItemMargin"
+                android:visibility="@{hideItem ? View.VISIBLE : View.GONE}">
 
-        <info.xudshen.jandan.view.component.ProgressImageView
-            style="@style/ProgressImageViewStyle"
-            app:picFull="@{urls[1]}"
-            app:placeHolder="@{@drawable/placeholder}" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="已被超载鸡自动隐藏"
+                    android:textSize="14sp" />
 
-        <View style="@style/Divider" />
+                <Button
+                    android:id="@+id/toggle_item_detail"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="手贱一回"
+                    android:textColor="@color/colorAccent" />
+            </LinearLayout>
 
-        <info.xudshen.jandan.view.component.ProgressImageView
-            style="@style/ProgressImageViewStyle"
-            app:picFull="@{urls[2]}"
-            app:placeHolder="@{@drawable/placeholder}" />
+            <LinearLayout
+                android:id="@+id/item_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="@{hideItem ? View.GONE : View.VISIBLE}">
 
-        <View style="@style/Divider" />
+                <info.xudshen.jandan.view.component.ProgressImageView
+                    style="@style/ProgressImageViewStyle"
+                    app:picFull="@{urls[0]}"
+                    app:placeHolder="@{@drawable/placeholder}" />
 
-        <info.xudshen.jandan.view.component.ProgressImageView
-            style="@style/ProgressImageViewStyle"
-            app:picFull="@{urls[3]}"
-            app:placeHolder="@{@drawable/placeholder}" />
+                <View style="@style/Divider" />
+
+                <info.xudshen.jandan.view.component.ProgressImageView
+                    style="@style/ProgressImageViewStyle"
+                    app:picFull="@{urls[1]}"
+                    app:placeHolder="@{@drawable/placeholder}" />
+
+                <View style="@style/Divider" />
+
+                <info.xudshen.jandan.view.component.ProgressImageView
+                    style="@style/ProgressImageViewStyle"
+                    app:picFull="@{urls[2]}"
+                    app:placeHolder="@{@drawable/placeholder}" />
+
+                <View style="@style/Divider" />
+
+                <info.xudshen.jandan.view.component.ProgressImageView
+                    style="@style/ProgressImageViewStyle"
+                    app:picFull="@{urls[3]}"
+                    app:placeHolder="@{@drawable/placeholder}" />
+            </LinearLayout>
+        </LinearLayout>
 
         <View style="@style/Divider" />
 
