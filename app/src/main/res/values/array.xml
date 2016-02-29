@@ -6,9 +6,9 @@
         <item>@string/array_image_low</item>
     </string-array>
 
-    <string-array name="listValues">
+    <integer-array name="listValues">
         <item>1</item>
         <item>2</item>
         <item>3</item>
-    </string-array>
+    </integer-array>
 </resources>

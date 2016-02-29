@@ -61,7 +61,7 @@ public class JandanSettingActivity extends AppCompatActivity {
 
     public static ImageQuality getSettingImageQuality(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        switch (Integer.valueOf(preferences.getString(JandanSettingActivity.SETTING_IMAGE_QUALITY, "2"))) {
+        switch (preferences.getInt(JandanSettingActivity.SETTING_IMAGE_QUALITY, 2)) {
             case 1: {
                 return ImageQuality.HIGH;
             }
