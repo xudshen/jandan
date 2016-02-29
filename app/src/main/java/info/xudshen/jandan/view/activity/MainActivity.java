@@ -33,7 +33,6 @@ import info.xudshen.jandan.internal.di.modules.ActivityModule;
 import info.xudshen.jandan.view.fragment.FavoFragment;
 import info.xudshen.jandan.view.fragment.HomeFragment;
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity implements HasComponents, HasDrawer {
@@ -127,22 +126,22 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
             drawer.closeDrawer();
             return true;
         });
-
-        if (savedInstanceState == null) {
-            drawer.setSelection(R.id.drawer_home);
-        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         //[foreground lifetime]visible & taking user focus
-        if (needRefreshAfterSetting) {
-            needRefreshAfterSetting = false;
-            if (previousSelection == R.id.drawer_home) {
-                MainActivity.this.replaceFragment(R.id.activity_main_content, HomeFragment.newInstance());
-            } else if (previousSelection == R.id.drawer_favorites) {
-                MainActivity.this.replaceFragment(R.id.activity_main_content, FavoFragment.newInstance());
+        if (previousSelection < 0) {
+            drawer.setSelection(R.id.drawer_home);
+        } else {
+            if (needRefreshAfterSetting) {
+                needRefreshAfterSetting = false;
+                if (previousSelection == R.id.drawer_home) {
+                    MainActivity.this.replaceFragment(R.id.activity_main_content, HomeFragment.newInstance());
+                } else if (previousSelection == R.id.drawer_favorites) {
+                    MainActivity.this.replaceFragment(R.id.activity_main_content, FavoFragment.newInstance());
+                }
             }
         }
     }
