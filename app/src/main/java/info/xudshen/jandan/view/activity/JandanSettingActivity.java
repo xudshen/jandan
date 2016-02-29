@@ -36,6 +36,9 @@ public class JandanSettingActivity extends AppCompatActivity {
     public static final String FILTER_XX_GT_OO = "filterXXgtOO";
     public static final String SETTING_IMAGE_QUALITY = "imageQuality";
 
+    public static final String SETTING_USERNAME = "userName";
+    public static final String SETTING_USEREMAIL = "userEmail";
+
     public static boolean getSettingFilterXXgtOO(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getBoolean(JandanSettingActivity.FILTER_XX_GT_OO, false);
@@ -63,6 +66,30 @@ public class JandanSettingActivity extends AppCompatActivity {
                 return ImageQuality.MEDIUM;
             }
         }
+    }
+
+    public static String getSettingUsername(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getString(JandanSettingActivity.SETTING_USERNAME, "");
+    }
+
+    public static void setSettingUsername(Context context, String username) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(SETTING_USERNAME, username);
+        editor.apply();
+    }
+
+    public static String getSettingUseremail(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getString(JandanSettingActivity.SETTING_USEREMAIL, "");
+    }
+
+    public static void setSettingUseremail(Context context, String username) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(SETTING_USEREMAIL, username);
+        editor.apply();
     }
 
     private boolean previousFilterXXgtOO;
