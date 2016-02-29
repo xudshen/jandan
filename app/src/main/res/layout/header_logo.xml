@@ -2,7 +2,7 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="地球上没有新鲜事 "
+    android:text="@string/app_slogan"
     android:textColor="@color/md_white_1000"
     android:textSize="28dp"
     android:textStyle="bold" />

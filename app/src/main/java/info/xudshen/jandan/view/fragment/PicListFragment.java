@@ -91,10 +91,10 @@ public class PicListFragment extends BaseFragment implements DataListView {
         picListAdapter.addOnItemSubviewClickListener(R.id.toggle_item_detail, (vh, v, position) -> {
             View itemDetail = vh.itemView.findViewById(R.id.item_detail);
             if (itemDetail.getVisibility() == View.VISIBLE) {
-                ((Button) v).setText("再手贱一回");
+                ((Button) v).setText(getString(R.string.pic_filter_show_again));
                 LayoutHelper.collapse(itemDetail);
             } else {
-                ((Button) v).setText("真不该手贱");
+                ((Button) v).setText(getString(R.string.pic_filter_hide));
                 LayoutHelper.expand(itemDetail);
             }
         });

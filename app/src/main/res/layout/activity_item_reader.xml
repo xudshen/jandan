@@ -79,7 +79,7 @@
                         android:id="@+id/comment_area_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="称呼"
+                        android:hint="@string/preference_username"
                         android:imeOptions="actionNext"
                         android:inputType="textPersonName" />
                 </android.support.design.widget.TextInputLayout>
@@ -93,7 +93,7 @@
                         android:id="@+id/comment_area_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="邮箱"
+                        android:hint="@string/preference_email"
                         android:imeOptions="actionNext"
                         android:inputType="textEmailAddress" />
                 </android.support.design.widget.TextInputLayout>
@@ -109,7 +109,7 @@
                     android:id="@+id/comment_area_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="评论"
+                    android:hint="@string/comment_title"
                     android:imeOptions="actionSend"
                     android:inputType="textMultiLine" />
             </android.support.design.widget.TextInputLayout>

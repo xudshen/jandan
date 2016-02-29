@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:text="已被超载鸡自动隐藏"
+                    android:text="@string/pic_filter_hint"
                     android:textSize="14sp" />
 
                 <Button
@@ -54,7 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="手贱一回"
+                    android:text="@string/pic_filter_show"
                     android:textColor="@color/colorAccent" />
             </LinearLayout>
 

@@ -27,7 +27,7 @@
             android:paddingBottom="10dp"
             android:paddingLeft="16dp"
             android:paddingTop="12dp"
-            android:text="上一条消息"
+            android:text="@string/comment_action_last_comment"
             android:visibility="@{comment.hasPreviousComment ? View.VISIBLE : View.GONE}" />
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="复制" />
+                android:text="@string/comment_action_copy" />
 
             <Button
                 android:id="@+id/comment_reply_btn"
@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="回复@" />
+                android:text="@string/comment_action_reply" />
         </LinearLayout>
     </GridLayout>
 </layout>

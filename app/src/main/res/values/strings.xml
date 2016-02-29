@@ -63,4 +63,14 @@
     <string name="preference_version">Version 0.9.0</string>
     <string name="preference_drawer_image_by_lackar">Vuvuzela Image by Lackar</string>
     <string name="preference_thanks">Thanks</string>
+    <string name="pic_filter_show">Show</string>
+    <string name="pic_filter_hide">Hide</string>
+    <string name="pic_filter_show_again">Show again</string>
+    <string name="pic_filter_hint">Hidden by Chaozai Ji</string>
+    <string name="comment_title">Comment</string>
+    <string name="comment_action_copy">Copy</string>
+    <string name="comment_action_reply">Reply</string>
+    <string name="comment_action_last_comment">Last comment</string>
+    <string name="app_slogan">No news on earth.</string>
+    <string name="preference_filter_hint">0 for not filter</string>
 </resources>

@@ -62,4 +62,14 @@
     <string name="preference_about_author">关于作者</string>
     <string name="preference_drawer_image_by_lackar">超载鸡之呜呜祖拉@Lackar</string>
     <string name="preference_thanks">感谢</string>
+    <string name="pic_filter_hide">真不该手贱</string>
+    <string name="pic_filter_show">手贱一回</string>
+    <string name="pic_filter_show_again">再手贱一回</string>
+    <string name="pic_filter_hint">已被超载鸡自动隐藏</string>
+    <string name="comment_title">评论</string>
+    <string name="comment_action_last_comment">上一条评论</string>
+    <string name="comment_action_reply">回复@</string>
+    <string name="app_slogan">地球上没有新鲜事</string>
+    <string name="comment_action_copy">复制</string>
+    <string name="preference_filter_hint">0为不过滤</string>
 </resources>

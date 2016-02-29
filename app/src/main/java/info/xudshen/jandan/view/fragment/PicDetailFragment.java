@@ -225,10 +225,10 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
                         viewDataBinding.getRoot().findViewById(R.id.toggle_item_detail).setOnClickListener(v -> {
                             View itemDetail = viewDataBinding.getRoot().findViewById(R.id.item_detail);
                             if (itemDetail.getVisibility() == View.VISIBLE) {
-                                ((Button) v).setText("再手贱一回");
+                                ((Button) v).setText(getString(R.string.pic_filter_show_again));
                                 LayoutHelper.collapse(itemDetail);
                             } else {
-                                ((Button) v).setText("真不该手贱");
+                                ((Button) v).setText(getString(R.string.pic_filter_hide));
                                 LayoutHelper.expand(itemDetail);
                             }
                         });

@@ -18,7 +18,7 @@
     </PreferenceCategory>
 
 
-    <PreferenceCategory android:title="过滤器">
+    <PreferenceCategory android:title="@string/preference_filter">
         <SwitchPreference
             android:defaultValue="false"
             android:key="filterXXgtOO"
@@ -27,7 +27,7 @@
             android:defaultValue="0"
             android:enabled="true"
             android:key="filterXXgt"
-            android:summary="0为不过滤"
+            android:summary="@string/preference_filter_hint"
             android:title="@string/preference_filter_xx_gt"
             app:msbp_interval="2"
             app:msbp_maxValue="200"

@@ -20,8 +20,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import java.lang.reflect.Method;
-
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.domain.enums.ImageQuality;
 import info.xudshen.jandan.utils.ClipboardHelper;
