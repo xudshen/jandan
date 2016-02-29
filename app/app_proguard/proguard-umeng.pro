@@ -9,3 +9,7 @@
     public static **[] values();
     public static ** valueOf(java.lang.String);
 }
+
+-dontwarn org.android.agoo.net.**
+-dontwarn com.ta.utdid2.**
+-dontwarn com.umeng.**

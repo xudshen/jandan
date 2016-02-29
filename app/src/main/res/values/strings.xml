@@ -75,4 +75,7 @@
     <string name="preference_filter_hint">0 for not filter</string>
     <string name="feedback_info">Type your feedback below</string>
     <string name="feedback_name">Anno</string>
+    <string name="array_1">1</string>
+    <string name="array_2">2</string>
+    <string name="array_3">3</string>
 </resources>

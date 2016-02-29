@@ -74,4 +74,7 @@
     <string name="preference_filter_hint">0为不过滤</string>
     <string name="feedback_info">写下你的评论噜.说不定会有回复哦.</string>
     <string name="feedback_name">不愿意透露姓名的蛋友</string>
+    <string name="array_2">2</string>
+    <string name="array_1">1</string>
+    <string name="array_3">3</string>
 </resources>
