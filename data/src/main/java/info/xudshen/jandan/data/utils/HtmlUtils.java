@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import info.xudshen.jandan.domain.enums.ImageQuality;
 import jregex.Matcher;
 import jregex.Pattern;
 
@@ -54,23 +55,11 @@ public class HtmlUtils {
         return urlList;
     }
 
-    public static String thumb(String url) {
-        Matcher matcher = ImageUrlPattern.matcher(url);
-        if (matcher.find()) {
-            String http = matcher.group("http"),
-                    host = matcher.group("host"),
-                    size = matcher.group("size"),
-                    id = matcher.group("id"),
-                    type = matcher.group("type");
-            if (type.equals("gif")) {
-                String newUrl = String.format("%s://%s/%s/%s.%s", http, host, "thumbnail", id, type);
-                return newUrl;
-            } else return url;
-        }
-        return url;
+    public static String firstThumb(String url) {
+        return optimizedUrl(url, ImageQuality.MEDIUM, ImageQuality.THUMBNAIL);
     }
 
-    public static String fullSize(String url) {
+    public static String optimizedUrl(String url, ImageQuality imageQuality, ImageQuality gifQuality) {
         Matcher matcher = ImageUrlPattern.matcher(url);
         if (matcher.find()) {
             String http = matcher.group("http"),
@@ -79,9 +68,10 @@ public class HtmlUtils {
                     id = matcher.group("id"),
                     type = matcher.group("type");
             if (type.equals("gif")) {
-                String newUrl = String.format("%s://%s/%s/%s.%s", http, host, "bmiddle", id, type);
-                return newUrl;
-            } else return url;
+                return String.format("%s://%s/%s/%s.%s", http, host, gifQuality.getQuality(), id, type);
+            } else {
+                return String.format("%s://%s/%s/%s.%s", http, host, imageQuality.getQuality(), id, type);
+            }
         }
         return url;
     }

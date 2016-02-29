@@ -49,7 +49,7 @@ public class PicListResponse {
             List<String> urlList = HtmlUtils.getPicUrlList(getContent());
             this.setPics(Joiner.on(",").skipNulls().join(urlList));
             this.setPicCount(Long.valueOf(urlList.size()));
-            this.setPicFirst(HtmlUtils.thumb(urlList.get(0)));
+            this.setPicFirst(HtmlUtils.firstThumb(urlList.get(0)));
 
             this.setCommentCount(0l);
 

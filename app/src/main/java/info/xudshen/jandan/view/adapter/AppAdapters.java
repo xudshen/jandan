@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import info.xudshen.jandan.data.utils.HtmlUtils;
+import info.xudshen.jandan.domain.enums.ImageQuality;
 import info.xudshen.jandan.utils.HtmlHelper;
 import info.xudshen.jandan.utils.LayoutHelper;
 import info.xudshen.jandan.view.component.ProgressImageView;
@@ -36,6 +37,7 @@ import info.xudshen.jandan.view.component.ProgressImageView;
  */
 public class AppAdapters {
     private static final Logger logger = LoggerFactory.getLogger(AppAdapters.class);
+    public static ImageQuality IMAGE_QUALITY = ImageQuality.MEDIUM;
 
     @BindingAdapter(value = {"thumb", "placeHolder"})
     public static void setImageUrl(ImageView view, String url,
@@ -113,7 +115,7 @@ public class AppAdapters {
     @BindingAdapter(value = {"picFull", "placeHolder"})
     public static void setFullImageUrl(ProgressImageView view, String url,
                                        Drawable placeHolder) {
-        view.load(HtmlUtils.fullSize(url), placeHolder);
+        view.load(HtmlUtils.optimizedUrl(url, IMAGE_QUALITY, ImageQuality.MEDIUM), placeHolder);
     }
 
     @BindingAdapter(value = {"webContent"})

@@ -19,8 +19,10 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.domain.enums.ImageQuality;
 import info.xudshen.jandan.utils.ClipboardHelper;
 import info.xudshen.jandan.utils.HtmlHelper;
+import info.xudshen.jandan.view.adapter.AppAdapters;
 
 /**
  * Created by xudshen on 16/2/28.
@@ -32,6 +34,7 @@ public class JandanSettingActivity extends AppCompatActivity {
 
     public static final String FILTER_XX_GT = "filterXXgt";
     public static final String FILTER_XX_GT_OO = "filterXXgtOO";
+    public static final String SETTING_IMAGE_QUALITY = "imageQuality";
 
     public static boolean getSettingFilterXXgtOO(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -42,6 +45,24 @@ public class JandanSettingActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         int filterXXgt = preferences.getInt(JandanSettingActivity.FILTER_XX_GT, 0);
         return filterXXgt == 0 ? Integer.MAX_VALUE : filterXXgt;
+    }
+
+    public static ImageQuality getSettingImageQuality(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        switch (Integer.valueOf(preferences.getString(JandanSettingActivity.SETTING_IMAGE_QUALITY, "2"))) {
+            case 1: {
+                return ImageQuality.HIGH;
+            }
+            case 2: {
+                return ImageQuality.MEDIUM;
+            }
+            case 3: {
+                return ImageQuality.LOW;
+            }
+            default: {
+                return ImageQuality.MEDIUM;
+            }
+        }
     }
 
     private boolean previousFilterXXgtOO;
@@ -78,10 +99,15 @@ public class JandanSettingActivity extends AppCompatActivity {
         setResult(isChanged ? RESULT_FILTER_CHANGED : RESULT_FILTER_NOT_CHANGED, returnIntent);
     }
 
+    private void setImageQuality() {
+        AppAdapters.IMAGE_QUALITY = getSettingImageQuality(this);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             setFilterResult();
+            setImageQuality();
             finish();
         }
         return super.onOptionsItemSelected(item);
@@ -90,6 +116,7 @@ public class JandanSettingActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         setFilterResult();
+        setImageQuality();
         super.onBackPressed();
     }
 
