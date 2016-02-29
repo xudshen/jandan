@@ -183,6 +183,11 @@ public class MainActivity extends BaseActivity implements HasComponents, HasDraw
             if (backPressedCount == 0) {
                 showToast(getString(R.string.press_again_exit));
                 backPressedCount = 1;
+                Observable.timer(5, TimeUnit.SECONDS).subscribeOn(Schedulers.immediate())
+                        .subscribe(aLong -> {
+                            backPressedCount = 0;
+                        }, throwable -> {
+                        });
             } else {
                 super.onBackPressed();
                 backPressedCount = 0;
