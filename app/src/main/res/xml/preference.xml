@@ -47,12 +47,13 @@
     <PreferenceCategory android:title="@string/preference_other">
         <Preference
             android:key="clearCache"
-            android:title="@string/preference_clear_cache">
-        </Preference>
+            android:title="@string/preference_clear_cache" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/preference_about">
-        <Preference android:title="@string/preference_feedback" />
+        <Preference
+            android:key="feedback"
+            android:title="@string/preference_feedback" />
         <Preference
             android:key="aboutAuthor"
             android:title="@string/preference_about_author" />

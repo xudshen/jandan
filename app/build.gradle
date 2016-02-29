@@ -68,11 +68,20 @@ android {
     }
 }
 
+repositories {
+    jcenter()
+    maven { url "https://raw.githubusercontent.com/umeng/mvn-repo-umeng/master/repository" }
+}
+
+
 dependencies {
     def dependencies = rootProject.ext.appDependencies
     def testDependencies = rootProject.ext.appTestDependencies
 
     compile project(':data')
+
+    compile 'com.umeng:fb:5.4.0'
+    compile 'com.umeng.analytics:analytics:latest.integration'
 
     apt dependencies.androidBinding
 

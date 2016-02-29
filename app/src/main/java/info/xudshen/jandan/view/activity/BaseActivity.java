@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+import com.umeng.analytics.MobclickAgent;
 
 import javax.inject.Inject;
 
@@ -56,6 +57,13 @@ public abstract class BaseActivity extends RxAppCompatActivity implements Transi
     protected void onResume() {
         TransitionHelper.of(this).onResume();
         super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override

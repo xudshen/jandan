@@ -5,6 +5,10 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <uses-permission android:name="android.permission.INTERNET" />
 
 
@@ -22,6 +26,14 @@
             android:name="com.bumptech.glide.integration.okhttp.OkHttpGlideModule"
             android:value="GlideModule"
             tools:node="remove" />
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="56d4123a67e58ee62d001139" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="wandoujia" />
+
+        <activity android:name="com.umeng.fb.ConversationActivity" />
 
         <provider
             android:name="info.xudshen.jandan.data.dao.ModelContentProvider"

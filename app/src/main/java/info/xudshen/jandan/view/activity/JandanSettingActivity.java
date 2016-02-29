@@ -20,6 +20,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.umeng.fb.FeedbackAgent;
+import com.umeng.fb.fragment.FeedbackFragment;
+import com.umeng.fb.model.UserInfo;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.domain.enums.ImageQuality;
 import info.xudshen.jandan.utils.ClipboardHelper;
@@ -157,6 +164,25 @@ public class JandanSettingActivity extends AppCompatActivity {
             initSummary(getPreferenceScreen());
         }
 
+        private void setFeedbackUserInfo(FeedbackAgent agent) {
+            UserInfo info = agent.getUserInfo();
+            if (info == null)
+                info = new UserInfo();
+            Map<String, String> contact = info.getContact();
+            if (contact == null)
+                contact = new HashMap<String, String>();
+            contact.put("plain", getActivity().getString(R.string.feedback_name));
+            info.setContact(contact);
+            agent.setUserInfo(info);
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    boolean result = agent.updateUserInfo();
+                }
+            }).start();
+        }
+
         @Override
         public void onResume() {
             super.onResume();
@@ -182,6 +208,13 @@ public class JandanSettingActivity extends AppCompatActivity {
                         Uri.fromParts("package", getActivity().getPackageName(), null));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                return true;
+            });
+            findPreference("feedback").setOnPreferenceClickListener(preference -> {
+                FeedbackAgent agent = new FeedbackAgent(getActivity());
+                agent.setWelcomeInfo(getActivity().getString(R.string.feedback_info));
+                agent.startFeedbackActivity();
+                setFeedbackUserInfo(agent);
                 return true;
             });
         }
