@@ -6,6 +6,7 @@ import android.support.multidex.MultiDexApplication;
 
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
+import com.umeng.analytics.MobclickAgent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +44,8 @@ public class JandanApp extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         refWatcher = LeakCanary.install(this);
+
+        MobclickAgent.setCheckDevice(false);
 
         this.initializeInjector();
         ModelContentProvider.daoSession = getApplicationComponent().daoSession();
