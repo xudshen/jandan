@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
@@ -75,6 +76,7 @@ public class AppAdapters {
             request.placeholder(placeHolder);
         }
         request
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .transform(new BitmapTransformation(view.getContext()) {
                     @Override
                     protected Bitmap transform(BitmapPool pool, Bitmap toTransform,
