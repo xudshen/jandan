@@ -25,7 +25,7 @@ ext {
 
     freemarkerVersion = '2.3.22'
 
-    androidSupportVersion = '23.1.1'
+    androidSupportVersion = '23.2.0'
 
     //Testing
     robolectricVersion = '3.0'

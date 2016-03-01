@@ -68,6 +68,7 @@ public class HtmlHelper {
     }
 
     public static boolean isWholeBlank(final CharSequence cs) {
+        if (cs == null) return true;
         Matcher matcher = NOT_EMPTY.matcher(cs.toString());
         return !matcher.find();
     }
