@@ -22,6 +22,7 @@ public class HomeFragment extends BaseFragment {
     private static final Logger logger = LoggerFactory.getLogger(HomeFragment.class);
     @Bind(R.id.materialViewPager)
     MaterialViewPager viewPager;
+    private int previousSelection = -999;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -87,15 +88,27 @@ public class HomeFragment extends BaseFragment {
         viewPager.getViewPager().setOffscreenPageLimit(viewPager.getViewPager().getAdapter().getCount());
         //After set an adapter to the ViewPager
         viewPager.getPagerTitleStrip().setViewPager(viewPager.getViewPager());
-        //set default
-        viewPager.getViewPager().setCurrentItem(0);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (previousSelection < 0) {
+            //set default
+            viewPager.getViewPager().setCurrentItem(0);
+        }
     }
 
     @Override
     public void onDestroy() {
         viewPager.getViewPager().getAdapter().setPrimaryItem(null, 0, null);
-        viewPager.getViewPager().setAdapter(null);
 
         super.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 }

@@ -37,6 +37,7 @@ public class VideoReaderPagerAdapter extends FragmentStatePagerAdapter implement
     @Inject
     IterableUseCase getVideoListUseCase;
 
+    private int mCount;
     private LazyList<VideoItem> videoItems;
 
     public VideoReaderPagerAdapter(FragmentManager fm, LoadDataView loadDataView) {
@@ -46,6 +47,7 @@ public class VideoReaderPagerAdapter extends FragmentStatePagerAdapter implement
 
     public void initialize() {
         this.videoItems = this.videoItemDao.queryBuilder().orderDesc(VideoItemDao.Properties.Date).listLazyUncached();
+        this.mCount = this.videoItems.size();
     }
 
     @Override
@@ -69,7 +71,7 @@ public class VideoReaderPagerAdapter extends FragmentStatePagerAdapter implement
                             VideoReaderPagerAdapter.this.videoItemDao.queryBuilder()
                                     .orderDesc(VideoItemDao.Properties.Date).listLazyUncached();
                     Observable.empty().observeOn(AndroidSchedulers.mainThread()).doOnCompleted(() -> {
-                        logger.info("refresh");
+                        mCount = videoItems.size();
                         VideoReaderPagerAdapter.this.notifyDataSetChanged();
                     }).subscribe();
                 }
@@ -80,7 +82,7 @@ public class VideoReaderPagerAdapter extends FragmentStatePagerAdapter implement
 
     @Override
     public int getCount() {
-        return this.videoItems.size();
+        return mCount;
     }
 
     @Override

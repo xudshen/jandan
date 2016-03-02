@@ -37,6 +37,7 @@ public class PostReaderPagerAdapter extends FragmentStatePagerAdapter implements
     @Inject
     IterableUseCase getPostListUseCase;
 
+    private int mCount;
     private LazyList<SimplePost> simplePosts;
 
     public PostReaderPagerAdapter(FragmentManager fm, LoadDataView loadDataView) {
@@ -46,6 +47,7 @@ public class PostReaderPagerAdapter extends FragmentStatePagerAdapter implements
 
     public void initialize() {
         this.simplePosts = this.simplePostDao.queryBuilder().orderDesc(SimplePostDao.Properties.Date).listLazyUncached();
+        this.mCount = this.simplePosts.size();
     }
 
     @Override
@@ -69,7 +71,7 @@ public class PostReaderPagerAdapter extends FragmentStatePagerAdapter implements
                             PostReaderPagerAdapter.this.simplePostDao.queryBuilder()
                                     .orderDesc(SimplePostDao.Properties.Date).listLazyUncached();
                     Observable.empty().observeOn(AndroidSchedulers.mainThread()).doOnCompleted(() -> {
-                        logger.info("refresh");
+                        mCount = simplePosts.size();
                         PostReaderPagerAdapter.this.notifyDataSetChanged();
                     }).subscribe();
                 }
@@ -80,7 +82,7 @@ public class PostReaderPagerAdapter extends FragmentStatePagerAdapter implements
 
     @Override
     public int getCount() {
-        return this.simplePosts.size();
+        return mCount;
     }
 
     @Override

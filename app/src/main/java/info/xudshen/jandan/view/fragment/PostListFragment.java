@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
-import butterknife.ButterKnife;
 import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
 import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
 import info.xudshen.jandan.BR;
@@ -154,7 +153,6 @@ public class PostListFragment extends BaseFragment implements DataListView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
     }
 
     @Override

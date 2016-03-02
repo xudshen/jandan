@@ -37,6 +37,7 @@ public class JokeReaderPagerAdapter extends FragmentStatePagerAdapter implements
     @Inject
     IterableUseCase getJokeListUseCase;
 
+    private int mCount;
     private LazyList<JokeItem> jokeItems;
 
     public JokeReaderPagerAdapter(FragmentManager fm, LoadDataView loadDataView) {
@@ -46,6 +47,7 @@ public class JokeReaderPagerAdapter extends FragmentStatePagerAdapter implements
 
     public void initialize() {
         this.jokeItems = this.jokeItemDao.queryBuilder().orderDesc(JokeItemDao.Properties.Date).listLazyUncached();
+        this.mCount = this.jokeItems.size();
     }
 
     @Override
@@ -69,7 +71,7 @@ public class JokeReaderPagerAdapter extends FragmentStatePagerAdapter implements
                             JokeReaderPagerAdapter.this.jokeItemDao.queryBuilder()
                                     .orderDesc(JokeItemDao.Properties.Date).listLazyUncached();
                     Observable.empty().observeOn(AndroidSchedulers.mainThread()).doOnCompleted(() -> {
-                        logger.info("refresh");
+                        mCount = jokeItems.size();
                         JokeReaderPagerAdapter.this.notifyDataSetChanged();
                     }).subscribe();
                 }
@@ -80,7 +82,7 @@ public class JokeReaderPagerAdapter extends FragmentStatePagerAdapter implements
 
     @Override
     public int getCount() {
-        return this.jokeItems.size();
+        return mCount;
     }
 
     @Override

@@ -37,6 +37,7 @@ public class PicReaderPagerAdapter extends FragmentStatePagerAdapter implements 
     @Inject
     IterableUseCase getPicListUseCase;
 
+    private int mCount;
     private LazyList<PicItem> picItems;
 
     public PicReaderPagerAdapter(FragmentManager fm, LoadDataView loadDataView) {
@@ -46,6 +47,7 @@ public class PicReaderPagerAdapter extends FragmentStatePagerAdapter implements 
 
     public void initialize() {
         this.picItems = this.picItemDao.queryBuilder().orderDesc(PicItemDao.Properties.Date).listLazyUncached();
+        this.mCount = this.picItems.size();
     }
 
     @Override
@@ -69,7 +71,7 @@ public class PicReaderPagerAdapter extends FragmentStatePagerAdapter implements 
                             PicReaderPagerAdapter.this.picItemDao.queryBuilder()
                                     .orderDesc(PicItemDao.Properties.Date).listLazyUncached();
                     Observable.empty().observeOn(AndroidSchedulers.mainThread()).doOnCompleted(() -> {
-                        logger.info("refresh");
+                        mCount = picItems.size();
                         PicReaderPagerAdapter.this.notifyDataSetChanged();
                     }).subscribe();
                 }
@@ -80,7 +82,7 @@ public class PicReaderPagerAdapter extends FragmentStatePagerAdapter implements 
 
     @Override
     public int getCount() {
-        return this.picItems.size();
+        return mCount;
     }
 
     @Override
