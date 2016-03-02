@@ -42,6 +42,14 @@ public class UserActionRegistry {
         return onSubviewClickListener;
     }
 
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
+
+    public void setOnSubviewClickListener(OnSubviewClickListener onSubviewClickListener) {
+        this.onSubviewClickListener = onSubviewClickListener;
+    }
+
     public interface OnClickListener {
         void onClick(View v, int position);
     }

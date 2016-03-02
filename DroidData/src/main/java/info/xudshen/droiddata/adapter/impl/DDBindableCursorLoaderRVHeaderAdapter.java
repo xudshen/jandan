@@ -95,6 +95,13 @@ public class DDBindableCursorLoaderRVHeaderAdapter<VH extends RecyclerView.ViewH
         return position < mPlaceholderSize ? NO_ITEM_ID : super.getItemId(position - mPlaceholderSize);
     }
 
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        headerViewHolderCreator = null;
+        headerViewDataBindingVariableAction = null;
+        super.onDetachedFromRecyclerView(recyclerView);
+    }
+
     //<editor-fold desc="Getter && Setter">
     public void setHeaderViewHolderCreator(HeaderViewHolderCreator<VH> headerViewHolderCreator) {
         this.headerViewHolderCreator = headerViewHolderCreator;

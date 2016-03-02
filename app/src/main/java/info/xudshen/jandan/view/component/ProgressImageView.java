@@ -3,6 +3,7 @@ package info.xudshen.jandan.view.component;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,10 +78,10 @@ public class ProgressImageView extends RelativeLayout {
         target = new MyProgressTarget<>(new GlideDrawableImageViewTarget(imageView), progressBar, imageView, progressTextView);
     }
 
-    public void load(String url, Drawable placeHolder) {
+    public void load(String url, Drawable placeHolder, Fragment fragment) {
         if (url.endsWith("gif")) {
             target.setModel(url); // update target's cache
-            DrawableTypeRequest<String> request = Glide.with(getContext()).load(url);
+            DrawableTypeRequest<String> request = Glide.with(fragment).load(url);
             if (placeHolder != null) {
                 request.placeholder(placeHolder);
             }

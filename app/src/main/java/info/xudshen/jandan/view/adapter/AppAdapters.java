@@ -115,7 +115,7 @@ public class AppAdapters {
     @BindingAdapter(value = {"picFull", "placeHolder"})
     public static void setFullImageUrl(ProgressImageView view, String url,
                                        Drawable placeHolder) {
-        view.load(HtmlUtils.optimizedUrl(url, IMAGE_QUALITY, ImageQuality.MEDIUM), placeHolder);
+//        view.load(HtmlUtils.optimizedUrl(url, IMAGE_QUALITY, ImageQuality.MEDIUM), placeHolder, );
     }
 
     @BindingAdapter(value = {"webContent"})

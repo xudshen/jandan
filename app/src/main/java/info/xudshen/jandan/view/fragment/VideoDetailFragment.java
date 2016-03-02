@@ -181,6 +181,9 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
 
     @Override
     public void onDestroy() {
+        binding.itemWithCommentList.setAdapter(null);
+        binding.itemWithCommentLayout.setOnRefreshListener(null);
+
         super.onDestroy();
         this.videoDetailPresenter.destroy();
         binding.itemWithCommentLayout.setOnRefreshListener(null);

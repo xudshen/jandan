@@ -54,7 +54,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     void initializeViewPager() {
-        viewPager.getViewPager().setAdapter(new PostHubFragmentPagerAdapter(getFragmentManager(),
+        viewPager.getViewPager().setAdapter(new PostHubFragmentPagerAdapter(getChildFragmentManager(),
                 getActivity()));
 
         viewPager.setMaterialViewPagerListener(page -> {
@@ -89,5 +89,13 @@ public class HomeFragment extends BaseFragment {
         viewPager.getPagerTitleStrip().setViewPager(viewPager.getViewPager());
         //set default
         viewPager.getViewPager().setCurrentItem(0);
+    }
+
+    @Override
+    public void onDestroy() {
+        viewPager.getViewPager().getAdapter().setPrimaryItem(null, 0, null);
+        viewPager.getViewPager().setAdapter(null);
+
+        super.onDestroy();
     }
 }

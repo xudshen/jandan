@@ -377,6 +377,9 @@ public class ItemReaderActivity extends BaseActivity implements HasComponents, A
 
     @Override
     protected void onDestroy() {
+        this.viewPager.getAdapter().setPrimaryItem(null, 0, null);
+        this.viewPager.setAdapter(null);
+
         super.onDestroy();
         commentActionSubjectSubscription.unsubscribe();
         this.doCommentPresenter.destroy();

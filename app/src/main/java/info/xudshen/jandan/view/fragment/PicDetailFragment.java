@@ -203,6 +203,9 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
 
     @Override
     public void onDestroy() {
+        binding.itemDetailList.setAdapter(null);
+        binding.commentList.setAdapter(null);
+
         super.onDestroy();
         this.picDetailPresenter.destroy();
     }
@@ -252,7 +255,7 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
                 public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
                     ProgressImageView itemView = (ProgressImageView) holder.itemView;
                     itemView.load(HtmlUtils.optimizedUrl(urlList.get(position), AppAdapters.IMAGE_QUALITY, ImageQuality.MEDIUM),
-                            getResources().getDrawable(R.drawable.placeholder));
+                            getResources().getDrawable(R.drawable.placeholder), PicDetailFragment.this);
                 }
 
                 @Override

@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.databinding.ViewDataBinding;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -77,6 +78,28 @@ public class DDBindableCursorLoaderRVAdapter<VH extends RecyclerView.ViewHolder>
             throw new IllegalStateException("couldn't move cursor to position " + position);
         }
         return itemLayoutSelector.getItemLayoutRes(position, mCursor);
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        Log.d("see", "onDetachedFromRecyclerView");
+        itemViewHolderCreator = null;
+        itemLayoutSelector = null;
+        itemViewDataBindingVariableAction = null;
+
+        onItemClickListener = null;
+        for (UserActionRegistry userActionRegistry : userActionRegistries) {
+            userActionRegistry.setOnClickListener(null);
+            userActionRegistry.setOnSubviewClickListener(null);
+        }
+        userActionRegistries.clear();
+        super.onDetachedFromRecyclerView(recyclerView);
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(VH holder) {
+        Log.d("see", "onViewDetachedFromWindow");
+        super.onViewDetachedFromWindow(holder);
     }
 
     //<editor-fold desc="Getter & Setter">
