@@ -2,6 +2,7 @@ package info.xudshen.jandan.view.fragment;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -14,13 +15,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import butterknife.ButterKnife;
 import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
+import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
+import info.xudshen.jandan.BR;
 import info.xudshen.jandan.R;
+import info.xudshen.jandan.data.dao.SimplePostDao;
 import info.xudshen.jandan.databinding.FragmentPostListBinding;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
+import info.xudshen.jandan.domain.model.SimplePost;
 import info.xudshen.jandan.internal.di.components.PostComponent;
 import info.xudshen.jandan.presenter.PostListPresenter;
 import info.xudshen.jandan.view.DataListView;
@@ -37,7 +41,7 @@ public class PostListFragment extends BaseFragment implements DataListView {
     @Inject
     PostListPresenter postListPresenter;
     @Inject
-    @Named("postListAdapter")
+    SimplePostDao simplePostDao;
     DDBindableCursorLoaderRVHeaderAdapter postListAdapter;
 
     private boolean isDataLoaded = false;
@@ -57,18 +61,38 @@ public class PostListFragment extends BaseFragment implements DataListView {
         super.onCreate(savedInstanceState);
     }
 
+    private void initAdapter() {
+        postListAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
+                .cursorLoader(getContext(), SimplePostDao.CONTENT_URI, null, null, null, SimplePostDao.Properties.Date.columnName + " desc")
+                .headerViewHolderCreator((inflater, viewType, parent) -> {
+                    return new DDBindableViewHolder(inflater.inflate(
+                            com.github.florent37.materialviewpager.R.layout.material_view_pager_placeholder,
+                            parent, false));
+                })
+                .itemViewHolderCreator(((inflater1, viewType1, parent1) -> {
+                    ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
+                    return new DDBindableViewHolder(viewDataBinding);
+                }))
+                .itemLayoutSelector((position, cursor) -> R.layout.post_card_view)
+                .itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {
+                    SimplePost simplePost = simplePostDao.loadEntity(cursor);
+                    viewDataBinding.setVariable(BR.item, simplePost);
+                })
+                .build();
+        postListAdapter.setOnItemClickListener((itemView, position) -> {
+            logger.info("position={}", position);
+            getNavigator().launchItemReader((BaseActivity) getActivity(),
+                    itemView.findViewById(R.id.post_card_author), position, ReaderItemType.SimplePost);
+        });
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.inject();
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_post_list, container, false);
-
-        postListAdapter.setOnItemClickListener((itemView, position) -> {
-            logger.info("position={}", position);
-            getNavigator().launchItemReader((BaseActivity) getActivity(),
-                    itemView.findViewById(R.id.post_card_author), position, ReaderItemType.SimplePost);
-        });
+        initAdapter();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         binding.myRecyclerView.setLayoutManager(linearLayoutManager);

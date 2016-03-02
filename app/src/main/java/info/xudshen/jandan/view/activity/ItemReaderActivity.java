@@ -41,7 +41,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.constants.Constants;
-import info.xudshen.jandan.data.dao.MetaDao;
 import info.xudshen.jandan.domain.enums.CommentAction;
 import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.domain.model.FavoItem;

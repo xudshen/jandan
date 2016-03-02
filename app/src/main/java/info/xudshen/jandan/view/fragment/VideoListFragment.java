@@ -2,21 +2,26 @@ package info.xudshen.jandan.view.fragment;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
+import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
+import info.xudshen.jandan.BR;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.dao.VideoItemDao;
 import info.xudshen.jandan.databinding.FragmentVideoListBinding;
@@ -47,8 +52,6 @@ public class VideoListFragment extends BaseFragment implements DataListView {
     VideoListPresenter videoListPresenter;
     @Inject
     VideoItemDao videoItemDao;
-    @Inject
-    @Named("videoListAdapter")
     DDBindableCursorLoaderRVHeaderAdapter videoListAdapter;
 
     private boolean isDataLoaded = false;
@@ -62,12 +65,30 @@ public class VideoListFragment extends BaseFragment implements DataListView {
         this.getComponent(VideoComponent.class).inject(this);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        this.inject();
-        // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_video_list, container, false);
+    private void initAdapter() {
+        videoListAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
+                .cursorLoader(getContext(), VideoItemDao.CONTENT_URI, null, null, null, VideoItemDao.Properties.Date.columnName + " desc")
+                .headerViewHolderCreator((inflater, viewType, parent) -> {
+                    return new DDBindableViewHolder(inflater.inflate(
+                            com.github.florent37.materialviewpager.R.layout.material_view_pager_placeholder,
+                            parent, false));
+                })
+                .itemViewHolderCreator(((inflater1, viewType1, parent1) -> {
+                    ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
+                    FloatingActionButton button = (FloatingActionButton) viewDataBinding.getRoot().findViewById(R.id.play_buttom);
+                    button.setImageDrawable(new IconicsDrawable(getContext())
+                            .icon(GoogleMaterial.Icon.gmd_play_circle_filled)
+                            .color(getContext().getResources().getColor(R.color.md_white_1000))
+                            .sizeDp(20)
+                            .paddingDp(2));
+                    return new DDBindableViewHolder(viewDataBinding);
+                }))
+                .itemLayoutSelector((position, cursor) -> R.layout.video_card_view)
+                .itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {
+                    VideoItem videoItem = videoItemDao.loadEntity(cursor);
+                    viewDataBinding.setVariable(BR.item, videoItem);
+                })
+                .build();
 
         videoListAdapter.setOnItemClickListener((itemView, position) -> {
             logger.info("position={}", position);
@@ -89,6 +110,15 @@ public class VideoListFragment extends BaseFragment implements DataListView {
             VideoItem comment = videoItemDao.loadEntity(videoListAdapter.getItemCursor(position));
             HtmlHelper.openInBrowser(getActivity(), comment.getVideoLink());
         });
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        this.inject();
+        // Inflate the layout for this fragment
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_video_list, container, false);
+        initAdapter();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         binding.videoListView.setLayoutManager(linearLayoutManager);

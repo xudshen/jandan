@@ -3,7 +3,6 @@ package info.xudshen.jandan.utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.text.TextUtils;
 import android.util.Patterns;
 
 import org.slf4j.Logger;

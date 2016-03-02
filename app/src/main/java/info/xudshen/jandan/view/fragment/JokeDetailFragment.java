@@ -178,6 +178,7 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
     public void onDestroy() {
         super.onDestroy();
         this.jokeDetailPresenter.destroy();
+        binding.itemWithCommentLayout.setOnRefreshListener(null);
     }
 
     @Override

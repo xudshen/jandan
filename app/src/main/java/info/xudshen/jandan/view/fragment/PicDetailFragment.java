@@ -23,7 +23,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVAdapter;
-import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
 import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
 import info.xudshen.jandan.BR;
 import info.xudshen.jandan.R;

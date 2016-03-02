@@ -165,6 +165,7 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
     public void onDestroy() {
         super.onDestroy();
         this.postDetailPresenter.destroy();
+        binding.postWithCommentLayout.setOnRefreshListener(null);
     }
 
     @Override

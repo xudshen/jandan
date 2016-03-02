@@ -2,6 +2,7 @@ package info.xudshen.jandan.view.fragment;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -14,9 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
+import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
+import info.xudshen.jandan.BR;
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.data.dao.JokeItemDao;
 import info.xudshen.jandan.databinding.FragmentJokeListBinding;
@@ -46,8 +48,6 @@ public class JokeListFragment extends BaseFragment implements DataListView {
     JokeListPresenter jokeListPresenter;
     @Inject
     JokeItemDao jokeItemDao;
-    @Inject
-    @Named("jokeListAdapter")
     DDBindableCursorLoaderRVHeaderAdapter jokeListAdapter;
 
     private boolean isDataLoaded = false;
@@ -61,12 +61,24 @@ public class JokeListFragment extends BaseFragment implements DataListView {
         this.getComponent(JokeComponent.class).inject(this);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        this.inject();
-        // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_joke_list, container, false);
+    private void initAdapter() {
+        jokeListAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
+                .cursorLoader(getContext(), JokeItemDao.CONTENT_URI, null, null, null, JokeItemDao.Properties.Date.columnName + " desc")
+                .headerViewHolderCreator((inflater, viewType, parent) -> {
+                    return new DDBindableViewHolder(inflater.inflate(
+                            com.github.florent37.materialviewpager.R.layout.material_view_pager_placeholder,
+                            parent, false));
+                })
+                .itemViewHolderCreator(((inflater1, viewType1, parent1) -> {
+                    ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
+                    return new DDBindableViewHolder(viewDataBinding);
+                }))
+                .itemLayoutSelector((position, cursor) -> R.layout.joke_card_view)
+                .itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {
+                    JokeItem jokeItem = jokeItemDao.loadEntity(cursor);
+                    viewDataBinding.setVariable(BR.item, jokeItem);
+                })
+                .build();
 
         jokeListAdapter.setOnItemClickListener((itemView, position) -> {
             logger.info("position={}", position);
@@ -84,6 +96,15 @@ public class JokeListFragment extends BaseFragment implements DataListView {
             JokeListFragment.this.jokeListPresenter.voteComment(comment.getJokeId(), VoteType.XX);
             logger.info("{}", v);
         });
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        this.inject();
+        // Inflate the layout for this fragment
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_joke_list, container, false);
+        initAdapter();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         binding.jokeListView.setLayoutManager(linearLayoutManager);

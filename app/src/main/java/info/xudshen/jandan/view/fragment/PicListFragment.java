@@ -121,10 +121,10 @@ public class PicListFragment extends BaseFragment implements DataListView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.inject();
-        initAdapter();
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pic_list, container, false);
-
+        initAdapter();
+        
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         binding.picListView.setLayoutManager(linearLayoutManager);
         binding.picListView.setAdapter(picListAdapter);

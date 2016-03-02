@@ -24,7 +24,6 @@ import info.xudshen.jandan.domain.model.PicItem;
 import info.xudshen.jandan.utils.RetrofitErrorHelper;
 import info.xudshen.jandan.view.ActionView;
 import info.xudshen.jandan.view.DataDetailView;
-import info.xudshen.jandan.view.fragment.PicDetailFragment;
 import rx.Subscriber;
 
 public class PicDetailPresenter implements Presenter {

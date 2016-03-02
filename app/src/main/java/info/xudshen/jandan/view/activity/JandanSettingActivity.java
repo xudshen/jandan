@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.umeng.fb.FeedbackAgent;
-import com.umeng.fb.fragment.FeedbackFragment;
 import com.umeng.fb.model.UserInfo;
 
 import java.util.HashMap;
