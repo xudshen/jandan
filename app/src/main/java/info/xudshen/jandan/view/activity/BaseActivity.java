@@ -19,20 +19,9 @@ import info.xudshen.jandan.navigation.Navigator;
 /**
  * Created by xudshen on 16/1/6.
  */
-public abstract class BaseActivity extends RxAppCompatActivity implements TransitionHelper.Source, TransitionHelper.Listener {
+public abstract class BaseActivity extends RxAppCompatActivity {
     @Inject
     Navigator navigator;
-    TransitionHelper transitionHelper;
-
-    @Override
-    public TransitionHelper getTransitionHelper() {
-        return transitionHelper;
-    }
-
-    @Override
-    public void setTransitionHelper(TransitionHelper transitionHelper) {
-        this.transitionHelper = transitionHelper;
-    }
 
     /**
      * called in {@link #onCreate(Bundle)}
@@ -41,21 +30,17 @@ public abstract class BaseActivity extends RxAppCompatActivity implements Transi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        TransitionHelper.init(this, savedInstanceState);
-        TransitionHelper.of(this).addListener(this);
         super.onCreate(savedInstanceState);
         this.getApplicationComponent().inject(this);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        TransitionHelper.of(this).onSaveInstanceState(outState);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onResume() {
-        TransitionHelper.of(this).onResume();
         super.onResume();
         MobclickAgent.onResume(this);
     }
@@ -65,34 +50,6 @@ public abstract class BaseActivity extends RxAppCompatActivity implements Transi
         super.onPause();
         MobclickAgent.onPause(this);
     }
-
-    @Override
-    public void onBackPressed() {
-        TransitionHelper.of(this).onBackPressed();
-    }
-
-    //<editor-fold desc="TransitionHelper.Listener">
-    @Override
-    public void onBeforeViewShows(View contentView) {
-    }
-
-    @Override
-    public void onBeforeEnter(View contentView) {
-    }
-
-    @Override
-    public void onAfterEnter() {
-    }
-
-    @Override
-    public boolean onBeforeBack() {
-        return false;
-    }
-
-    @Override
-    public void onBeforeReturn() {
-    }
-    //</editor-fold>
 
     /**
      * Get the Main Application component for dependency injection.

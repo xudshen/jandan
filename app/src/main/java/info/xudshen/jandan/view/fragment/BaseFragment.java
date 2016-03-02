@@ -20,17 +20,14 @@ import info.xudshen.jandan.internal.di.HasComponents;
 import info.xudshen.jandan.navigation.Navigator;
 import info.xudshen.jandan.view.activity.BaseActivity;
 import info.xudshen.jandan.view.activity.HasDrawer;
-import info.xudshen.jandan.view.activity.TransitionHelper;
 
 /**
  * Created by xudshen on 16/1/7.
  */
-public abstract class BaseFragment extends RxFragment implements TransitionHelper.Listener {
+public abstract class BaseFragment extends RxFragment  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        TransitionHelper.of(getActivity()).addListener(this);
         super.onCreate(savedInstanceState);
-
     }
 
     /**
@@ -42,39 +39,14 @@ public abstract class BaseFragment extends RxFragment implements TransitionHelpe
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        TransitionHelper.of(getActivity()).onViewCreated();
         super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        TransitionHelper.of(getActivity()).removeListener(this);
         JandanApp.getRefWatcher(getActivity()).watch(this);
     }
-
-    //<editor-fold desc="TransitionHelper.Listener">
-    @Override
-    public void onBeforeViewShows(View contentView) {
-    }
-
-    @Override
-    public void onBeforeEnter(View contentView) {
-    }
-
-    @Override
-    public void onAfterEnter() {
-    }
-
-    @Override
-    public boolean onBeforeBack() {
-        return false;
-    }
-
-    @Override
-    public void onBeforeReturn() {
-    }
-    //</editor-fold>
 
     protected Navigator getNavigator() {
         return ((BaseActivity) getActivity()).getNavigator();
