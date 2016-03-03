@@ -9,7 +9,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -87,6 +90,13 @@ public class VideoListFragment extends BaseFragment implements DataListView {
                 .itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {
                     VideoItem videoItem = videoItemDao.loadEntity(cursor);
                     viewDataBinding.setVariable(BR.item, videoItem);
+
+                    ImageView imageView = (ImageView) viewDataBinding.getRoot().findViewById(R.id.video_thumb);
+                    Glide.with(VideoListFragment.this).load(videoItem.getVideoThumbnail()).placeholder(R.drawable.placeholder)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .centerCrop()
+                            .crossFade()
+                            .into(imageView);
                 })
                 .build();
 

@@ -38,7 +38,7 @@
                 <ImageView
                     android:id="@+id/video_thumb"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="280dp"
                     android:adjustViewBounds="true" />
 
                 <View style="@style/Divider" />

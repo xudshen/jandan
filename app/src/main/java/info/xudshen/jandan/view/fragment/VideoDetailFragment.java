@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -228,6 +230,12 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
     public void renderDataDetail(VideoItemObservable item) {
         if (binding.commentList.getAdapter() == null) {
             binding.playButtom.setOnClickListener(v -> HtmlHelper.openInBrowser(getActivity(), item.getVideoLink()));
+            Glide.with(VideoDetailFragment.this).load(item.getVideoThumbnail()).placeholder(R.drawable.placeholder)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .centerCrop()
+                    .crossFade()
+                    .into(binding.videoThumb);
+
             binding.setVariable(BR.videoItem, item);
 
             DDBindableCursorLoaderRVAdapter commentAdapter = new DDBindableCursorLoaderRVAdapter.Builder<DDBindableViewHolder>()
