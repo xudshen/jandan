@@ -10,13 +10,13 @@
     </data>
 
     <info.xudshen.jandan.view.widget.CustomSwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+        android:id="@+id/postListLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".view.fragment.PostListFragment">
 
         <info.xudshen.jandan.view.component.LoadMoreRecyclerView
-            android:id="@+id/my_recycler_view"
+            android:id="@+id/postListView"
             android:layout_width="match_parent"
 
             android:layout_height="match_parent"

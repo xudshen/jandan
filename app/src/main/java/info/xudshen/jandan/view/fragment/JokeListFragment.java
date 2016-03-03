@@ -98,6 +98,11 @@ public class JokeListFragment extends BaseFragment implements DataListView {
         });
     }
 
+    private void unBindView() {
+        binding.jokeListView.setOnLoadMoreListener(null);
+        binding.jokeListLayout.setOnRefreshListener(null);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -106,17 +111,14 @@ public class JokeListFragment extends BaseFragment implements DataListView {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_joke_list, container, false);
         initAdapter();
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        binding.jokeListView.setLayoutManager(linearLayoutManager);
+        binding.jokeListView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.jokeListView.setAdapter(jokeListAdapter);
         binding.jokeListView.setOnLoadMoreListener(() -> {
-            logger.info("OnLoadMoreListener");
             this.jokeListPresenter.swipeUpStart();
         });
 
         binding.jokeListLayout.setColorSchemeResources(R.color.colorPrimaryDark, R.color.colorAccent);
         binding.jokeListLayout.setOnRefreshListener(() -> {
-            logger.info("OnRefreshListener");
             this.jokeListPresenter.swipeDownStart();
         });
 
@@ -164,7 +166,7 @@ public class JokeListFragment extends BaseFragment implements DataListView {
 
             @Override
             public Context context() {
-                return getActivity().getApplicationContext();
+                return JokeListFragment.this.getContext();
             }
 
             @Override
@@ -191,6 +193,9 @@ public class JokeListFragment extends BaseFragment implements DataListView {
 
     @Override
     public void onDestroy() {
+        binding.jokeListView.setAdapter(null);
+        unBindView();
+
         super.onDestroy();
         this.jokeListPresenter.destroy();
     }
@@ -256,7 +261,7 @@ public class JokeListFragment extends BaseFragment implements DataListView {
 
     @Override
     public Context context() {
-        return getActivity().getApplicationContext();
+        return getContext();
     }
     //</editor-fold>
 }

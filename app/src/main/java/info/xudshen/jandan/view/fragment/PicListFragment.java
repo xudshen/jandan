@@ -129,6 +129,11 @@ public class PicListFragment extends BaseFragment implements DataListView {
         });
     }
 
+    private void unBindView() {
+        binding.picListView.setOnLoadMoreListener(null);
+        binding.picListLayout.setOnRefreshListener(null);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -137,17 +142,14 @@ public class PicListFragment extends BaseFragment implements DataListView {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pic_list, container, false);
         initAdapter();
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        binding.picListView.setLayoutManager(linearLayoutManager);
+        binding.picListView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.picListView.setAdapter(picListAdapter);
         binding.picListView.setOnLoadMoreListener(() -> {
-            logger.info("OnLoadMoreListener");
             this.picListPresenter.swipeUpStart();
         });
 
         binding.picListLayout.setColorSchemeResources(R.color.colorPrimaryDark, R.color.colorAccent);
         binding.picListLayout.setOnRefreshListener(() -> {
-            logger.info("OnRefreshListener");
             this.picListPresenter.swipeDownStart();
         });
 
@@ -195,7 +197,7 @@ public class PicListFragment extends BaseFragment implements DataListView {
 
             @Override
             public Context context() {
-                return getActivity().getApplicationContext();
+                return PicListFragment.this.getContext();
             }
 
             @Override
@@ -222,6 +224,9 @@ public class PicListFragment extends BaseFragment implements DataListView {
 
     @Override
     public void onDestroy() {
+        binding.picListView.setAdapter(null);
+        unBindView();
+
         super.onDestroy();
         this.picListPresenter.destroy();
     }
@@ -287,7 +292,7 @@ public class PicListFragment extends BaseFragment implements DataListView {
 
     @Override
     public Context context() {
-        return getActivity().getApplicationContext();
+        return getContext();
     }
     //</editor-fold>
 }

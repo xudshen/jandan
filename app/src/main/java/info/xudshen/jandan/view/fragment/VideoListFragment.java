@@ -112,6 +112,11 @@ public class VideoListFragment extends BaseFragment implements DataListView {
         });
     }
 
+    private void unBindView() {
+        binding.videoListView.setOnLoadMoreListener(null);
+        binding.videoListLayout.setOnRefreshListener(null);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -120,17 +125,14 @@ public class VideoListFragment extends BaseFragment implements DataListView {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_video_list, container, false);
         initAdapter();
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        binding.videoListView.setLayoutManager(linearLayoutManager);
+        binding.videoListView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.videoListView.setAdapter(videoListAdapter);
         binding.videoListView.setOnLoadMoreListener(() -> {
-            logger.info("OnLoadMoreListener");
             this.videoListPresenter.swipeUpStart();
         });
 
         binding.videoListLayout.setColorSchemeResources(R.color.colorPrimaryDark, R.color.colorAccent);
         binding.videoListLayout.setOnRefreshListener(() -> {
-            logger.info("OnRefreshListener");
             this.videoListPresenter.swipeDownStart();
         });
 
@@ -178,7 +180,7 @@ public class VideoListFragment extends BaseFragment implements DataListView {
 
             @Override
             public Context context() {
-                return getActivity().getApplicationContext();
+                return VideoListFragment.this.getContext();
             }
 
             @Override
@@ -205,6 +207,9 @@ public class VideoListFragment extends BaseFragment implements DataListView {
 
     @Override
     public void onDestroy() {
+        binding.videoListView.setAdapter(null);
+        unBindView();
+
         super.onDestroy();
         this.videoListPresenter.destroy();
     }
@@ -270,7 +275,7 @@ public class VideoListFragment extends BaseFragment implements DataListView {
 
     @Override
     public Context context() {
-        return getActivity().getApplicationContext();
+        return getContext();
     }
     //</editor-fold>
 }

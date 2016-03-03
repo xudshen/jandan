@@ -58,11 +58,6 @@ public class PostListFragment extends BaseFragment implements DataListView {
         this.getComponent(PostComponent.class).inject(this);
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     private void initAdapter() {
         postListAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
                 .cursorLoader(getContext(), SimplePostDao.CONTENT_URI, null, null, null, SimplePostDao.Properties.Date.columnName + " desc")
@@ -95,6 +90,11 @@ public class PostListFragment extends BaseFragment implements DataListView {
         });
     }
 
+    private void unBindView() {
+        binding.postListView.setOnLoadMoreListener(null);
+        binding.postListLayout.setOnRefreshListener(null);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -103,20 +103,19 @@ public class PostListFragment extends BaseFragment implements DataListView {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_post_list, container, false);
         initAdapter();
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        binding.myRecyclerView.setLayoutManager(linearLayoutManager);
-        binding.myRecyclerView.setAdapter(postListAdapter);
-        binding.myRecyclerView.setOnLoadMoreListener(() -> {
+        binding.postListView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.postListView.setAdapter(postListAdapter);
+        binding.postListView.setOnLoadMoreListener(() -> {
             this.postListPresenter.swipeUpStart();
         });
 
-        binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark, R.color.colorAccent);
-        binding.swipeRefreshLayout.setOnRefreshListener(() -> {
+        binding.postListLayout.setColorSchemeResources(R.color.colorPrimaryDark, R.color.colorAccent);
+        binding.postListLayout.setOnRefreshListener(() -> {
             this.postListPresenter.swipeDownStart();
         });
 
         //init for MaterialViewPager
-        MaterialViewPagerHelper.registerRecyclerView(getActivity(), binding.myRecyclerView, null);
+        MaterialViewPagerHelper.registerRecyclerView(getActivity(), binding.postListView, null);
         //start load data in db
         getLoaderManager().initLoader(0, null, postListAdapter);
         return binding.getRoot();
@@ -156,6 +155,9 @@ public class PostListFragment extends BaseFragment implements DataListView {
 
     @Override
     public void onDestroy() {
+        binding.postListView.setAdapter(null);
+        unBindView();
+
         super.onDestroy();
         this.postListPresenter.destroy();
     }
@@ -179,12 +181,12 @@ public class PostListFragment extends BaseFragment implements DataListView {
     //<editor-fold desc="Called by Presenter"
     @Override
     public void showLoading() {
-        binding.swipeRefreshLayout.setRefreshing(true, RefreshDirection.TOP);
+        binding.postListLayout.setRefreshing(true, RefreshDirection.TOP);
     }
 
     @Override
     public void hideLoading() {
-        binding.swipeRefreshLayout.setRefreshing(false, RefreshDirection.TOP);
+        binding.postListLayout.setRefreshing(false, RefreshDirection.TOP);
     }
 
     @Override
@@ -199,19 +201,19 @@ public class PostListFragment extends BaseFragment implements DataListView {
 
     @Override
     public void showError(String message) {
-        showSnackbar(binding.myRecyclerView, message);
+        showSnackbar(binding.postListView, message);
     }
 
     @Override
     public void showLoadingMore() {
-        binding.swipeRefreshLayout.setRefreshing(true, RefreshDirection.BOTTOM);
-        binding.myRecyclerView.setLoading(true);
+        binding.postListLayout.setRefreshing(true, RefreshDirection.BOTTOM);
+        binding.postListView.setLoading(true);
     }
 
     @Override
     public void hideLoadingMore() {
-        binding.swipeRefreshLayout.setRefreshing(false, RefreshDirection.BOTTOM);
-        binding.myRecyclerView.setLoading(false);
+        binding.postListLayout.setRefreshing(false, RefreshDirection.BOTTOM);
+        binding.postListView.setLoading(false);
     }
 
     @Override
@@ -221,7 +223,7 @@ public class PostListFragment extends BaseFragment implements DataListView {
 
     @Override
     public Context context() {
-        return getActivity().getApplicationContext();
+        return getContext();
     }
 
     //</editor-fold>
