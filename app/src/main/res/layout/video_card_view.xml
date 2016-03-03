@@ -39,9 +39,7 @@
                     android:id="@+id/video_thumb"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    app:picThumb="@{item.videoThumbnail}"
-                    app:placeHolder="@{@drawable/placeholder}" />
+                    android:adjustViewBounds="true" />
 
                 <View style="@style/Divider" />
 

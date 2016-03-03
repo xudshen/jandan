@@ -8,7 +8,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
 
 import org.slf4j.Logger;
@@ -76,6 +79,13 @@ public class PostListFragment extends BaseFragment implements DataListView {
                 .itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {
                     SimplePost simplePost = simplePostDao.loadEntity(cursor);
                     viewDataBinding.setVariable(BR.item, simplePost);
+
+                    ImageView imageView = (ImageView) viewDataBinding.getRoot().findViewById(R.id.post_thumb);
+                    Glide.with(PostListFragment.this).load(simplePost.getThumbC()).placeholder(R.drawable.post_thumb_placeholder)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .centerCrop()
+                            .crossFade()
+                            .into(imageView);
                 })
                 .build();
         postListAdapter.setOnItemClickListener((itemView, position) -> {
