@@ -22,7 +22,7 @@ public class HomeFragment extends BaseFragment {
     private static final Logger logger = LoggerFactory.getLogger(HomeFragment.class);
     @Bind(R.id.materialViewPager)
     MaterialViewPager viewPager;
-    private int previousSelection = -999;
+    private boolean firstSelect = true;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -93,8 +93,9 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (previousSelection < 0) {
+        if (firstSelect) {
             //set default
+            firstSelect = false;
             viewPager.getViewPager().setCurrentItem(0);
         }
     }
