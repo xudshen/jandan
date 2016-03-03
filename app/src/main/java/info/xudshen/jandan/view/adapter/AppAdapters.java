@@ -70,46 +70,45 @@ public class AppAdapters {
     @BindingAdapter(value = {"picThumb", "placeHolder"})
     public static void setThumbImageUrl(ImageView view, String url,
                                         Drawable placeHolder) {
-        if (Strings.isNullOrEmpty(url)) url = "http://localhost";
-        DrawableTypeRequest<String> request = Glide.with(view.getContext())
-                .load(url);
-        request.asBitmap();
-        if (placeHolder != null) {
-            request.placeholder(placeHolder);
-        }
-        request
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .transform(new BitmapTransformation(view.getContext()) {
-                    @Override
-                    protected Bitmap transform(BitmapPool pool, Bitmap toTransform,
-                                               int outWidth, int outHeight) {
-                        int width = outWidth;
-                        int height = Math.min(toTransform.getHeight() * outWidth / toTransform.getWidth(),
-                                LayoutHelper.toPx(view.getContext(), 480));
-
-                        Bitmap result = pool.get(width, height, Bitmap.Config.ARGB_8888);
-                        if (result == null) {
-                            // Use ARGB_8888 since we're going to add alpha to the image.
-                            result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-                        }
-                        TransformationUtils.setAlpha(toTransform, result);
-
-                        Canvas canvas = new Canvas(result);
-
-                        Paint paint = new Paint(Paint.DITHER_FLAG | Paint.FILTER_BITMAP_FLAG);
-                        canvas.drawBitmap(toTransform, new Rect(0, 0, toTransform.getWidth(), height * toTransform.getWidth() / width),
-                                new Rect(0, 0, width, height), paint);
-
-                        return result;
-                    }
-
-                    @Override
-                    public String getId() {
-                        return "info.xudshen.jandan.transform.ThumbTransform";
-                    }
-                })
-                .crossFade()
-                .into(view);
+//        if (Strings.isNullOrEmpty(url)) url = "http://localhost";
+//        DrawableTypeRequest<String> request = Glide.with(view.getContext())
+//                .load(url);
+//        request.asBitmap();
+//        if (placeHolder != null) {
+//            request.placeholder(placeHolder);
+//        }
+//        request
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .transform(new BitmapTransformation(view.getContext()) {
+//                    @Override
+//                    protected Bitmap transform(BitmapPool pool, Bitmap toTransform,
+//                                               int outWidth, int outHeight) {
+//                        int width = outWidth;
+//                        int height = Math.min(toTransform.getHeight() * outWidth / toTransform.getWidth(),
+//                                LayoutHelper.toPx(view.getContext(), 480));
+//
+//                        Bitmap result = pool.get(width, height, Bitmap.Config.RGB_565);
+//                        if (result == null) {
+//                            result = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+//                        }
+//                        TransformationUtils.setAlpha(toTransform, result);
+//
+//                        Canvas canvas = new Canvas(result);
+//
+//                        Paint paint = new Paint(Paint.DITHER_FLAG | Paint.FILTER_BITMAP_FLAG);
+//                        canvas.drawBitmap(toTransform, new Rect(0, 0, toTransform.getWidth(), height * toTransform.getWidth() / width),
+//                                new Rect(0, 0, width, height), paint);
+//
+//                        return result;
+//                    }
+//
+//                    @Override
+//                    public String getId() {
+//                        return "info.xudshen.jandan.transform.ThumbTransform";
+//                    }
+//                })
+//                .crossFade()
+//                .into(view);
     }
 
     @BindingAdapter(value = {"picFull", "placeHolder"})

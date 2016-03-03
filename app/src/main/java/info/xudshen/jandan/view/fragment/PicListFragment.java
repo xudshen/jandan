@@ -9,7 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
 
 import org.slf4j.Logger;
@@ -85,6 +88,15 @@ public class PicListFragment extends BaseFragment implements DataListView {
                     boolean hideItem = (filterXXgtOO && picItem.getVoteNegative() > picItem.getVotePositive()) || picItem.getVoteNegative() > filterXXgt;
                     viewDataBinding.setVariable(BR.item, picItem);
                     viewDataBinding.setVariable(BR.hideItem, hideItem);
+
+                    ImageView imageView = (ImageView) viewDataBinding.getRoot().findViewById(R.id.item_thumb_image);
+                    Glide.with(PicListFragment.this)
+                            .load(picItem.getPicFirst())
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .placeholder(R.drawable.placeholder)
+                            .centerCrop()
+                            .crossFade()
+                            .into(imageView);
                 })
                 .build();
 
@@ -124,7 +136,7 @@ public class PicListFragment extends BaseFragment implements DataListView {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_pic_list, container, false);
         initAdapter();
-        
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         binding.picListView.setLayoutManager(linearLayoutManager);
         binding.picListView.setAdapter(picListAdapter);

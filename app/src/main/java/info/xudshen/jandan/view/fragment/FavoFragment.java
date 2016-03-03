@@ -11,7 +11,10 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -52,6 +55,7 @@ public class FavoFragment extends BaseFragment implements DeleteDataView {
     FavoItemDao favoItemDao;
 
     private FragmentFavoBinding binding;
+    private ItemTouchHelper itemTouchHelper;
 
     @Override
     public void inject() {
@@ -121,6 +125,14 @@ public class FavoFragment extends BaseFragment implements DeleteDataView {
                         }
                         case SimplePic: {
                             viewDataBinding.setVariable(BR.item, FavoItemTrans.toPicItem(favoItem));
+                            ImageView imageView = (ImageView) viewDataBinding.getRoot().findViewById(R.id.item_thumb_image);
+                            Glide.with(FavoFragment.this)
+                                    .load(favoItem.getPicFirst())
+                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                    .placeholder(R.drawable.placeholder)
+                                    .centerCrop()
+                                    .crossFade()
+                                    .into(imageView);
                             break;
                         }
                         default: {
@@ -153,7 +165,7 @@ public class FavoFragment extends BaseFragment implements DeleteDataView {
         binding.favoList.setLayoutManager(linearLayoutManager);
         binding.favoList.setAdapter(favoListAdapter);
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+        itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
             @Override
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 int swipeFlags = ItemTouchHelper.START;
@@ -193,6 +205,22 @@ public class FavoFragment extends BaseFragment implements DeleteDataView {
             binding.favoList.setVisibility(View.GONE);
             binding.blankPlaceholder.setVisibility(View.VISIBLE);
         }
+        favoListPresenter.resume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        favoListPresenter.pause();
+    }
+
+    @Override
+    public void onDestroy() {
+        itemTouchHelper = null;
+        binding.favoList.setAdapter(null);
+
+        super.onDestroy();
+        favoListPresenter.destroy();
     }
 
     @Override

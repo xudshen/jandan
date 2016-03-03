@@ -70,11 +70,10 @@
                 android:visibility="@{hideItem ? View.GONE : View.VISIBLE}">
 
                 <ImageView
+                    android:id="@+id/item_thumb_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    app:picThumb="@{item.picFirst}"
-                    app:placeHolder="@{@drawable/placeholder}" />
+                    android:adjustViewBounds="true" />
 
                 <View style="@style/Divider" />
 
