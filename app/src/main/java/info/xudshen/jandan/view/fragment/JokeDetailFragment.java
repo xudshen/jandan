@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
+import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVAdapter;
 import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
 import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
 import info.xudshen.jandan.BR;
@@ -95,17 +96,29 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
         this.inject();
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_joke_detail, container, false);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        binding.itemWithCommentList.setLayoutManager(linearLayoutManager);
+        binding.commentList.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.commentList.setNestedScrollingEnabled(false);
 
-        binding.itemWithCommentLayout.setOnRefreshListener(direction -> {
-            switch (direction) {
-                case BOTTOM: {
-                    JokeDetailFragment.this.jokeDetailPresenter.refreshComment(jokeId);
-                }
-            }
-        });
+        initView();
+
         return binding.getRoot();
+    }
+
+    private void initView() {
+        binding.refreshCommentButton.setOnClickListener(v -> jokeDetailPresenter.refreshComment(jokeId));
+        //set for vote
+        binding.commentVoteOo.setOnClickListener(v -> {
+            JokeDetailFragment.this.jokeDetailPresenter.voteComment(jokeId, VoteType.OO);
+        });
+        binding.commentVoteXx.setOnClickListener(v -> {
+            JokeDetailFragment.this.jokeDetailPresenter.voteComment(jokeId, VoteType.XX);
+        });
+    }
+
+    private void unBindView() {
+        binding.refreshCommentButton.setOnClickListener(null);
+        binding.commentVoteOo.setOnClickListener(null);
+        binding.commentVoteXx.setOnClickListener(null);
     }
 
     @Override
@@ -115,7 +128,7 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
         this.jokeDetailPresenter.setVoteCommentView(new ActionView() {
             @Override
             public void showSuccess() {
-                showSnackbar(binding.itemWithCommentList, getString(R.string.vote_success));
+                showSnackbar(binding.scrollContent, getString(R.string.vote_success));
             }
 
             @Override
@@ -140,12 +153,12 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
 
             @Override
             public void showError(String message) {
-                showSnackbar(binding.itemWithCommentList, message);
+                showSnackbar(binding.scrollContent, message);
             }
 
             @Override
             public Context context() {
-                return getActivity().getApplicationContext();
+                return JokeDetailFragment.this.getContext();
             }
 
             @Override
@@ -176,8 +189,8 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
 
     @Override
     public void onDestroy() {
-        binding.itemWithCommentList.setAdapter(null);
-        binding.itemWithCommentLayout.setOnRefreshListener(null);
+        binding.commentList.setAdapter(null);
+        unBindView();
 
         super.onDestroy();
         this.jokeDetailPresenter.destroy();
@@ -201,26 +214,11 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
     //<editor-fold desc="Called by presenter">
     @Override
     public void renderDataDetail(JokeItemObservable item) {
-        if (binding.itemWithCommentList.getAdapter() == null) {
-            DDBindableCursorLoaderRVHeaderAdapter commentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
-                    .cursorLoader(getActivity(), DuoshuoCommentDao.CONTENT_URI, null, DuoshuoCommentDao.Properties.ThreadKey.columnName + " = ?", new String[]{Constants.THREAD_PREFIX + jokeId}, null)
-                    .headerViewHolderCreator((inflater, viewType, parent) -> {
-                        ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.header_joke_detail, parent, false);
-                        Button refreshButton = (Button) viewDataBinding.getRoot().findViewById(R.id.refresh_comment_button);
-                        refreshButton.setOnClickListener(v -> jokeDetailPresenter.refreshComment(jokeId));
-                        //set for vote
-                        viewDataBinding.getRoot().findViewById(R.id.comment_vote_oo).setOnClickListener(v -> {
-                            JokeDetailFragment.this.jokeDetailPresenter.voteComment(item.getJokeId(), VoteType.OO);
-                        });
-                        viewDataBinding.getRoot().findViewById(R.id.comment_vote_xx).setOnClickListener(v -> {
-                            JokeDetailFragment.this.jokeDetailPresenter.voteComment(item.getJokeId(), VoteType.XX);
-                        });
+        if (binding.commentList.getAdapter() == null) {
+            binding.setVariable(BR.jokeItem, item);
 
-                        return new DDBindableViewHolder(viewDataBinding);
-                    })
-                    .headerViewDataBindingVariableAction(viewDataBinding -> {
-                        viewDataBinding.setVariable(BR.jokeItem, item);
-                    })
+            DDBindableCursorLoaderRVAdapter commentAdapter = new DDBindableCursorLoaderRVAdapter.Builder<DDBindableViewHolder>()
+                    .cursorLoader(getActivity(), DuoshuoCommentDao.CONTENT_URI, null, DuoshuoCommentDao.Properties.ThreadKey.columnName + " = ?", new String[]{Constants.THREAD_PREFIX + jokeId}, null)
                     .itemViewHolderCreator(((inflater1, viewType1, parent1) -> {
                         ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
                         return new DDBindableViewHolder(viewDataBinding);
@@ -273,7 +271,7 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
                 }
             });
 
-            binding.itemWithCommentList.setAdapter(commentAdapter);
+            binding.commentList.setAdapter(commentAdapter);
 
             getLoaderManager().initLoader(0, null, commentAdapter);
 
@@ -284,13 +282,13 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
     @Override
     public void showLoading() {
         binding.progressBar.setVisibility(View.VISIBLE);
-        binding.itemWithCommentList.setVisibility(View.GONE);
+        binding.scrollContent.setVisibility(View.GONE);
     }
 
     @Override
     public void hideLoading() {
         binding.progressBar.setVisibility(View.GONE);
-        binding.itemWithCommentList.setVisibility(View.VISIBLE);
+        binding.scrollContent.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -305,28 +303,28 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
 
     @Override
     public void showError(String message) {
-        showSnackbar(binding.itemWithCommentList, message);
+        showSnackbar(binding.scrollContent, message);
     }
 
     @Override
     public void showLoadingMore() {
-        binding.itemWithCommentLayout.setRefreshing(true);
+//        binding.itemWithCommentLayout.setRefreshing(true);
     }
 
     @Override
     public void hideLoadingMore(int count) {
-        binding.itemWithCommentLayout.setRefreshing(false);
+//        binding.itemWithCommentLayout.setRefreshing(false);
         if (count > 0) {
-            showSnackbar(binding.itemWithCommentList,
+            showSnackbar(binding.scrollContent,
                     String.format(getString(R.string.loaded_numbers_comments), count));
         } else if (count == 0) {
-            showSnackbar(binding.itemWithCommentList, getString(R.string.post_detail_no_more_comments));
+            showSnackbar(binding.scrollContent, getString(R.string.post_detail_no_more_comments));
         }
     }
 
     @Override
     public Context context() {
-        return getActivity().getApplicationContext();
+        return getContext();
     }
     //</editor-fold>
 }

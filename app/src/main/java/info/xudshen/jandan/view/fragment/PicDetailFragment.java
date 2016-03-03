@@ -114,6 +114,8 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
         binding.itemDetailList.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.itemDetailList.setNestedScrollingEnabled(false);
 
+        initView();
+
         return binding.getRoot();
     }
 
@@ -138,6 +140,13 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
         });
     }
 
+    private void unBindView() {
+        binding.refreshCommentButton.setOnClickListener(null);
+        binding.commentVoteOo.setOnClickListener(null);
+        binding.commentVoteXx.setOnClickListener(null);
+        binding.toggleItemDetail.setOnClickListener(null);
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -145,7 +154,7 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
         this.picDetailPresenter.setVoteCommentView(new ActionView() {
             @Override
             public void showSuccess() {
-                showSnackbar(binding.commentList, getString(R.string.vote_success));
+                showSnackbar(binding.scrollContent, getString(R.string.vote_success));
             }
 
             @Override
@@ -170,12 +179,12 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
 
             @Override
             public void showError(String message) {
-                showSnackbar(binding.commentList, message);
+                showSnackbar(binding.scrollContent, message);
             }
 
             @Override
             public Context context() {
-                return getActivity().getApplicationContext();
+                return PicDetailFragment.this.getContext();
             }
 
             @Override
@@ -208,6 +217,7 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
     public void onDestroy() {
         binding.itemDetailList.setAdapter(null);
         binding.commentList.setAdapter(null);
+        unBindView();
 
         super.onDestroy();
         this.picDetailPresenter.destroy();
@@ -238,7 +248,6 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
             boolean hideItem = (filterXXgtOO && item.getVoteNegative() > item.getVotePositive()) || item.getVoteNegative() > filterXXgt;
             binding.setVariable(BR.hideItem, hideItem);
             binding.setVariable(BR.picItem, item);
-
 
             //set for list
             List<String> urlList = Splitter.on(",").splitToList(item.getPics());
@@ -351,13 +360,13 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
     @Override
     public void showLoading() {
         binding.progressBar.setVisibility(View.VISIBLE);
-        binding.commentList.setVisibility(View.GONE);
+        binding.scrollContent.setVisibility(View.GONE);
     }
 
     @Override
     public void hideLoading() {
         binding.progressBar.setVisibility(View.GONE);
-        binding.commentList.setVisibility(View.VISIBLE);
+        binding.scrollContent.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -372,7 +381,7 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
 
     @Override
     public void showError(String message) {
-        showSnackbar(binding.commentList, message);
+        showSnackbar(binding.scrollContent, message);
     }
 
     @Override
@@ -384,16 +393,16 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
     public void hideLoadingMore(int count) {
 //        binding.itemWithCommentLayout.setRefreshing(false);
         if (count > 0) {
-            showSnackbar(binding.commentList,
+            showSnackbar(binding.scrollContent,
                     String.format(getString(R.string.loaded_numbers_comments), count));
         } else if (count == 0) {
-            showSnackbar(binding.commentList, getString(R.string.post_detail_no_more_comments));
+            showSnackbar(binding.scrollContent, getString(R.string.post_detail_no_more_comments));
         }
     }
 
     @Override
     public Context context() {
-        return getActivity().getApplicationContext();
+        return getContext();
     }
     //</editor-fold>
 }

@@ -20,21 +20,16 @@
             type="info.xudshen.jandan.data.model.observable.PicItemObservable" />
     </data>
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/md_white_1000">
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            style="?android:progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-
         <android.support.v4.widget.NestedScrollView
+            android:id="@+id/scroll_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -171,9 +166,15 @@
                     android:layout_height="wrap_content"
                     android:background="@color/md_white_1000"
                     android:clickable="true"
-                    android:focusable="true"
-                    android:scrollbars="none" />
+                    android:focusable="true" />
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
-    </FrameLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
 </layout>

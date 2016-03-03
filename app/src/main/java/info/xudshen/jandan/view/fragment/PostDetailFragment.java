@@ -91,6 +91,10 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
         binding.refreshCommentButton.setOnClickListener(v -> postDetailPresenter.refreshComment(postId));
     }
 
+    private void unBindView() {
+        binding.refreshCommentButton.setOnClickListener(null);
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -156,7 +160,7 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
     @Override
     public void onDestroy() {
         binding.commentList.setAdapter(null);
-        binding.refreshCommentButton.setOnClickListener(null);
+        unBindView();
 
         super.onDestroy();
         this.postDetailPresenter.destroy();

@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
+import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVAdapter;
 import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
 import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
 import info.xudshen.jandan.BR;
@@ -100,17 +101,36 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
         this.inject();
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_video_detail, container, false);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        binding.itemWithCommentList.setLayoutManager(linearLayoutManager);
+        binding.commentList.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.commentList.setNestedScrollingEnabled(false);
 
-        binding.itemWithCommentLayout.setOnRefreshListener(direction -> {
-            switch (direction) {
-                case BOTTOM: {
-                    VideoDetailFragment.this.videoDetailPresenter.refreshComment(videoId);
-                }
-            }
-        });
+        initView();
+
         return binding.getRoot();
+    }
+
+    private void initView() {
+        binding.playButtom.setImageDrawable(new IconicsDrawable(getActivity())
+                .icon(GoogleMaterial.Icon.gmd_play_circle_filled)
+                .color(getResources().getColor(R.color.md_white_1000))
+                .sizeDp(20)
+                .paddingDp(2));
+
+        binding.refreshCommentButton.setOnClickListener(v -> videoDetailPresenter.refreshComment(videoId));
+        //set for vote
+        binding.commentVoteOo.setOnClickListener(v -> {
+            VideoDetailFragment.this.videoDetailPresenter.voteComment(videoId, VoteType.OO);
+        });
+        binding.commentVoteXx.setOnClickListener(v -> {
+            VideoDetailFragment.this.videoDetailPresenter.voteComment(videoId, VoteType.XX);
+        });
+    }
+
+    private void unBindView() {
+        binding.playButtom.setOnClickListener(null);
+        binding.refreshCommentButton.setOnClickListener(null);
+        binding.commentVoteOo.setOnClickListener(null);
+        binding.commentVoteXx.setOnClickListener(null);
     }
 
     @Override
@@ -120,7 +140,7 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
         this.videoDetailPresenter.setVoteCommentView(new ActionView() {
             @Override
             public void showSuccess() {
-                showSnackbar(binding.itemWithCommentList, getString(R.string.vote_success));
+                showSnackbar(binding.scrollContent, getString(R.string.vote_success));
             }
 
             @Override
@@ -145,12 +165,12 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
 
             @Override
             public void showError(String message) {
-                showSnackbar(binding.itemWithCommentList, message);
+                showSnackbar(binding.scrollContent, message);
             }
 
             @Override
             public Context context() {
-                return getActivity().getApplicationContext();
+                return VideoDetailFragment.this.getContext();
             }
 
             @Override
@@ -181,12 +201,11 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
 
     @Override
     public void onDestroy() {
-        binding.itemWithCommentList.setAdapter(null);
-        binding.itemWithCommentLayout.setOnRefreshListener(null);
+        binding.commentList.setAdapter(null);
+        unBindView();
 
         super.onDestroy();
         this.videoDetailPresenter.destroy();
-        binding.itemWithCommentLayout.setOnRefreshListener(null);
     }
 
     @Override
@@ -207,35 +226,12 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
     //<editor-fold desc="Called by presenter">
     @Override
     public void renderDataDetail(VideoItemObservable item) {
-        if (binding.itemWithCommentList.getAdapter() == null) {
-            DDBindableCursorLoaderRVHeaderAdapter commentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
+        if (binding.commentList.getAdapter() == null) {
+            binding.playButtom.setOnClickListener(v -> HtmlHelper.openInBrowser(getActivity(), item.getVideoLink()));
+            binding.setVariable(BR.videoItem, item);
+
+            DDBindableCursorLoaderRVAdapter commentAdapter = new DDBindableCursorLoaderRVAdapter.Builder<DDBindableViewHolder>()
                     .cursorLoader(getActivity(), DuoshuoCommentDao.CONTENT_URI, null, DuoshuoCommentDao.Properties.ThreadKey.columnName + " = ?", new String[]{Constants.THREAD_PREFIX + videoId}, null)
-                    .headerViewHolderCreator((inflater, viewType, parent) -> {
-                        ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.header_video_detail, parent, false);
-                        FloatingActionButton button = (FloatingActionButton) viewDataBinding.getRoot().findViewById(R.id.play_buttom);
-                        button.setImageDrawable(new IconicsDrawable(getActivity())
-                                .icon(GoogleMaterial.Icon.gmd_play_circle_filled)
-                                .color(getResources().getColor(R.color.md_white_1000))
-                                .sizeDp(20)
-                                .paddingDp(2));
-                        button.setOnClickListener(v -> HtmlHelper.openInBrowser(getActivity(), item.getVideoLink()));
-
-                        Button refreshButton = (Button) viewDataBinding.getRoot().findViewById(R.id.refresh_comment_button);
-                        refreshButton.setOnClickListener(v -> videoDetailPresenter.refreshComment(videoId));
-
-                        //set for vote
-                        viewDataBinding.getRoot().findViewById(R.id.comment_vote_oo).setOnClickListener(v -> {
-                            VideoDetailFragment.this.videoDetailPresenter.voteComment(item.getVideoId(), VoteType.OO);
-                        });
-                        viewDataBinding.getRoot().findViewById(R.id.comment_vote_xx).setOnClickListener(v -> {
-                            VideoDetailFragment.this.videoDetailPresenter.voteComment(item.getVideoId(), VoteType.XX);
-                        });
-
-                        return new DDBindableViewHolder(viewDataBinding);
-                    })
-                    .headerViewDataBindingVariableAction(viewDataBinding -> {
-                        viewDataBinding.setVariable(BR.videoItem, item);
-                    })
                     .itemViewHolderCreator(((inflater1, viewType1, parent1) -> {
                         ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
                         return new DDBindableViewHolder(viewDataBinding);
@@ -246,7 +242,6 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
                         viewDataBinding.setVariable(BR.comment, duoshuoComment);
                     })
                     .build();
-
 
             commentAdapter.setOnItemClickListener((v, position) -> {
                 DuoshuoComment duoshuoComment = duoshuoCommentDao.loadEntity(commentAdapter.getItemCursor(position));
@@ -289,7 +284,7 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
                 }
             });
 
-            binding.itemWithCommentList.setAdapter(commentAdapter);
+            binding.commentList.setAdapter(commentAdapter);
 
             getLoaderManager().initLoader(0, null, commentAdapter);
 
@@ -300,13 +295,13 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
     @Override
     public void showLoading() {
         binding.progressBar.setVisibility(View.VISIBLE);
-        binding.itemWithCommentList.setVisibility(View.GONE);
+        binding.scrollContent.setVisibility(View.GONE);
     }
 
     @Override
     public void hideLoading() {
         binding.progressBar.setVisibility(View.GONE);
-        binding.itemWithCommentList.setVisibility(View.VISIBLE);
+        binding.scrollContent.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -321,22 +316,22 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
 
     @Override
     public void showError(String message) {
-        showSnackbar(binding.itemWithCommentList, message);
+        showSnackbar(binding.scrollContent, message);
     }
 
     @Override
     public void showLoadingMore() {
-        binding.itemWithCommentLayout.setRefreshing(true);
+//        binding.scrollContent.setRefreshing(true);
     }
 
     @Override
     public void hideLoadingMore(int count) {
-        binding.itemWithCommentLayout.setRefreshing(false);
+//        binding.itemWithCommentLayout.setRefreshing(false);
         if (count > 0) {
-            showSnackbar(binding.itemWithCommentList,
+            showSnackbar(binding.scrollContent,
                     String.format(getString(R.string.loaded_numbers_comments), count));
         } else if (count == 0) {
-            showSnackbar(binding.itemWithCommentList, getString(R.string.post_detail_no_more_comments));
+            showSnackbar(binding.scrollContent, getString(R.string.post_detail_no_more_comments));
         }
     }
 
