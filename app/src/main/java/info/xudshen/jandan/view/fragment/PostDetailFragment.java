@@ -10,14 +10,13 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
-import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVHeaderAdapter;
+import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVAdapter;
 import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
 import info.xudshen.jandan.BR;
 import info.xudshen.jandan.R;
@@ -80,17 +79,16 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
         this.inject();
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_post_detail, container, false);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        binding.postWithCommentList.setLayoutManager(linearLayoutManager);
+        binding.commentList.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.commentList.setNestedScrollingEnabled(false);
 
-        binding.postWithCommentLayout.setOnRefreshListener(direction -> {
-            switch (direction) {
-                case BOTTOM: {
-                    PostDetailFragment.this.postDetailPresenter.refreshComment(postId);
-                }
-            }
-        });
+        initView();
+
         return binding.getRoot();
+    }
+
+    private void initView() {
+        binding.refreshCommentButton.setOnClickListener(v -> postDetailPresenter.refreshComment(postId));
     }
 
     @Override
@@ -100,7 +98,7 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
         this.postDetailPresenter.setVoteCommentView(new ActionView() {
             @Override
             public void showSuccess() {
-                showSnackbar(binding.postWithCommentList, getString(R.string.vote_success));
+                showSnackbar(binding.scrollContent, getString(R.string.vote_success));
             }
 
             @Override
@@ -125,7 +123,7 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
 
             @Override
             public void showError(String message) {
-                showSnackbar(binding.postWithCommentList, message);
+                showSnackbar(binding.scrollContent, message);
             }
 
             @Override
@@ -156,19 +154,12 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-//        ButterKnife.unbind(this);
-    }
-
-    @Override
     public void onDestroy() {
-        binding.postWithCommentList.setAdapter(null);
-        binding.postWithCommentLayout.setOnRefreshListener(null);
+        binding.commentList.setAdapter(null);
+        binding.refreshCommentButton.setOnClickListener(null);
 
         super.onDestroy();
         this.postDetailPresenter.destroy();
-        binding.postWithCommentLayout.setOnRefreshListener(null);
     }
 
     @Override
@@ -184,18 +175,11 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
 
     @Override
     public void renderDataDetail(PostObservable postObservable) {
-        if (binding.postWithCommentList.getAdapter() == null) {
-            DDBindableCursorLoaderRVHeaderAdapter postCommentAdapter = new DDBindableCursorLoaderRVHeaderAdapter.Builder<DDBindableViewHolder>()
+        if (binding.commentList.getAdapter() == null) {
+            binding.setVariable(BR.post, postObservable);
+
+            DDBindableCursorLoaderRVAdapter postCommentAdapter = new DDBindableCursorLoaderRVAdapter.Builder<DDBindableViewHolder>()
                     .cursorLoader(getActivity(), CommentDao.CONTENT_URI, null, CommentDao.Properties.PostId.columnName + " = ?", new String[]{postId.toString()}, null)
-                    .headerViewHolderCreator((inflater, viewType, parent) -> {
-                        ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.header_post_detail, parent, false);
-                        Button refreshButton = (Button) viewDataBinding.getRoot().findViewById(R.id.refresh_comment_button);
-                        refreshButton.setOnClickListener(v -> postDetailPresenter.refreshComment(postId));
-                        return new DDBindableViewHolder(viewDataBinding);
-                    })
-                    .headerViewDataBindingVariableAction(viewDataBinding -> {
-                        viewDataBinding.setVariable(BR.post, postObservable);
-                    })
                     .itemViewHolderCreator(((inflater1, viewType1, parent1) -> {
                         ViewDataBinding viewDataBinding = DataBindingUtil.inflate(inflater1, viewType1, parent1, false);
                         return new DDBindableViewHolder(viewDataBinding);
@@ -210,12 +194,10 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
             postCommentAdapter.addOnItemSubviewClickListener(R.id.comment_vote_oo, (vh, v, position) -> {
                 Comment comment = commentDao.loadEntity(postCommentAdapter.getItemCursor(position));
                 PostDetailFragment.this.postDetailPresenter.voteComment(comment.getCommentId(), VoteType.OO);
-                logger.info("{}", v);
             });
             postCommentAdapter.addOnItemSubviewClickListener(R.id.comment_vote_xx, (vh, v, position) -> {
                 Comment comment = commentDao.loadEntity(postCommentAdapter.getItemCursor(position));
                 PostDetailFragment.this.postDetailPresenter.voteComment(comment.getCommentId(), VoteType.XX);
-                logger.info("{}", v);
             });
 
             postCommentAdapter.setOnItemClickListener((v, position) -> {
@@ -257,7 +239,7 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
                     alertDialog.show();
                 }
             });
-            binding.postWithCommentList.setAdapter(postCommentAdapter);
+            binding.commentList.setAdapter(postCommentAdapter);
 
             getLoaderManager().initLoader(0, null, postCommentAdapter);
 
@@ -268,13 +250,13 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
     @Override
     public void showLoading() {
         binding.progressBar.setVisibility(View.VISIBLE);
-        binding.postWithCommentList.setVisibility(View.GONE);
+        binding.scrollContent.setVisibility(View.GONE);
     }
 
     @Override
     public void hideLoading() {
         binding.progressBar.setVisibility(View.GONE);
-        binding.postWithCommentList.setVisibility(View.VISIBLE);
+        binding.scrollContent.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -289,27 +271,27 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
 
     @Override
     public void showError(String message) {
-        showSnackbar(binding.postWithCommentList, message);
+        showSnackbar(binding.scrollContent, message);
     }
 
     @Override
     public void showLoadingMore() {
-        binding.postWithCommentLayout.setRefreshing(true);
+//        binding.commentList.setRefreshing(true);
     }
 
     @Override
     public void hideLoadingMore(int count) {
-        binding.postWithCommentLayout.setRefreshing(false);
+//        binding.postWithCommentLayout.setRefreshing(false);
         if (count > 0) {
-            showSnackbar(binding.postWithCommentList,
+            showSnackbar(binding.scrollContent,
                     String.format(getString(R.string.loaded_numbers_comments), count));
         } else if (count == 0) {
-            showSnackbar(binding.postWithCommentList, getString(R.string.post_detail_no_more_comments));
+            showSnackbar(binding.scrollContent, getString(R.string.post_detail_no_more_comments));
         }
     }
 
     @Override
     public Context context() {
-        return getActivity().getApplicationContext();
+        return getContext();
     }
 }
