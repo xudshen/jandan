@@ -12,8 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.google.common.base.Splitter;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -241,8 +244,17 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
             List<String> urlList = Splitter.on(",").splitToList(item.getPics());
             binding.itemDetailList.setAdapter(new RecyclerView.Adapter() {
                 @Override
+                public int getItemViewType(int position) {
+                    if (urlList.get(position).endsWith("gif")) {
+                        return R.layout.header_pic_detail_item;
+                    } else {
+                        return R.layout.header_pic_detail_item_image;
+                    }
+                }
+
+                @Override
                 public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                    View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_pic_detail_item, parent, false);
+                    View v = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
                     return new RecyclerView.ViewHolder(v) {
                         @Override
                         public String toString() {
@@ -253,9 +265,18 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
 
                 @Override
                 public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-                    ProgressImageView itemView = (ProgressImageView) holder.itemView;
-                    itemView.load(HtmlUtils.optimizedUrl(urlList.get(position), AppAdapters.IMAGE_QUALITY, ImageQuality.MEDIUM),
-                            getResources().getDrawable(R.drawable.placeholder), PicDetailFragment.this);
+//                    ProgressImageView itemView = (ProgressImageView) holder.itemView;
+                    String url = HtmlUtils.optimizedUrl(urlList.get(position), AppAdapters.IMAGE_QUALITY, ImageQuality.MEDIUM);
+                    if (url.endsWith("gif")) {
+                        ((ProgressImageView) holder.itemView).load(url,
+                                getResources().getDrawable(R.drawable.placeholder), PicDetailFragment.this);
+                    } else {
+                        ImageLoader imageLoader = ImageLoader.getInstance();
+                        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
+                                .cacheOnDisk(true).resetViewBeforeLoading(true)
+                                .build();
+                        imageLoader.displayImage(url, (ImageView) holder.itemView, options);
+                    }
                 }
 
                 @Override

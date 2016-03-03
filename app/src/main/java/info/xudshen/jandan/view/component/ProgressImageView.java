@@ -16,10 +16,13 @@ import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.bumptech.glide.request.target.Target;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestCreator;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import info.xudshen.jandan.R;
 import info.xudshen.jandan.utils.glide.ProgressTarget;
@@ -28,6 +31,7 @@ import info.xudshen.jandan.utils.glide.ProgressTarget;
  * Created by xudshen on 16/2/22.
  */
 public class ProgressImageView extends RelativeLayout {
+    private static final Logger logger = LoggerFactory.getLogger(ProgressImageView.class);
     private boolean showProgressText = true, showProgressBar = true;
     private TextView progressTextView;
     private ImageView imageView;
@@ -87,17 +91,10 @@ public class ProgressImageView extends RelativeLayout {
             }
 
             request.diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .sizeMultiplier(0.6f)
                     .fitCenter() // needs explicit transformation, because we're using a custom target
                     .crossFade()
                     .into(target);
-        } else {
-            progressTextView.setVisibility(GONE);
-            progressBar.setVisibility(GONE);
-            RequestCreator request = Picasso.with(getContext()).load(url);
-            if (placeHolder != null) {
-                request.placeholder(placeHolder);
-            }
-            request.into(imageView);
         }
     }
 

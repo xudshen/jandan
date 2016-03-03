@@ -101,7 +101,8 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void onDestroy() {
-        viewPager.getViewPager().getAdapter().setPrimaryItem(null, 0, null);
+//        viewPager.getViewPager().getAdapter().setPrimaryItem(null, 0, null);
+//        viewPager.getViewPager().setAdapter(null);
 
         super.onDestroy();
     }
