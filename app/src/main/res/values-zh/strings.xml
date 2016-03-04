@@ -40,6 +40,7 @@
     <string name="vote_success">谢谢投票.</string>
     <string name="favo_deleted">已删除.</string>
     <string name="activity_reader">煎蛋阅读器</string>
+    <string name="activity_hdimage_viewer">煎蛋高清图</string>
     <string name="activity_setting">设置</string>
     <string name="preference_user_summary">评论时的默认值</string>
     <string name="preference_username">昵称</string>
@@ -79,4 +80,6 @@
     <string name="array_3">3</string>
     <string name="item_reader_menu_favo">收藏</string>
     <string name="item_reader_menu_share">分享</string>
+    <string name="image_save">保存</string>
+    <string name="image_hd">查看高清</string>
 </resources>

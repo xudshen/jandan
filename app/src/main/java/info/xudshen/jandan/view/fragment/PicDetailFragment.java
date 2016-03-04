@@ -25,6 +25,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import info.xudshen.droiddata.adapter.UserActionRegistry;
 import info.xudshen.droiddata.adapter.impl.DDBindableCursorLoaderRVAdapter;
 import info.xudshen.droiddata.adapter.impl.DDBindableViewHolder;
 import info.xudshen.jandan.BR;
@@ -45,6 +46,7 @@ import info.xudshen.jandan.utils.ClipboardHelper;
 import info.xudshen.jandan.utils.LayoutHelper;
 import info.xudshen.jandan.view.ActionView;
 import info.xudshen.jandan.view.DataDetailView;
+import info.xudshen.jandan.view.activity.BaseActivity;
 import info.xudshen.jandan.view.activity.JandanSettingActivity;
 import info.xudshen.jandan.view.adapter.AppAdapters;
 import info.xudshen.jandan.view.component.ProgressImageView;
@@ -88,6 +90,9 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
     private Long picId;
     private FavoItem favoItem;
     private FragmentPicDetailBinding binding;
+
+    private UserActionRegistry.OnClickListener onImageClickListener;
+    private List<String> urlList = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -142,6 +147,28 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
                 LayoutHelper.expand(binding.itemDetailList);
             }
         });
+
+        onImageClickListener = (v, pos) -> {
+            if (urlList != null && pos < urlList.size()) {
+                Context mContext = PicDetailFragment.this.getContext();
+                LayoutInflater inflater = (LayoutInflater)
+                        mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                View view = inflater.inflate(R.layout.view_hd_popup, null);
+                AlertDialog alertDialog = (new AlertDialog.Builder(mContext))
+                        .setView(view)
+                        .create();
+
+                view.findViewById(R.id.image_hd_btn).setOnClickListener(v1 -> {
+                    getNavigator().launchHDImage((BaseActivity) PicDetailFragment.this.getActivity(), urlList.get(pos));
+                    alertDialog.hide();
+                });
+                view.findViewById(R.id.image_save_btn).setOnClickListener(v1 -> {
+                    alertDialog.hide();
+                });
+                alertDialog.show();
+            }
+        };
     }
 
     private void unBindView() {
@@ -150,6 +177,8 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
         binding.commentVoteOo.setOnClickListener(null);
         binding.commentVoteXx.setOnClickListener(null);
         binding.toggleItemDetail.setOnClickListener(null);
+
+        onImageClickListener = null;
     }
 
     @Override
@@ -255,8 +284,8 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
             binding.setVariable(BR.picItem, item);
 
             //set for list
-            List<String> urlList = Splitter.on(",").splitToList(item.getPics());
-            binding.itemDetailList.setAdapter(new RecyclerView.Adapter() {
+            urlList = Splitter.on(",").splitToList(item.getPics());
+            binding.itemDetailList.setAdapter(new RecyclerView.Adapter<ClickableViewHolder>() {
                 @Override
                 public int getItemViewType(int position) {
                     if (urlList.get(position).endsWith("gif")) {
@@ -267,18 +296,17 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
                 }
 
                 @Override
-                public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                    View v = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
-                    return new RecyclerView.ViewHolder(v) {
-                        @Override
-                        public String toString() {
-                            return super.toString();
-                        }
-                    };
+                public ClickableViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                    View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
+                    ClickableViewHolder vh = new ClickableViewHolder(view);
+                    if (viewType == R.layout.header_pic_detail_item_image) {
+                        vh.registerOnClick(onImageClickListener);
+                    }
+                    return vh;
                 }
 
                 @Override
-                public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+                public void onBindViewHolder(ClickableViewHolder holder, int position) {
 //                    ProgressImageView itemView = (ProgressImageView) holder.itemView;
                     String url = HtmlUtils.optimizedUrl(urlList.get(position), AppAdapters.IMAGE_QUALITY, ImageQuality.MEDIUM);
                     if (url.endsWith("gif")) {
@@ -410,4 +438,18 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
         return getContext();
     }
     //</editor-fold>
+
+    public static class ClickableViewHolder extends RecyclerView.ViewHolder {
+        public ClickableViewHolder(View itemView) {
+            super(itemView);
+        }
+
+        public void registerOnClick(UserActionRegistry.OnClickListener onClickListener) {
+            itemView.setOnClickListener(v -> {
+                if (onClickListener != null) {
+                    onClickListener.onClick(v, getAdapterPosition());
+                }
+            });
+        }
+    }
 }

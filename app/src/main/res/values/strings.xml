@@ -42,6 +42,7 @@
     <string name="favo_deleted">Deleted.</string>
     <string name="activity_reader">Jandan Reader</string>
     <string name="activity_setting">Preference</string>
+    <string name="activity_hdimage_viewer">Jandan HD Viewer</string>
     <string name="preference_username">Username</string>
     <string name="preference_email">Email</string>
     <string name="preference_general">General</string>
@@ -80,4 +81,6 @@
     <string name="array_3">3</string>
     <string name="item_reader_menu_favo">Add to favorite</string>
     <string name="item_reader_menu_share">Share</string>
+    <string name="image_hd">View HD</string>
+    <string name="image_save">Save to local</string>
 </resources>

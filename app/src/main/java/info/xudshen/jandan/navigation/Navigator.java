@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 
 import info.xudshen.jandan.domain.enums.ReaderItemType;
 import info.xudshen.jandan.view.activity.BaseActivity;
+import info.xudshen.jandan.view.activity.HDImageViewerActivity;
 import info.xudshen.jandan.view.activity.ItemReaderActivity;
 import info.xudshen.jandan.view.activity.JandanSettingActivity;
 
@@ -41,5 +42,11 @@ public class Navigator {
     public void launchSetting(BaseActivity fromActivity) {
         Intent intent = new Intent(fromActivity, JandanSettingActivity.class);
         ActivityCompat.startActivityForResult(fromActivity, intent, JandanSettingActivity.REQUEST_CODE, null);
+    }
+
+    public void launchHDImage(BaseActivity fromActivity, String url) {
+        Intent intent = new Intent(fromActivity, HDImageViewerActivity.class);
+        intent.putExtra(HDImageViewerActivity.ARG_URL, url);
+        ActivityCompat.startActivity(fromActivity, intent, null);
     }
 }

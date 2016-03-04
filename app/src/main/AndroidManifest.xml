@@ -57,6 +57,9 @@
         <activity
             android:name=".view.activity.JandanSettingActivity"
             android:label="@string/activity_setting" />
+        <activity
+            android:name=".view.activity.HDImageViewerActivity"
+            android:label="@string/activity_hdimage_viewer" />
     </application>
 
 </manifest>
