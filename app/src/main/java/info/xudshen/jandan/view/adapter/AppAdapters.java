@@ -47,9 +47,11 @@ public class AppAdapters {
                                     Drawable placeHolder) {
         ImageLoader imageLoader = ImageLoader.getInstance();
         DisplayImageOptions options = new DisplayImageOptions.Builder()
-                .cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(true)
-                .showImageForEmptyUri(placeHolder)
-                .showImageOnLoading(placeHolder)
+                .cacheInMemory(true).cacheOnDisk(true)
+                .showImageOnFail(R.drawable.placeholder_failed_96)
+                .showImageOnLoading(R.drawable.placeholder_loading_96)
+                .showImageForEmptyUri(R.drawable.placeholder_failed_96)
+                .resetViewBeforeLoading(true)
                 .build();
         imageLoader.displayImage(url, view, options);
     }

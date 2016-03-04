@@ -4,9 +4,9 @@
     android:layout_height="match_parent"
     tools:context="info.xudshen.jandan.view.fragment.HDImageViewerFragment">
 
-    <TextView
-        android:id="@+id/textUrl"
+    <uk.co.senab.photoview.PhotoView
+        android:id="@+id/image_hd_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="heh" />
+        android:adjustViewBounds="true" />
 </FrameLayout>

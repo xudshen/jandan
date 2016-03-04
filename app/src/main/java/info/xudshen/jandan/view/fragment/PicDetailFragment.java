@@ -17,6 +17,9 @@ import android.widget.ImageView;
 import com.google.common.base.Splitter;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.CircleBitmapDisplayer;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -314,8 +317,13 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
                                 getResources().getDrawable(R.drawable.placeholder), PicDetailFragment.this);
                     } else {
                         ImageLoader imageLoader = ImageLoader.getInstance();
-                        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                                .cacheOnDisk(true).resetViewBeforeLoading(true)
+                        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                                .cacheInMemory(true).cacheOnDisk(true)
+                                .showImageOnFail(R.drawable.placeholder_failed)
+                                .showImageOnLoading(R.drawable.placeholder_loading)
+                                .imageScaleType(ImageScaleType.NONE)
+                                .displayer(new FadeInBitmapDisplayer(300))
+                                .resetViewBeforeLoading(true)
                                 .build();
                         imageLoader.displayImage(url, (ImageView) holder.itemView, options);
                     }
