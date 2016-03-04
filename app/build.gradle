@@ -127,6 +127,8 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.commit451:PhotoView:1.2.4'
 
+    compile 'com.yqritc:recyclerview-flexibledivider:1.2.9'
+
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile('com.mikepenz:materialdrawer:5.0.0@aar') {
         transitive = true

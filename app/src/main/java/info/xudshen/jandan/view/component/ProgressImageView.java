@@ -88,7 +88,7 @@ public class ProgressImageView extends RelativeLayout {
 
             Glide.with(fragment).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .placeholder(R.drawable.placeholder_loading)
-                    .fallback(R.drawable.placeholder_failed)
+                    .error(R.drawable.placeholder_failed)
                     .sizeMultiplier(0.6f)
                     .fitCenter() // needs explicit transformation, because we're using a custom target
                     .crossFade()

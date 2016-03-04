@@ -238,7 +238,7 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
             Glide.with(VideoDetailFragment.this).load(item.getVideoThumbnail())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.placeholder_loading)
-                    .fallback(R.drawable.placeholder_failed)
+                    .error(R.drawable.placeholder_failed)
                     .centerCrop()
                     .crossFade()
                     .into(binding.videoThumb);

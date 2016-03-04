@@ -130,7 +130,7 @@ public class FavoFragment extends BaseFragment implements DeleteDataView {
                                     .load(favoItem.getPicFirst())
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                                     .placeholder(R.drawable.placeholder_loading)
-                                    .fallback(R.drawable.placeholder_failed)
+                                    .error(R.drawable.placeholder_failed)
                                     .centerCrop()
                                     .crossFade()
                                     .into(imageView);

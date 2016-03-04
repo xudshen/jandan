@@ -19,6 +19,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,6 +121,8 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
         binding.commentList.setNestedScrollingEnabled(false);
         binding.itemDetailList.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.itemDetailList.setNestedScrollingEnabled(false);
+
+        binding.itemDetailList.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).build());
 
         initView();
 

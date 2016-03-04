@@ -95,7 +95,7 @@ public class VideoListFragment extends BaseFragment implements DataListView {
                     Glide.with(VideoListFragment.this).load(videoItem.getVideoThumbnail())
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .placeholder(R.drawable.placeholder_loading)
-                            .fallback(R.drawable.placeholder_failed)
+                            .error(R.drawable.placeholder_failed)
                             .centerCrop()
                             .crossFade()
                             .into(imageView);

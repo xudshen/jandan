@@ -78,7 +78,7 @@ public class PostListFragment extends BaseFragment implements DataListView {
                     ImageView imageView = (ImageView) viewDataBinding.getRoot().findViewById(R.id.post_thumb);
                     Glide.with(PostListFragment.this).load(simplePost.getThumbC())
                             .placeholder(R.drawable.placeholder_loading_96)
-                            .fallback(R.drawable.placeholder_failed_96)
+                            .error(R.drawable.placeholder_failed_96)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .centerCrop()
                             .crossFade()
