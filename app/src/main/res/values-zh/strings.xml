@@ -31,7 +31,7 @@
     <string name="comment_no_blank">不要留空惹</string>
     <string name="comment_email_format_error">格式不对惹</string>
     <string name="comment_say_after_at_somebody">不要只@不说话惹</string>
-    <string name="comment_success">评论成功!</string>
+    <string name="comment_success">评论成功!等待超载鸡审核中.</string>
     <string name="comment_failed">评论失败.</string>
     <string name="retrofit_no_internet">网络断开.</string>
     <string name="retrofit_socket_timeout">网络超时.</string>
