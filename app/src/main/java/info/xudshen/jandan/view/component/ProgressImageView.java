@@ -82,15 +82,13 @@ public class ProgressImageView extends RelativeLayout {
         target = new MyProgressTarget<>(new GlideDrawableImageViewTarget(imageView), progressBar, imageView, progressTextView);
     }
 
-    public void load(String url, Drawable placeHolder, Fragment fragment) {
+    public void load(String url, Fragment fragment) {
         if (url.endsWith("gif")) {
             target.setModel(url); // update target's cache
-            DrawableTypeRequest<String> request = Glide.with(fragment).load(url);
-            if (placeHolder != null) {
-                request.placeholder(placeHolder);
-            }
 
-            request.diskCacheStrategy(DiskCacheStrategy.SOURCE)
+            Glide.with(fragment).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .placeholder(R.drawable.placeholder_loading)
+                    .fallback(R.drawable.placeholder_failed)
                     .sizeMultiplier(0.6f)
                     .fitCenter() // needs explicit transformation, because we're using a custom target
                     .crossFade()

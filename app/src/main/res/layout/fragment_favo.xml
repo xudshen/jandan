@@ -27,6 +27,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/md_white_1000"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <android.support.v7.widget.RecyclerView
@@ -41,9 +42,8 @@
                 android:id="@+id/blank_placeholder"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="100dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/blank_placeholder"
+                android:src="@drawable/placeholder_failed"
                 android:visibility="gone" />
         </RelativeLayout>
     </android.support.design.widget.CoordinatorLayout>

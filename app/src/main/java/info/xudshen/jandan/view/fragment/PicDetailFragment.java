@@ -18,7 +18,6 @@ import com.google.common.base.Splitter;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.CircleBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import org.slf4j.Logger;
@@ -313,8 +312,7 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
 //                    ProgressImageView itemView = (ProgressImageView) holder.itemView;
                     String url = HtmlUtils.optimizedUrl(urlList.get(position), AppAdapters.IMAGE_QUALITY, ImageQuality.MEDIUM);
                     if (url.endsWith("gif")) {
-                        ((ProgressImageView) holder.itemView).load(url,
-                                getResources().getDrawable(R.drawable.placeholder), PicDetailFragment.this);
+                        ((ProgressImageView) holder.itemView).load(url, PicDetailFragment.this);
                     } else {
                         ImageLoader imageLoader = ImageLoader.getInstance();
                         DisplayImageOptions options = new DisplayImageOptions.Builder()

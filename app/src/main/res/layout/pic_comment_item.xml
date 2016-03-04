@@ -27,8 +27,7 @@
             android:layout_rowSpan="2"
             app:avatar="@{comment.authorAvatar}"
             app:civ_border_color="@color/almostWhite"
-            app:civ_border_width="1dp"
-            app:placeHolder="@{@drawable/placeholder}" />
+            app:civ_border_width="1dp" />
 
         <TextView
             style="@style/PostDetailMetaHighlight"

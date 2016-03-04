@@ -235,8 +235,10 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
     public void renderDataDetail(VideoItemObservable item) {
         if (binding.commentList.getAdapter() == null) {
             binding.playButtom.setOnClickListener(v -> HtmlHelper.openInBrowser(getActivity(), item.getVideoLink()));
-            Glide.with(VideoDetailFragment.this).load(item.getVideoThumbnail()).placeholder(R.drawable.placeholder)
+            Glide.with(VideoDetailFragment.this).load(item.getVideoThumbnail())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.drawable.placeholder_loading)
+                    .fallback(R.drawable.placeholder_failed)
                     .centerCrop()
                     .crossFade()
                     .into(binding.videoThumb);

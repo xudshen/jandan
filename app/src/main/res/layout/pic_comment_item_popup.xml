@@ -39,8 +39,7 @@
             android:visibility="@{comment.hasPreviousComment ? View.VISIBLE : View.GONE}"
             app:avatar="@{comment.authorAvatar}"
             app:civ_border_color="@color/almostWhite"
-            app:civ_border_width="1dp"
-            app:placeHolder="@{@drawable/placeholder}" />
+            app:civ_border_width="1dp" />
 
         <TextView
             style="@style/PostDetailMetaHighlight"

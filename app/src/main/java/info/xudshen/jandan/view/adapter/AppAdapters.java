@@ -42,15 +42,14 @@ public class AppAdapters {
     private static final Logger logger = LoggerFactory.getLogger(AppAdapters.class);
     public static ImageQuality IMAGE_QUALITY = ImageQuality.MEDIUM;
 
-    @BindingAdapter(value = {"avatar", "placeHolder"})
-    public static void setAvatarUrl(CircleImageView view, String url,
-                                    Drawable placeHolder) {
+    @BindingAdapter(value = {"avatar"})
+    public static void setAvatarUrl(CircleImageView view, String url) {
         ImageLoader imageLoader = ImageLoader.getInstance();
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .cacheInMemory(true).cacheOnDisk(true)
-                .showImageOnFail(R.drawable.placeholder_failed_96)
-                .showImageOnLoading(R.drawable.placeholder_loading_96)
-                .showImageForEmptyUri(R.drawable.placeholder_failed_96)
+                .showImageOnFail(R.drawable.placeholder_failed_48)
+                .showImageOnLoading(R.drawable.placeholder_loading_48)
+                .showImageForEmptyUri(R.drawable.placeholder_failed_48)
                 .resetViewBeforeLoading(true)
                 .build();
         imageLoader.displayImage(url, view, options);

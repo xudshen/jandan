@@ -92,8 +92,10 @@ public class VideoListFragment extends BaseFragment implements DataListView {
                     viewDataBinding.setVariable(BR.item, videoItem);
 
                     ImageView imageView = (ImageView) viewDataBinding.getRoot().findViewById(R.id.video_thumb);
-                    Glide.with(VideoListFragment.this).load(videoItem.getVideoThumbnail()).placeholder(R.drawable.placeholder)
+                    Glide.with(VideoListFragment.this).load(videoItem.getVideoThumbnail())
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .placeholder(R.drawable.placeholder_loading)
+                            .fallback(R.drawable.placeholder_failed)
                             .centerCrop()
                             .crossFade()
                             .into(imageView);

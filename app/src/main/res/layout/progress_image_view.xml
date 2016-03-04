@@ -6,7 +6,7 @@
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
-        android:src="@drawable/placeholder" />
+        android:src="@drawable/placeholder_loading" />
 
     <ProgressBar
         android:id="@+id/progress_image_view_progress_bar"

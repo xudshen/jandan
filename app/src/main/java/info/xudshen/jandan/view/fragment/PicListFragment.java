@@ -93,7 +93,8 @@ public class PicListFragment extends BaseFragment implements DataListView {
                     Glide.with(PicListFragment.this)
                             .load(picItem.getPicFirst())
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .placeholder(R.drawable.placeholder)
+                            .placeholder(R.drawable.placeholder_loading)
+                            .fallback(R.drawable.placeholder_failed)
                             .centerCrop()
                             .crossFade()
                             .into(imageView);
