@@ -120,6 +120,10 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
     }
 
     private void initView() {
+        binding.scrollContent.setColorSchemeResources(R.color.colorPrimaryDark, R.color.colorAccent);
+        binding.scrollContent.setEnabled(true);
+        binding.scrollContent.setOnRefreshListener(
+                () -> PicDetailFragment.this.picDetailPresenter.refreshComment(picId));
         binding.refreshCommentButton.setOnClickListener(v -> picDetailPresenter.refreshComment(picId));
         //set for vote
         binding.commentVoteOo.setOnClickListener(v -> {
@@ -141,6 +145,7 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
     }
 
     private void unBindView() {
+        binding.scrollContent.setOnRefreshListener(null);
         binding.refreshCommentButton.setOnClickListener(null);
         binding.commentVoteOo.setOnClickListener(null);
         binding.commentVoteXx.setOnClickListener(null);
@@ -386,12 +391,12 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
 
     @Override
     public void showLoadingMore() {
-//        binding.itemWithCommentLayout.setRefreshing(true);
+        binding.scrollContent.setRefreshing(true);
     }
 
     @Override
     public void hideLoadingMore(int count) {
-//        binding.itemWithCommentLayout.setRefreshing(false);
+        binding.scrollContent.setRefreshing(false);
         if (count > 0) {
             showSnackbar(binding.scrollContent,
                     String.format(getString(R.string.loaded_numbers_comments), count));

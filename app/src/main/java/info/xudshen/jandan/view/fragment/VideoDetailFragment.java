@@ -118,6 +118,10 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
                 .sizeDp(20)
                 .paddingDp(2));
 
+        binding.scrollContent.setColorSchemeResources(R.color.colorPrimaryDark, R.color.colorAccent);
+        binding.scrollContent.setEnabled(true);
+        binding.scrollContent.setOnRefreshListener(
+                () -> VideoDetailFragment.this.videoDetailPresenter.refreshComment(videoId));
         binding.refreshCommentButton.setOnClickListener(v -> videoDetailPresenter.refreshComment(videoId));
         //set for vote
         binding.commentVoteOo.setOnClickListener(v -> {
@@ -129,6 +133,7 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
     }
 
     private void unBindView() {
+        binding.scrollContent.setOnRefreshListener(null);
         binding.playButtom.setOnClickListener(null);
         binding.refreshCommentButton.setOnClickListener(null);
         binding.commentVoteOo.setOnClickListener(null);
@@ -329,12 +334,12 @@ public class VideoDetailFragment extends BaseFragment implements DataDetailView<
 
     @Override
     public void showLoadingMore() {
-//        binding.scrollContent.setRefreshing(true);
+        binding.scrollContent.setRefreshing(true);
     }
 
     @Override
     public void hideLoadingMore(int count) {
-//        binding.itemWithCommentLayout.setRefreshing(false);
+        binding.scrollContent.setRefreshing(false);
         if (count > 0) {
             showSnackbar(binding.scrollContent,
                     String.format(getString(R.string.loaded_numbers_comments), count));

@@ -105,6 +105,10 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
     }
 
     private void initView() {
+        binding.scrollContent.setColorSchemeResources(R.color.colorPrimaryDark, R.color.colorAccent);
+        binding.scrollContent.setEnabled(true);
+        binding.scrollContent.setOnRefreshListener(
+                () -> JokeDetailFragment.this.jokeDetailPresenter.refreshComment(jokeId));
         binding.refreshCommentButton.setOnClickListener(v -> jokeDetailPresenter.refreshComment(jokeId));
         //set for vote
         binding.commentVoteOo.setOnClickListener(v -> {
@@ -116,6 +120,7 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
     }
 
     private void unBindView() {
+        binding.scrollContent.setOnRefreshListener(null);
         binding.refreshCommentButton.setOnClickListener(null);
         binding.commentVoteOo.setOnClickListener(null);
         binding.commentVoteXx.setOnClickListener(null);
@@ -308,12 +313,12 @@ public class JokeDetailFragment extends BaseFragment implements DataDetailView<J
 
     @Override
     public void showLoadingMore() {
-//        binding.itemWithCommentLayout.setRefreshing(true);
+        binding.scrollContent.setRefreshing(true);
     }
 
     @Override
     public void hideLoadingMore(int count) {
-//        binding.itemWithCommentLayout.setRefreshing(false);
+        binding.scrollContent.setRefreshing(false);
         if (count > 0) {
             showSnackbar(binding.scrollContent,
                     String.format(getString(R.string.loaded_numbers_comments), count));

@@ -88,10 +88,15 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
     }
 
     private void initView() {
+        binding.scrollContent.setColorSchemeResources(R.color.colorPrimaryDark, R.color.colorAccent);
+        binding.scrollContent.setEnabled(true);
+        binding.scrollContent.setOnRefreshListener(
+                () -> PostDetailFragment.this.postDetailPresenter.refreshComment(postId));
         binding.refreshCommentButton.setOnClickListener(v -> postDetailPresenter.refreshComment(postId));
     }
 
     private void unBindView() {
+        binding.scrollContent.setOnRefreshListener(null);
         binding.refreshCommentButton.setOnClickListener(null);
     }
 
@@ -280,12 +285,12 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
 
     @Override
     public void showLoadingMore() {
-//        binding.commentList.setRefreshing(true);
+        binding.scrollContent.setRefreshing(true);
     }
 
     @Override
     public void hideLoadingMore(int count) {
-//        binding.postWithCommentLayout.setRefreshing(false);
+        binding.scrollContent.setRefreshing(false);
         if (count > 0) {
             showSnackbar(binding.scrollContent,
                     String.format(getString(R.string.loaded_numbers_comments), count));

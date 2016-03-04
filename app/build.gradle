@@ -71,6 +71,9 @@ android {
 repositories {
     jcenter()
     maven { url "https://raw.githubusercontent.com/umeng/mvn-repo-umeng/master/repository" }
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 
@@ -79,6 +82,7 @@ dependencies {
     def testDependencies = rootProject.ext.appTestDependencies
 
     compile project(':data')
+    compile(name: 'swiperefreshlayoutbottom-1.0', ext: 'aar')
 
     compile 'com.umeng:fb:5.4.0'
     compile 'com.umeng.analytics:analytics:latest.integration'
