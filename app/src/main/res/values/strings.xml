@@ -78,4 +78,6 @@
     <string name="array_1">1</string>
     <string name="array_2">2</string>
     <string name="array_3">3</string>
+    <string name="item_reader_menu_favo">Add to favorite</string>
+    <string name="item_reader_menu_share">Share</string>
 </resources>

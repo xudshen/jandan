@@ -77,4 +77,6 @@
     <string name="array_2">2</string>
     <string name="array_1">1</string>
     <string name="array_3">3</string>
+    <string name="item_reader_menu_favo">收藏</string>
+    <string name="item_reader_menu_share">分享</string>
 </resources>
