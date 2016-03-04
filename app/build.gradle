@@ -109,7 +109,6 @@ dependencies {
     compile dependencies.butterKnife
     compile dependencies.gson
 
-    compile dependencies.picasso
     compile dependencies.glide
     compile dependencies.glideOkHttp
     compile dependencies.okHttp

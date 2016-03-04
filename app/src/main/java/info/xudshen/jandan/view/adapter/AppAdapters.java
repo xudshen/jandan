@@ -19,6 +19,8 @@ import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
 import com.google.common.base.Strings;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
@@ -43,15 +45,13 @@ public class AppAdapters {
     @BindingAdapter(value = {"avatar", "placeHolder"})
     public static void setAvatarUrl(CircleImageView view, String url,
                                     Drawable placeHolder) {
-        if (Strings.isNullOrEmpty(url)) url = "http://localhost";
-        RequestCreator requestCreator =
-                Picasso.with(view.getContext()).load(url);
-        if (placeHolder != null) {
-            requestCreator.placeholder(placeHolder);
-        }
-        requestCreator.resize(48, 48)
-                .centerCrop()
-                .into(view);
+        ImageLoader imageLoader = ImageLoader.getInstance();
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(true)
+                .showImageForEmptyUri(placeHolder)
+                .showImageOnLoading(placeHolder)
+                .build();
+        imageLoader.displayImage(url, view, options);
     }
 
     @BindingAdapter(value = {"webContent"})
