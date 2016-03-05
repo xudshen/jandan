@@ -122,7 +122,8 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
         binding.itemDetailList.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.itemDetailList.setNestedScrollingEnabled(false);
 
-        binding.itemDetailList.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).build());
+        binding.itemDetailList.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext())
+                .color(R.attr.dividerVertical).build());
 
         initView();
 
@@ -163,7 +164,6 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
                 AlertDialog alertDialog = (new AlertDialog.Builder(mContext))
                         .setView(view)
                         .create();
-
                 view.findViewById(R.id.image_hd_btn).setOnClickListener(v1 -> {
                     getNavigator().launchHDImage((BaseActivity) PicDetailFragment.this.getActivity(), urlList.get(pos));
                     alertDialog.dismiss();
