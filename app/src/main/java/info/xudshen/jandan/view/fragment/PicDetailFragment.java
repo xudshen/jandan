@@ -166,10 +166,10 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
 
                 view.findViewById(R.id.image_hd_btn).setOnClickListener(v1 -> {
                     getNavigator().launchHDImage((BaseActivity) PicDetailFragment.this.getActivity(), urlList.get(pos));
-                    alertDialog.hide();
+                    alertDialog.dismiss();
                 });
                 view.findViewById(R.id.image_save_btn).setOnClickListener(v1 -> {
-                    alertDialog.hide();
+                    alertDialog.dismiss();
                 });
                 alertDialog.show();
             }
@@ -379,13 +379,13 @@ public class PicDetailFragment extends BaseFragment implements DataDetailView<Pi
 
                     viewDataBinding.getRoot().findViewById(R.id.comment_copy_btn).setOnClickListener(v1 -> {
                         ClipboardHelper.copy(getContext(), duoshuoComment.getMessage());
-                        alertDialog.hide();
+                        alertDialog.dismiss();
                     });
                     viewDataBinding.getRoot().findViewById(R.id.comment_reply_btn).setOnClickListener(v1 -> {
                         commentActionPublishSubject.onNext(new CommentAction.Builder()
                                 .parentId(duoshuoComment.getCommentId())
                                 .parentName(duoshuoComment.getAuthorName()).duoshuo());
-                        alertDialog.hide();
+                        alertDialog.dismiss();
                     });
                     alertDialog.show();
                 }

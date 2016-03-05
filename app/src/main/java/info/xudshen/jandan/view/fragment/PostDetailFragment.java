@@ -237,13 +237,13 @@ public class PostDetailFragment extends BaseFragment implements DataDetailView<P
 
                     viewDataBinding.getRoot().findViewById(R.id.comment_copy_btn).setOnClickListener(v1 -> {
                         ClipboardHelper.copy(getContext(), Html.fromHtml(comment.getContent()).toString());
-                        alertDialog.hide();
+                        alertDialog.dismiss();
                     });
                     viewDataBinding.getRoot().findViewById(R.id.comment_reply_btn).setOnClickListener(v1 -> {
                         commentActionPublishSubject.onNext(new CommentAction.Builder()
                                 .parentId(Constants.JANDAN_COMMENT_PREFIX + comment.getCommentId())
                                 .parentName(comment.getName()).jandan());
-                        alertDialog.hide();
+                        alertDialog.dismiss();
                     });
                     alertDialog.show();
                 }
