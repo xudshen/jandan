@@ -37,23 +37,31 @@ ContentProvider <- ModelDao._allChanges
 ## RecyclerAdapter
 ```java
 DDCursorRecyclerAdapter
-- onCreateViewHolder(LayoutInflater inflater, int viewType, ViewGroup parent)
-- onBindViewHolder(VH viewHolder, Cursor cursor)
-- swapCursor(Cursor newCursor)
++ public abstract VH createViewHolder(LayoutInflater inflater, int viewType, ViewGroup parent)
++ public abstract void bindViewHolder(VH viewHolder, Cursor cursor)
++ swapCursor(Cursor newCursor)
 
 DDCursorLoaderRecyclerAdapter <- DDCursorRecyclerAdapter
-- DDCursorLoaderRecyclerAdapter(Context context, Uri uri, String[] projection, String selection,
++ DDCursorLoaderRecyclerAdapter(Context context, Uri uri, String[] projection, String selection,
                                 String[] selectionArgs, String sortOrder)
-- onLoadFinished -> swapCursor
++ onLoadFinished -> swapCursor
 
-DDViewBindingCursorLoaderAdapter <- DDCursorLoaderRecyclerAdapter
-- itemLayoutSelector(position -> {}) //get the layout_res for each item
-- itemViewDataBindingVariableAction((viewDataBinding, cursor) -> {}) //bind view with cursor data
+DDBindableCursorLoaderRVAdapter <- DDCursorLoaderRecyclerAdapter
++ ItemViewHolderCreator((inflater, viewType, parent) -> {}) //create viewholder
++ ItemLayoutSelector((position, cursor) -> {})//get the layout_res for each item
++ ItemViewDataBindingVariableAction((viewDataBinding, cursor) -> {}) //bind view with cursor data
 
-- onItemClick((itemView, position) -> {})
++ onItemClickListener((itemView, position) -> {})
++ onItemSubViewClickListener(layoutRes, (viewholder, v, position) -> {})
+
+DDBindableCursorLoaderRVHeaderAdapter <- DDBindableCursorLoaderRVAdapter
+//add a header in adapter
++ HeaderViewHolderCreator((inflater, viewType, parent) -> {})
++ HeaderViewDataBindingVariableAction(viewDataBinding -> {})
+
+DDBindableViewHolder implements IBindableViewHolder 
 ```
 
 ## TODO
 - [ ] potential memory leak on ModelObservable
-- [ ] DDViewBindingCursorLoaderAdapter.onItemClick position choose
   
