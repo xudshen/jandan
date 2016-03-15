@@ -46,7 +46,7 @@ public class LayoutHelper {
         };
 
         // 1dp/ms
-        a.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density));
+        a.setDuration(Math.min((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density), 1000));
         v.startAnimation(a);
     }
 
@@ -74,7 +74,7 @@ public class LayoutHelper {
         };
 
         // 1dp/ms
-        a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
+        a.setDuration(Math.min((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density), 1000));
         v.startAnimation(a);
     }
 }
