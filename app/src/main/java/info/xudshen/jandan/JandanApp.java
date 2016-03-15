@@ -1,6 +1,8 @@
 package info.xudshen.jandan;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
@@ -49,7 +51,7 @@ public class JandanApp extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        refWatcher = LeakCanary.install(this);
+        refWatcher = isDebuggable(this) ? LeakCanary.install(this) : RefWatcher.DISABLED;
 
         MobclickAgent.setCheckDevice(false);
 
@@ -87,6 +89,20 @@ public class JandanApp extends MultiDexApplication {
     private void preLoadImageQuality() {
         AppAdapters.IMAGE_QUALITY = JandanSettingActivity.getSettingImageQuality(this);
         logger.info("load IMAGE_QUALITY={}", AppAdapters.IMAGE_QUALITY);
+    }
+
+    public static boolean isDebuggable(Context ctx) {
+        boolean debuggable = false;
+
+        PackageManager pm = ctx.getPackageManager();
+        try {
+            ApplicationInfo appinfo = pm.getApplicationInfo(ctx.getPackageName(), 0);
+            debuggable = (0 != (appinfo.flags & ApplicationInfo.FLAG_DEBUGGABLE));
+        } catch (PackageManager.NameNotFoundException e) {
+            /*debuggable variable will remain false*/
+        }
+
+        return debuggable;
     }
 
     public ApplicationComponent getApplicationComponent() {
