@@ -17,6 +17,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,14 +130,26 @@ public class FavoFragment extends BaseFragment implements DeleteDataView {
                         case SimplePic: {
                             viewDataBinding.setVariable(BR.item, FavoItemTrans.toPicItem(favoItem));
                             ImageView imageView = (ImageView) viewDataBinding.getRoot().findViewById(R.id.item_thumb_image);
-                            Glide.with(FavoFragment.this)
-                                    .load(favoItem.getPicFirst())
-                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                    .placeholder(R.drawable.placeholder_loading)
-                                    .error(R.drawable.placeholder_failed)
-                                    .centerCrop()
-                                    .crossFade()
-                                    .into(imageView);
+
+                            ImageLoader imageLoader = ImageLoader.getInstance();
+                            DisplayImageOptions options = new DisplayImageOptions.Builder()
+                                    .cacheInMemory(true).cacheOnDisk(true)
+                                    .showImageOnFail(R.drawable.placeholder_failed)
+                                    .showImageOnLoading(R.drawable.placeholder_loading)
+                                    .imageScaleType(ImageScaleType.NONE_SAFE)
+                                    .displayer(new FadeInBitmapDisplayer(300))
+                                    .resetViewBeforeLoading(true)
+                                    .build();
+                            imageLoader.displayImage(favoItem.getPicFirst(), imageView, options);
+
+//                            Glide.with(FavoFragment.this)
+//                                    .load(favoItem.getPicFirst())
+//                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                                    .placeholder(R.drawable.placeholder_loading)
+//                                    .error(R.drawable.placeholder_failed)
+//                                    .centerCrop()
+//                                    .crossFade()
+//                                    .into(imageView);
                             break;
                         }
                         default: {
