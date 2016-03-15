@@ -14,6 +14,10 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,14 +94,26 @@ public class PicListFragment extends BaseFragment implements DataListView {
                     viewDataBinding.setVariable(BR.hideItem, hideItem);
 
                     ImageView imageView = (ImageView) viewDataBinding.getRoot().findViewById(R.id.item_thumb_image);
-                    Glide.with(PicListFragment.this)
-                            .load(picItem.getPicFirst())
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .placeholder(R.drawable.placeholder_loading)
-                            .error(R.drawable.placeholder_failed)
-                            .centerCrop()
-                            .crossFade()
-                            .into(imageView);
+
+                    ImageLoader imageLoader = ImageLoader.getInstance();
+                    DisplayImageOptions options = new DisplayImageOptions.Builder()
+                            .cacheInMemory(true).cacheOnDisk(true)
+                            .showImageOnFail(R.drawable.placeholder_failed)
+                            .showImageOnLoading(R.drawable.placeholder_loading)
+                            .imageScaleType(ImageScaleType.NONE_SAFE)
+                            .displayer(new FadeInBitmapDisplayer(300))
+                            .resetViewBeforeLoading(true)
+                            .build();
+                    imageLoader.displayImage(picItem.getPicFirst(), imageView, options);
+
+//                    Glide.with(PicListFragment.this)
+//                            .load(picItem.getPicFirst())
+//                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                            .placeholder(R.drawable.placeholder_loading)
+//                            .error(R.drawable.placeholder_failed)
+//                            .centerCrop()
+//                            .crossFade()
+//                            .into(imageView);
                 })
                 .build();
 
