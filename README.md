@@ -1,10 +1,9 @@
 # Jandan.app
-## Modules
-domain
-
-data
-
-app
+## Screenshots
+![posts](http://ww2.sinaimg.cn/large/8ece804cgw1f24g9qvnkgj21401z4tp1.jpg)
+![images](http://ww3.sinaimg.cn/large/8ece804cgw1f24gcdn1o1j21401z4n8u.jpg)
+![jokes](http://ww4.sinaimg.cn/large/8ece804cgw1f24gcqsk4uj21401z4n8x.jpg)
+![vides](http://ww1.sinaimg.cn/large/8ece804cgw1f24gd3wuckj21401z4tk3.jpg)
 
 # DroidData
 ## Model Structure
