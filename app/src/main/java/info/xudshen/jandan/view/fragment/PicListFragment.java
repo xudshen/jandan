@@ -171,7 +171,7 @@ public class PicListFragment extends BaseFragment implements DataListView {
         });
 
         //init for MaterialViewPager
-        MaterialViewPagerHelper.registerRecyclerView(getActivity(), binding.picListView, null);
+        MaterialViewPagerHelper.registerRecyclerView(getActivity(), binding.picListView);
         //start load data in db
         getLoaderManager().initLoader(0, null, picListAdapter);
         return binding.getRoot();

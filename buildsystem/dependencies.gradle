@@ -1,9 +1,9 @@
 ext {
     //Android
-    androidCompileSdkVersion = 23
-    androidBuildToolsVersion = "23.0.1"
+    androidCompileSdkVersion = 24
+    androidBuildToolsVersion = "24.0.2"
     androidMinSdkVersion = 16
-    androidTargetSdkVersion = 23
+    androidTargetSdkVersion = 24
 
     //Libraries
     daggerVersion = '2.0.1'
@@ -25,7 +25,7 @@ ext {
 
     freemarkerVersion = '2.3.22'
 
-    androidSupportVersion = '23.2.0'
+    androidSupportVersion = '24.2.1'
 
     //Testing
     robolectricVersion = '3.0'
@@ -37,12 +37,10 @@ ext {
     testingSupportLibVersion = '0.1'
 
     //Retrolambda
-    jdk = "/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home"
-    oldJdk = "/Library/Java/JavaVirtualMachines/jdk1.7.0_55.jdk/Contents/Home"
+    jdk = "/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home"
+    oldJdk = "/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home"
 
     appDependencies = [
-            //androidBinding
-            androidBinding : 'com.android.databinding:compiler:1.0-rc1',
             //multiDex
             multiDex       : "com.android.support:multidex:1.0.1",
             //support
@@ -87,6 +85,7 @@ ext {
             dexmakerMockito  : "com.google.dexmaker:dexmaker-mockito:${dexmakerVersion}",
             espresso         : "com.android.support.test.espresso:espresso-core:${espressoVersion}",
             testingSupportLib: "com.android.support.test:testing-support-lib:${testingSupportLibVersion}",
+            annotations      : "com.android.support:support-annotations:${androidSupportVersion}",
     ]
 
     domainDependencies = [
@@ -109,8 +108,6 @@ ext {
     ]
 
     dataDependencies = [
-            //androidBinding
-            androidBinding : 'com.android.databinding:compiler:1.0-rc1',
             //DI
             daggerCompiler : "com.google.dagger:dagger-compiler:${daggerVersion}",
             dagger         : "com.google.dagger:dagger:${daggerVersion}",

@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.android.databinding'
 
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
@@ -49,7 +48,6 @@ android {
 
     dexOptions {
         preDexLibraries = false
-        incremental true
         javaMaxHeapSize "4g"
     }
 
@@ -61,10 +59,13 @@ android {
         }
         release {
             minifyEnabled true
-            FileCollection proGuardFileCollection = files { file('./app_proguard').listFiles() }
-            proguardFiles(proGuardFileCollection)
+            proguardFiles fileTree(dir: "app_proguard", include: ["*.pro"]).asList().toArray()
             shrinkResources true
         }
+    }
+
+    dataBinding {
+        enabled = true
     }
 }
 
@@ -86,8 +87,6 @@ dependencies {
 
     compile 'com.umeng:fb:5.4.0'
     compile 'com.umeng.analytics:analytics:latest.integration'
-
-    apt dependencies.androidBinding
 
     compile dependencies.multiDex
 
@@ -135,12 +134,12 @@ dependencies {
     }
     compile 'com.mikepenz:google-material-typeface:2.1.0.1.original@aar'
     compile 'com.mikepenz:fontawesome-typeface:4.5.0.1@aar'
-    compile('com.github.florent37:materialviewpager:1.1.3@aar') {
+    compile('com.github.florent37:materialviewpager:1.2.0@aar') {
         transitive = true
     }
     compile 'com.pavelsikun:material-seekbar-preference:0.12.1+'
 
-    androidTestCompile 'com.android.support:support-annotations:23.2.0'
+    androidTestCompile testDependencies.annotations
     androidTestCompile testDependencies.mockito
     androidTestCompile testDependencies.dexmaker
     androidTestCompile testDependencies.dexmakerMockito

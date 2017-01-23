@@ -21,8 +21,6 @@ import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
 import com.google.common.base.Strings;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestCreator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -149,7 +149,7 @@ public class VideoListFragment extends BaseFragment implements DataListView {
         });
 
         //init for MaterialViewPager
-        MaterialViewPagerHelper.registerRecyclerView(getActivity(), binding.videoListView, null);
+        MaterialViewPagerHelper.registerRecyclerView(getActivity(), binding.videoListView);
         //start load data in db
         getLoaderManager().initLoader(0, null, videoListAdapter);
         return binding.getRoot();

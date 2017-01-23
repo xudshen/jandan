@@ -117,7 +117,7 @@ public class PostListFragment extends BaseFragment implements DataListView {
         });
 
         //init for MaterialViewPager
-        MaterialViewPagerHelper.registerRecyclerView(getActivity(), binding.postListView, null);
+        MaterialViewPagerHelper.registerRecyclerView(getActivity(), binding.postListView);
         //start load data in db
         getLoaderManager().initLoader(0, null, postListAdapter);
         return binding.getRoot();

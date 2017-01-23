@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.android.databinding'
 
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
@@ -26,6 +25,10 @@ android {
         oldJdk globalConfiguration.getAt("oldJdk")
         javaVersion JavaVersion.VERSION_1_7
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -34,7 +37,7 @@ dependencies {
 
     compile project(':domain')
 
-    apt dependencies.androidBinding
+    compile 'org.apache.commons:commons-lang3:3.4'
 
     apt dependencies.daggerCompiler
     compile dependencies.daggerCompiler

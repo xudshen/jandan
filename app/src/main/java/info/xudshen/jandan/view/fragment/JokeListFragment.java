@@ -123,7 +123,7 @@ public class JokeListFragment extends BaseFragment implements DataListView {
         });
 
         //init for MaterialViewPager
-        MaterialViewPagerHelper.registerRecyclerView(getActivity(), binding.jokeListView, null);
+        MaterialViewPagerHelper.registerRecyclerView(getActivity(), binding.jokeListView);
         //start load data in db
         getLoaderManager().initLoader(0, null, jokeListAdapter);
         return binding.getRoot();
